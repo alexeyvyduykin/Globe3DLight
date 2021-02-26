@@ -1,0 +1,9 @@
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Host=localhost;Port=5432;Database=dbGlobe3DLight;Username=postgres;Password=user"
+  },
+
+  "PostgresVersionMajor": 9,
+
+  "PostgresVersionMinor": 6
+}

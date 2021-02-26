@@ -1,0 +1,79 @@
+<UserControl x:Class="Globe3DLight.AvaloniaUI.Views.TimePresenterControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:converters="clr-namespace:Globe3DLight.AvaloniaUI.Converters;assembly=Globe3DLight.AvaloniaUI"
+             xmlns:Time="clr-namespace:Globe3DLight.Time;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.AvaloniaUI.Designer;assembly=Globe3DLight.AvaloniaUI"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static Designer:DesignerContext.TimePresenter}"
+             d:DesignWidth="500" d:DesignHeight="64"
+             x:DataType="Time:ITimePresenter" x:CompileBindings="True"
+             >
+
+  <UserControl.Resources>
+    <converters:TimePresenterToStringConverter x:Key="TimePresenterToStringConverter"/>
+    <converters:TimePresenterToSliderConverter x:Key="TimePresenterToSliderConverter"/>
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+    <Styles>
+      <Style Selector="Button">
+        <Setter Property="Width" Value="62"></Setter>
+        <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+      </Style>
+    </Styles>
+  </UserControl.Styles>
+
+
+  <Grid ColumnDefinitions="*" RowDefinitions="32,32">
+
+    <Grid ColumnDefinitions="Auto,Auto,Auto,Auto,Auto,*" Grid.Row="0">
+
+      <Button x:Name="btnReset"
+              Command="{Binding OnReset}"
+              Content="Reset"
+              Grid.Column="0"
+              x:CompileBindings="False"/>
+
+      <Button x:Name="btnPlay"
+              Command="{Binding OnPlay}"
+              Content="Play"
+              Grid.Column="1"
+              x:CompileBindings="False"/>
+
+      <Button x:Name="btnPause"
+        Command="{Binding OnPause}"
+        Content="Pause"
+        Grid.Column="2"
+        x:CompileBindings="False"/>
+
+      <Button Command="{Binding OnSlower}"
+              Content="Slower"
+              Grid.Column="3"
+              x:CompileBindings="False"/>
+
+      <Button Command="{Binding OnFaster}"
+              Content="Faster"
+              Grid.Column="4"
+              x:CompileBindings="False"/>
+
+      <TextBlock Grid.Column="5"
+                 HorizontalAlignment="Left"
+                 VerticalAlignment="Center"
+                 Text="{Binding TimeInterval, Converter={StaticResource TimePresenterToStringConverter}}"/>
+
+    </Grid>
+
+
+    <Slider Value="{Binding SliderInterval.Value}"
+            Minimum="{Binding SliderInterval.Min}"
+            Maximum="{Binding SliderInterval.Max}"
+            Grid.Column="0"
+            Grid.Row="1"
+            Margin="10,-30,10,-30"
+            VerticalAlignment="Center"/>
+  </Grid>
+
+</UserControl>

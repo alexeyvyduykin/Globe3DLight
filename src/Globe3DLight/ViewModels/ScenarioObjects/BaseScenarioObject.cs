@@ -1,0 +1,49 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Collections.Immutable;
+
+
+namespace Globe3DLight.ScenarioObjects
+{
+
+    public abstract class BaseScenarioObject : ObservableObject, IScenarioObject
+    {
+        private ImmutableArray<IScenarioObject> _children;
+
+        public ImmutableArray<IScenarioObject> Children
+        {
+            get => _children;
+            set => Update(ref _children, value);
+        }
+
+
+        public override bool IsDirty()
+        {
+            var isDirty = base.IsDirty();
+
+            foreach (var child in Children)
+            {
+                isDirty |= child.IsDirty();
+            }
+
+            //   isDirty |= State.IsDirty();
+            //   isDirty |= Data.IsDirty();
+
+            return isDirty;
+        }
+
+        public override void Invalidate()
+        {
+            base.Invalidate();
+
+            foreach (var child in Children)
+            {
+                child.Invalidate();
+            }
+
+            //    State.Invalidate();
+            //    Data.Invalidate();
+        }
+    }
+}
