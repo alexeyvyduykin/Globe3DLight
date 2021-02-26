@@ -27,6 +27,8 @@ namespace Globe3DLight.Data
 
         IGroundStationData CreateGroundStationData(IGroundStationDatabase groundStationDatabase);
 
+        IGroundObjectListData CreateGroundObjectListData(IGroundObjectListDatabase groundObjectListDatabase);
+
         IRetranslatorData CreateRetranslatorAnimator(IRetranslatorDatabase retranslatorDatabase);
 
     }
@@ -73,7 +75,10 @@ namespace Globe3DLight.Data
         {
             return new GroundStationData(groundStationDatabase);// { Name ="fr_groundstation" };
         }
-
+        public IGroundObjectListData CreateGroundObjectListData(IGroundObjectListDatabase groundObjectListDatabase)
+        {
+            return new GroundObjectListData(groundObjectListDatabase);
+        }
         public IRetranslatorData CreateRetranslatorAnimator(IRetranslatorDatabase retranslatorDatabase)
         {
             return new RetranslatorAnimator(retranslatorDatabase);

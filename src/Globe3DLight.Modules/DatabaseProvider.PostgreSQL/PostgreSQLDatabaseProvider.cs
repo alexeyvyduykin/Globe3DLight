@@ -80,7 +80,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var initialConditions = db.InitialConditions.FirstOrDefault();
             var groundStations = db.GroundStations.ToList();
             var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
-            db.GroundObjects.Load();
+            var groundObjects = db.GroundObjects.ToList();
             db.SatellitePositions.Load();
             db.SatelliteRotations.Load();
             db.SatelliteShootings.Load();
@@ -113,6 +113,12 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 fr_j2000.AddChild(fr_gs);
             }
 
+            var gos = groundObjects.Select(s => (s.Name, s.Lon, s.Lat)).ToList();
+
+            var fr_gos = factory.CreateLogicalTreeNode("fr_gos", 
+                dataFactory.CreateGroundObjectListData(databaseFactory.CreateGroundObjectListDatabase(gos)));
+            fr_j2000.AddChild(fr_gos);
+
             var fr_orbits = new List<ILogicalTreeNode>();
             var fr_rotations = new List<ILogicalTreeNode>();
             var fr_sensors = new List<ILogicalTreeNode>();
@@ -132,7 +138,6 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             {
                 fr_retrs.Add(CreateRetranslatorNode(root, retranslators[i]));
             }
-
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
@@ -164,6 +169,10 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 var gs = objFactory.CreateGroundStation(groundStations[i].Name, fr_gss[i], i);
                 gss.Add(gs);
             }
+
+
+            objBuilder.Add(objFactory.CreateGroundObjectList("GroundObjectList", fr_gos));
+
 
             objBuilder.AddRange(gss);
             objBuilder.AddRange(rtrs);

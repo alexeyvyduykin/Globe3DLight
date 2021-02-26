@@ -54,6 +54,7 @@ namespace Globe3DLight.Renderer
         void DrawFrame(object dc, IFrameRenderModel frame, dmat4 modelMatrix, ISceneState scene);
    
         void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene);
+        void DrawGroundObjectList(object dc, IGroundObjectListRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene);
         void DrawRetranslator(object dc, IRetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene);
         void DrawSatellite(object dc, ISatelliteRenderModel satellite, dmat4 modelMatrix, ISceneState scene);
         void DrawSensor(object dc, ISensorRenderModel sensor, dmat4 modelMatrix, ISceneState scene);

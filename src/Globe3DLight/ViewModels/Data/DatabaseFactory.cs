@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GlmSharp;
 using Globe3DLight.Data.Database;
-
+using System.Linq;
 
 namespace Globe3DLight.Data
 {
@@ -22,6 +22,8 @@ namespace Globe3DLight.Data
         ISunDatabase CreateSunDatabase(double begin, double end, dvec3 p0, dvec3 p1);
 
         IAntennaDatabase CreateAntennaDatabase(double begin, double end, List<TranslationRecord> translations);
+
+        IGroundObjectListDatabase CreateGroundObjectListDatabase(List<(string name, double lon, double lat)> groundObjects);
     }
 
     public class DatabaseFactory : IDatabaseFactory
@@ -35,6 +37,15 @@ namespace Globe3DLight.Data
                 Lon = lonDeg,
                 Lat = latDeg,
                 Elevation = elevation,
+                EarthRadius = 6371.0,
+            };
+        }
+
+        public IGroundObjectListDatabase CreateGroundObjectListDatabase(List<(string name, double lon, double lat)> groundObjects)
+        {
+            return new GroundObjectListDatabase()
+            {
+                Positions = groundObjects.Select(s => KeyValuePair.Create<string, (double, double)>(s.name, (s.lon, s.lat))).ToDictionary(s => s.Key, s => s.Value),
                 EarthRadius = 6371.0,
             };
         }

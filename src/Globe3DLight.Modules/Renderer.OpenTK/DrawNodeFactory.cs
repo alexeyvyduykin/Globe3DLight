@@ -27,7 +27,10 @@ namespace Globe3DLight.Renderer.OpenTK
         {
             return new GroundStationDrawNode(groundStation);
         }
-
+        public IGroundObjectListDrawNode CreateGroundObjectListDrawNode(IGroundObjectListRenderModel groundObjectList)
+        {
+            return new GroundObjectListDrawNode(groundObjectList);
+        }
         public IRetranslatorDrawNode CreateRetranslatorDrawNode(IRetranslatorRenderModel retranslator)
         {
             return new RetranslatorDrawNode(retranslator);

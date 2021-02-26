@@ -359,5 +359,31 @@ namespace Globe3DLight.Renderer
             }
         }
 
+        public void DrawGroundObjectList(object dc, IGroundObjectListRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+        {
+            var drawNodeCached = _drawNodeCache.Get(groundobject);
+            if (drawNodeCached != null)
+            {
+                if (groundobject.IsDirty())
+                {
+                    drawNodeCached.UpdateGeometry();
+                }
+
+                drawNodeCached.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
+            }
+            else
+            {
+                var drawNode = _drawNodeFactory.CreateGroundObjectListDrawNode(groundobject);
+
+                drawNode.UpdateStyle();
+
+                drawNode.UpdateGeometry();
+
+                _drawNodeCache.Set(groundobject, drawNode);
+
+                drawNode.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
+            }
+
+        }
     }
 }

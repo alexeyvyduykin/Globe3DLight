@@ -63,6 +63,11 @@ namespace Globe3DLight.Renderer.OpenTK
             //    translateDisposable?.Dispose();
         }
 
+        public virtual void Draw(object dc, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+        {
+
+        }
+
         public abstract void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene);
 
         public virtual void Dispose()

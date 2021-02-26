@@ -16,6 +16,7 @@ namespace Globe3DLight.Renderer
         void UpdateGeometry();
         void UpdateStyle();
         void Draw(object dc, dmat4 modelMatrix, ISceneState scene);
+        void Draw(object dc, IEnumerable<dmat4> modelMatrices, ISceneState scene);
         void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene);
     }
 }

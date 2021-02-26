@@ -28,6 +28,8 @@ namespace Globe3DLight.Editor
 
         IGroundStationRenderModel CreateGroundStation(double scale);
 
+        IGroundObjectListRenderModel CreateGroundObjectList();
+
         IRetranslatorRenderModel CreateRetranslator(double scale);
 
         IAntennaRenderModel CreateAntenna();
@@ -230,6 +232,16 @@ namespace Globe3DLight.Editor
             {                
                 Mesh = mesh,//factory.CreateSolidSphere(0.06f, 16, 16),
                 Scale = scale,
+            };
+
+            return obj;
+        }
+
+        public IGroundObjectListRenderModel CreateGroundObjectList()
+        {
+            var obj = new GroundObjectListRenderModel()
+            {
+
             };
 
             return obj;
