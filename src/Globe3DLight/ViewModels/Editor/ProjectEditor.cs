@@ -284,7 +284,7 @@ namespace Globe3DLight.Editor
             {
                 if (Project?.CurrentScenario != null)
                 {
-                    var child = Factory.CreateLogicalTreeNode("Frame", DataFactory.CreateFrameData());
+                    var child = Factory.CreateLogicalTreeNode("Frame", DataFactory.CreateFrameState());
 
                     Project.AddChildFrame(node, child);
                 }
@@ -304,48 +304,48 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public void OnImportJson__(string path)
-        {
-            try
-            {
-                var json = FileIO?.ReadUtf8Text(path);
-                if (!string.IsNullOrWhiteSpace(json))
-                {
-                    var item = JsonSerializer.Deserialize<object>(json);
-                    if (item != null)
-                    {
-                        var name = System.IO.Path.GetFileNameWithoutExtension(path);
-                        OnImportObject__(name, item);
-                    }
-                }
-            }
-            catch (Exception)
-            {
+        //public void OnImportJson__(string path)
+        //{
+        //    try
+        //    {
+        //        var json = FileIO?.ReadUtf8Text(path);
+        //        if (!string.IsNullOrWhiteSpace(json))
+        //        {
+        //            var item = JsonSerializer.Deserialize<object>(json);
+        //            if (item != null)
+        //            {
+        //                var name = System.IO.Path.GetFileNameWithoutExtension(path);
+        //                OnImportObject__(name, item);
+        //            }
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
                
-            }
-        }
+        //    }
+        //}
 
-        public void OnImportObject__(string name, object item)
-        {
-            if (item is IDatabase db)
-            {
-                var data = DataFactory.CreateDataFromDatabase(db);            
-                OnImportObject__(name, data);
-            }
-            else if(item is IData data)
-            {
-                var node = Factory.CreateLogicalTreeNode(name, data);
-                OnImportObject__(name, node);
-            }
-            else if (item is ILogicalTreeNode child)
-            {
-                Project?.AddChildFrame(Project.CurrentScenario.CurrentLogicalTreeNode, child);
-            }
-            else
-            {
-                throw new NotSupportedException("Not supported import object.");
-            }
-        }
+        //public void OnImportObject__(string name, object item)
+        //{
+        //    if (item is IDatabase db)
+        //    {
+        //        var data = DataFactory.CreateDataFromDatabase(db);            
+        //        OnImportObject__(name, data);
+        //    }
+        //    else if(item is IData data)
+        //    {
+        //        var node = Factory.CreateLogicalTreeNode(name, data);
+        //        OnImportObject__(name, node);
+        //    }
+        //    else if (item is ILogicalTreeNode child)
+        //    {
+        //        Project?.AddChildFrame(Project.CurrentScenario.CurrentLogicalTreeNode, child);
+        //    }
+        //    else
+        //    {
+        //        throw new NotSupportedException("Not supported import object.");
+        //    }
+        //}
 
         public void OnLoad(IProjectContainer project, string path = null)
         {

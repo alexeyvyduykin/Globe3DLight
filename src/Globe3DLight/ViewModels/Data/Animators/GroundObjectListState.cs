@@ -4,12 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IGroundObjectListData : IData
+    public interface IGroundObjectListState : IState
     {
         IDictionary<string, dvec3> Positions { get; }
         IDictionary<string, dmat4> ModelMatrices { get; }
@@ -17,19 +15,18 @@ namespace Globe3DLight.Data.Animators
     }
 
 
-    public class GroundObjectListData : ObservableObject, IGroundObjectListData
-    {
-        private readonly IGroundObjectListDatabase _db;
-
+    public class GroundObjectListState : ObservableObject, IGroundObjectListState
+    {     
         private IDictionary<string, dvec3> _positions;
         private IDictionary<string, dmat4> _modelMatrices;
         private IDictionary<string, (double lon, double lat)> _sourcePositions;
+        private double _earthRadius;
 
-        public GroundObjectListData(IGroundObjectListDatabase db)
-        {
-            _db = db;
+        public GroundObjectListState(GroundObjectListData data)
+        {          
+            _sourcePositions = data.Positions;
 
-            _sourcePositions = db.Positions;
+            _earthRadius = data.EarthRadius;
 
             _positions = new Dictionary<string, dvec3>();
 
@@ -58,7 +55,7 @@ namespace Globe3DLight.Data.Animators
 
         private void Update()
         {
-            foreach (var item in _db.Positions)
+            foreach (var item in _sourcePositions)
             {
                 var name = item.Key;
                 var lonDeg = item.Value.lon;
@@ -66,7 +63,7 @@ namespace Globe3DLight.Data.Animators
 
                 double lon = glm.Radians(lonDeg);
                 double lat = glm.Radians(latDeg);
-                double r = _db.EarthRadius;
+                double r = _earthRadius;
 
                 dmat3 model3x3 = new dmat3();
                 model3x3.m02 = -Math.Cos(lon) * Math.Sin(lat);

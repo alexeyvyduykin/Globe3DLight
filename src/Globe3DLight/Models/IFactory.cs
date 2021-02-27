@@ -53,7 +53,7 @@ namespace Globe3DLight
 
         IScenarioContainer CreateScenarioContainer(string name = "Scenario");
 
-        ILogicalTreeNode CreateLogicalTreeNode(string name, IData data);
+        ILogicalTreeNode CreateLogicalTreeNode(string name, IState state);
         
         ITimePresenter CreateTimePresenter();
        

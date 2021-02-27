@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface ISunData : IData, IAnimator
+    public interface ISunState : IState, IAnimator
     {
         dvec3 Position { get; }
 
@@ -14,10 +13,8 @@ namespace Globe3DLight.Data.Animators
     }
 
 
-    public class SunAnimator : ObservableObject, ISunData
-    {
-        private readonly ISunDatabase _sunDatabase;
-
+    public class SunAnimator : ObservableObject, ISunState
+    {     
         private readonly dvec3 _position0;
         private readonly dvec3 _position1;
         private readonly double _timeBegin;
@@ -36,14 +33,12 @@ namespace Globe3DLight.Data.Animators
             get => _modelMatrix;
             protected set => Update(ref _modelMatrix, value);
         }
-        public SunAnimator(ISunDatabase sunDatabase)
-        {
-            this._sunDatabase = sunDatabase;
-
-            this._position0 = sunDatabase.Position0;
-            this._position1 = sunDatabase.Position1;
-            this._timeBegin = sunDatabase.TimeBegin;
-            this._timeEnd = sunDatabase.TimeEnd;
+        public SunAnimator(SunData data)
+        {            
+            _position0 = data.Position0;
+            _position1 = data.Position1;
+            _timeBegin = data.TimeBegin;
+            _timeEnd = data.TimeEnd;
         }
 
         private dvec3 GetPosition(double t)

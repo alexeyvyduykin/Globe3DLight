@@ -7,21 +7,10 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Containers
 {
-    //public interface ILogicalTreeNode : IObservableObject
-    //{
-
-    //}
-
-
-    public interface ILogicalTreeNode : IObservableObject//ILogicalTreeNode
+    public interface ILogicalTreeNode : IObservableObject
     {        
         ImmutableArray<ILogicalTreeNode> Children { get; set; }
 
-        IData Data { get; set; }
-
-      //  ILibrary<IDataProvider> DataProviderLibrary { get; set; }
-
-      //  IDataProvider CurrentDataProvider { get; set; }
-
+        IState State { get; set; }
     }
 }

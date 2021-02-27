@@ -4,7 +4,6 @@ using System.Collections.Immutable;
 using System.Linq;
 using Globe3DLight.Containers;
 using Globe3DLight.Data;
-using Globe3DLight.Data.Database;
 using Globe3DLight.Editor;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Scene;
@@ -37,30 +36,30 @@ namespace Globe3DLight.AvaloniaUI.Designer
         public static ILogicalTreeNode SunNode { get; set; }
         public static ILogicalTreeNode J2000Node { get; set; }
 
-        public static IOrbitDatabase OrbitDatabase { get; set; }
-        public static ISensorDatabase SensorDatabase { get; set; }
-        public static IRotationDatabase RotationDatabase { get; set; }
-        public static ISunDatabase SunDatabase { get; set; }
-        public static IJ2000Database J2000Database { get; set; }
-        public static IRetranslatorDatabase RetranslatorDatabase { get; set; }
-        public static IAntennaDatabase AntennaDatabase { get; set; }
-        public static IGroundStationDatabase GroundStationDatabase { get; set; }
+        public static OrbitData OrbitData { get; set; }
+        public static SensorData SensorData { get; set; }
+        public static RotationData RotationData { get; set; }
+        public static SunData SunData { get; set; }
+        public static J2000Data J2000Data { get; set; }
+        public static RetranslatorData RetranslatorData { get; set; }
+        public static AntennaData AntennaData { get; set; }
+        public static GroundStationData GroundStationData { get; set; }
 
 
-        public static IData OrbitAnimator { get; set; }
-        public static IData SensorAnimator { get; set; }
-        public static IData RotationAnimator { get; set; }
-        public static IData SunAnimator { get; set; }
-        public static IData J2000Animator { get; set; }
-        public static IData RetranslatorAnimator { get; set; }
-        public static IData AntennaAnimator { get; set; }
-        public static IData GroundStationData { get; set; }
+        public static IState OrbitAnimator { get; set; }
+        public static IState SensorAnimator { get; set; }
+        public static IState RotationAnimator { get; set; }
+        public static IState SunAnimator { get; set; }
+        public static IState J2000Animator { get; set; }
+        public static IState RetranslatorAnimator { get; set; }
+        public static IState AntennaAnimator { get; set; }
+        public static IState GroundStationState { get; set; }
 
         public static void InitializeContext(IServiceProvider serviceProvider)
         {
             var factory = serviceProvider.GetService<IFactory>();
             var objFactory = serviceProvider.GetService<IScenarioObjectFactory>();
-            var databaseFactory = serviceProvider.GetService<IDatabaseFactory>();
+            //var databaseFactory = serviceProvider.GetService<IDatabaseFactory>();
 
             // Editor
 
@@ -104,47 +103,47 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Database
 
-            OrbitDatabase = new DesignerOrbitDatabase();
-            RotationDatabase = new DesignRotationDatabase();
-            SensorDatabase = new DesignerSensorDatabase();
-            SunDatabase = new DesignSunDatabse();
-            J2000Database = new J2000Database() { Epoch = DateTime.Now, AngleDeg = 120.0 };
-            RetranslatorDatabase = new DesignerRetranslatorDatabase();
-            AntennaDatabase = new DesignerAntennaDatabase();
-            GroundStationDatabase = new GroundStationDatabase() { Lon = 36.0, Lat = 42.17, Elevation = 0.135, EarthRadius = 6371.0 };
+            OrbitData = DataDesigner.OrbitData;
+            RotationData = DataDesigner.RotationData;
+            SensorData = DataDesigner.SensorData;
+            SunData = DataDesigner.SunData;
+            J2000Data = new J2000Data { Epoch = DateTime.Now, AngleDeg = 120.0 };
+            RetranslatorData = DataDesigner.RetranslatorData;
+            AntennaData = DataDesigner.AntennaData;
+            GroundStationData = new GroundStationData { Lon = 36.0, Lat = 42.17, Elevation = 0.135, EarthRadius = 6371.0 };
 
             // Data
 
-            var orbitAnimator = dataFactory.CreateOrbitAnimator(OrbitDatabase);
+            var orbitAnimator = dataFactory.CreateOrbitAnimator(OrbitData);
             orbitAnimator.Animate(0.0);
             OrbitAnimator = orbitAnimator;
 
-            var rotationAnimator = dataFactory.CreateRotationAnimator(RotationDatabase);
+            var rotationAnimator = dataFactory.CreateRotationAnimator(RotationData);
             rotationAnimator.Animate(1.0);
             RotationAnimator = rotationAnimator;
 
-            var sensorAnimator = dataFactory.CreateSensorAnimator(SensorDatabase);
+            var sensorAnimator = dataFactory.CreateSensorAnimator(SensorData);
             sensorAnimator.Animate(0.0);
             SensorAnimator = sensorAnimator;
 
-            var sunAnimator = dataFactory.CreateSunAnimator(SunDatabase);
+            var sunAnimator = dataFactory.CreateSunAnimator(SunData);
             sunAnimator.Animate(0.0);
             SunAnimator = sunAnimator;
 
-            var j2000Animator = dataFactory.CreateJ2000Animator(J2000Database);
+            var j2000Animator = dataFactory.CreateJ2000Animator(J2000Data);
             j2000Animator.Animate(0.0);
             J2000Animator = j2000Animator;
 
-            var retranslatorAnimator = dataFactory.CreateRetranslatorAnimator(RetranslatorDatabase);
+            var retranslatorAnimator = dataFactory.CreateRetranslatorAnimator(RetranslatorData);
             retranslatorAnimator.Animate(0.0);
             RetranslatorAnimator = retranslatorAnimator;
 
-            var antennaAnimator = dataFactory.CreateAntennaAnimator(AntennaDatabase);
+            var antennaAnimator = dataFactory.CreateAntennaAnimator(AntennaData);
             antennaAnimator.Animate(0.0);
             AntennaAnimator = antennaAnimator;
 
-            var groundStationData = dataFactory.CreateGroundStationData(GroundStationDatabase);
-            GroundStationData = groundStationData;
+            var groundStationData = dataFactory.CreateGroundStationData(GroundStationData);
+            GroundStationState = groundStationData;
 
 
             // Frames
@@ -165,7 +164,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             Sensor = objFactory.CreateSensor("Sensor1", null);
 
             Project.AddChildFrame(Project.CurrentScenario.LogicalTreeNodeRoot.FirstOrDefault(),
-                factory.CreateLogicalTreeNode("Frame1", dataFactory.CreateFrameData()));
+                factory.CreateLogicalTreeNode("Frame1", dataFactory.CreateFrameState()));
 
 
 
@@ -175,10 +174,10 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             var dt = DateTime.Now;
             var events = new List<ISatelliteEvent>();
-            events.AddRange(objFactory.CreateRotationEvents(RotationDatabase, dt));
-            events.AddRange(objFactory.CreateObservationEvents(SensorDatabase, dt));
-            events.AddRange(objFactory.CreateTransmissionEvents(AntennaDatabase, dt));
-            SatelliteTask = objFactory.CreateSatelliteTask(Satellite, DateTime.Now);
+            events.AddRange(objFactory.CreateRotationEvents(RotationData, dt));
+            events.AddRange(objFactory.CreateObservationEvents(SensorData, dt));
+            events.AddRange(objFactory.CreateTransmissionEvents(AntennaData, dt));
+            SatelliteTask = objFactory.CreateSatelliteTask(Satellite, RotationData, SensorData, AntennaData, DateTime.Now);
             SatelliteTask.Events = events.OrderBy(s => s.Begin).ToList();
 
             Scenario.SatelliteTasks = ImmutableArray.Create(SatelliteTask);
@@ -191,46 +190,40 @@ namespace Globe3DLight.AvaloniaUI.Designer
         }
     }
 
-    internal class DesignerOrbitDatabase : OrbitDatabase
+    internal class DataDesigner
     {
         // x y z vx vy vz u   
         //public IList<(double x, double y, double z, double vx, double vy, double vz, double u)> Records { get; set; }
 
-        public DesignerOrbitDatabase()
-        {
-            Records = new List<double[]>()
-            {
-                new double[]{ 7000.0, -6800.0, 6750.0, 100.0, -150.0, 80.0, 0.0 },
-                new double[]{ 7000.0, -6800.0, 6750.0, 100.0, -150.0, 80.0, 1.0 },
-            };
-            TimeBegin = 0.0;
-            TimeEnd = 86400.0;
-            TimeStep = 60.0;
-        }
+        public static OrbitData OrbitData =>
+                new OrbitData()
+                {
+                    Records = new List<double[]>()
+                    {
+                        new double[] { 7000.0, -6800.0, 6750.0, 100.0, -150.0, 80.0, 0.0 },
+                        new double[] { 7000.0, -6800.0, 6750.0, 100.0, -150.0, 80.0, 1.0 },
+                    },
+                    TimeBegin = 0.0,
+                    TimeEnd = 86400.0,
+                    TimeStep = 60.0,
+                };
 
+        public static RetranslatorData RetranslatorData =>
+                new RetranslatorData()
+                {
+                    Records = new List<double[]>()
+                    {
+                        new double[] { 12000.0, -11500.0, 11750.0, 0.0 },
+                        new double[] { 13000.0, -12500.0, 12750.0, 3.0 },
+                    },
 
-    }
+                    TimeBegin = 0.0,
+                    TimeEnd = 86400.0,
+                    TimeStep = 60.0,
+                };
 
-    internal class DesignerRetranslatorDatabase : RetranslatorDatabase
-    {
-        public DesignerRetranslatorDatabase()
-        {
-
-            Records = new List<double[]>()
-            {
-            new double[]{ 12000.0, -11500.0, 11750.0, 0.0 },
-            new double[]{ 13000.0, -12500.0, 12750.0, 3.0 },
-            };
-
-            TimeBegin = 0.0;
-            TimeEnd = 86400.0;
-            TimeStep = 60.0;
-        }
-    }
-
-    internal class DesignerSensorDatabase : SensorDatabase
-    {
-        public DesignerSensorDatabase()
+        public static SensorData SensorData =>
+        new SensorData()
         {
             Shootings = new List<ShootingRecord1>()
             {
@@ -264,15 +257,13 @@ namespace Globe3DLight.AvaloniaUI.Designer
                     Range2 = 577,
                     TargetName = "GroundObject0234"
                 },
-            };
-            TimeBegin = 0.0;
-            TimeEnd = 86400.0;
-        }
-    }
+            },
+            TimeBegin = 0.0,
+            TimeEnd = 86400.0,
+        };
 
-    internal class DesignerAntennaDatabase : AntennaDatabase
-    {
-        public DesignerAntennaDatabase()
+        public static AntennaData AntennaData =>
+        new AntennaData()
         {
             Translations = new List<TranslationRecord>()
             {
@@ -294,18 +285,16 @@ namespace Globe3DLight.AvaloniaUI.Designer
                     EndTime = 60.0,
                     Target = "GST0000002",
                 },
-            };
+            },
 
-            TimeBegin = 0.0;
-            TimeEnd = 86400.0;
-        }
-    }
+            TimeBegin = 0.0,
+            TimeEnd = 86400.0,
+        };
 
-    internal class DesignRotationDatabase : RotationDatabase
-    {
-        public DesignRotationDatabase()
-        {
-            Rotations = new List<RotationRecord>()
+        public static RotationData RotationData =>
+            new RotationData()
+            {
+                Rotations = new List<RotationRecord>()
             {
                 new RotationRecord()
                 {
@@ -326,23 +315,21 @@ namespace Globe3DLight.AvaloniaUI.Designer
                     EndTime = 30.0,
                     Angle = 25.0
                 },
+            },
+                TimeBegin = 0.0,
+                TimeEnd = 86400.0,
             };
-            TimeBegin = 0.0;
-            TimeEnd = 86400.0;
-        }
-    }
 
-    internal class DesignSunDatabse : SunDatabase
-    {
-        public DesignSunDatabse()
+        public static SunData SunData =>
+        new SunData()
         {
-            Position0 = new GlmSharp.dvec3(40000.0, -42000.0, 41500.0);
+            Position0 = new GlmSharp.dvec3(40000.0, -42000.0, 41500.0),
 
-            Position1 = new GlmSharp.dvec3(38000.0, -44000.0, 37500.0);
+            Position1 = new GlmSharp.dvec3(38000.0, -44000.0, 37500.0),
 
-            TimeBegin = 0.0;
+            TimeBegin = 0.0,
 
-            TimeEnd = 86400.0;
-        }
+            TimeEnd = 86400.0,
+        };
     }
 }

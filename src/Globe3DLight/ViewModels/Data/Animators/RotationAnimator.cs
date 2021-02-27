@@ -2,23 +2,21 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 using System.Diagnostics;
 
 
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IRotationData : IData, IAnimator
+    public interface IRotationState : IState, IAnimator
     {
         dmat4 RotationMatrix { get; }
 
         double GamDEG { get; }
     }
 
-    public class RotationAnimator : ObservableObject, IRotationData
-    {
-        private readonly IRotationDatabase _rotationDatabase;
-        private readonly ContinuousEvents<RotationState> _rotationEvents;
+    public class RotationAnimator : ObservableObject, IRotationState
+    {      
+        private readonly ContinuousEvents<RotationEventState> _rotationEvents;
 
         private dmat4 _rotationMatrix;
         private double _gamDEG;
@@ -35,27 +33,26 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _gamDEG, value);
         }
 
-        public RotationAnimator(IRotationDatabase rotationDatabase)
-        {
-            this._rotationDatabase = rotationDatabase;
-            this._rotationEvents = create(rotationDatabase.Rotations);
+        public RotationAnimator(RotationData data)
+        {         
+            _rotationEvents = create(data.Rotations);
         }
 
-        private ContinuousEvents<RotationState> create(IList<RotationRecord> rotations)
+        private ContinuousEvents<RotationEventState> create(IList<RotationRecord> rotations)
         {
-            var rotationEvents = new ContinuousEvents<RotationState>() { MissMode = MissMode.LastActive };
+            var rotationEvents = new ContinuousEvents<RotationEventState>() { MissMode = MissMode.LastActive };
 
             double lastAngle = 0.0;
 
             foreach (var item in rotations)
             {
-                rotationEvents.AddFrom(new RotationState()
+                rotationEvents.AddFrom(new RotationEventState()
                 {
                     t = item.BeginTime,
                     Angle = lastAngle,
                 });
 
-                rotationEvents.AddTo(new RotationState()
+                rotationEvents.AddTo(new RotationEventState()
                 {
                     t = item.EndTime,
                     Angle = item.Angle,

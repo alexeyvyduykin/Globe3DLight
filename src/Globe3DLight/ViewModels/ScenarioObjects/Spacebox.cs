@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
-using Globe3DLight.Data.Animators;
+using Globe3DLight.Data;
 
 
 namespace Globe3DLight.ScenarioObjects
@@ -41,7 +41,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is IFrameData frameData)
+                if (LogicalTreeNode.State is IFrameState frameData)
                 {
                     renderer.DrawSpacebox(dc, RenderModel, frameData.ModelMatrix, scene);
                 }

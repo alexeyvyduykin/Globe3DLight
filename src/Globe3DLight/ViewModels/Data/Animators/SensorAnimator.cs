@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
 
-    public interface ISensorData : IData, IAnimator
+    public interface ISensorState : IState, IAnimator
     {
         bool Enable { get; }
 
@@ -124,10 +122,9 @@ namespace Globe3DLight.Data.Animators
         }
     }
 
-    public class SensorAnimator : ObservableObject, ISensorData
-    {
-        private readonly ISensorDatabase _sensorDatabase;
-        private readonly ContinuousEvents<SensorState> _shootingEvents;
+    public class SensorAnimator : ObservableObject, ISensorState
+    {      
+        private readonly ContinuousEvents<SensorEventState> _shootingEvents;
 
 
         private bool _enable;
@@ -151,19 +148,18 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _direction, value);
         }
 
-        public SensorAnimator(ISensorDatabase sensorDatabase)
-        {           
-            _sensorDatabase = sensorDatabase;
-            _shootingEvents = create(sensorDatabase.Shootings);
+        public SensorAnimator(SensorData data)
+        {                      
+            _shootingEvents = create(data.Shootings);
         }
 
-        private ContinuousEvents<SensorState> create(IList<ShootingRecord1> shootings)
+        private ContinuousEvents<SensorEventState> create(IList<ShootingRecord1> shootings)
         {
-            var shootingEvents = new ContinuousEvents<SensorState>();
+            var shootingEvents = new ContinuousEvents<SensorEventState>();
 
             foreach (var item in shootings)
             {
-                shootingEvents.AddFrom(new SensorState()
+                shootingEvents.AddFrom(new SensorEventState()
                 {
                     t = item.BeginTime,
                     Range1 = item.Range1,
@@ -172,7 +168,7 @@ namespace Globe3DLight.Data.Animators
                     Gam2RAD = glm.Radians(item.Gam2),
                 });
 
-                shootingEvents.AddTo(new SensorState()
+                shootingEvents.AddTo(new SensorEventState()
                 {
                     t = item.EndTime,
                     Range1 = item.Range1,

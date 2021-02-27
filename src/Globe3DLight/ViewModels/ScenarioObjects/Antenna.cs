@@ -5,7 +5,6 @@ using Globe3DLight.Scene;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Data.Animators;
 using GlmSharp;
 using System.Collections.Immutable;
 using System.Linq;
@@ -59,7 +58,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is IAntennaData antennaData)
+                if (LogicalTreeNode.State is IAntennaState antennaData)
                 {
                     //        if (antennaData.Enable == true)
                     //       {
@@ -77,10 +76,10 @@ namespace Globe3DLight.ScenarioObjects
                             {
                                 if(groundStation.UniqueName.Name.Equals(target) == true)
                                 {                        
-                                    if (groundStation.LogicalTreeNode.Data is IGroundStationData groundStationData)
+                                    if (groundStation.LogicalTreeNode.State is IGroundStationState groundStationData)
                                     {
                                         var j2000Node = (ILogicalTreeNode)groundStation.LogicalTreeNode.Owner;
-                                        if (j2000Node.Data is IJ2000Data j2000Data)
+                                        if (j2000Node.State is IJ2000State j2000Data)
                                         {                                            
                                             targetPosition = new dvec3(j2000Data.ModelMatrix * new dvec4(groundStationData.Position, 1.0));
                                         }
@@ -95,7 +94,7 @@ namespace Globe3DLight.ScenarioObjects
                             {
                                 if (retranslator.UniqueName.Name.Equals(target) == true)
                                 {
-                                    if (retranslator.LogicalTreeNode.Data is IRetranslatorData retranslatorData)
+                                    if (retranslator.LogicalTreeNode.State is IRetranslatorState retranslatorData)
                                     {
                                         targetPosition = retranslatorData.Position;                               
                                     }
@@ -106,10 +105,10 @@ namespace Globe3DLight.ScenarioObjects
 
 
                         var rotationNode = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                        if (rotationNode.Data is IRotationData rotationData)
+                        if (rotationNode.State is IRotationState rotationData)
                         {
                             var orbitNode = (ILogicalTreeNode)rotationNode.Owner;
-                            if (orbitNode.Data is IOrbitData orbitData)
+                            if (orbitNode.State is IOrbitState orbitData)
                         {
                             var attach = RenderModel.AttachPosition;
 

@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IGroundStationData : IData
+    public interface IGroundStationState : IState
     {
         dvec3 Position { get; }
 
@@ -21,17 +19,25 @@ namespace Globe3DLight.Data.Animators
     }
 
 
-    public class GroundStationData : ObservableObject, IGroundStationData
-    {
-
-        private readonly IGroundStationDatabase _groundStationDatabase;
-
+    public class GroundStationState : ObservableObject, IGroundStationState
+    {        
         private dvec3 _position;
         private dmat4 _modelMatrix;
 
         private double _lon;
         private double _lat;
         private double _elevation;
+        private double _earthRadius;
+
+        public GroundStationState(GroundStationData data)
+        {            
+            _lon = data.Lon;
+            _lat = data.Lat;
+            _elevation = data.Elevation;
+            _earthRadius = data.EarthRadius;
+
+            Update();
+        }
 
         public dvec3 Position
         {
@@ -63,24 +69,12 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _elevation, value);
         }
 
-
-        public GroundStationData(IGroundStationDatabase groundStationDatabase)
-        {
-            this._groundStationDatabase = groundStationDatabase;
-
-            this.Lon = groundStationDatabase.Lon;
-            this.Lat = groundStationDatabase.Lat;
-            this.Elevation = groundStationDatabase.Elevation;
-
-            Update();
-        }
-
         private void Update()
         {
 
-            double lon = glm.Radians(_groundStationDatabase.Lon);
-            double lat = glm.Radians(_groundStationDatabase.Lat);
-            double r = _groundStationDatabase.Elevation + _groundStationDatabase.EarthRadius;
+            double lon = glm.Radians(_lon);
+            double lat = glm.Radians(_lat);
+            double r = _elevation + _earthRadius;
 
             dmat3 model3x3 = new dmat3();
             model3x3.m02 = -Math.Cos(lon) * Math.Sin(lat); model3x3.m12 = Math.Cos(lon) * Math.Cos(lat); model3x3.m22 = -Math.Sin(lon);

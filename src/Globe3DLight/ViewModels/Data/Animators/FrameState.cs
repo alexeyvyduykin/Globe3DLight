@@ -2,17 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IFrameData : IData, IFrameable
+    public interface IFrameState : IState, IFrameable
     {   
       //  dmat4 ModelMatrix { get; }
     }
 
 
-    public class FrameData : ObservableObject, IFrameData
+    public class FrameState : ObservableObject, IFrameState
     {
   
         private dmat4 _modelMatrix;
@@ -23,7 +22,7 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _modelMatrix, value);
         }
 
-        public FrameData()
+        public FrameState()
         {
             this._modelMatrix = dmat4.Identity;
         }

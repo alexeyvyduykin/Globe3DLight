@@ -357,18 +357,13 @@ namespace Globe3DLight
 
 
 
-        public ILogicalTreeNode CreateLogicalTreeNode(string name, IData data)
+        public ILogicalTreeNode CreateLogicalTreeNode(string name, IState state)
         {
             return new LogicalTreeNode()
             {
                 Name = name,
                 Children = ImmutableArray.Create<ILogicalTreeNode>(),
-                Data = data,
-                //Data = new Frame() 
-                //{
-                //    Name = name,
-                //    ModelMatrix = dmat4.Identity 
-                //},                
+                State = state,              
             };
         }
 

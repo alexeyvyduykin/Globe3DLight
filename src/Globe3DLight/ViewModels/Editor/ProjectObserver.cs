@@ -118,7 +118,7 @@ namespace Globe3DLight.Editor
 
         private void UpdateData(double t, ILogicalTreeNode node)
         {
-            if(node.Data is IAnimator animator)
+            if(node.State is IAnimator animator)
             {
                 animator.Animate(t);
             }

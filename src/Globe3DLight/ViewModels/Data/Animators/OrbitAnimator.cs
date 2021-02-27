@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 using System.Linq;
 
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IOrbitData : IData, IAnimator, IFrameable
+    public interface IOrbitState : IState, IAnimator, IFrameable
     {
         dvec3 Position { get; }      
       //  dmat4 ModelMatrix { get; }
@@ -17,19 +16,26 @@ namespace Globe3DLight.Data.Animators
         dmat4 Rotation { get; }
     }
 
-    public class OrbitAnimator : ObservableObject, IOrbitData
-    {
-        private readonly IOrbitDatabase _orbitDatabase;
+    public class OrbitAnimator : ObservableObject, IOrbitState
+    {      
         private readonly IList<(double x, double y, double z, double vx, double vy, double vz, double u)> _records;
         private readonly double _timeBegin;
         private readonly double _timeEnd;
         private readonly double _timeStep;
 
-
         private dvec3 _position;
         private dmat4 _modelMatrix;
         private dmat4 _translate;
         private dmat4 _rotation;
+
+        public OrbitAnimator(OrbitData data)
+        {
+            _records = data.Records.Select(s => (s[0], s[1], s[2], s[3], s[4], s[5], s[6])).ToList();
+            _timeBegin = data.TimeBegin;
+            _timeEnd = data.TimeEnd;
+            _timeStep = data.TimeStep;
+        }
+
         public dmat4 Translate
         {
             get => _translate; 
@@ -53,16 +59,6 @@ namespace Globe3DLight.Data.Animators
         {
             get => _position;
             protected set => Update(ref _position, value);
-        }
-
-        public OrbitAnimator(IOrbitDatabase orbitDatabase)
-        {
-            this._orbitDatabase = orbitDatabase;
-
-            this._records = orbitDatabase.Records.Select(s => (s[0], s[1], s[2], s[3], s[4], s[5], s[6])).ToList();
-            this._timeBegin = orbitDatabase.TimeBegin;
-            this._timeEnd = orbitDatabase.TimeEnd;
-            this._timeStep = orbitDatabase.TimeStep;
         }
 
         private dvec3 GetPosition(double t)

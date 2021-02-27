@@ -17,7 +17,7 @@ namespace Globe3DLight
 
                 child.Owner = node;
 
-                child.Data.Owner = node.Data;
+                child.State.Owner = node.State;
 
                 builder.Add(child);
 
@@ -85,10 +85,10 @@ namespace Globe3DLight
         {
             if (node.Owner == null)
             {
-                return node.Data.Name;
+                return node.State.Name;
             }
 
-            return string.Format("{0}.{1}", ((ILogicalTreeNode)node.Owner).GetFullName(), node.Data.Name);
+            return string.Format("{0}.{1}", ((ILogicalTreeNode)node.Owner).GetFullName(), node.State.Name);
         }
     }
 }

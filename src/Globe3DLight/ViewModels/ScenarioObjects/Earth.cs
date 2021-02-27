@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
-using Globe3DLight.Data.Animators;
 using GlmSharp;
 
 
@@ -61,7 +60,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is IJ2000Data j2000Data)
+                if (LogicalTreeNode.State is IJ2000State j2000Data)
                 {
                     renderer.DrawFrame(dc, FrameRenderModel, j2000Data.ModelMatrix, scene);
 

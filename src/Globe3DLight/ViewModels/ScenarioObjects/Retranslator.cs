@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.Renderer;
-using Globe3DLight.Data.Animators;
 using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
@@ -46,7 +45,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is IRetranslatorData retranslatorData)
+                if (LogicalTreeNode.State is IRetranslatorState retranslatorData)
                 {
                     var m = retranslatorData.ModelMatrix;
 

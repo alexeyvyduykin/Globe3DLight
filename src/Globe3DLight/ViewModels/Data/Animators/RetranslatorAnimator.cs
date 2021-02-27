@@ -2,30 +2,36 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 using System.Linq;
 
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IRetranslatorData : IData, IAnimator
+    public interface IRetranslatorState : IState, IAnimator
     {
         dvec3 Position { get; }
         dmat4 ModelMatrix { get; }
     }
 
-    public class RetranslatorAnimator : ObservableObject, IRetranslatorData
-    {
-        private readonly IRetranslatorDatabase _retranslatorDatabase;
+    public class RetranslatorAnimator : ObservableObject, IRetranslatorState
+    {     
         private readonly IList<(double x, double y, double z, double u)> _records;
         private readonly double _timeBegin;
         private readonly double _timeEnd;
         private readonly double _timeStep;
 
-
         private dvec3 _position;
         private dmat4 _modelMatrix;
         private dmat4 _translate;
         private dmat4 _rotation;
+
+        public RetranslatorAnimator(RetranslatorData data)
+        {           
+            _records = data.Records.Select(s => (s[0], s[1], s[2], s[3])).ToList();
+            _timeBegin = data.TimeBegin;
+            _timeEnd = data.TimeEnd;
+            _timeStep = data.TimeStep;
+        }
+
         public dmat4 Translate
         {
             get => _translate;
@@ -51,15 +57,6 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _position, value);
         }
 
-        public RetranslatorAnimator(IRetranslatorDatabase retranslatorDatabase)
-        {
-            this._retranslatorDatabase = retranslatorDatabase;
-
-            this._records = retranslatorDatabase.Records.Select(s => (s[0], s[1], s[2], s[3])).ToList();
-            this._timeBegin = retranslatorDatabase.TimeBegin;
-            this._timeEnd = retranslatorDatabase.TimeEnd;
-            this._timeStep = retranslatorDatabase.TimeStep;
-        }
 
         private dvec3 GetPosition(double t)
         {

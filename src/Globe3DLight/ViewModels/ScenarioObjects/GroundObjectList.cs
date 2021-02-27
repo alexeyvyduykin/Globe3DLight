@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 using Globe3DLight.Containers;
 using Globe3DLight.Renderer;
 using Globe3DLight.Scene;
-using Globe3DLight.Data.Animators;
-
+using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
@@ -39,10 +38,10 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is IGroundObjectListData groundObjectListData)
+                if (LogicalTreeNode.State is IGroundObjectListState groundObjectListData)
                 {
                     var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                    if (parent.Data is IJ2000Data j2000Data)
+                    if (parent.State is IJ2000State j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 

@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Data.Animators;
 using System.Collections.Immutable;
-using Globe3DLight.Data.Database;
 using GlmSharp;
 
 
@@ -11,77 +9,76 @@ namespace Globe3DLight.Data
 {
     public interface IDataFactory
     {
-        IFrameData CreateFrameData(/*string name*/);
+        IFrameState CreateFrameState();
 
-        ISunData CreateSunAnimator(ISunDatabase sunDatabase);
+        ISunState CreateSunAnimator(SunData data);
 
-        IJ2000Data CreateJ2000Animator(IJ2000Database j2000Database);
+        IJ2000State CreateJ2000Animator(J2000Data data);
 
-        IOrbitData CreateOrbitAnimator(IOrbitDatabase orbitDatabase);
+        IOrbitState CreateOrbitAnimator(OrbitData data);
 
-        IRotationData CreateRotationAnimator(IRotationDatabase rotationDatabase);
+        IRotationState CreateRotationAnimator(RotationData data);
 
-        ISensorData CreateSensorAnimator(ISensorDatabase sensorDatabase);
+        ISensorState CreateSensorAnimator(SensorData data);
 
-        IAntennaData CreateAntennaAnimator(IAntennaDatabase antennaDatabase);
+        IAntennaState CreateAntennaAnimator(AntennaData data);
 
-        IGroundStationData CreateGroundStationData(IGroundStationDatabase groundStationDatabase);
+        IGroundStationState CreateGroundStationData(GroundStationData data);
 
-        IGroundObjectListData CreateGroundObjectListData(IGroundObjectListDatabase groundObjectListDatabase);
+        IGroundObjectListState CreateGroundObjectListData(GroundObjectListData data);
 
-        IRetranslatorData CreateRetranslatorAnimator(IRetranslatorDatabase retranslatorDatabase);
-
+        IRetranslatorState CreateRetranslatorAnimator(RetranslatorData data);
     }
 
 
     public class DataFactory : IDataFactory
     {
-        public IFrameData CreateFrameData(/*string name*/)
+        public IFrameState CreateFrameState()
         {
-            return new FrameData();// { Name = name };
+            return new FrameState();
         }
 
-        public ISunData CreateSunAnimator(ISunDatabase sunDatabase)
+        public ISunState CreateSunAnimator(SunData data)
         {
-            return new SunAnimator(sunDatabase);// { Name = "fr_sun" };
+            return new SunAnimator(data);
         }
 
-        public IJ2000Data CreateJ2000Animator(IJ2000Database j2000Database)
+        public IJ2000State CreateJ2000Animator(J2000Data data)
         {
-            return new J2000Animator(j2000Database);// { Name = "fr_j2000" };
+            return new J2000Animator(data);
         }
 
-        public IOrbitData CreateOrbitAnimator(IOrbitDatabase orbitDatabase)
+        public IOrbitState CreateOrbitAnimator(OrbitData data)
         {
-            return new OrbitAnimator(orbitDatabase);// { Name = "fr_orbital" };
+            return new OrbitAnimator(data);
         }
 
-        public IRotationData CreateRotationAnimator(IRotationDatabase rotationDatabase)
+        public IRotationState CreateRotationAnimator(RotationData data)
         {
-            return new RotationAnimator(rotationDatabase);// { Name = "fr_rotation" };
+            return new RotationAnimator(data);
         }
 
-        public ISensorData CreateSensorAnimator(ISensorDatabase sensorDatabase)
+        public ISensorState CreateSensorAnimator(SensorData data)
         {
-            return new SensorAnimator(sensorDatabase);// { Name = "fr_sensor" };
+            return new SensorAnimator(data);
         }
 
-        public IAntennaData CreateAntennaAnimator(IAntennaDatabase antennaDatabase)
+        public IAntennaState CreateAntennaAnimator(AntennaData data)
         {
-            return new AntennaAnimator(antennaDatabase);
+            return new AntennaAnimator(data);
         }
 
-        public IGroundStationData CreateGroundStationData(IGroundStationDatabase groundStationDatabase)
+        public IGroundStationState CreateGroundStationData(GroundStationData data)
         {
-            return new GroundStationData(groundStationDatabase);// { Name ="fr_groundstation" };
+            return new GroundStationState(data);
         }
-        public IGroundObjectListData CreateGroundObjectListData(IGroundObjectListDatabase groundObjectListDatabase)
+        public IGroundObjectListState CreateGroundObjectListData(GroundObjectListData data)
         {
-            return new GroundObjectListData(groundObjectListDatabase);
+            return new GroundObjectListState(data);
         }
-        public IRetranslatorData CreateRetranslatorAnimator(IRetranslatorDatabase retranslatorDatabase)
+        public IRetranslatorState CreateRetranslatorAnimator(RetranslatorData data)
         {
-            return new RetranslatorAnimator(retranslatorDatabase);
+            return new RetranslatorAnimator(data);
         }
     }
 }

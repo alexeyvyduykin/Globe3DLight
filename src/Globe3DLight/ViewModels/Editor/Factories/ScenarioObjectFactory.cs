@@ -7,8 +7,8 @@ using System.Linq;
 using System.Collections.Immutable;
 using Globe3DLight.Containers;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 using System.Threading;
+using Globe3DLight.Data;
 
 namespace Globe3DLight.Editor
 {
@@ -36,11 +36,11 @@ namespace Globe3DLight.Editor
 
         ICamera CreateArcballCamera(ITargetable target);
 
-        ISatelliteTask CreateSatelliteTask(ISatellite satellite, DateTime epochOnDay);
+        ISatelliteTask CreateSatelliteTask(ISatellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay);
 
-        IEnumerable<ISatelliteEvent> CreateRotationEvents(IRotationDatabase db, DateTime epochOnDay);
-        IEnumerable<ISatelliteEvent> CreateObservationEvents(ISensorDatabase db, DateTime epochOnDay);
-        IEnumerable<ISatelliteEvent> CreateTransmissionEvents(IAntennaDatabase db, DateTime epochOnDay);
+        IEnumerable<ISatelliteEvent> CreateRotationEvents(RotationData data, DateTime epochOnDay);
+        IEnumerable<ISatelliteEvent> CreateObservationEvents(SensorData data, DateTime epochOnDay);
+        IEnumerable<ISatelliteEvent> CreateTransmissionEvents(AntennaData data, DateTime epochOnDay);
     }
 
     public class ScenarioObjectFactory : IScenarioObjectFactory
@@ -409,25 +409,25 @@ namespace Globe3DLight.Editor
         }
 
 
-        public ISatelliteTask CreateSatelliteTask(ISatellite satellite, DateTime epochOnDay)
+        public ISatelliteTask CreateSatelliteTask(ISatellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay)
         {
             var name = satellite.Name;
         
             var events = new List<ISatelliteEvent>();
            
-            if (satellite.LogicalTreeNode.Data is IRotationDatabase rotationDatabase)
+            if (satellite.LogicalTreeNode.State is IRotationState)
             {               
-                events.AddRange(CreateRotationEvents(rotationDatabase, epochOnDay));
+                events.AddRange(CreateRotationEvents(rotationData, epochOnDay));
 
                 foreach (var childNode in satellite.LogicalTreeNode.Children)
                 {
-                    if (childNode.Data is ISensorDatabase sensorDatabase)
+                    if (childNode.State is ISensorState)
                     {
-                        events.AddRange(CreateObservationEvents(sensorDatabase, epochOnDay));
+                        events.AddRange(CreateObservationEvents(sensorData, epochOnDay));
                     }
-                    else if(childNode.Data is IAntennaDatabase antennaDatabase)
+                    else if(childNode.State is IAntennaState)
                     {
-                        events.AddRange(CreateTransmissionEvents(antennaDatabase, epochOnDay));
+                        events.AddRange(CreateTransmissionEvents(antennaData, epochOnDay));
                     }
                 }
 
@@ -447,12 +447,12 @@ namespace Globe3DLight.Editor
             };
         }
 
-        public IEnumerable<ISatelliteEvent> CreateRotationEvents(IRotationDatabase db, DateTime epochOnDay)
+        public IEnumerable<ISatelliteEvent> CreateRotationEvents(RotationData data, DateTime epochOnDay)
         {
             var events = new List<ISatelliteEvent>();
 
-            var dt = epochOnDay.AddSeconds(db.TimeBegin);
-            foreach (var item in db.Rotations)
+            var dt = epochOnDay.AddSeconds(data.TimeBegin);
+            foreach (var item in data.Rotations)
             {
                 events.Add(new RotationEvent()
                 {
@@ -465,11 +465,11 @@ namespace Globe3DLight.Editor
             return events;
         }
 
-        public IEnumerable<ISatelliteEvent> CreateObservationEvents(ISensorDatabase db, DateTime epochOnDay)
+        public IEnumerable<ISatelliteEvent> CreateObservationEvents(SensorData data, DateTime epochOnDay)
         {
             var events = new List<ISatelliteEvent>();
-            var dt = epochOnDay.AddSeconds(db.TimeBegin);
-            foreach (var item in db.Shootings)
+            var dt = epochOnDay.AddSeconds(data.TimeBegin);
+            foreach (var item in data.Shootings)
             {
                 events.Add(new ObservationEvent()
                 {
@@ -481,11 +481,11 @@ namespace Globe3DLight.Editor
             
             return events;
         }
-        public IEnumerable<ISatelliteEvent> CreateTransmissionEvents(IAntennaDatabase db, DateTime epochOnDay)
+        public IEnumerable<ISatelliteEvent> CreateTransmissionEvents(AntennaData data, DateTime epochOnDay)
         {
             var events = new List<ISatelliteEvent>(); 
-            var dt = epochOnDay.AddSeconds(db.TimeBegin);
-            foreach (var item in db.Translations)
+            var dt = epochOnDay.AddSeconds(data.TimeBegin);
+            foreach (var item in data.Translations)
             {
                 events.Add(new TransmissionEvent()
                 {

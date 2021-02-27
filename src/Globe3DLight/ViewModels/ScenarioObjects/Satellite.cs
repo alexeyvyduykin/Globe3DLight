@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.Renderer;
-using Globe3DLight.Data.Animators;
 using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
@@ -46,7 +45,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             get
             {
-                if(((ILogicalTreeNode)_logicalTreeNode?.Owner).Data is IFrameable frameable)
+                if(((ILogicalTreeNode)_logicalTreeNode?.Owner).State is IFrameable frameable)
                 {
                     return frameable.ModelMatrix.Inverse;
                 }
@@ -64,10 +63,10 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is IRotationData rotationData)
+                if (LogicalTreeNode.State is IRotationState rotationData)
                 {
                     var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                    if (parent.Data is IOrbitData orbitData)
+                    if (parent.State is IOrbitState orbitData)
                     {
                         //   double r = orbitData.Position.Length;
                         //    var orbitRadius = r * scene.WorldScale;

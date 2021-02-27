@@ -1,25 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Data.Database;
-
 
 namespace Globe3DLight.Data
 {
     public interface IJsonDataProvider : IDataProvider
     {
-        ISunDatabase CreateSunDatabase(string json);
+        SunData CreateSunDatabase(string json);
 
-        IJ2000Database CreateJ2000Database(string json);
+        J2000Data CreateJ2000Database(string json);
 
-        IOrbitDatabase CreateOrbitalDatabase(string json); 
-        IRotationDatabase CreateRotationDatabase(string json);
+        OrbitData CreateOrbitalDatabase(string json); 
+        RotationData CreateRotationDatabase(string json);
 
-        ISensorDatabase CreateSensorDatabase(string json);
+        SensorData CreateSensorDatabase(string json);
 
-        IRetranslatorDatabase CreateRetranslatorDatabase(string json);
+        RetranslatorData CreateRetranslatorDatabase(string json);
 
-        IAntennaDatabase CreateAntennaDatabase(string json);
+        AntennaData CreateAntennaDatabase(string json);
 
     }
 

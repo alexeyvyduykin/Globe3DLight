@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Animators;
 
-namespace Globe3DLight.Data.Database
+namespace Globe3DLight.Data
 {
-    public class SensorState : EventState
+    public class SensorEventState : EventState
     {
         internal double Range1 { get; set; }
         internal double Range2 { get; set; }
@@ -97,7 +96,7 @@ namespace Globe3DLight.Data.Database
                 first = false;
             }
 
-            return new SensorState()
+            return new SensorEventState()
             {
                 Shoot = Shoot,
                 Direction = Direction,

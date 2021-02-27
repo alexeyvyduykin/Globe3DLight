@@ -12,17 +12,13 @@ namespace Globe3DLight.Containers
     {       
         private ImmutableArray<ILogicalTreeNode> _children;    
         private bool _isExpanded = true;
-        private IData _data;
-   //     private ILibrary<IDataProvider> _dataProviderLibrary;
-   //     private IDataProvider _currentDataProvider;
+        private IState _state;
 
         public bool IsExpanded
         {
             get => _isExpanded;
             set => Update(ref _isExpanded, value);
         }
-
-
 
         //public new string Name
         //{
@@ -43,31 +39,19 @@ namespace Globe3DLight.Containers
             set => Update(ref _children, value);
         }
 
-        public IData Data
+        public IState State
         {
-            get => _data;
-            set => Update(ref _data, value);
+            get => _state;
+            set => Update(ref _state, value);
         }
-
-        //public ILibrary<IDataProvider> DataProviderLibrary 
-        //{
-        //    get => _dataProviderLibrary; 
-        //    set => Update(ref _dataProviderLibrary, value);
-        //}
-
-        //public IDataProvider CurrentDataProvider 
-        //{
-        //    get => _currentDataProvider; 
-        //    set => Update(ref _currentDataProvider, value); 
-        //}
 
         public override bool IsDirty()
         {
             var isDirty = base.IsDirty();
 
-            if (Data != null)
+            if (State != null)
             {
-                isDirty |= Data.IsDirty();
+                isDirty |= State.IsDirty();
             }
 
             foreach (var child in Children)
@@ -83,7 +67,7 @@ namespace Globe3DLight.Containers
         {
             base.Invalidate();
 
-            Data?.Invalidate();
+            State?.Invalidate();
 
             foreach (var child in Children)
             {

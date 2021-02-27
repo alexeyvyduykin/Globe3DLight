@@ -5,7 +5,7 @@ using GlmSharp;
 
 namespace Globe3DLight.Data
 {
-    public interface IData : IObservableObject
+    public interface IState : IObservableObject
     {
        // dmat4 GetModelMatrix();
     }

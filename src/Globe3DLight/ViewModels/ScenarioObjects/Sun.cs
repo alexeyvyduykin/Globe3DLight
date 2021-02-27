@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.Renderer;
-using Globe3DLight.Data.Animators;
 using GlmSharp;
 
 
@@ -45,7 +44,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is ISunData sunData)
+                if (LogicalTreeNode.State is ISunState sunData)
                 {
                     double r = sunData.Position.Length;
                     var orbitRadius = r;// * scene.WorldScale;

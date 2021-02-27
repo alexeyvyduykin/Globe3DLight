@@ -38,8 +38,8 @@ namespace Globe3DLight.Editor
         void OnSetCameraTo();
         void OnExportJson(string path, object item);
         void OnImportJson(string path);
-        void OnImportJson__(string path);
-        void OnImportObject__(string name, object item);
+        //void OnImportJson__(string path);
+        //void OnImportObject__(string name, object item);
         void OnImportObject(object item, bool restore);
 
         string GetName(object item);

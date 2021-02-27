@@ -2,12 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IJ2000Data : IData, IAnimator
+    public interface IJ2000State : IState, IAnimator
     {
         dmat4 ModelMatrix { get; }
 
@@ -15,9 +13,8 @@ namespace Globe3DLight.Data.Animators
     }
 
 
-    public class J2000Animator : ObservableObject, IJ2000Data
-    {
-        private readonly IJ2000Database _j2000Database;
+    public class J2000Animator : ObservableObject, IJ2000State
+    {        
         private readonly double _angleDeg0;
         private double _angleDeg;
 
@@ -36,12 +33,10 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _angleDeg, value);
         }
 
-        public J2000Animator(IJ2000Database j2000Database)
-        {
-            this._j2000Database = j2000Database;
-
-            this._angleDeg0 = j2000Database.AngleDeg;
-            this._epoch = j2000Database.Epoch;
+        public J2000Animator(J2000Data data)
+        {            
+            _angleDeg0 = data.AngleDeg;
+            _epoch = data.Epoch;
         }
 
         public void Animate(double t)

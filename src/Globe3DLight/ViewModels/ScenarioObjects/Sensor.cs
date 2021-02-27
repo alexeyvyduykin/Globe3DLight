@@ -5,7 +5,6 @@ using Globe3DLight.Scene;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Data.Animators;
 using GlmSharp;
 using System.Collections.Immutable;
 
@@ -51,15 +50,15 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.Data is ISensorData sensorData)
+                if (LogicalTreeNode.State is ISensorState sensorData)
                 {
                     if (sensorData.Enable == true)
                     {
                         var rotationNode = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                        if (rotationNode.Data is IRotationData /*rotationData*/)
+                        if (rotationNode.State is IRotationState /*rotationData*/)
                         {
                             var orbitNode = (ILogicalTreeNode)rotationNode.Owner;
-                            if (orbitNode.Data is IOrbitData orbitData)
+                            if (orbitNode.State is IOrbitState orbitData)
                             {
                                 //   double r = orbitData.Position.Length;
                                 //   var orbitRadius = r * scene.WorldScale;

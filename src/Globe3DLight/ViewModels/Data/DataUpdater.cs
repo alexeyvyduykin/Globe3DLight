@@ -32,7 +32,7 @@ namespace Globe3DLight.Data
 
         public void Update(double t, ILogicalTreeNode logicalTreeNode)
         {
-            if(logicalTreeNode.Data is IAnimator animator)
+            if(logicalTreeNode.State is IAnimator animator)
             {
                 animator.Animate(t);
             }

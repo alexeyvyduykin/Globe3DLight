@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight.Data.Database
+namespace Globe3DLight.Data
 {
     //public enum TranslationType
     //{
@@ -11,11 +11,11 @@ namespace Globe3DLight.Data.Database
     //}
 
 
-    public class AntennaState : EventState
+    public class AntennaEventState : EventState
     {
         internal override EventState FromHit(EventState state0, EventState state1, double t)
         {
-            return new AntennaState()
+            return new AntennaEventState()
             {
                 Target = this.Target,
        //         IndexTarget = this.IndexTarget,

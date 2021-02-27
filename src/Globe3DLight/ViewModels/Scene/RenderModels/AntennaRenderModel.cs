@@ -5,7 +5,6 @@ using GlmSharp;
 using Globe3DLight;
 using Globe3DLight.Data;
 using Globe3DLight.Renderer;
-using Globe3DLight.Data.Animators;
 
 namespace Globe3DLight.Scene
 {

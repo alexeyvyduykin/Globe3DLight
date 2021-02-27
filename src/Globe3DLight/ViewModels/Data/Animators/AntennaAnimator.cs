@@ -2,24 +2,20 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Data.Database;
 
-namespace Globe3DLight.Data.Animators
+namespace Globe3DLight.Data
 {
-    public interface IAntennaData : IData, IAnimator
+    public interface IAntennaState : IState, IAnimator
     {
         bool Enable { get; }
 
-        string Target { get; }
-
-      
+        string Target { get; }      
     }
 
 
-    public class AntennaAnimator : ObservableObject, IAntennaData
-    {
-        private readonly IAntennaDatabase _antennaDatabase;
-        private readonly ContinuousEvents<AntennaState> _translationEvents;
+    public class AntennaAnimator : ObservableObject, IAntennaState
+    {      
+        private readonly ContinuousEvents<AntennaEventState> _translationEvents;
         private bool _enable;
         private string _target;
 
@@ -35,25 +31,24 @@ namespace Globe3DLight.Data.Animators
             protected set => Update(ref _target, value);
         }
 
-        public AntennaAnimator(IAntennaDatabase antennaDatabase)
-        {
-            this._antennaDatabase = antennaDatabase;
-            this._translationEvents = create(antennaDatabase.Translations);      
+        public AntennaAnimator(AntennaData data)
+        {            
+            _translationEvents = create(data.Translations);      
         }
 
-        private ContinuousEvents<AntennaState> create(IList<TranslationRecord> translations)
+        private ContinuousEvents<AntennaEventState> create(IList<TranslationRecord> translations)
         {
-            var translationEvents = new ContinuousEvents<AntennaState>();
+            var translationEvents = new ContinuousEvents<AntennaEventState>();
 
             foreach (var item in translations)
             {
-                translationEvents.AddFrom(new AntennaState()
+                translationEvents.AddFrom(new AntennaEventState()
                 {
                     t = item.BeginTime,
                     Target = item.Target,                    
                 });
 
-                translationEvents.AddTo(new AntennaState()
+                translationEvents.AddTo(new AntennaEventState()
                 {
                     t = item.EndTime,
                     Target = item.Target,
