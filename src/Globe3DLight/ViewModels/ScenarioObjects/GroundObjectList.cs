@@ -38,14 +38,14 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IGroundObjectListState groundObjectListData)
+                if (LogicalTreeNode.State is IGroundObjectListState groundObjectListState)
                 {
                     var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
                     if (parent.State is IJ2000State j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 
-                        var matrices = groundObjectListData.ModelMatrices.Select(s => m * s.Value);
+                        var matrices = groundObjectListState.States.Values.Select(s => m * s.ModelMatrix);
                  
                         renderer.DrawGroundObjectList(dc, RenderModel, matrices, scene);
                     }

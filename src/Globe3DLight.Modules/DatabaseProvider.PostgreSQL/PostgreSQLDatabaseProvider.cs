@@ -92,7 +92,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var earthAngleDeg = initialConditions.EarthAngleBegin;
 
 
-            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(new J2000Data() { Epoch = epoch, AngleDeg = earthAngleDeg }));
+            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
             root.AddChild(fr_j2000);
 
             var fr_sun = CreateSunNode(root, initialConditions);
@@ -103,16 +103,16 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             {
                 var gs = groundStations[i];
 
-                var fr_gs = factory.CreateLogicalTreeNode(string.Format("fr_gs{0:00}", i + 1), dataFactory.CreateGroundStationData(new GroundStationData() { Lon = gs.Lon, Lat = gs.Lat, Elevation = 0.0, EarthRadius = 6371.0 }));
+                var fr_gs = factory.CreateLogicalTreeNode(string.Format("fr_gs{0:00}", i + 1), dataFactory.CreateGroundStationState(gs.Lon, gs.Lat, 0.0, 6371.0));
 
                 fr_gss.Add(fr_gs);
 
                 fr_j2000.AddChild(fr_gs);
             }
 
-            var gos = groundObjects.ToDictionary(s => s.Name, s => (s.Lon, s.Lat));
+            var gos = groundObjects.ToDictionary(s => s.Name, s => (s.Lon, s.Lat, 6371.0));
 
-            var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListData(new GroundObjectListData() { Positions = gos, EarthRadius = 6371.0 }));
+            var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListState(gos));
             fr_j2000.AddChild(fr_gos);
 
             var fr_orbits = new List<ILogicalTreeNode>();

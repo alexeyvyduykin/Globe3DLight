@@ -222,21 +222,21 @@ namespace Globe3DLight.Editor
             }
 
             var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
-            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(new J2000Data() { Epoch = DateTime.Now, AngleDeg = 0.0 }));
+            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(DateTime.Now, 0.0));
             root.AddChild(fr_j2000);
 
             var fr_sun = CreateSunNode(root, @"C:\resource\globe3d\data\fr_sun.json");
 
 
-            var fr_gs01 = factory.CreateLogicalTreeNode("fr_gs01", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 36.26, Lat = 54.97, Elevation = 0.223, EarthRadius = 6371.0 }));
-            var fr_gs02 = factory.CreateLogicalTreeNode("fr_gs02", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 30.201389, Lat = 59.712777, Elevation = 0.128, EarthRadius = 6371.0 }));
-            var fr_gs03 = factory.CreateLogicalTreeNode("fr_gs03", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 37.0532, Lat = 55.5856, Elevation = 0.204, EarthRadius = 6371.0 }));
-            var fr_gs04 = factory.CreateLogicalTreeNode("fr_gs04", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 107.945, Lat = 51.87111, Elevation = 0.621, EarthRadius = 6371.0 }));
-            var fr_gs05 = factory.CreateLogicalTreeNode("fr_gs05", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 37.9678, Lat = 55.9494, Elevation = 0.157, EarthRadius = 6371.0 }));
-            var fr_gs06 = factory.CreateLogicalTreeNode("fr_gs06", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 131.7575, Lat = 44.0247, Elevation = 0.080, EarthRadius = 6371.0 }));
-            var fr_gs07 = factory.CreateLogicalTreeNode("fr_gs07", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 136.7536, Lat = 50.6856, Elevation = 0.222, EarthRadius = 6371.0 }));
-            var fr_gs08 = factory.CreateLogicalTreeNode("fr_gs08", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 38.39, Lat = 55.1536111, Elevation = 0.189, EarthRadius = 6371.0 }));
-            var fr_gs09 = factory.CreateLogicalTreeNode("fr_gs09", dataFactory.CreateGroundStationData(new GroundStationData() { Lon = 107.934166, Lat = 51.864722, Elevation = 0.633, EarthRadius = 6371.0 }));
+            var fr_gs01 = factory.CreateLogicalTreeNode("fr_gs01", dataFactory.CreateGroundStationState(36.26, 54.97, 0.223, 6371.0));
+            var fr_gs02 = factory.CreateLogicalTreeNode("fr_gs02", dataFactory.CreateGroundStationState(30.201389, 59.712777, 0.128, 6371.0));
+            var fr_gs03 = factory.CreateLogicalTreeNode("fr_gs03", dataFactory.CreateGroundStationState(37.0532, 55.5856, 0.204, 6371.0));
+            var fr_gs04 = factory.CreateLogicalTreeNode("fr_gs04", dataFactory.CreateGroundStationState(107.945, 51.87111, 0.621, 6371.0));
+            var fr_gs05 = factory.CreateLogicalTreeNode("fr_gs05", dataFactory.CreateGroundStationState(37.9678, 55.9494, 0.157, 6371.0));
+            var fr_gs06 = factory.CreateLogicalTreeNode("fr_gs06", dataFactory.CreateGroundStationState(131.7575, 44.0247, 0.080, 6371.0));
+            var fr_gs07 = factory.CreateLogicalTreeNode("fr_gs07", dataFactory.CreateGroundStationState(136.7536, 50.6856, 0.222, 6371.0));
+            var fr_gs08 = factory.CreateLogicalTreeNode("fr_gs08", dataFactory.CreateGroundStationState(38.39, 55.1536111, 0.189, 6371.0));
+            var fr_gs09 = factory.CreateLogicalTreeNode("fr_gs09", dataFactory.CreateGroundStationState(107.934166, 51.864722, 0.633, 6371.0));
 
             fr_j2000.AddChild(fr_gs01);
             fr_j2000.AddChild(fr_gs02);

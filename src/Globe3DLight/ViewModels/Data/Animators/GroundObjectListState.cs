@@ -9,79 +9,23 @@ namespace Globe3DLight.Data
 {
     public interface IGroundObjectListState : IState
     {
-        IDictionary<string, dvec3> Positions { get; }
-        IDictionary<string, dmat4> ModelMatrices { get; }
-        IDictionary<string, (double lon, double lat)> SourcePositions { get; }
+        IDictionary<string, GroundObjectState> States { get; }
     }
 
 
     public class GroundObjectListState : ObservableObject, IGroundObjectListState
-    {     
-        private IDictionary<string, dvec3> _positions;
-        private IDictionary<string, dmat4> _modelMatrices;
-        private IDictionary<string, (double lon, double lat)> _sourcePositions;
-        private double _earthRadius;
+    {
+        private IDictionary<string, GroundObjectState> _states;
 
-        public GroundObjectListState(GroundObjectListData data)
-        {          
-            _sourcePositions = data.Positions;
-
-            _earthRadius = data.EarthRadius;
-
-            _positions = new Dictionary<string, dvec3>();
-
-            _modelMatrices = new Dictionary<string, dmat4>();
-
-            Update();
+        public GroundObjectListState(IDictionary<string, GroundObjectState> states)
+        {
+            _states = states;
         }
 
-        public IDictionary<string, dvec3> Positions
+        public IDictionary<string, GroundObjectState> States
         {
-            get => _positions;
-            protected set => Update(ref _positions, value);
-        }
-
-        public IDictionary<string, dmat4> ModelMatrices
-        {
-            get => _modelMatrices;
-            protected set => Update(ref _modelMatrices, value);
-        }
-
-        public IDictionary<string, (double lon, double lat)> SourcePositions
-        {
-            get => _sourcePositions;
-            protected set => Update(ref _sourcePositions, value);
-        }
-
-        private void Update()
-        {
-            foreach (var item in _sourcePositions)
-            {
-                var name = item.Key;
-                var lonDeg = item.Value.lon;
-                var latDeg = item.Value.lat;
-
-                double lon = glm.Radians(lonDeg);
-                double lat = glm.Radians(latDeg);
-                double r = _earthRadius;
-
-                dmat3 model3x3 = new dmat3();
-                model3x3.m02 = -Math.Cos(lon) * Math.Sin(lat);
-                model3x3.m12 = Math.Cos(lon) * Math.Cos(lat);
-                model3x3.m22 = -Math.Sin(lon);
-                model3x3.m00 = -Math.Sin(lon) * Math.Sin(lat);
-                model3x3.m10 = Math.Sin(lon) * Math.Cos(lat);
-                model3x3.m20 = Math.Cos(lon);
-                model3x3.m01 = Math.Cos(lat);
-                model3x3.m11 = Math.Sin(lat);
-                model3x3.m21 = 0.0;
-
-                var modelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
-                var position = new dvec3(modelMatrix.Column3);
-
-                _modelMatrices.Add(name, modelMatrix);
-                _positions.Add(name, position);
-            }
+            get => _states;
+            protected set => Update(ref _states, value);
         }
 
         public override object Copy(IDictionary<object, object> shared)

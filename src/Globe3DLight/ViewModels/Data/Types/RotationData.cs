@@ -6,7 +6,7 @@ namespace Globe3DLight.Data
     {
         //  public ContinuousEvents<RotationState> RotationEvents { get; set; }
 
-        public List<RotationRecord> Rotations;
+        public IList<RotationRecord> Rotations;
 
         public double TimeBegin;
 
