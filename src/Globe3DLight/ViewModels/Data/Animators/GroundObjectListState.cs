@@ -9,20 +9,20 @@ namespace Globe3DLight.Data
 {
     public interface IGroundObjectListState : IState
     {
-        IDictionary<string, GroundObjectState> States { get; }
+        IDictionary<string, IGroundObjectState> States { get; }
     }
 
 
     public class GroundObjectListState : ObservableObject, IGroundObjectListState
     {
-        private IDictionary<string, GroundObjectState> _states;
+        private IDictionary<string, IGroundObjectState> _states;
 
-        public GroundObjectListState(IDictionary<string, GroundObjectState> states)
+        public GroundObjectListState(IDictionary<string, IGroundObjectState> states)
         {
             _states = states;
         }
 
-        public IDictionary<string, GroundObjectState> States
+        public IDictionary<string, IGroundObjectState> States
         {
             get => _states;
             protected set => Update(ref _states, value);

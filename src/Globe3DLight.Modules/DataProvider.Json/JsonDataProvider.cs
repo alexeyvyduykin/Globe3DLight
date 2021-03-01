@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.Data;
-using Globe3DLight.Data.Database;
 using GlmSharp;
 
 namespace Globe3DLight.DataProvider.Json
@@ -18,11 +17,11 @@ namespace Globe3DLight.DataProvider.Json
             this._jsonSerializer = serviceProvider.GetService<IJsonSerializer>();
         }
 
-        public ISunDatabase CreateSunDatabase(string json)
+        public SunData CreateSunData(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<ISunDatabase>(json);
+                return _jsonSerializer.Deserialize<SunData>(json);
             }
             catch (Exception)
             {
@@ -31,11 +30,11 @@ namespace Globe3DLight.DataProvider.Json
 
         }
 
-        public IJ2000Database CreateJ2000Database(string json)
+        public J2000Data CreateJ2000Data(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<IJ2000Database>(json);
+                return _jsonSerializer.Deserialize<J2000Data>(json);
             }
             catch (Exception)
             {
@@ -43,11 +42,11 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public IOrbitDatabase CreateOrbitalDatabase(string json)
+        public OrbitData CreateOrbitalData(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<IOrbitDatabase>(json);
+                return _jsonSerializer.Deserialize<OrbitData>(json);
             }
             catch (Exception)
             {
@@ -55,11 +54,11 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public IRotationDatabase CreateRotationDatabase(string json)
+        public RotationData CreateRotationData(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<IRotationDatabase>(json);
+                return _jsonSerializer.Deserialize<RotationData>(json);
             }
             catch (Exception)
             {
@@ -67,11 +66,11 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public ISensorDatabase CreateSensorDatabase(string json)
+        public SensorData CreateSensorData(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<ISensorDatabase>(json);
+                return _jsonSerializer.Deserialize<SensorData>(json);
             }
             catch (Exception)
             {
@@ -79,11 +78,11 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public IRetranslatorDatabase CreateRetranslatorDatabase(string json)
+        public RetranslatorData CreateRetranslatorData(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<IRetranslatorDatabase>(json);
+                return _jsonSerializer.Deserialize<RetranslatorData>(json);
             }
             catch (Exception)
             {
@@ -91,11 +90,11 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public IAntennaDatabase CreateAntennaDatabase(string json)
+        public AntennaData CreateAntennaData(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<IAntennaDatabase>(json);
+                return _jsonSerializer.Deserialize<AntennaData>(json);
             }
             catch (Exception)
             {

@@ -39,7 +39,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
             builder.RegisterType<DataFactory>().As<IDataFactory>().InstancePerLifetimeScope();
             builder.RegisterType<RenderModelFactory>().As<IRenderModelFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ScenarioObjectFactory>().As<IScenarioObjectFactory>().InstancePerLifetimeScope();
-            builder.RegisterType<DatabaseFactory>().As<IDatabaseFactory>().InstancePerLifetimeScope();
+          //  builder.RegisterType<DatabaseFactory>().As<IDatabaseFactory>().InstancePerLifetimeScope();
 
             //builder.RegisterType<OpenTKShaderProgram>().As<IShaderProgram>().InstancePerDependency();
 

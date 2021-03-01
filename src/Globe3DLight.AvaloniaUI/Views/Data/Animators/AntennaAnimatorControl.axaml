@@ -5,12 +5,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
             
              xmlns:converters="clr-namespace:Globe3DLight.AvaloniaUI.Converters;assembly=Globe3DLight.AvaloniaUI"             
-             xmlns:Animators="clr-namespace:Globe3DLight.Data.Animators;assembly=Globe3DLight"
+             xmlns:Data="clr-namespace:Globe3DLight.Data;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.AvaloniaUI.Designer;assembly=Globe3DLight.AvaloniaUI"             
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.AntennaAnimator}"
              d:DesignWidth="250" d:DesignHeight="400"
-             x:DataType="Animators:IAntennaData" x:CompileBindings="True"
+             x:DataType="Data:IAntennaState" x:CompileBindings="True"
                                          
              >
 

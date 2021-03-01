@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.Data;
-using Globe3DLight.Data.Database;
 using GlmSharp;
 
 namespace Globe3DLight.DataProvider.Science
@@ -10,29 +9,40 @@ namespace Globe3DLight.DataProvider.Science
     public class ScienceDataProvider : ObservableObject, IDataProvider
     {
         private readonly IServiceProvider _serviceProvider;
-        private readonly IDatabaseFactory _databaseFactory;
+        //private readonly IDataFactory _dataFactory;
 
         public ScienceDataProvider(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;
-            this._databaseFactory = serviceProvider.GetService<IDatabaseFactory>();
+            _serviceProvider = serviceProvider;
+           // _dataFactory = serviceProvider.GetService<IDataFactory>();
         }
 
 
-        public IJ2000Database CreateJ2000Database(DateTime begin) 
+        public J2000Data CreateJ2000Data(DateTime begin)
         {
             var Angle0DEG = AngleDeg(begin);
-  
-            return _databaseFactory.CreateJ2000Database(begin, Angle0DEG);
+
+            return new J2000Data()
+            {
+                Epoch = begin,
+                AngleDeg = Angle0DEG,
+            };
         }
 
-        public ISunDatabase CreateSunDatabase(DateTime begin, TimeSpan duration)
+        public SunData CreateSunData(DateTime begin, TimeSpan duration)
         {
             var position1 = GetSunPosition(begin);
             var position2 = GetSunPosition(begin + duration);
 
             //  var res = SunPositionTools.CalculateSunPosition(_begin, 0.0, 0.0);
-            return _databaseFactory.CreateSunDatabase(0.0, duration.TotalSeconds, position1, position2);
+            //return _databaseFactory.CreateSunDatabase(0.0, duration.TotalSeconds, position1, position2);
+            return new SunData()
+            {
+                Position0 = position1,
+                Position1 = position2,
+                TimeBegin = 0.0,
+                TimeEnd = duration.TotalSeconds,
+            };
         }
 
         private double AngleDeg(DateTime time)

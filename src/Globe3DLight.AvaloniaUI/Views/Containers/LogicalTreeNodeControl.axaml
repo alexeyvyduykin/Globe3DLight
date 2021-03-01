@@ -22,7 +22,7 @@
         
     <ContentControl Grid.Row="2" 
                     Grid.ColumnSpan="2"
-                    Content="{Binding Data, Mode=TwoWay}"/>
+                    Content="{Binding State, Mode=TwoWay}"/>
 
 
   </Grid>

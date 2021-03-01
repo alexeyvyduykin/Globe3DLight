@@ -152,11 +152,13 @@ namespace Globe3DLight.Data
 
         public IGroundObjectListState CreateGroundObjectListState(IDictionary<string, GroundObjectData> data)
         {
-            return new GroundObjectListState((IDictionary<string, GroundObjectState>)data.ToDictionary(s => s.Key, s => CreateGroundObjectState(s.Value)));
+            return new GroundObjectListState(
+                new Dictionary<string, IGroundObjectState>(data.Select(s => KeyValuePair.Create(s.Key, CreateGroundObjectState(s.Value)))));
         }
         public IGroundObjectListState CreateGroundObjectListState(IDictionary<string, (double lon, double lat, double earthRadius)> groundObjects)
         {
-            return new GroundObjectListState((IDictionary<string, GroundObjectState>)groundObjects.ToDictionary(s => s.Key, s => CreateGroundObjectState(s.Value.lon, s.Value.lat, s.Value.earthRadius)));
+            return new GroundObjectListState(
+                new Dictionary<string, IGroundObjectState>(groundObjects.Select(s => KeyValuePair.Create(s.Key, CreateGroundObjectState(s.Value.lon, s.Value.lat, s.Value.earthRadius)))));
         }
 
         public IGroundObjectState CreateGroundObjectState(GroundObjectData data)

@@ -81,7 +81,7 @@ namespace Globe3DLight.Editor
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
             var json1 = fileSystem.ReadUtf8Text(path);
-            var db1 = jsonDataProvider.CreateOrbitalDatabase(json1);
+            var db1 = jsonDataProvider.CreateOrbitalData(json1);
             var orbitData = dataFactory.CreateOrbitAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
             var fr_orbit = factory.CreateLogicalTreeNode(name, orbitData);
@@ -100,7 +100,7 @@ namespace Globe3DLight.Editor
 
 
             var json2 = fileSystem.ReadUtf8Text(path);
-            var db2 = jsonDataProvider.CreateRotationDatabase(json2);
+            var db2 = jsonDataProvider.CreateRotationData(json2);
             var rotationData = dataFactory.CreateRotationAnimator(db2);
             var name = Path.GetFileNameWithoutExtension(path);
 
@@ -120,7 +120,7 @@ namespace Globe3DLight.Editor
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
             var json = fileSystem.ReadUtf8Text(path);
-            var db = jsonDataProvider.CreateSunDatabase(json);
+            var db = jsonDataProvider.CreateSunData(json);
             var sun_data = dataFactory.CreateSunAnimator(db);
             var name = Path.GetFileNameWithoutExtension(path);
 
@@ -139,7 +139,7 @@ namespace Globe3DLight.Editor
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
             var json = fileSystem.ReadUtf8Text(path);
-            var db = jsonDataProvider.CreateSensorDatabase(json);
+            var db = jsonDataProvider.CreateSensorData(json);
             var sensor_data = dataFactory.CreateSensorAnimator(db);
             var name = Path.GetFileNameWithoutExtension(path);
 
@@ -159,7 +159,7 @@ namespace Globe3DLight.Editor
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
             var json1 = fileSystem.ReadUtf8Text(path);
-            var db1 = jsonDataProvider.CreateRetranslatorDatabase(json1);
+            var db1 = jsonDataProvider.CreateRetranslatorData(json1);
             var retranslatorData = dataFactory.CreateRetranslatorAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
             var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
@@ -181,7 +181,7 @@ namespace Globe3DLight.Editor
 
 
             var json = fileSystem.ReadUtf8Text(path);
-            var db = jsonDataProvider.CreateAntennaDatabase(json);
+            var db = jsonDataProvider.CreateAntennaData(json);
             var antenna_data = dataFactory.CreateAntennaAnimator(db/*, p0LeftPos*/);
             var name = Path.GetFileNameWithoutExtension(path);
 

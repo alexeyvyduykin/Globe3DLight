@@ -69,7 +69,7 @@
       <TextBlock Text="{Binding Name}" Grid.Row="1" Grid.Column="1"></TextBlock>
 
       <TextBlock Text="Data" Grid.Row="2" Grid.Column="0"></TextBlock>
-      <TextBlock Text="{Binding Data.Name}" Grid.Row="2" Grid.Column="1"></TextBlock>
+      <TextBlock Text="{Binding State.Name}" Grid.Row="2" Grid.Column="1"></TextBlock>
 
 
 

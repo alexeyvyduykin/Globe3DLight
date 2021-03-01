@@ -6,7 +6,7 @@ using Globe3DLight.Scene;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 //using Globe3DScene;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Data.Animators;
+using Globe3DLight.Data;
 
 namespace Globe3DLight.Renderer.OpenTK
 {

@@ -142,7 +142,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             antennaAnimator.Animate(0.0);
             AntennaAnimator = antennaAnimator;
 
-            var groundStationData = dataFactory.CreateGroundStationData(GroundStationData);
+            var groundStationData = dataFactory.CreateGroundStationState(GroundStationData);
             GroundStationState = groundStationData;
 
 

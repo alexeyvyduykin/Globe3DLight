@@ -4,9 +4,7 @@ using System.Text;
 using GlmSharp;
 using Globe3DLight.Scene;
 using Globe3DLight.Renderer.OpenTK.Core;
-//using Globe3DScene;
 using OpenTK.Graphics.OpenGL;
-using Globe3DLight.Data.Animators;
 
 namespace Globe3DLight.Renderer.OpenTK
 {

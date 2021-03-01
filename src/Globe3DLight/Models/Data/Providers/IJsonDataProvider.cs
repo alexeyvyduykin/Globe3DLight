@@ -6,18 +6,18 @@ namespace Globe3DLight.Data
 {
     public interface IJsonDataProvider : IDataProvider
     {
-        SunData CreateSunDatabase(string json);
+        SunData CreateSunData(string json);
 
-        J2000Data CreateJ2000Database(string json);
+        J2000Data CreateJ2000Data(string json);
 
-        OrbitData CreateOrbitalDatabase(string json); 
-        RotationData CreateRotationDatabase(string json);
+        OrbitData CreateOrbitalData(string json); 
+        RotationData CreateRotationData(string json);
 
-        SensorData CreateSensorDatabase(string json);
+        SensorData CreateSensorData(string json);
 
-        RetranslatorData CreateRetranslatorDatabase(string json);
+        RetranslatorData CreateRetranslatorData(string json);
 
-        AntennaData CreateAntennaDatabase(string json);
+        AntennaData CreateAntennaData(string json);
 
     }
 
