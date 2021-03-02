@@ -81,29 +81,32 @@
     </Grid>
 
 
-    <Grid x:Name="LAYOUT_EditorGrid" 
+    <Grid x:Name="LAYOUT_EditorGrid" ShowGridLines="True"
           ColumnDefinitions="250,6,*,6,250" 
-          RowDefinitions="Auto,64,*,Auto,Auto" 
+          RowDefinitions="Auto,Auto,*,20" 
           IsVisible="{Binding Project, Converter={x:Static ObjectConverters.IsNotNull}}">
 
       <views:EditorMenuControl x:Name="EditorMenuControl" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5"/>
             
       <TabControl x:Name="LAYOUT_LeftTabControl" Padding="6,0,0,0" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
-        <TabItem Header="Project">
+        <TabItem Header="Project" FontSize="20">
           <containers:ProjectContainerControl DataContext="{Binding Project}"/>
         </TabItem>
-        <TabItem Header="Frames">
+        <TabItem Header="Frames" FontSize="20">
           <containers:FrameContainerControl DataContext="{Binding Project}"/>
+        </TabItem>          
+        <TabItem Header="Tasks" FontSize="20">
+          <containers:TaskContainerControl DataContext="{Binding Project.CurrentScenario}"/>
         </TabItem>
       </TabControl>
 
       <TabControl x:Name="LAYOUT_RightTabControl"  Padding="0,0,6,0" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2">
-        <TabItem Header="Properties">
+        <TabItem Header="Properties" FontSize="20">
           <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
             <ContentControl Content="{Binding Project.CurrentScenario.CurrentLogicalTreeNode, Mode=TwoWay}"/>
           </ScrollViewer>
         </TabItem>
-        <TabItem Header="Scene">
+        <TabItem Header="Scene" FontSize="20">
           <TabControl>
             <TabItem Header="Scenario">
               <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">

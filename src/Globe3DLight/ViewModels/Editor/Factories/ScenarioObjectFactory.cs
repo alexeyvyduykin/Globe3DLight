@@ -414,36 +414,22 @@ namespace Globe3DLight.Editor
             var name = satellite.Name;
         
             var events = new List<ISatelliteEvent>();
-           
-            if (satellite.LogicalTreeNode.State is IRotationState)
-            {               
-                events.AddRange(CreateRotationEvents(rotationData, epochOnDay));
 
-                foreach (var childNode in satellite.LogicalTreeNode.Children)
-                {
-                    if (childNode.State is ISensorState)
-                    {
-                        events.AddRange(CreateObservationEvents(sensorData, epochOnDay));
-                    }
-                    else if(childNode.State is IAntennaState)
-                    {
-                        events.AddRange(CreateTransmissionEvents(antennaData, epochOnDay));
-                    }
-                }
+            events.AddRange(CreateRotationEvents(rotationData, epochOnDay));
+            events.AddRange(CreateObservationEvents(sensorData, epochOnDay));
+            events.AddRange(CreateTransmissionEvents(antennaData, epochOnDay));
 
-            }
+            var sortEvents = events.OrderBy(s => s.Begin).ToList();
 
-            var sortEvents = events.OrderBy(s => s.Duration).ToList();
-
-            return new SatelliteTask()
+            return new SatelliteTask(sortEvents)
             {
                 Name = name,
                 HasRotations = true,
                 HasObservations = true,
                 HasTransmissions = true,
                 SearchString = string.Empty,
-                Events = sortEvents,
-                SelectedEvent = sortEvents.FirstOrDefault(),
+                //Events = sortEvents,
+                //SelectedEvent = sortEvents.FirstOrDefault(),
             };
         }
 
