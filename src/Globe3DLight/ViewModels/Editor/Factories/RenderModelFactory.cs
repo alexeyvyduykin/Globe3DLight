@@ -7,7 +7,6 @@ using Globe3DLight.Renderer;
 using Globe3DLight.Geometry;
 using System.Linq;
 using System.Collections.Immutable;
-using Globe3DLight.Resources;
 using Globe3DLight.Image;
 
 namespace Globe3DLight.Editor
