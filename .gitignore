@@ -355,3 +355,4 @@ MigrationBackup/
 # Specific for this project
 demo/
 tests/
+resources/

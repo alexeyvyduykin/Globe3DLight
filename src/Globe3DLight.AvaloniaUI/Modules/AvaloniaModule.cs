@@ -17,7 +17,9 @@ using Globe3DLight.Renderer.OpenTK;
 using Globe3DLight.Serializer.Newtonsoft;
 //using Globe3DLight.Renderer.OpenTKNETCore;
 using Globe3DLight.ServiceProvider.Autofac;
-
+using System.Configuration;
+using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace Globe3DLight.AvaloniaUI.Modules
 {
@@ -29,6 +31,15 @@ namespace Globe3DLight.AvaloniaUI.Modules
             // Locator
 
             builder.RegisterType<AutofacServiceProvider>().As<IServiceProvider>().InstancePerLifetimeScope();
+
+
+            // Build configuration
+
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appSettings.json")
+                .Build();
+            builder.RegisterInstance(configuration).As<IConfigurationRoot>();
 
             // Core
 
