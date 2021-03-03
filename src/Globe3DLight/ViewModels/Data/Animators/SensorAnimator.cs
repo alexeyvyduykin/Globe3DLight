@@ -153,7 +153,7 @@ namespace Globe3DLight.Data
             _shootingEvents = create(data.Shootings);
         }
 
-        private ContinuousEvents<SensorEventState> create(IList<ShootingRecord1> shootings)
+        private ContinuousEvents<SensorEventState> create(IList<ShootingRecord> shootings)
         {
             var shootingEvents = new ContinuousEvents<SensorEventState>();
 

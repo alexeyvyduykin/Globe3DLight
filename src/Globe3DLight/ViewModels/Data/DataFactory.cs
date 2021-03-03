@@ -24,7 +24,7 @@ namespace Globe3DLight.Data
         IRotationState CreateRotationAnimator(IList<RotationRecord> rotations, double t0, double t1);
 
         ISensorState CreateSensorAnimator(SensorData data);
-        ISensorState CreateSensorAnimator(IList<ShootingRecord1> shootings, double t0, double t1);
+        ISensorState CreateSensorAnimator(IList<ShootingRecord> shootings, double t0, double t1);
 
         IAntennaState CreateAntennaAnimator(AntennaData data); 
         IAntennaState CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1);
@@ -111,7 +111,7 @@ namespace Globe3DLight.Data
         {
             return new SensorAnimator(data);
         }
-        public ISensorState CreateSensorAnimator(IList<ShootingRecord1> shootings, double t0, double t1)
+        public ISensorState CreateSensorAnimator(IList<ShootingRecord> shootings, double t0, double t1)
         {
             return new SensorAnimator(new SensorData()
             {

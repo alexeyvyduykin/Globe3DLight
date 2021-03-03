@@ -73,15 +73,12 @@ namespace Globe3DLight.Editor
         }
 
         private ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, string path)
-        {
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
+        {      
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();    
 
-            var json1 = fileSystem.ReadUtf8Text(path);
-            var db1 = jsonDataProvider.CreateOrbitalData(json1);
+            var db1 = jsonDataProvider.CreateDataFromPath<OrbitData>(path);
             var orbitData = dataFactory.CreateOrbitAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
             var fr_orbit = factory.CreateLogicalTreeNode(name, orbitData);
@@ -91,16 +88,12 @@ namespace Globe3DLight.Editor
         }
 
         private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path)
-        {
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
+        {            
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-
-
-            var json2 = fileSystem.ReadUtf8Text(path);
-            var db2 = jsonDataProvider.CreateRotationData(json2);
+         
+            var db2 = jsonDataProvider.CreateDataFromPath<RotationData>(path);
             var rotationData = dataFactory.CreateRotationAnimator(db2);
             var name = Path.GetFileNameWithoutExtension(path);
 
@@ -112,15 +105,12 @@ namespace Globe3DLight.Editor
 
         }
         private ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, string path)
-        {
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
+        {     
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-
-            var json = fileSystem.ReadUtf8Text(path);
-            var db = jsonDataProvider.CreateSunData(json);
+            var factory = _serviceProvider.GetService<IFactory>();          
+    
+            var db = jsonDataProvider.CreateDataFromPath<SunData>(path);
             var sun_data = dataFactory.CreateSunAnimator(db);
             var name = Path.GetFileNameWithoutExtension(path);
 
@@ -131,15 +121,12 @@ namespace Globe3DLight.Editor
         }
 
         private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, string path)
-        {
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
+        {     
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-
-            var json = fileSystem.ReadUtf8Text(path);
-            var db = jsonDataProvider.CreateSensorData(json);
+            var factory = _serviceProvider.GetService<IFactory>(); 
+    
+            var db = jsonDataProvider.CreateDataFromPath<SensorData>(path);
             var sensor_data = dataFactory.CreateSensorAnimator(db);
             var name = Path.GetFileNameWithoutExtension(path);
 
@@ -151,15 +138,12 @@ namespace Globe3DLight.Editor
         }
 
         private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, string path)
-        {
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
+        {        
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-
-            var json1 = fileSystem.ReadUtf8Text(path);
-            var db1 = jsonDataProvider.CreateRetranslatorData(json1);
+            var factory = _serviceProvider.GetService<IFactory>();       
+  
+            var db1 = jsonDataProvider.CreateDataFromPath<RetranslatorData>(path);
             var retranslatorData = dataFactory.CreateRetranslatorAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
             var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
@@ -169,19 +153,15 @@ namespace Globe3DLight.Editor
         }
 
         private ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, string path)
-        {
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
+        {      
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();      
 
             //var p0LeftPos = new dvec3(67.74, -12.22, -23.5);
             //   var p0LeftPos = new dvec3(0.6774, -0.1222, -0.235);
-
-
-            var json = fileSystem.ReadUtf8Text(path);
-            var db = jsonDataProvider.CreateAntennaData(json);
+  
+            var db = jsonDataProvider.CreateDataFromPath<AntennaData>(path);
             var antenna_data = dataFactory.CreateAntennaAnimator(db/*, p0LeftPos*/);
             var name = Path.GetFileNameWithoutExtension(path);
 

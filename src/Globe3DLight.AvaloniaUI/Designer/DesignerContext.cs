@@ -225,9 +225,9 @@ namespace Globe3DLight.AvaloniaUI.Designer
         public static SensorData SensorData =>
         new SensorData()
         {
-            Shootings = new List<ShootingRecord1>()
+            Shootings = new List<ShootingRecord>()
             {
-                new ShootingRecord1()
+                new ShootingRecord()
                 {
                     BeginTime = 0.0,
                     EndTime = 10.0,
@@ -237,7 +237,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
                     Range2 = 600,
                     TargetName = "GroundObject0043"
                 } ,
-                new ShootingRecord1()
+                new ShootingRecord()
                 {
                     BeginTime = 26.0,
                     EndTime = 35.0,
@@ -247,7 +247,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
                     Range2 = 567,
                     TargetName = "GroundObject0634"
                 },
-                new ShootingRecord1()
+                new ShootingRecord()
                 {
                     BeginTime = 56.0,
                     EndTime = 67.0,

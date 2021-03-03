@@ -228,7 +228,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             {
                 TimeBegin = satellite.LifetimeBegin,
                 TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Shootings = satellite.SatelliteShootings.Select(s => new ShootingRecord1()
+                Shootings = satellite.SatelliteShootings.Select(s => new ShootingRecord()
                 {
                     BeginTime = s.Begin,
                     EndTime = s.Begin + s.Duration,
@@ -381,7 +381,7 @@ initialCondition.SunPositionZend
             var begin = satellite.LifetimeBegin;
             var duration = satellite.LifetimeDuration;
 
-            var shoots = satellite.SatelliteShootings.OrderBy(s => s.Begin).Select(s => new ShootingRecord1() 
+            var shoots = satellite.SatelliteShootings.OrderBy(s => s.Begin).Select(s => new ShootingRecord() 
             { 
             BeginTime = s.Begin,
             EndTime = s.Begin + s.Duration,

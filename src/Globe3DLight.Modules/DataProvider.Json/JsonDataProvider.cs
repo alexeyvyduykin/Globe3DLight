@@ -10,31 +10,20 @@ namespace Globe3DLight.DataProvider.Json
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IJsonSerializer _jsonSerializer;
+        private readonly IFileSystem _fileSystem;
 
         public JsonDataProvider(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;
-            this._jsonSerializer = serviceProvider.GetService<IJsonSerializer>();
+            _serviceProvider = serviceProvider;
+            _jsonSerializer = serviceProvider.GetService<IJsonSerializer>();
+            _fileSystem = _serviceProvider.GetService<IFileSystem>();
         }
 
-        public SunData CreateSunData(string json)
+        public T CreateDataFromJson<T>(string json)
         {
             try
             {
-                return _jsonSerializer.Deserialize<SunData>(json);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-
-        }
-
-        public J2000Data CreateJ2000Data(string json)
-        {
-            try
-            {
-                return _jsonSerializer.Deserialize<J2000Data>(json);
+                return _jsonSerializer.Deserialize<T>(json);
             }
             catch (Exception)
             {
@@ -42,66 +31,12 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public OrbitData CreateOrbitalData(string json)
+        public T CreateDataFromPath<T>(string path)
         {
-            try
-            {
-                return _jsonSerializer.Deserialize<OrbitData>(json);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
+            var json = _fileSystem.ReadUtf8Text(path);
+            
+            return CreateDataFromJson<T>(json);
         }
-
-        public RotationData CreateRotationData(string json)
-        {
-            try
-            {
-                return _jsonSerializer.Deserialize<RotationData>(json);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public SensorData CreateSensorData(string json)
-        {
-            try
-            {
-                return _jsonSerializer.Deserialize<SensorData>(json);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public RetranslatorData CreateRetranslatorData(string json)
-        {
-            try
-            {
-                return _jsonSerializer.Deserialize<RetranslatorData>(json);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
-        public AntennaData CreateAntennaData(string json)
-        {
-            try
-            {
-                return _jsonSerializer.Deserialize<AntennaData>(json);
-            }
-            catch (Exception)
-            {
-                return default;
-            }
-        }
-
 
         public override object Copy(IDictionary<object, object> shared)
         {

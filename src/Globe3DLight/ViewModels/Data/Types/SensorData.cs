@@ -4,13 +4,13 @@ namespace Globe3DLight.Data
 {
     public struct SensorData
     {
-        public IList<ShootingRecord1> Shootings;
+        public IList<ShootingRecord> Shootings;
 
         public double TimeBegin;
         public double TimeEnd;
     }
 
-    public struct ShootingRecord1
+    public struct ShootingRecord
     {
         public double BeginTime; // local(or satellite) time
         public double EndTime; // local(or satellite) time
