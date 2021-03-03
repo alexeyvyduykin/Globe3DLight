@@ -27,10 +27,4 @@
     <Folder Include="Serializer.Newtonsoft\Converters\" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="DatabaseProvider.PostgreSQL\postgresSettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

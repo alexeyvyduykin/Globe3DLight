@@ -44,7 +44,7 @@
     <AvaloniaXaml Remove="Views\MainControl.axaml" />
     <AvaloniaXaml Remove="Views\MainWindow.axaml" />
     <AvaloniaXaml Remove="Views\OpenGlPage.axaml" />  
-    <AvaloniaResource Include="Views\Containers\ProjectContainerControl.axaml" />
+    <AvaloniaResource Include="Views\Containers\ProjectContainerControl.axaml" />  
     <AvaloniaResource Include="Views\MainControl.axaml" />
     <AvaloniaResource Include="Views\MainWindow.axaml" />
     <AvaloniaResource Include="Views\OpenGlPage.axaml" />
