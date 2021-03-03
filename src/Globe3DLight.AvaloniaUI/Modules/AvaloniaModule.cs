@@ -37,7 +37,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
 
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appSettings.json")
+                .AddJsonFile("appsettings.json")
                 .Build();
             builder.RegisterInstance(configuration).As<IConfigurationRoot>();
 

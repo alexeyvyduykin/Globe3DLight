@@ -28,7 +28,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             // установка пути к текущему каталогу
             builder.SetBasePath(Directory.GetCurrentDirectory());
             // получаем конфигурацию из файла appsettings.json
-            builder.AddJsonFile("DatabaseProvider.PostgreSQL/postgresSettings.json");
+            builder.AddJsonFile("appsettings.json");
             // создаем конфигурацию
             var config = builder.Build();
             // получаем строку подключения
