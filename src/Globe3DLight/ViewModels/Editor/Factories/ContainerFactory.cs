@@ -11,7 +11,7 @@ using Globe3DLight.Data;
 using System.IO;
 using GlmSharp;
 using System.Threading.Tasks;
-
+using Microsoft.Extensions.Configuration;
 
 namespace Globe3DLight.Editor
 {
@@ -175,21 +175,17 @@ namespace Globe3DLight.Editor
         public IProjectContainer GetDemo()
         {
             var factory = _serviceProvider.GetService<IFactory>();
-            var containerFactory = this as IContainerFactory;
-            var fileSystem = _serviceProvider.GetService<IFileSystem>();
-            //   var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();           
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-            var jsonSerializer = _serviceProvider.GetService<IJsonSerializer>();
-            //  var editor = _serviceProvider.GetService<IProjectEditor>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            //var databaseFactory = _serviceProvider.GetService<IDatabaseFactory>();
+            var containerFactory = this as IContainerFactory;                   
+            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();         
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();        
             var dataProvider = _serviceProvider.GetService<IDataProvider>();
+            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
+
+            var resourcePath = configuration["ResourcePath"];
+            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
 
             var project = factory.CreateProjectContainer("Project1");
-
             var scenario1 = containerFactory.GetScenario("Scenario1");
-            //       var scenario2 = containerFactory.GetScenario("Scenario2");
-            //       var scenario3 = containerFactory.GetScenario("Scenario3");
 
             if (dataProvider is IJsonDataProvider jsonDataProvider)
             {
@@ -205,7 +201,7 @@ namespace Globe3DLight.Editor
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(DateTime.Now, 0.0));
             root.AddChild(fr_j2000);
 
-            var fr_sun = CreateSunNode(root, @"C:\resource\globe3d\data\fr_sun.json");
+            var fr_sun = CreateSunNode(root, Path.Combine(path, @"data\fr_sun.json"));
 
 
             var fr_gs01 = factory.CreateLogicalTreeNode("fr_gs01", dataFactory.CreateGroundStationState(36.26, 54.97, 0.223, 6371.0));
@@ -228,29 +224,29 @@ namespace Globe3DLight.Editor
             fr_j2000.AddChild(fr_gs08);
             fr_j2000.AddChild(fr_gs09);
 
-            var fr_orbit1 = CreateOrbitNode(fr_j2000, @"C:\resource\globe3d\data\fr_orbital_satellite1.json");
-            var fr_orbit2 = CreateOrbitNode(fr_j2000, @"C:\resource\globe3d\data\fr_orbital_satellite2.json");
-            var fr_orbit3 = CreateOrbitNode(fr_j2000, @"C:\resource\globe3d\data\fr_orbital_satellite3.json");
-            var fr_orbit4 = CreateOrbitNode(fr_j2000, @"C:\resource\globe3d\data\fr_orbital_satellite4.json");
+            var fr_orbit1 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite1.json"));
+            var fr_orbit2 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite2.json"));
+            var fr_orbit3 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite3.json"));
+            var fr_orbit4 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite4.json"));
 
-            var fr_rotation1 = CreateRotationNode(fr_orbit1, @"C:\resource\globe3d\data\fr_rotation_satellite1.json");
-            var fr_rotation2 = CreateRotationNode(fr_orbit2, @"C:\resource\globe3d\data\fr_rotation_satellite2.json");
-            var fr_rotation3 = CreateRotationNode(fr_orbit3, @"C:\resource\globe3d\data\fr_rotation_satellite3.json");
-            var fr_rotation4 = CreateRotationNode(fr_orbit4, @"C:\resource\globe3d\data\fr_rotation_satellite4.json");
+            var fr_rotation1 = CreateRotationNode(fr_orbit1, Path.Combine(path, @"data\fr_rotation_satellite1.json"));
+            var fr_rotation2 = CreateRotationNode(fr_orbit2, Path.Combine(path, @"data\fr_rotation_satellite2.json"));
+            var fr_rotation3 = CreateRotationNode(fr_orbit3, Path.Combine(path, @"data\fr_rotation_satellite3.json"));
+            var fr_rotation4 = CreateRotationNode(fr_orbit4, Path.Combine(path, @"data\fr_rotation_satellite4.json"));
 
-            var fr_sensor1 = CreateSensorNode(fr_rotation1, @"C:\resource\globe3d\data\fr_shooting_sensor1.json");
-            var fr_sensor2 = CreateSensorNode(fr_rotation2, @"C:\resource\globe3d\data\fr_shooting_sensor2.json");
-            var fr_sensor3 = CreateSensorNode(fr_rotation3, @"C:\resource\globe3d\data\fr_shooting_sensor3.json");
-            var fr_sensor4 = CreateSensorNode(fr_rotation4, @"C:\resource\globe3d\data\fr_shooting_sensor4.json");
+            var fr_sensor1 = CreateSensorNode(fr_rotation1, Path.Combine(path, @"data\fr_shooting_sensor1.json"));
+            var fr_sensor2 = CreateSensorNode(fr_rotation2, Path.Combine(path, @"data\fr_shooting_sensor2.json"));
+            var fr_sensor3 = CreateSensorNode(fr_rotation3, Path.Combine(path, @"data\fr_shooting_sensor3.json"));
+            var fr_sensor4 = CreateSensorNode(fr_rotation4, Path.Combine(path, @"data\fr_shooting_sensor4.json"));
             
-            var fr_antenna1 = CreateAntennaNode(fr_rotation1, @"C:\resource\globe3d\data\fr_antenna1.json");
-            var fr_antenna2 = CreateAntennaNode(fr_rotation2, @"C:\resource\globe3d\data\fr_antenna2.json");
-            var fr_antenna3 = CreateAntennaNode(fr_rotation3, @"C:\resource\globe3d\data\fr_antenna3.json");
-            var fr_antenna4 = CreateAntennaNode(fr_rotation4, @"C:\resource\globe3d\data\fr_antenna4.json");
+            var fr_antenna1 = CreateAntennaNode(fr_rotation1, Path.Combine(path, @"data\fr_antenna1.json"));
+            var fr_antenna2 = CreateAntennaNode(fr_rotation2, Path.Combine(path, @"data\fr_antenna2.json"));
+            var fr_antenna3 = CreateAntennaNode(fr_rotation3, Path.Combine(path, @"data\fr_antenna3.json"));
+            var fr_antenna4 = CreateAntennaNode(fr_rotation4, Path.Combine(path, @"data\fr_antenna4.json"));
 
-            var fr_retr1 = CreateRetranslatorNode(root, @"C:\resource\globe3d\data\fr_retranslator1.json");
-            var fr_retr2 = CreateRetranslatorNode(root, @"C:\resource\globe3d\data\fr_retranslator2.json");
-            var fr_retr3 = CreateRetranslatorNode(root, @"C:\resource\globe3d\data\fr_retranslator3.json");
+            var fr_retr1 = CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator1.json"));
+            var fr_retr2 = CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator2.json"));
+            var fr_retr3 = CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator3.json"));
 
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
