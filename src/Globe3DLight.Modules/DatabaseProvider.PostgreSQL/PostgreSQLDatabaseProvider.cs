@@ -92,6 +92,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var project = factory.CreateProjectContainer("Project1");
 
             var scenario1 = containerFactory.GetScenario("Scenario1");
+
             var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
 
             var initialConditions = db.InitialConditions.FirstOrDefault();
@@ -109,11 +110,15 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var epoch = FromJulianDate(initialConditions.JulianDateOnTheDay);
             var earthAngleDeg = initialConditions.EarthAngleBegin;
 
+            var begin = epoch.AddSeconds(initialConditions.ModelingTimeBegin);            
+            var duration = TimeSpan.FromSeconds(initialConditions.ModelingTimeDuration);
+
+            scenario1.TimePresenter = factory.CreateTimePresenter(begin, duration);
 
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
             root.AddChild(fr_j2000);
 
-            var fr_sun = CreateSunNode(root, initialConditions);
+            var fr_sun = containerFactory.CreateSunNode("fr_sun", root, initialConditions.ToSunData());
 
             var fr_gss = new List<ILogicalTreeNode>();
 
@@ -140,17 +145,17 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                fr_orbits.Add(CreateOrbitNode(fr_j2000, satellites[i]));
-                fr_rotations.Add(CreateRotationNode(fr_orbits[i], satellites[i]));
-                fr_sensors.Add(CreateSensorNode(fr_rotations[i], satellites[i]));
-                fr_antennas.Add(CreateAntennaNode(fr_rotations[i], satellites[i]));
+                fr_orbits.Add(containerFactory.CreateOrbitNode(string.Format("fr_orbital_{0}", satellites[i].Name), fr_j2000, satellites[i].ToOrbitData()));
+                fr_rotations.Add(containerFactory.CreateRotationNode(string.Format("fr_rotation_{0}", satellites[i].Name), fr_orbits[i], satellites[i].ToRotationData()));
+                fr_sensors.Add(containerFactory.CreateSensorNode(string.Format("fr_shooting_sensor{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToSensorData()));
+                fr_antennas.Add(containerFactory.CreateAntennaNode(string.Format("fr_antenna{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToAntennaData()));
             }
 
             var fr_retrs = new List<ILogicalTreeNode>();
 
             for (int i = 0; i < retranslators.Count; i++)
             {
-                fr_retrs.Add(CreateRetranslatorNode(root, retranslators[i]));
+                fr_retrs.Add(containerFactory.CreateRetranslatorNode(string.Format("fr_{0}", retranslators[i].Name), root, retranslators[i].ToData()));
             }
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
@@ -219,89 +224,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             project.SetCurrentScenario(scenario1);
             return project;
         }
-                     
-        private ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, Satellite satellite)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = satellite.Name;
-            var orbitState = dataFactory.CreateOrbitAnimator(satellite.ToOrbitData());         
-            var fr_orbit = factory.CreateLogicalTreeNode(string.Format("fr_orbital_{0}", name), orbitState);
-            parent.AddChild(fr_orbit);
-
-            return fr_orbit;
-        }
-
-        private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, Satellite satellite)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = satellite.Name;
-            var rotationData = dataFactory.CreateRotationAnimator(satellite.ToRotationData());
-            var fr_rotation = factory.CreateLogicalTreeNode(string.Format("fr_rotation_{0}", name), rotationData);
-
-            parent.AddChild(fr_rotation);
-
-            return fr_rotation;
-        }
-       
-        private ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, InitialCondition initialCondition)
-        {             
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-            
-            var sun_data = dataFactory.CreateSunAnimator(initialCondition.ToSunData());        
-            var fr_sun = factory.CreateLogicalTreeNode("fr_sun", sun_data);
-            parent.AddChild(fr_sun);
-            return fr_sun;
-            //  return objFactory.CreateSun(name, fr_sun);
-        }
-
-        private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, Satellite satellite)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-    
-            var id = satellite.Id;            
-            var sensor_data = dataFactory.CreateSensorAnimator(satellite.ToSensorData());
-            var fr_sensor = factory.CreateLogicalTreeNode(string.Format("fr_shooting_sensor{0}", id), sensor_data);
-            parent.AddChild(fr_sensor);
-
-            return fr_sensor;
-            // return objFactory.CreateSensor(name, fr_sensor);
-        }
-
-        private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, Retranslator retranslator)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = retranslator.Name;
-            var retranslatorData = dataFactory.CreateRetranslatorAnimator(retranslator.ToData());    
-            var fr_retranslator = factory.CreateLogicalTreeNode(string.Format("fr_{0}", name), retranslatorData);
-            parent.AddChild(fr_retranslator);
-
-            return fr_retranslator;
-        }
-
-        private ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, Satellite satellite)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            //var p0LeftPos = new dvec3(67.74, -12.22, -23.5);
-            //   var p0LeftPos = new dvec3(0.6774, -0.1222, -0.235);
-
-            var id = satellite.Id;
-            var antenna_data = dataFactory.CreateAntennaAnimator(satellite.ToAntennaData());
-            var fr_antenna = factory.CreateLogicalTreeNode(string.Format("fr_antenna{0}", id), antenna_data);
-            parent.AddChild(fr_antenna);
-
-            return fr_antenna;
-        }
-
+                            
         private ScenarioData GetScenarioData(dbGlobe3DLightContext db)
         {                  
             var initialConditions = db.InitialConditions.FirstOrDefault();

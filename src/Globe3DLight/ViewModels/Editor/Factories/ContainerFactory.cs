@@ -86,7 +86,7 @@ namespace Globe3DLight.Editor
 
             return fr_orbit;
         }
-        private ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data)
+        public ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data)
         {          
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -114,7 +114,7 @@ namespace Globe3DLight.Editor
             return fr_rotation;
 
         }
-        private ILogicalTreeNode CreateRotationNode(string name, ILogicalTreeNode parent, RotationData data)
+        public ILogicalTreeNode CreateRotationNode(string name, ILogicalTreeNode parent, RotationData data)
         {  
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -141,7 +141,7 @@ namespace Globe3DLight.Editor
             return fr_sun;
             //  return objFactory.CreateSun(name, fr_sun);
         }
-        private ILogicalTreeNode CreateSunNode(string name, ILogicalTreeNode parent, SunData data)
+        public ILogicalTreeNode CreateSunNode(string name, ILogicalTreeNode parent, SunData data)
         {       
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -167,7 +167,7 @@ namespace Globe3DLight.Editor
             return fr_sensor;
             // return objFactory.CreateSensor(name, fr_sensor);
         }
-        private ILogicalTreeNode CreateSensorNode(string name, ILogicalTreeNode parent, SensorData data)
+        public ILogicalTreeNode CreateSensorNode(string name, ILogicalTreeNode parent, SensorData data)
         {          
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -192,7 +192,7 @@ namespace Globe3DLight.Editor
 
             return fr_retranslator;
         }
-        private ILogicalTreeNode CreateRetranslatorNode(string name, ILogicalTreeNode parent, RetranslatorData data)
+        public ILogicalTreeNode CreateRetranslatorNode(string name, ILogicalTreeNode parent, RetranslatorData data)
         {           
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -221,7 +221,7 @@ namespace Globe3DLight.Editor
 
             return fr_antenna;
         }
-        private ILogicalTreeNode CreateAntennaNode(string name, ILogicalTreeNode parent, AntennaData data)
+        public ILogicalTreeNode CreateAntennaNode(string name, ILogicalTreeNode parent, AntennaData data)
         {     
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -232,7 +232,7 @@ namespace Globe3DLight.Editor
 
             return fr_antenna;
         }
-        private ILogicalTreeNode CreateGroundStationNode(string name, ILogicalTreeNode parent, GroundStationData data)
+        public ILogicalTreeNode CreateGroundStationNode(string name, ILogicalTreeNode parent, GroundStationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -243,7 +243,7 @@ namespace Globe3DLight.Editor
 
             return fr_groundStation;       
         }
-        private ILogicalTreeNode CreateEarthNode(string name, ILogicalTreeNode parent, J2000Data data)
+        public ILogicalTreeNode CreateEarthNode(string name, ILogicalTreeNode parent, J2000Data data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
