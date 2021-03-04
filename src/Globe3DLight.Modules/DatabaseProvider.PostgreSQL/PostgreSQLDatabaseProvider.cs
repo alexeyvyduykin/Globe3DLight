@@ -89,12 +89,6 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
   
-            var project = factory.CreateProjectContainer("Project1");
-
-            var scenario1 = containerFactory.GetScenario("Scenario1");
-
-            var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
-
             var initialConditions = db.InitialConditions.FirstOrDefault();
             var groundStations = db.GroundStations.ToList();
             var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
@@ -106,15 +100,18 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             db.SatelliteToRetranslatorTransfers.Load();     
             var satellites = db.Satellites.ToList();
            
-
             var epoch = FromJulianDate(initialConditions.JulianDateOnTheDay);
             var earthAngleDeg = initialConditions.EarthAngleBegin;
 
             var begin = epoch.AddSeconds(initialConditions.ModelingTimeBegin);            
             var duration = TimeSpan.FromSeconds(initialConditions.ModelingTimeDuration);
 
-            scenario1.TimePresenter = factory.CreateTimePresenter(begin, duration);
+            var project = factory.CreateProjectContainer("Project1");
 
+            var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
+
+            var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
+         
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
             root.AddChild(fr_j2000);
 

@@ -249,14 +249,11 @@ namespace Globe3DLight.Editor
             }
         }
 
-
-
-
         public void OnAddScenario()
         {
             if (Project != null)
             {
-                var scenario = ContainerFactory.GetScenario("Scenario1");
+                var scenario = ContainerFactory.GetScenario("Scenario1", DateTime.Now, TimeSpan.FromDays(1));
 
                 Project.AddScenario(scenario);
                 Project.SetCurrentScenario(scenario);

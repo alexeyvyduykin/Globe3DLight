@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Globe3DLight.Containers;
 using Globe3DLight.Data;
+using System;
 
 namespace Globe3DLight.Editor
 {
@@ -11,7 +12,7 @@ namespace Globe3DLight.Editor
         Task<IProjectContainer> GetFromDatabase();
         Task<IProjectContainer> GetFromJson();
         Task SaveFromDatabaseToJson();
-        IScenarioContainer GetScenario(string name);
+        IScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration);
         IProjectContainer GetEmptyProject();
         ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data);
         ILogicalTreeNode CreateRotationNode(string name, ILogicalTreeNode parent, RotationData data);

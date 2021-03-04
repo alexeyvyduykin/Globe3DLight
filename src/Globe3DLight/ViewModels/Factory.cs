@@ -387,19 +387,6 @@ namespace Globe3DLight
             return new AcceleratedTimer();
         }
 
-        public ITimePresenter CreateTimePresenter()
-        {
-            var timer = CreateAcceleratedTimer();
-
-            return new TimePresenter(DateTime.Now, TimeSpan.FromDays(1))
-            {
-             //   BeginTime = DateTime.Now,
-             //   TimeSpan = TimeSpan.FromDays(1),
-                Timer = timer,
-                //CurrentTime = 0.0,
-            };
-        }
-
         public ITimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan)
         {
             var timer = CreateAcceleratedTimer();

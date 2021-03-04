@@ -38,7 +38,7 @@ namespace Globe3DLight.Editor
             //   project.SetCurrentTemplate(project.Templates.FirstOrDefault(t => t.Name == "Default"));
 
             // Documents and Pages      
-            var scenario = containerFactory.GetScenario("Scenario1");
+            var scenario = containerFactory.GetScenario("Scenario1", DateTime.Now, TimeSpan.FromDays(1));
 
             var scenarioBuilder = project.Scenarios.ToBuilder();
             scenarioBuilder.Add(scenario);
@@ -49,7 +49,7 @@ namespace Globe3DLight.Editor
             return project;
         }
 
-        IScenarioContainer IContainerFactory.GetScenario(string name)
+        public IScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var scenario = factory.CreateScenarioContainer(name);
@@ -67,7 +67,7 @@ namespace Globe3DLight.Editor
 
             //scenario.SceneTimer = _serviceProvider.GetService<ISceneTimer>();
 
-            scenario.TimePresenter = factory.CreateTimePresenter();
+            scenario.TimePresenter = factory.CreateTimePresenter(begin, duration);
 
             return scenario;
         }
@@ -265,8 +265,11 @@ namespace Globe3DLight.Editor
             var resourcePath = configuration["ResourcePath"];
             var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
 
+            var begin = DateTime.Now;
+            var duration = TimeSpan.FromDays(1);
+
             var project = factory.CreateProjectContainer("Project1");
-            var scenario1 = containerFactory.GetScenario("Scenario1");
+            var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
 
             if (dataProvider is IJsonDataProvider jsonDataProvider)
             {
@@ -279,7 +282,7 @@ namespace Globe3DLight.Editor
             }
 
             var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
-            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(DateTime.Now, 0.0));
+            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(begin, 0.0));
             root.AddChild(fr_j2000);
 
             var fr_sun = CreateSunNode(root, Path.Combine(path, @"data\fr_sun.json"));
@@ -468,15 +471,13 @@ namespace Globe3DLight.Editor
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-       
-            var project = factory.CreateProjectContainer("Project1");
-            var scenario1 = containerFactory.GetScenario("Scenario1");
 
             var epoch = FromJulianDate(data.JulianDateOnTheDay);
             var begin = epoch.AddSeconds(data.ModelingTimeBegin);
             var duration = TimeSpan.FromSeconds(data.ModelingTimeDuration);
 
-            scenario1.TimePresenter = factory.CreateTimePresenter(begin, duration);
+            var project = factory.CreateProjectContainer("Project1");
+            var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
 
             var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
 
@@ -592,7 +593,7 @@ namespace Globe3DLight.Editor
 
             var project = factory.CreateProjectContainer("Project1");
 
-            var scenario1 = containerFactory.GetScenario("Scenario1");
+            var scenario1 = containerFactory.GetScenario("Scenario1", DateTime.Now, TimeSpan.FromDays(1));
 
             project.AddScenario(scenario1);
             project.SetCurrentScenario(scenario1);

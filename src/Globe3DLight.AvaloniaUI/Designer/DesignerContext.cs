@@ -61,11 +61,14 @@ namespace Globe3DLight.AvaloniaUI.Designer
             var objFactory = serviceProvider.GetService<IScenarioObjectFactory>();
             //var databaseFactory = serviceProvider.GetService<IDatabaseFactory>();
 
+            var begin = DateTime.Now;
+            var duration = TimeSpan.FromDays(1);
+
             // Editor
 
             Editor = serviceProvider.GetService<IProjectEditor>();
 
-            TimePresenter = factory.CreateTimePresenter();// serviceProvider.GetService<ISceneTimer>();
+            TimePresenter = factory.CreateTimePresenter(begin, duration);// serviceProvider.GetService<ISceneTimer>();
 
             // New Project
 
@@ -79,9 +82,9 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             Project = containerFactory.GetProject();
 
-            Project.AddScenario(containerFactory.GetScenario("Scenario1"));
-            Project.AddScenario(containerFactory.GetScenario("Scenario2"));
-            Project.AddScenario(containerFactory.GetScenario("Scenario3"));
+            Project.AddScenario(containerFactory.GetScenario("Scenario1", begin, duration));
+            Project.AddScenario(containerFactory.GetScenario("Scenario2", begin, duration));
+            Project.AddScenario(containerFactory.GetScenario("Scenario3", begin, duration));
             Project.CurrentScenario = Project.Scenarios.FirstOrDefault();
 
 
