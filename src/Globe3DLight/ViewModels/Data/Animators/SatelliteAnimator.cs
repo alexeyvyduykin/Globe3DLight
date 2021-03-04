@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace Globe3DLight.Data
 {
-    public interface IOrbitState : IState, IAnimator, IFrameable
+    public interface ISatelliteState : IState, IAnimator, IFrameable
     {               
         dvec3 Position { get; }      
      
@@ -15,7 +15,7 @@ namespace Globe3DLight.Data
         dmat4 Rotation { get; }
     }
 
-    public class OrbitAnimator : ObservableObject, IOrbitState
+    public class SatelliteAnimator : ObservableObject, ISatelliteState
     {
         private readonly IList<(double x, double y, double z, double vx, double vy, double vz, double u)> _records;
         private readonly double _timeBegin;
@@ -27,7 +27,7 @@ namespace Globe3DLight.Data
         private dmat4 _translate;
         private dmat4 _rotation;
 
-        public OrbitAnimator(OrbitData data)
+        public SatelliteAnimator(SatelliteData data)
         {
             _records = data.Records.Select(s => (s[0], s[1], s[2], s[3], s[4], s[5], s[6])).ToList();
             _timeBegin = data.TimeBegin;

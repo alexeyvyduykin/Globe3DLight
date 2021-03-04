@@ -142,7 +142,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                fr_orbits.Add(containerFactory.CreateOrbitNode(string.Format("fr_orbital_{0}", satellites[i].Name), fr_j2000, satellites[i].ToOrbitData()));
+                fr_orbits.Add(containerFactory.CreateSatelliteNode(string.Format("fr_orbital_{0}", satellites[i].Name), fr_j2000, satellites[i].ToSatelliteData()));
                 fr_rotations.Add(containerFactory.CreateRotationNode(string.Format("fr_rotation_{0}", satellites[i].Name), fr_orbits[i], satellites[i].ToRotationData()));
                 fr_sensors.Add(containerFactory.CreateSensorNode(string.Format("fr_shooting_sensor{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToSensorData()));
                 fr_antennas.Add(containerFactory.CreateAntennaNode(string.Format("fr_antenna{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToAntennaData()));
@@ -250,7 +250,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 GroundObjects = groundObjects.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
                 GroundStations = groundStations.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
                 RetranslatorPositions = retranslators.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
-                SatellitePositions = satellites.OrderBy(s => s.Id).Select(s => s.ToOrbitData()).ToList(),
+                SatellitePositions = satellites.OrderBy(s => s.Id).Select(s => s.ToSatelliteData()).ToList(),
                 SatelliteRotations = satellites.OrderBy(s => s.Id).Select(s => s.ToRotationData()).ToList(),
                 SatelliteShootings = satellites.OrderBy(s => s.Id).Select(s => s.ToSensorData()).ToList(),
                 SatelliteTransfers = satellites.OrderBy(s => s.Id).Select(s => s.ToAntennaData()).ToList(),

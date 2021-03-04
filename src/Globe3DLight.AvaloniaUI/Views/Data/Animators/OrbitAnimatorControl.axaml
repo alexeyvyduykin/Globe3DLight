@@ -10,9 +10,9 @@
             
              
              mc:Ignorable="d"                          
-             d:DataContext="{x:Static Designer:DesignerContext.OrbitAnimator}"
+             d:DataContext="{x:Static Designer:DesignerContext.SatelliteAnimator}"
              d:DesignWidth="250" d:DesignHeight="400"
-             x:DataType="Data:IOrbitState" x:CompileBindings="True"
+             x:DataType="Data:ISatelliteState" x:CompileBindings="True"
              >
 
 

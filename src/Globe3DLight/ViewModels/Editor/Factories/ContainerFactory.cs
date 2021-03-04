@@ -72,30 +72,30 @@ namespace Globe3DLight.Editor
             return scenario;
         }
 
-        private ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, string path)
+        private ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, string path)
         {      
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();    
 
-            var db1 = jsonDataProvider.CreateDataFromPath<OrbitData>(path);
-            var orbitData = dataFactory.CreateOrbitAnimator(db1);
+            var db1 = jsonDataProvider.CreateDataFromPath<SatelliteData>(path);
+            var satelliteState = dataFactory.CreateSatelliteAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
-            var fr_orbit = factory.CreateLogicalTreeNode(name, orbitData);
-            parent.AddChild(fr_orbit);
+            var fr_satellite = factory.CreateLogicalTreeNode(name, satelliteState);
+            parent.AddChild(fr_satellite);
 
-            return fr_orbit;
+            return fr_satellite;
         }
-        public ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data)
+        public ILogicalTreeNode CreateSatelliteNode(string name, ILogicalTreeNode parent, SatelliteData data)
         {          
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
    
-            var orbitData = dataFactory.CreateOrbitAnimator(data);      
-            var fr_orbit = factory.CreateLogicalTreeNode(name, orbitData);
-            parent.AddChild(fr_orbit);
+            var satelliteState = dataFactory.CreateSatelliteAnimator(data);      
+            var fr_satellite = factory.CreateLogicalTreeNode(name, satelliteState);
+            parent.AddChild(fr_satellite);
 
-            return fr_orbit;
+            return fr_satellite;
         }
         private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path)
         {            
@@ -308,15 +308,15 @@ namespace Globe3DLight.Editor
             fr_j2000.AddChild(fr_gs08);
             fr_j2000.AddChild(fr_gs09);
 
-            var fr_orbit1 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite1.json"));
-            var fr_orbit2 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite2.json"));
-            var fr_orbit3 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite3.json"));
-            var fr_orbit4 = CreateOrbitNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite4.json"));
+            var fr_satellite1 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite1.json"));
+            var fr_satellite2 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite2.json"));
+            var fr_satellite3 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite3.json"));
+            var fr_satellite4 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite4.json"));
 
-            var fr_rotation1 = CreateRotationNode(fr_orbit1, Path.Combine(path, @"data\fr_rotation_satellite1.json"));
-            var fr_rotation2 = CreateRotationNode(fr_orbit2, Path.Combine(path, @"data\fr_rotation_satellite2.json"));
-            var fr_rotation3 = CreateRotationNode(fr_orbit3, Path.Combine(path, @"data\fr_rotation_satellite3.json"));
-            var fr_rotation4 = CreateRotationNode(fr_orbit4, Path.Combine(path, @"data\fr_rotation_satellite4.json"));
+            var fr_rotation1 = CreateRotationNode(fr_satellite1, Path.Combine(path, @"data\fr_rotation_satellite1.json"));
+            var fr_rotation2 = CreateRotationNode(fr_satellite2, Path.Combine(path, @"data\fr_rotation_satellite2.json"));
+            var fr_rotation3 = CreateRotationNode(fr_satellite3, Path.Combine(path, @"data\fr_rotation_satellite3.json"));
+            var fr_rotation4 = CreateRotationNode(fr_satellite4, Path.Combine(path, @"data\fr_rotation_satellite4.json"));
 
             var fr_sensor1 = CreateSensorNode(fr_rotation1, Path.Combine(path, @"data\fr_shooting_sensor1.json"));
             var fr_sensor2 = CreateSensorNode(fr_rotation2, Path.Combine(path, @"data\fr_shooting_sensor2.json"));
@@ -491,16 +491,16 @@ namespace Globe3DLight.Editor
                 fr_gss.Add(CreateGroundStationNode(string.Format("fr_gs{0:00}", i + 1), fr_earth, data.GroundStations[i]));
             }
 
-            var fr_orbits = new List<ILogicalTreeNode>();
+            var fr_sats = new List<ILogicalTreeNode>();
             for (int i = 0; i < data.SatellitePositions.Count; i++)
             {
-                fr_orbits.Add(CreateOrbitNode(string.Format("fr_orbital_satellite{0}", i + 1), fr_earth, data.SatellitePositions[i]));
+                fr_sats.Add(CreateSatelliteNode(string.Format("fr_orbital_satellite{0}", i + 1), fr_earth, data.SatellitePositions[i]));
             }
 
             var fr_rotations = new List<ILogicalTreeNode>();
             for (int i = 0; i < data.SatelliteRotations.Count; i++)
             {
-                fr_rotations.Add(CreateRotationNode(string.Format("fr_rotation_satellite{0}", i + 1), fr_orbits[i], data.SatelliteRotations[i]));
+                fr_rotations.Add(CreateRotationNode(string.Format("fr_rotation_satellite{0}", i + 1), fr_sats[i], data.SatelliteRotations[i]));
             }
 
             var fr_sensors = new List<ILogicalTreeNode>();

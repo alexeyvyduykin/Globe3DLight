@@ -14,7 +14,7 @@ namespace Globe3DLight.Editor
         Task SaveFromDatabaseToJson();
         IScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration);
         IProjectContainer GetEmptyProject();
-        ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data);
+        ILogicalTreeNode CreateSatelliteNode(string name, ILogicalTreeNode parent, SatelliteData data);
         ILogicalTreeNode CreateRotationNode(string name, ILogicalTreeNode parent, RotationData data);
         ILogicalTreeNode CreateSunNode(string name, ILogicalTreeNode parent, SunData data);
         ILogicalTreeNode CreateSensorNode(string name, ILogicalTreeNode parent, SensorData data);

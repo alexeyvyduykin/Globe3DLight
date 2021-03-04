@@ -30,13 +30,13 @@ namespace Globe3DLight.AvaloniaUI.Designer
         public static ISensor Sensor { get; set; }
 
 
-        public static ILogicalTreeNode OrbitNode { get; set; }
+        public static ILogicalTreeNode SatelliteNode { get; set; }
         public static ILogicalTreeNode SensorNode { get; set; }
         public static ILogicalTreeNode RotationNode { get; set; }
         public static ILogicalTreeNode SunNode { get; set; }
         public static ILogicalTreeNode J2000Node { get; set; }
 
-        public static OrbitData OrbitData { get; set; }
+        public static SatelliteData SatelliteData { get; set; }
         public static SensorData SensorData { get; set; }
         public static RotationData RotationData { get; set; }
         public static SunData SunData { get; set; }
@@ -46,7 +46,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
         public static GroundStationData GroundStationData { get; set; }
 
 
-        public static IState OrbitAnimator { get; set; }
+        public static IState SatelliteAnimator { get; set; }
         public static IState SensorAnimator { get; set; }
         public static IState RotationAnimator { get; set; }
         public static IState SunAnimator { get; set; }
@@ -106,7 +106,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Database
 
-            OrbitData = DataDesigner.OrbitData;
+            SatelliteData = DataDesigner.SatelliteData;
             RotationData = DataDesigner.RotationData;
             SensorData = DataDesigner.SensorData;
             SunData = DataDesigner.SunData;
@@ -117,9 +117,9 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Data
 
-            var orbitAnimator = dataFactory.CreateOrbitAnimator(OrbitData);
-            orbitAnimator.Animate(0.0);
-            OrbitAnimator = orbitAnimator;
+            var satelliteAnimator = dataFactory.CreateSatelliteAnimator(SatelliteData);
+            satelliteAnimator.Animate(0.0);
+            SatelliteAnimator = satelliteAnimator;
 
             var rotationAnimator = dataFactory.CreateRotationAnimator(RotationData);
             rotationAnimator.Animate(1.0);
@@ -151,10 +151,10 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Frames
 
-            OrbitNode = factory.CreateLogicalTreeNode("fr_orbit_satellite1", OrbitAnimator);
+            SatelliteNode = factory.CreateLogicalTreeNode("fr_orbit_satellite1", SatelliteAnimator);
             RotationNode = factory.CreateLogicalTreeNode("fr_rotation_satellite1", RotationAnimator);
 
-            OrbitNode.AddChild(RotationNode);
+            SatelliteNode.AddChild(RotationNode);
 
             SensorNode = factory.CreateLogicalTreeNode("fr_sensor1", SensorAnimator);
 
@@ -198,8 +198,8 @@ namespace Globe3DLight.AvaloniaUI.Designer
         // x y z vx vy vz u   
         //public IList<(double x, double y, double z, double vx, double vy, double vz, double u)> Records { get; set; }
 
-        public static OrbitData OrbitData =>
-                new OrbitData()
+        public static SatelliteData SatelliteData =>
+                new SatelliteData()
                 {
                     Records = new List<double[]>()
                     {

@@ -16,7 +16,7 @@ namespace Globe3DLight.Data
         public IList<GroundObjectData> GroundObjects;
         public IList<GroundStationData> GroundStations;
         public IList<RetranslatorData> RetranslatorPositions;
-        public IList<OrbitData> SatellitePositions;
+        public IList<SatelliteData> SatellitePositions;
         public IList<RotationData> SatelliteRotations;
         public IList<SensorData> SatelliteShootings;
         public IList<AntennaData> SatelliteTransfers;

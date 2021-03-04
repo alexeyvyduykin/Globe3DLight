@@ -66,14 +66,14 @@ namespace Globe3DLight.ScenarioObjects
                 if (LogicalTreeNode.State is IRotationState rotationData)
                 {
                     var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                    if (parent.State is IOrbitState orbitData)
+                    if (parent.State is ISatelliteState satelliteState)
                     {
                         //   double r = orbitData.Position.Length;
                         //    var orbitRadius = r * scene.WorldScale;
 
                         //   dmat4 translate = dmat4.Translate(glm.Normalized(orbitData.Position) * orbitRadius);
 
-                        var orbitmodelMatrix = orbitData.Translate * orbitData.Rotation;//.Inverse;     
+                        var orbitmodelMatrix = satelliteState.Translate * satelliteState.Rotation;//.Inverse;     
 
                         var satelliteModelMatrix = orbitmodelMatrix * rotationData.RotationMatrix;
 

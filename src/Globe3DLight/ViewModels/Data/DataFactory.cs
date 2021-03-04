@@ -17,8 +17,8 @@ namespace Globe3DLight.Data
         IJ2000State CreateJ2000Animator(J2000Data data); 
         IJ2000State CreateJ2000Animator(DateTime epoch, double angleDeg);
 
-        IOrbitState CreateOrbitAnimator(OrbitData data);
-        IOrbitState CreateOrbitAnimator(IList<double[]> records, double t0, double t1, double tStep);
+        ISatelliteState CreateSatelliteAnimator(SatelliteData data);
+        ISatelliteState CreateSatelliteAnimator(IList<double[]> records, double t0, double t1, double tStep);
 
         IRotationState CreateRotationAnimator(RotationData data);
         IRotationState CreateRotationAnimator(IList<RotationRecord> rotations, double t0, double t1);
@@ -78,13 +78,13 @@ namespace Globe3DLight.Data
             });
         }
 
-        public IOrbitState CreateOrbitAnimator(OrbitData data)
+        public ISatelliteState CreateSatelliteAnimator(SatelliteData data)
         {
-            return new OrbitAnimator(data);
+            return new SatelliteAnimator(data);
         }
-        public IOrbitState CreateOrbitAnimator(IList<double[]> records, double t0, double t1, double tStep)
+        public ISatelliteState CreateSatelliteAnimator(IList<double[]> records, double t0, double t1, double tStep)
         {
-            return new OrbitAnimator(new OrbitData()
+            return new SatelliteAnimator(new SatelliteData()
             {
                 Records = records,
                 TimeBegin = t0,

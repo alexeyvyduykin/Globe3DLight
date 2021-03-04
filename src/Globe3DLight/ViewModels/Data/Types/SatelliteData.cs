@@ -2,7 +2,7 @@
 
 namespace Globe3DLight.Data
 {
-    public struct OrbitData
+    public struct SatelliteData
     {
         // x y z vx vy vz u   
         //public IList<(double x, double y, double z, double vx, double vy, double vz, double u)> Records { get; set; }

@@ -108,7 +108,7 @@ namespace Globe3DLight.ScenarioObjects
                         if (rotationNode.State is IRotationState rotationData)
                         {
                             var orbitNode = (ILogicalTreeNode)rotationNode.Owner;
-                            if (orbitNode.State is IOrbitState orbitData)
+                            if (orbitNode.State is ISatelliteState satelliteState)
                         {
                             var attach = RenderModel.AttachPosition;
 
@@ -117,7 +117,7 @@ namespace Globe3DLight.ScenarioObjects
 
                             //   dmat4 translate = dmat4.Translate(glm.Normalized(orbitData.Position) * orbitRadius);
 
-                            var orbitModelMatrix = orbitData.ModelMatrix;// translate * orbitData.mtxRot;//.Inverse;     
+                            var orbitModelMatrix = satelliteState.ModelMatrix;// translate * orbitData.mtxRot;//.Inverse;     
 
                             var satelliteModelMatrix = orbitModelMatrix * rotationData.RotationMatrix;
 

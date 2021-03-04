@@ -56,7 +56,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             };
         }
 
-        public static OrbitData ToOrbitData(this Satellite satellite)
+        public static SatelliteData ToSatelliteData(this Satellite satellite)
         {
             var begin = satellite.LifetimeBegin;
             var duration = satellite.LifetimeDuration;
@@ -76,7 +76,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 s.TrueAnomaly
             }).ToList();
 
-            return new OrbitData()
+            return new SatelliteData()
             {
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
