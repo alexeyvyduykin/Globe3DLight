@@ -246,13 +246,13 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 ModelingTimeDuration = duration,
                 Sun = initialConditions.ToSunData(),
                 Earth = initialConditions.ToJ2000Data(),
-                GroundObjects = groundObjects.Select(s => s.ToData()).ToList(),
-                GroundStations = groundStations.Select(s => s.ToData()).ToList(),
-                RetranslatorPositions = retranslators.Select(s => s.ToData()).ToList(),
-                SatellitePositions = satellites.Select(s => s.ToOrbitData()).ToList(),
-                SatelliteRotations = satellites.Select(s => s.ToRotationData()).ToList(),
-                SatelliteShootings = satellites.Select(s => s.ToSensorData()).ToList(),
-                SatelliteTransfers = satellites.Select(s => s.ToAntennaData()).ToList(),
+                GroundObjects = groundObjects.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
+                GroundStations = groundStations.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
+                RetranslatorPositions = retranslators.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
+                SatellitePositions = satellites.OrderBy(s => s.Id).Select(s => s.ToOrbitData()).ToList(),
+                SatelliteRotations = satellites.OrderBy(s => s.Id).Select(s => s.ToRotationData()).ToList(),
+                SatelliteShootings = satellites.OrderBy(s => s.Id).Select(s => s.ToSensorData()).ToList(),
+                SatelliteTransfers = satellites.OrderBy(s => s.Id).Select(s => s.ToAntennaData()).ToList(),
             };
         }
 
