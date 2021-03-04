@@ -10,7 +10,10 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
     internal static class ModelExtensions
     {
         public static RetranslatorData ToData(this Retranslator retranslator)
-        {
+        {          
+            var begin = retranslator.LifetimeBegin;
+            var duration = retranslator.LifetimeDuration;
+
             var arr = retranslator.RetranslatorPositions.OrderBy(s => s.PositionTime).Take(2).ToArray();
             var step = arr[1].PositionTime - arr[0].PositionTime;
 
@@ -26,8 +29,8 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             return new RetranslatorData()
             {
                 Records = records,
-                TimeBegin = retranslator.LifetimeBegin,
-                TimeEnd = retranslator.LifetimeDuration - retranslator.LifetimeBegin,
+                TimeBegin = begin,
+                TimeEnd = begin + duration,
                 TimeStep = step,
             };
         }
@@ -84,41 +87,54 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
         public static RotationData ToRotationData(this Satellite satellite)
         {
+            var begin = satellite.LifetimeBegin;
+            var duration = satellite.LifetimeDuration;
+         
+            var rots = satellite.SatelliteRotations.OrderBy(s => s.Begin).Select(s =>
+new RotationRecord()
+{
+    BeginTime = s.Begin,
+    EndTime = s.Begin + s.Duration,
+    Angle = s.ToAngle
+}).ToList();
+
             return new RotationData()
             {
-                TimeBegin = satellite.LifetimeBegin,
-                TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Rotations = satellite.SatelliteRotations.Select(s =>
-                new RotationRecord()
-                {
-                    BeginTime = s.Begin,
-                    EndTime = s.Begin + s.Duration,
-                    Angle = s.ToAngle
-                }).ToList(),
+                TimeBegin = begin,
+                TimeEnd = begin + duration,
+                Rotations = rots,
             };
         }
 
         public static SensorData ToSensorData(this Satellite satellite)
         {
+            var begin = satellite.LifetimeBegin;
+            var duration = satellite.LifetimeDuration;
+
+            var shoots = satellite.SatelliteShootings.OrderBy(s => s.Begin).Select(s => new ShootingRecord()
+            {
+                BeginTime = s.Begin,
+                EndTime = s.Begin + s.Duration,
+                Gam1 = s.Gam1,
+                Gam2 = s.Gam2,
+                Range1 = s.Range1,
+                Range2 = s.Range2,
+                TargetName = s.GroundObject.Name,
+            }).ToList();
+
             return new SensorData()
             {
-                TimeBegin = satellite.LifetimeBegin,
-                TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Shootings = satellite.SatelliteShootings.Select(s => new ShootingRecord()
-                {
-                    BeginTime = s.Begin,
-                    EndTime = s.Begin + s.Duration,
-                    Gam1 = s.Gam1,
-                    Gam2 = s.Gam2,
-                    Range1 = s.Range1,
-                    Range2 = s.Range2,
-                    TargetName = s.GroundObject.Name,
-                }).ToList(),
+                TimeBegin = begin,
+                TimeEnd = begin + duration,
+                Shootings = shoots,
             };
         }
 
         public static AntennaData ToAntennaData(this Satellite satellite)
         {
+            var begin = satellite.LifetimeBegin;
+            var duration = satellite.LifetimeDuration;
+
             var arr1 = satellite.SatelliteToGroundStationTransfers.Select(s => new TranslationRecord()
             {
                 BeginTime = s.Begin,
@@ -133,16 +149,21 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 Target = string.Format("RTR{0:0000000}", s.RetranslatorId - 1),
             }).ToList();
 
+            var arr = arr1.Union(arr2).OrderBy(s => s.BeginTime).ToList();
+
             return new AntennaData()
             {
-                TimeBegin = satellite.LifetimeBegin,
-                TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Translations = arr1.Union(arr2).ToList(),
+                TimeBegin = begin,
+                TimeEnd = begin + duration,
+                Translations = arr,
             };
         }
 
         public static SunData ToSunData(this InitialCondition initialCondition)
         {
+            var begin = initialCondition.ModelingTimeBegin;
+            var duration = initialCondition.ModelingTimeDuration;
+
             var pos0 = new GlmSharp.dvec3(
                 initialCondition.SunPositionXbegin,
                 initialCondition.SunPositionYbegin,
@@ -152,9 +173,6 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 initialCondition.SunPositionXend,
                 initialCondition.SunPositionYend,
                 initialCondition.SunPositionZend);
-
-            var begin = initialCondition.ModelingTimeBegin;
-            var duration = initialCondition.ModelingTimeDuration;
 
             return new SunData()
             {
