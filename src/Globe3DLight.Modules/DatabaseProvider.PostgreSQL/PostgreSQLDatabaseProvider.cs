@@ -228,6 +228,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var groundStations = db.GroundStations.ToList();
             var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
             var groundObjects = db.GroundObjects.ToList();
+            db.SatelliteOrbitPositions.Load();
             db.SatellitePositions.Load();
             db.SatelliteRotations.Load();
             db.SatelliteShootings.Load();

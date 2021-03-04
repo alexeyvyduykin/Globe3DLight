@@ -6,22 +6,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Globe3DLight.DatabaseProvider.PostgreSQL
 {
-    //public class AppContext : DbContext
-    //{
-    //    private readonly string _connectionString;
-
-    //    public AppContext(string connectionString)
-    //    {
-    //        _connectionString = connectionString;
-    //    }
-
-    //    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    {
-    //        optionsBuilder.UseNpgsql(_connectionString);
-    //    }
-    //}
-
-
     internal partial class dbGlobe3DLightContext : DbContext
     {
         public dbGlobe3DLightContext()
@@ -39,6 +23,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         public virtual DbSet<Retranslator> Retranslators { get; set; }
         public virtual DbSet<RetranslatorPosition> RetranslatorPositions { get; set; }
         public virtual DbSet<Satellite> Satellites { get; set; }
+        public virtual DbSet<SatelliteOrbitPosition> SatelliteOrbitPositions { get; set; }
         public virtual DbSet<SatellitePosition> SatellitePositions { get; set; }
         public virtual DbSet<SatelliteRotation> SatelliteRotations { get; set; }
         public virtual DbSet<SatelliteShooting> SatelliteShootings { get; set; }
@@ -100,6 +85,15 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             modelBuilder.Entity<Satellite>(entity =>
             {
                 entity.Property(e => e.Name).IsRequired();
+            });
+
+            modelBuilder.Entity<SatelliteOrbitPosition>(entity =>
+            {
+                entity.HasIndex(e => e.SatelliteId, "IX_SatelliteOrbitPositions_SatelliteId");
+
+                entity.HasOne(d => d.Satellite)
+                    .WithMany(p => p.SatelliteOrbitPositions)
+                    .HasForeignKey(d => d.SatelliteId);
             });
 
             modelBuilder.Entity<SatellitePosition>(entity =>

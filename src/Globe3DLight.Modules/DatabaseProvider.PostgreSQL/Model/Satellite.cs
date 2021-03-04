@@ -9,6 +9,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
     {
         public Satellite()
         {
+            SatelliteOrbitPositions = new HashSet<SatelliteOrbitPosition>();
             SatellitePositions = new HashSet<SatellitePosition>();
             SatelliteRotations = new HashSet<SatelliteRotation>();
             SatelliteShootings = new HashSet<SatelliteShooting>();
@@ -22,6 +23,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         public double LifetimeBegin { get; set; }
         public double LifetimeDuration { get; set; }
 
+        public virtual ICollection<SatelliteOrbitPosition> SatelliteOrbitPositions { get; set; }
         public virtual ICollection<SatellitePosition> SatellitePositions { get; set; }
         public virtual ICollection<SatelliteRotation> SatelliteRotations { get; set; }
         public virtual ICollection<SatelliteShooting> SatelliteShootings { get; set; }
