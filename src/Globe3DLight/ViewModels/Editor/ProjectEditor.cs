@@ -110,6 +110,18 @@ namespace Globe3DLight.Editor
             OnOpenProject(project, "");
         }
 
+        public async void OnFromJsonProject()
+        {
+            var project = await ContainerFactory.GetFromJson();
+
+            OnOpenProject(project, "");
+        }
+
+        public async void OnFromDatabaseToJson()
+        {
+            await ContainerFactory.SaveFromDatabaseToJson();
+        }
+
         public void OnOpenProject(IProjectContainer project, string path)
         {
             try

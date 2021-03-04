@@ -86,7 +86,17 @@ namespace Globe3DLight.Editor
 
             return fr_orbit;
         }
+        private ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data)
+        {          
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+   
+            var orbitData = dataFactory.CreateOrbitAnimator(data);      
+            var fr_orbit = factory.CreateLogicalTreeNode(name, orbitData);
+            parent.AddChild(fr_orbit);
 
+            return fr_orbit;
+        }
         private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path)
         {            
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
@@ -104,6 +114,18 @@ namespace Globe3DLight.Editor
             return fr_rotation;
 
         }
+        private ILogicalTreeNode CreateRotationNode(string name, ILogicalTreeNode parent, RotationData data)
+        {  
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+     
+            var rotationData = dataFactory.CreateRotationAnimator(data); 
+            var fr_rotation = factory.CreateLogicalTreeNode(name, rotationData);
+
+            parent.AddChild(fr_rotation);
+
+            return fr_rotation;
+        }
         private ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, string path)
         {     
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
@@ -119,7 +141,16 @@ namespace Globe3DLight.Editor
             return fr_sun;
             //  return objFactory.CreateSun(name, fr_sun);
         }
+        private ILogicalTreeNode CreateSunNode(string name, ILogicalTreeNode parent, SunData data)
+        {       
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
 
+            var sun_data = dataFactory.CreateSunAnimator(data);      
+            var fr_sun = factory.CreateLogicalTreeNode(name, sun_data);
+            parent.AddChild(fr_sun);
+            return fr_sun;  
+        }
         private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, string path)
         {     
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
@@ -136,7 +167,17 @@ namespace Globe3DLight.Editor
             return fr_sensor;
             // return objFactory.CreateSensor(name, fr_sensor);
         }
+        private ILogicalTreeNode CreateSensorNode(string name, ILogicalTreeNode parent, SensorData data)
+        {          
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
 
+            var sensor_data = dataFactory.CreateSensorAnimator(data);         
+            var fr_sensor = factory.CreateLogicalTreeNode(name, sensor_data);
+            parent.AddChild(fr_sensor);
+
+            return fr_sensor;        
+        }
         private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, string path)
         {        
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
@@ -151,7 +192,17 @@ namespace Globe3DLight.Editor
 
             return fr_retranslator;
         }
+        private ILogicalTreeNode CreateRetranslatorNode(string name, ILogicalTreeNode parent, RetranslatorData data)
+        {           
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+        
+            var retranslatorData = dataFactory.CreateRetranslatorAnimator(data);         
+            var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
+            parent.AddChild(fr_retranslator);
 
+            return fr_retranslator;
+        }
         private ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, string path)
         {      
             var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
@@ -170,8 +221,38 @@ namespace Globe3DLight.Editor
 
             return fr_antenna;
         }
+        private ILogicalTreeNode CreateAntennaNode(string name, ILogicalTreeNode parent, AntennaData data)
+        {     
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+      
+            var antenna_data = dataFactory.CreateAntennaAnimator(data);            
+            var fr_antenna = factory.CreateLogicalTreeNode(name, antenna_data);
+            parent.AddChild(fr_antenna);
 
+            return fr_antenna;
+        }
+        private ILogicalTreeNode CreateGroundStationNode(string name, ILogicalTreeNode parent, GroundStationData data)
+        {
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
 
+            var groundStationData = dataFactory.CreateGroundStationState(data);
+            var fr_groundStation = factory.CreateLogicalTreeNode(name, groundStationData);
+            parent.AddChild(fr_groundStation);
+
+            return fr_groundStation;       
+        }
+        private ILogicalTreeNode CreateEarthNode(string name, ILogicalTreeNode parent, J2000Data data)
+        {
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+
+            var earth_data = dataFactory.CreateJ2000Animator(data);
+            var fr_earth = factory.CreateLogicalTreeNode(name, earth_data);
+            parent.AddChild(fr_earth);
+            return fr_earth;
+        }
         public IProjectContainer GetDemo()
         {
             var factory = _serviceProvider.GetService<IFactory>();
@@ -336,6 +417,174 @@ namespace Globe3DLight.Editor
                 throw new Exception();
             }             
         }
+        public async Task SaveFromDatabaseToJson()
+        {
+            var databaseProvider = _serviceProvider.GetService<IDatabaseProvider>();
+            var jsonSerializer = _serviceProvider.GetService<IJsonSerializer>();
+            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
+            var fileIO = _serviceProvider.GetService<IFileSystem>();
+
+            var resourcePath = configuration["ResourcePath"];
+       
+            try
+            {
+                var data = await Task.Run(() => databaseProvider.LoadScenarioData());
+
+                var json = jsonSerializer.Serialize<ScenarioData>(data);
+
+                var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"data\project1.json");
+
+                using var stream = fileIO.Create(path);
+                fileIO.WriteUtf8Text(stream, json);         
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+        public async Task<IProjectContainer> GetFromJson()
+        {
+            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
+
+            var resourcePath = configuration["ResourcePath"];
+            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
+
+            try
+            {
+                var data = await Task.Run(() => jsonDataProvider.CreateDataFromPath<ScenarioData>(Path.Combine(path, @"data\project1.json")));
+
+                return FromData(data);
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+        private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
+        
+        private IProjectContainer FromData(ScenarioData data)
+        {
+            var factory = _serviceProvider.GetService<IFactory>();
+            var containerFactory = this as IContainerFactory;
+            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+       
+            var project = factory.CreateProjectContainer("Project1");
+            var scenario1 = containerFactory.GetScenario("Scenario1");
+
+            var epoch = FromJulianDate(data.JulianDateOnTheDay);
+            var begin = epoch.AddSeconds(data.ModelingTimeBegin);
+            var duration = TimeSpan.FromSeconds(data.ModelingTimeDuration);
+
+            scenario1.TimePresenter = factory.CreateTimePresenter(begin, duration);
+
+            var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
+
+            var fr_earth = CreateEarthNode("fr_j2000", root, data.Earth);
+                       
+            var fr_sun = CreateSunNode("fr_sun", root, data.Sun);
+
+            var fr_gss = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.GroundStations.Count; i++)
+            {
+                fr_gss.Add(CreateGroundStationNode(string.Format("fr_gs{0:00}", i + 1), fr_earth, data.GroundStations[i]));
+            }
+
+            var fr_orbits = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatellitePositions.Count; i++)
+            {
+                fr_orbits.Add(CreateOrbitNode(string.Format("fr_orbital_satellite{0}", i + 1), fr_earth, data.SatellitePositions[i]));
+            }
+
+            var fr_rotations = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteRotations.Count; i++)
+            {
+                fr_rotations.Add(CreateRotationNode(string.Format("fr_rotation_satellite{0}", i + 1), fr_orbits[i], data.SatelliteRotations[i]));
+            }
+
+            var fr_sensors = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteShootings.Count; i++)
+            {
+                fr_sensors.Add(CreateSensorNode(string.Format("fr_shooting_sensor{0}", i + 1), fr_rotations[i], data.SatelliteShootings[i]));
+            }
+
+            var fr_antennas = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteTransfers.Count; i++)
+            {
+                fr_antennas.Add(CreateAntennaNode(string.Format("fr_antenna{0}", i + 1), fr_rotations[i], data.SatelliteTransfers[i]));
+            }
+
+            var fr_retrs = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.RetranslatorPositions.Count; i++)
+            {
+                fr_retrs.Add(CreateRetranslatorNode(string.Format("fr_retranslator{0}", i + 1), root, data.RetranslatorPositions[i]));
+            }
+
+            var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
+            objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
+            objBuilder.Add(objFactory.CreateEarth("Earth", fr_earth));
+
+            var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
+
+            for (int i = 0; i < fr_rotations.Count; i++)
+            {
+                var sat = objFactory.CreateSatellite(string.Format("Satellite{0}", i + 1), fr_rotations[i]);
+                objBuilder.Add(sat);
+
+                taskBuilder.Add(objFactory.CreateSatelliteTask(
+                    sat,
+                    data.SatelliteRotations[i],            
+                    data.SatelliteShootings[i],
+                    data.SatelliteTransfers[i],
+                    FromJulianDate(data.JulianDateOnTheDay)));
+            }
+
+            for (int i = 0; i < fr_sensors.Count; i++)
+            {
+                objBuilder.Add(objFactory.CreateSensor(string.Format("Sensor{0}", i + 1), fr_sensors[i]));
+            }
+
+            var gss = new List<IScenarioObject>();
+            var rtrs = new List<IScenarioObject>();
+
+            for (int i = 0; i < fr_gss.Count; i++)
+            {
+                gss.Add(objFactory.CreateGroundStation(string.Format("GroundStation{0:00}", i + 1), fr_gss[i], i));
+            }
+
+            for (int i = 0; i < fr_retrs.Count; i++)
+            {
+                rtrs.Add(objFactory.CreateRetranslator(string.Format("Retranslator{0}", i + 1), fr_retrs[i], i));
+            }
+
+            objBuilder.AddRange(gss);
+            objBuilder.AddRange(rtrs);
+            
+            var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            assetsBuilder.AddRange(gss);
+            assetsBuilder.AddRange(rtrs);
+
+
+            for (int i = 0; i < fr_antennas.Count; i++)
+            {
+                var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[i]);
+                antenna.Assets = assetsBuilder.ToImmutable();
+
+                objBuilder.Add(antenna);
+            }
+
+            scenario1.ScenarioObjects = objBuilder.ToImmutable();
+
+            scenario1.SatelliteTasks = taskBuilder.ToImmutable();
+
+            project.AddScenario(scenario1);
+
+            project.SetCurrentScenario(scenario1);
+
+            return project;
+        }
+
         public IProjectContainer GetEmptyProject()
         {
             var factory = _serviceProvider.GetService<IFactory>();

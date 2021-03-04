@@ -400,6 +400,16 @@ namespace Globe3DLight
             };
         }
 
+        public ITimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan)
+        {
+            var timer = CreateAcceleratedTimer();
+
+            return new TimePresenter(dateTime, timeSpan)
+            {
+                Timer = timer,            
+            };
+        }
+
         public UniqueName CreateUniqueName(string name)
         {
             return new UniqueName(name);

@@ -25,7 +25,7 @@ namespace Globe3DLight.Editor
         void OnNewProject();
         void OnDemoProject();
         void OnFromDatabaseProject();
-
+        void OnFromJsonProject();
         void OnOpenProject(IProjectContainer project, string path);
         void OnOpenProject(string path); 
         void OnSaveProject(string path);

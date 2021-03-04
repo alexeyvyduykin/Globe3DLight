@@ -7,17 +7,16 @@ using System.Linq;
 namespace Globe3DLight.Data
 {
     public interface IOrbitState : IState, IAnimator, IFrameable
-    {
+    {               
         dvec3 Position { get; }      
-      //  dmat4 ModelMatrix { get; }
-
+     
         dmat4 Translate { get; }
 
         dmat4 Rotation { get; }
     }
 
     public class OrbitAnimator : ObservableObject, IOrbitState
-    {      
+    {
         private readonly IList<(double x, double y, double z, double vx, double vy, double vz, double u)> _records;
         private readonly double _timeBegin;
         private readonly double _timeEnd;
@@ -47,7 +46,6 @@ namespace Globe3DLight.Data
             get => _rotation; 
             protected set => Update(ref _rotation, value); 
         }
-
 
         public dmat4 ModelMatrix
         {

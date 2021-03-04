@@ -42,7 +42,7 @@
       </Menu>
 
       <Grid x:Name="LAYOUT_DashboardContentGrid" 
-            RowDefinitions="0.2*,50,30,1*,30,1*,30,1*,20,0.2*" 
+            RowDefinitions="0.2*,50,30,1*,30,1*,30,1*,30,1*,20,0.2*" 
             ColumnDefinitions="5*,50*,30,40*,5*" 
             MaxWidth="800" 
             MaxHeight="600" 
@@ -68,15 +68,35 @@
                 Grid.Column="1" Grid.Row="5" Grid.ColumnSpan="1" Grid.RowSpan="1" 
                 Command="{Binding OnDemoProject}" 
                 x:CompileBindings="False"/>
-        <Button Content="From Database Project" 
-                FontSize="24" 
-                HorizontalAlignment="Stretch" 
-                VerticalAlignment="Stretch" 
-                HorizontalContentAlignment="Center" 
-                VerticalContentAlignment="Center" 
-                Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="1" Grid.RowSpan="1" 
-                Command="{Binding OnFromDatabaseProject}"
-                x:CompileBindings="False"/>
+        <Button Content="From Json Project"
+                FontSize="24"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Grid.Column="1" Grid.Row="7" Grid.ColumnSpan="1" Grid.RowSpan="1"
+                Command="{Binding OnFromJsonProject}"
+                x:CompileBindings="False"/>                   
+        <Button Content="From Database Project"                              
+                FontSize="24"                                                
+                HorizontalAlignment="Stretch"                                               
+                VerticalAlignment="Stretch"                                                
+                HorizontalContentAlignment="Center"                                                
+                VerticalContentAlignment="Center"                                        
+                Grid.Column="1" Grid.Row="9"                                        
+                Grid.ColumnSpan="1" Grid.RowSpan="1"                                             
+                Command="{Binding OnFromDatabaseProject}"                                                                                     
+                x:CompileBindings="False"/>          
+        <Button Content="From Database to Json"                      
+                FontSize="24"                      
+                HorizontalAlignment="Stretch"                      
+                VerticalAlignment="Stretch"
+                HorizontalContentAlignment="Center"
+                VerticalContentAlignment="Center"
+                Grid.Column="3" Grid.Row="9"                                        
+                Grid.ColumnSpan="1" Grid.RowSpan="1"   
+                Command="{Binding OnFromDatabaseToJson}"
+                x:CompileBindings="False"/>          
       </Grid>
     </Grid>
 

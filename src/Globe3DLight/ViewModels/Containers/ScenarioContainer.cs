@@ -136,6 +136,7 @@ namespace Globe3DLight.Containers
         public virtual bool ShouldSerializeLogicalTreeNodeRoot() => true;
         public virtual bool ShouldSerializeCurrentLogicalTreeNode() => _currentLogicalTreeNode != null;
         public virtual bool ShouldSerializeScenarioObjects() => true;
+        public virtual bool ShouldSerializeSatelliteTasks() => true;
         public virtual bool ShouldSerializeCurrentScenarioObject() => _currentScenarioObject != null;
         public virtual bool ShouldSerializeWidth() => _width != default;
         public virtual bool ShouldSerializeHeight() => _height != default;

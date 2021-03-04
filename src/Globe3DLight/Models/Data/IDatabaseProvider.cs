@@ -8,5 +8,6 @@ namespace Globe3DLight.Data
     public interface IDatabaseProvider 
     {
         IProjectContainer LoadProject();
+        ScenarioData LoadScenarioData();
     }
 }

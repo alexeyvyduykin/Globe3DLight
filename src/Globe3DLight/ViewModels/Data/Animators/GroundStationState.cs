@@ -5,8 +5,8 @@ using GlmSharp;
 
 namespace Globe3DLight.Data
 {
-    public interface IGroundStationState : IState
-    {
+    public interface IGroundStationState : IState   
+    {    
         dvec3 Position { get; }
 
         dmat4 ModelMatrix { get; }
@@ -27,10 +27,10 @@ namespace Globe3DLight.Data
         private double _lon;
         private double _lat;
         private double _elevation;
-        private double _earthRadius;
-
+        private readonly double _earthRadius;
+ 
         public GroundStationState(GroundStationData data)
-        {            
+        {
             _lon = data.Lon;
             _lat = data.Lat;
             _elevation = data.Elevation;

@@ -6,7 +6,7 @@ using GlmSharp;
 namespace Globe3DLight.Data
 {
     public interface IJ2000State : IState, IAnimator
-    {
+    {      
         dmat4 ModelMatrix { get; }
 
         double AngleDEG { get; }
@@ -15,11 +15,19 @@ namespace Globe3DLight.Data
 
     public class J2000Animator : ObservableObject, IJ2000State
     {        
-        private readonly double _angleDeg0;
+        private double _angleDeg0;
         private double _angleDeg;
 
         private dmat4 _modelMatrix;
         private DateTime _epoch;
+
+        private J2000Data _data;
+
+        public J2000Animator(J2000Data data)
+        {
+            _angleDeg0 = _data.AngleDeg;
+            _epoch = _data.Epoch;
+        }
 
         public dmat4 ModelMatrix 
         {
@@ -31,12 +39,6 @@ namespace Globe3DLight.Data
         {
             get => _angleDeg;
             protected set => Update(ref _angleDeg, value);
-        }
-
-        public J2000Animator(J2000Data data)
-        {            
-            _angleDeg0 = data.AngleDeg;
-            _epoch = data.Epoch;
         }
 
         public void Animate(double t)

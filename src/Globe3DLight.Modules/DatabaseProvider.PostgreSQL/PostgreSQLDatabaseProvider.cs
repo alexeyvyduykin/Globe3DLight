@@ -19,7 +19,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
         public PostgreSQLDatabaseProvider(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;         
+            _serviceProvider = serviceProvider;         
         }
 
         public IProjectContainer LoadProject()
@@ -51,26 +51,44 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             //Npgsql.EntityFrameworkCore.PostgreSQL
         }
 
-        private double ToJulianDate(DateTime date)
+        public ScenarioData LoadScenarioData()
         {
-            return date.ToOADate() + 2415018.5;
+            var builder = new ConfigurationBuilder();
+            // установка пути к текущему каталогу
+            builder.SetBasePath(Directory.GetCurrentDirectory());
+            // получаем конфигурацию из файла appsettings.json
+            builder.AddJsonFile("appsettings.json");
+            // создаем конфигурацию
+            var config = builder.Build();
+            // получаем строку подключения
+            string connectionString = config.GetConnectionString("DefaultConnection");
+            var major = int.Parse(config["PostgresVersionMajor"]);
+            var minor = int.Parse(config["PostgresVersionMinor"]);
+
+            var optionsBuilder = new DbContextOptionsBuilder<dbGlobe3DLightContext>();
+            var options = optionsBuilder.UseNpgsql(connectionString, options => options.SetPostgresVersion(new Version(major, minor))).Options;
+
+            ScenarioData data;
+
+            using (var db = new dbGlobe3DLightContext(options))
+            {
+                data = GetScenarioData(db);
+            }
+
+            return data;
         }
 
-        private DateTime FromJulianDate(double jd)
-        {
-            var d = jd - 2415018.5;
-
-            return DateTime.FromOADate(d);
-        }
-
+        private double ToJulianDate(DateTime date) => date.ToOADate() + 2415018.5;
+        
+        private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
+        
         private IProjectContainer GetProject(dbGlobe3DLightContext db)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = _serviceProvider.GetService<IContainerFactory>();
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            //var databaseFactory = _serviceProvider.GetService<IDatabaseFactory>();
-
+  
             var project = factory.CreateProjectContainer("Project1");
 
             var scenario1 = containerFactory.GetScenario("Scenario1");
@@ -149,9 +167,9 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
                 taskBuilder.Add(objFactory.CreateSatelliteTask(
                     sat,
-                    CreateRotationData(satellites[i]),
-                    CreateSensorData(satellites[i]),
-                    CreateAntennaData(satellites[i]),
+                    satellites[i].ToRotationData(),
+                    satellites[i].ToSensorData(),
+                    satellites[i].ToAntennaData(),
                     FromJulianDate(satellites[i].JulianDateOnTheDay)));
             }
 
@@ -195,211 +213,59 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             }
 
             scenario1.ScenarioObjects = objBuilder.ToImmutable();
-
             scenario1.SatelliteTasks = taskBuilder.ToImmutable();
 
             project.AddScenario(scenario1);
-            //    project.AddScenario(scenario2);
-            //    project.AddScenario(scenario3);
             project.SetCurrentScenario(scenario1);
-
             return project;
         }
-
-        private RotationData CreateRotationData(Satellite satellite)
-        {
-            return new RotationData()
-            {
-                TimeBegin = satellite.LifetimeBegin,
-                TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Rotations = satellite.SatelliteRotations.Select(s =>
-                new RotationRecord()
-                {
-                    BeginTime = s.Begin,
-                    EndTime = s.Begin + s.Duration,
-                    Angle = s.ToAngle
-                }).ToList(),
-            };
-        }
-            
-        private SensorData CreateSensorData(Satellite satellite)
-        {
-            return new SensorData()
-            {
-                TimeBegin = satellite.LifetimeBegin,
-                TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Shootings = satellite.SatelliteShootings.Select(s => new ShootingRecord()
-                {
-                    BeginTime = s.Begin,
-                    EndTime = s.Begin + s.Duration,
-                    Gam1 = s.Gam1,
-                    Gam2 = s.Gam2,
-                    Range1 = s.Range1,
-                    Range2 = s.Range2,
-                    TargetName = s.GroundObject.Name,
-                }).ToList(),
-            };
-        }
-            
-        private AntennaData CreateAntennaData(Satellite satellite)
-        {
-            var arr1 = satellite.SatelliteToGroundStationTransfers.Select(s => new TranslationRecord()
-            {
-                BeginTime = s.Begin,
-                EndTime = s.Begin + s.Duration,
-                Target = string.Format("GST{0:0000000}", s.GroundStationId - 1),
-            }).ToList();
-
-            var arr2 = satellite.SatelliteToRetranslatorTransfers.Select(s => new TranslationRecord()
-            {
-                BeginTime = s.Begin,
-                EndTime = s.Begin + s.Duration,
-                Target = string.Format("RTR{0:0000000}", s.RetranslatorId - 1),
-            }).ToList();
-        
-            return new AntennaData()
-            {
-                TimeBegin = satellite.LifetimeBegin,
-                TimeEnd = satellite.LifetimeBegin + satellite.LifetimeDuration,
-                Translations = arr1.Union(arr2).ToList(),
-            };
-        }
-
-        private ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, Satellite satellite/*, IList<SatellitePosition> positions*/)
+                     
+        private ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, Satellite satellite)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
 
             var name = satellite.Name;
-            var begin = satellite.LifetimeBegin;
-            var duration = satellite.LifetimeDuration;
-
-            var arr = satellite.SatellitePositions.OrderBy(s => s.PositionTime).Take(2).ToArray();
-            var step = arr[1].PositionTime - arr[0].PositionTime;
-
-            var records = satellite.SatellitePositions.OrderBy(s => s.PositionTime).Select(s =>
-            new double[]
-            {
-                s.PositionX,
-                s.PositionY,
-                s.PositionZ,
-                s.VelocityX,
-                s.VelocityY,
-                s.VelocityZ,
-                s.TrueAnomaly
-            }).ToList();
-
-            var db = new OrbitData() 
-            { 
-            TimeBegin = begin,
-            TimeEnd = begin + duration,
-            TimeStep = step,
-            Records = records,
-            };
-
-            var orbitData = dataFactory.CreateOrbitAnimator(db);         
-            var fr_orbit = factory.CreateLogicalTreeNode(string.Format("fr_orbital_{0}", name), orbitData);
+            var orbitState = dataFactory.CreateOrbitAnimator(satellite.ToOrbitData());         
+            var fr_orbit = factory.CreateLogicalTreeNode(string.Format("fr_orbital_{0}", name), orbitState);
             parent.AddChild(fr_orbit);
 
             return fr_orbit;
         }
 
-        private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, Satellite satellite/*, IList<SatelliteRotation> rotations*/)
+        private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, Satellite satellite)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
 
-            var begin = satellite.LifetimeBegin;
-            var duration = satellite.LifetimeDuration;
             var name = satellite.Name;
-
-            var rots = satellite.SatelliteRotations.OrderBy(s => s.Begin).Select(s => 
-            new RotationRecord()
-            { 
-                BeginTime = s.Begin, 
-                EndTime = s.Begin + s.Duration,
-                Angle = s.ToAngle 
-            }).ToList();
-
-            var db = new RotationData() 
-            { 
-            TimeBegin = begin,
-            TimeEnd = begin + duration,
-            Rotations = rots,
-            };
-
-            var rotationData = dataFactory.CreateRotationAnimator(db);
+            var rotationData = dataFactory.CreateRotationAnimator(satellite.ToRotationData());
             var fr_rotation = factory.CreateLogicalTreeNode(string.Format("fr_rotation_{0}", name), rotationData);
 
             parent.AddChild(fr_rotation);
 
             return fr_rotation;
         }
+       
         private ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, InitialCondition initialCondition)
         {             
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
-
-            var pos0 = new GlmSharp.dvec3(
-            initialCondition.SunPositionXbegin,
-            initialCondition.SunPositionYbegin,
-            initialCondition.SunPositionZbegin
-            );
-
-            var pos1 = new GlmSharp.dvec3(
-initialCondition.SunPositionXend,
-initialCondition.SunPositionYend,
-initialCondition.SunPositionZend
-);
-
-            var begin = initialCondition.ModelingTimeBegin;
-            var duration = initialCondition.ModelingTimeDuration;
-
-            var db = new SunData() 
-            { 
-            TimeBegin = begin,
-            TimeEnd = begin + duration,
-            Position0 = pos0,
-            Position1 = pos1,
-            };
-
-            var sun_data = dataFactory.CreateSunAnimator(db);        
+            
+            var sun_data = dataFactory.CreateSunAnimator(initialCondition.ToSunData());        
             var fr_sun = factory.CreateLogicalTreeNode("fr_sun", sun_data);
             parent.AddChild(fr_sun);
             return fr_sun;
             //  return objFactory.CreateSun(name, fr_sun);
         }
 
-        private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, Satellite satellite/*, IList<SatelliteShooting> shootings*/)
+        private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, Satellite satellite)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = satellite.Name;
-            var id = satellite.Id;
-
-            var begin = satellite.LifetimeBegin;
-            var duration = satellite.LifetimeDuration;
-
-            var shoots = satellite.SatelliteShootings.OrderBy(s => s.Begin).Select(s => new ShootingRecord() 
-            { 
-            BeginTime = s.Begin,
-            EndTime = s.Begin + s.Duration,
-            Gam1 = s.Gam1,
-            Gam2 = s.Gam2,
-            Range1 = s.Range1,
-            Range2 = s.Range2,
-            TargetName = s.GroundObject.Name,
-            }).ToList();
-
-            var db = new SensorData() 
-            { 
-            TimeBegin = begin,
-            TimeEnd = begin + duration,
-            Shootings = shoots,
-            };
-            
-            var sensor_data = dataFactory.CreateSensorAnimator(db);
+    
+            var id = satellite.Id;            
+            var sensor_data = dataFactory.CreateSensorAnimator(satellite.ToSensorData());
             var fr_sensor = factory.CreateLogicalTreeNode(string.Format("fr_shooting_sensor{0}", id), sensor_data);
             parent.AddChild(fr_sensor);
 
@@ -407,38 +273,13 @@ initialCondition.SunPositionZend
             // return objFactory.CreateSensor(name, fr_sensor);
         }
 
-        private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, Retranslator retranslator/*, IList<RetranslatorPosition> positions*/)
+        private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, Retranslator retranslator)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
 
             var name = retranslator.Name;
-            var begin = retranslator.LifetimeBegin;
-            var duration = retranslator.LifetimeDuration;
-
-            var arr = retranslator.RetranslatorPositions.OrderBy(s => s.PositionTime).Take(2).ToArray();
-            var step = arr[1].PositionTime - arr[0].PositionTime;
-
-            var records = retranslator.RetranslatorPositions.OrderBy(s => s.PositionTime).Select(s => 
-            new double[] 
-            {
-                s.PositionX, 
-                s.PositionY, 
-                s.PositionZ,
-                s.TrueAnomaly 
-            }).ToList();
-
-
-            var db = new RetranslatorData() 
-            { 
-            TimeBegin = begin,
-            TimeEnd = begin + duration,
-            TimeStep = step,
-            Records = records,
-            
-            };
-
-            var retranslatorData = dataFactory.CreateRetranslatorAnimator(db);    
+            var retranslatorData = dataFactory.CreateRetranslatorAnimator(retranslator.ToData());    
             var fr_retranslator = factory.CreateLogicalTreeNode(string.Format("fr_{0}", name), retranslatorData);
             parent.AddChild(fr_retranslator);
 
@@ -454,38 +295,46 @@ initialCondition.SunPositionZend
             //   var p0LeftPos = new dvec3(0.6774, -0.1222, -0.235);
 
             var id = satellite.Id;
-
-            var begin = satellite.LifetimeBegin;
-            var duration = satellite.LifetimeDuration;
-
-            var arr1 = satellite.SatelliteToGroundStationTransfers.Select(s => new TranslationRecord()
-            {
-                BeginTime = s.Begin,
-                EndTime = s.Begin + s.Duration,
-                Target = string.Format("GST{0:0000000}", s.GroundStationId - 1),
-            }).ToList();
-
-            var arr2 = satellite.SatelliteToRetranslatorTransfers.Select(s => new TranslationRecord() 
-            { 
-            BeginTime = s.Begin,
-            EndTime = s.Begin + s.Duration,
-            Target = string.Format("RTR{0:0000000}", s.RetranslatorId - 1),
-            }).ToList();
-
-            var arr = arr1.Union(arr2).OrderBy(s => s.BeginTime).ToList();
-
-            var db = new AntennaData() 
-            { 
-            TimeBegin = begin,
-            TimeEnd = begin + duration,
-            Translations = arr,
-            };
-
-            var antenna_data = dataFactory.CreateAntennaAnimator(db/*, p0LeftPos*/);
+            var antenna_data = dataFactory.CreateAntennaAnimator(satellite.ToAntennaData());
             var fr_antenna = factory.CreateLogicalTreeNode(string.Format("fr_antenna{0}", id), antenna_data);
             parent.AddChild(fr_antenna);
 
             return fr_antenna;
         }
+
+        private ScenarioData GetScenarioData(dbGlobe3DLightContext db)
+        {                  
+            var initialConditions = db.InitialConditions.FirstOrDefault();
+            var groundStations = db.GroundStations.ToList();
+            var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
+            var groundObjects = db.GroundObjects.ToList();
+            db.SatellitePositions.Load();
+            db.SatelliteRotations.Load();
+            db.SatelliteShootings.Load();
+            db.SatelliteToGroundStationTransfers.Load();
+            db.SatelliteToRetranslatorTransfers.Load();
+            var satellites = db.Satellites.ToList();
+
+            var epoch = initialConditions.JulianDateOnTheDay;
+            var begin = initialConditions.ModelingTimeBegin;
+            var duration = initialConditions.ModelingTimeDuration;
+             
+            return new ScenarioData()
+            {
+                JulianDateOnTheDay = epoch,
+                ModelingTimeBegin = begin,
+                ModelingTimeDuration = duration,
+                Sun = initialConditions.ToSunData(),
+                Earth = initialConditions.ToJ2000Data(),
+                GroundObjects = groundObjects.Select(s => s.ToData()).ToList(),
+                GroundStations = groundStations.Select(s => s.ToData()).ToList(),
+                RetranslatorPositions = retranslators.Select(s => s.ToData()).ToList(),
+                SatellitePositions = satellites.Select(s => s.ToOrbitData()).ToList(),
+                SatelliteRotations = satellites.Select(s => s.ToRotationData()).ToList(),
+                SatelliteShootings = satellites.Select(s => s.ToSensorData()).ToList(),
+                SatelliteTransfers = satellites.Select(s => s.ToAntennaData()).ToList(),
+            };
+        }
+
     }
 }

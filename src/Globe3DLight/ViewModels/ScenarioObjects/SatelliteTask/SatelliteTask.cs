@@ -103,5 +103,12 @@ namespace Globe3DLight.ScenarioObjects
         {
             throw new NotImplementedException();
         }
+
+        public virtual bool ShouldSerializeHasObservations() => true;
+        public virtual bool ShouldSerializeHasRotations() => true;
+        public virtual bool ShouldSerializeHasTransmissions() => true;
+        public virtual bool ShouldSerializeSearchString() => true;
+        public virtual bool ShouldSerializeEvents() => true;
+        public virtual bool ShouldSerializeSelectedEvent() => _selectedEvent != null;
     }
 }

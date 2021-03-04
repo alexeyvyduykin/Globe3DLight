@@ -18,14 +18,14 @@ namespace Globe3DLight.Data
         private readonly double _timeBegin;
         private readonly double _timeEnd;
         private readonly double _timeStep;
-
+     
         private dvec3 _position;
         private dmat4 _modelMatrix;
         private dmat4 _translate;
         private dmat4 _rotation;
 
         public RetranslatorAnimator(RetranslatorData data)
-        {           
+        {
             _records = data.Records.Select(s => (s[0], s[1], s[2], s[3])).ToList();
             _timeBegin = data.TimeBegin;
             _timeEnd = data.TimeEnd;
@@ -43,7 +43,6 @@ namespace Globe3DLight.Data
             get => _rotation;
             protected set => Update(ref _rotation, value);
         }
-
 
         public dmat4 ModelMatrix
         {

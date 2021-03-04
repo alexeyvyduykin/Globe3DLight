@@ -6,7 +6,7 @@ using GlmSharp;
 namespace Globe3DLight.Data
 {
     public interface IAntennaState : IState, IAnimator
-    {
+    {  
         bool Enable { get; }
 
         string Target { get; }      
@@ -19,6 +19,12 @@ namespace Globe3DLight.Data
         private bool _enable;
         private string _target;
 
+        public AntennaAnimator(AntennaData data)
+        {
+            _translationEvents = create(data.Translations);
+        }
+
+
         public bool Enable
         {
             get => _enable;
@@ -29,11 +35,6 @@ namespace Globe3DLight.Data
         {
             get => _target;
             protected set => Update(ref _target, value);
-        }
-
-        public AntennaAnimator(AntennaData data)
-        {            
-            _translationEvents = create(data.Translations);      
         }
 
         private ContinuousEvents<AntennaEventState> create(IList<TranslationRecord> translations)
@@ -71,8 +72,6 @@ namespace Globe3DLight.Data
                 this.Target = activeState.Target;
             }
         }
-
-
 
         public override object Copy(IDictionary<object, object> shared)
         {
