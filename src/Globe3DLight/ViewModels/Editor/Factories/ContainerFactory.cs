@@ -74,7 +74,7 @@ namespace Globe3DLight.Editor
 
         private ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, string path)
         {      
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();    
 
@@ -99,7 +99,7 @@ namespace Globe3DLight.Editor
         }
         private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path)
         {            
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
          
@@ -128,7 +128,7 @@ namespace Globe3DLight.Editor
         }
         private ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, string path)
         {     
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();          
     
@@ -153,7 +153,7 @@ namespace Globe3DLight.Editor
         }
         private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, string path)
         {     
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>(); 
     
@@ -180,7 +180,7 @@ namespace Globe3DLight.Editor
         }
         private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, string path)
         {        
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();       
   
@@ -205,7 +205,7 @@ namespace Globe3DLight.Editor
         }
         private ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, string path)
         {      
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();      
 
@@ -269,8 +269,7 @@ namespace Globe3DLight.Editor
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;                   
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();         
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();        
-            var dataProvider = _serviceProvider.GetService<IDataProvider>();
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();                  
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
 
             var resourcePath = configuration["ResourcePath"];
@@ -281,16 +280,6 @@ namespace Globe3DLight.Editor
 
             var project = factory.CreateProjectContainer("Project1");
             var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
-
-            if (dataProvider is IJsonDataProvider jsonDataProvider)
-            {
-                //  --- Creating new json-files ---
-          //   var json1 = fileSystem.ReadUtf8Text(@"C:\resource\globe3d\data\Antenna4\fr_antenna4.json");
-          //   var db2_ = jsonSerializer.Deserialize<Globe3DLight.Data.Database.AntennaDatabase>(json1);
-          //   var str_ = jsonSerializer.Serialize<Globe3DLight.Data.Database.IAntennaDatabase>(db2_);
-          //   fileSystem.WriteUtf8Text(@"C:\resource\globe3d\data\Antenna4\fr_antenna4_true.json", str_);
-
-            }
 
             var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(begin, 0.0));
@@ -458,7 +447,7 @@ namespace Globe3DLight.Editor
         }
         public async Task<IProjectContainer> GetFromJson()
         {
-            var jsonDataProvider = (IJsonDataProvider)_serviceProvider.GetService<IDataProvider>();
+            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
 
             var resourcePath = configuration["ResourcePath"];

@@ -59,9 +59,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
             //builder.RegisterType<AvaloniaTextClipboard>().As<ITextClipboard>().InstancePerLifetimeScope();  
             builder.RegisterType<DotNetFileSystem>().As<IFileSystem>().InstancePerLifetimeScope();
             //builder.RegisterType<RoslynScriptRunner>().As<IScriptRunner>().InstancePerLifetimeScope();
-            builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().InstancePerLifetimeScope();
-
-            builder.RegisterType<JsonDataProvider>().As<IDataProvider>().InstancePerLifetimeScope();
+            builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().InstancePerLifetimeScope();            
             builder.RegisterType<DataUpdater>().As<IDataUpdater>().InstancePerLifetimeScope();
 
 
@@ -69,7 +67,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
             // Data
 
             builder.RegisterType<PostgreSQLDatabaseProvider>().As<IDatabaseProvider>().InstancePerDependency();// InstancePerLifetimeScope();
-
+            builder.RegisterType<JsonDataProvider>().As<IJsonDataProvider>().InstancePerLifetimeScope();
 
             // Renderer
 
