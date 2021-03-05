@@ -9,6 +9,8 @@ namespace Globe3DLight.Data
         T CreateDataFromJson<T>(string json);
 
         T CreateDataFromPath<T>(string path);
+
+        void Save(ScenarioData data);
     }
 
 }

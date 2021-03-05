@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Threading.Tasks;
 using Globe3DLight.Data;
-using GlmSharp;
+using Microsoft.Extensions.Configuration;
+using Globe3DLight.Containers;
+using Globe3DLight.Editor;
 
 namespace Globe3DLight.DataProvider.Json
 {
-    public class JsonDataProvider : ObservableObject, IDataProvider, IJsonDataProvider
+    public class JsonDataProvider : ObservableObject, IJsonDataProvider
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IJsonSerializer _jsonSerializer;
@@ -34,8 +37,41 @@ namespace Globe3DLight.DataProvider.Json
         public T CreateDataFromPath<T>(string path)
         {
             var json = _fileSystem.ReadUtf8Text(path);
-            
+
             return CreateDataFromJson<T>(json);
+        }
+
+        public void Save(ScenarioData data)
+        {
+            var fileIO = _serviceProvider.GetService<IFileSystem>();
+
+            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
+
+            var resourcePath = configuration["ResourcePath"];
+            var projectFilename = configuration["ProjectFilename"];
+            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
+
+            var json = _jsonSerializer.Serialize<ScenarioData>(data);
+         
+            fileIO.WriteUtf8Text(Path.Combine(path, projectFilename), json);
+        }
+
+        public async Task<IProjectContainer> LoadProject()
+        {         
+            var data = await LoadData();
+
+            return _serviceProvider.GetService<IContainerFactory>().GetProject(data);
+        }
+
+        public async Task<ScenarioData> LoadData()
+        {
+            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
+
+            var resourcePath = configuration["ResourcePath"];
+            var projectFilename = configuration["ProjectFilename"];
+            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
+
+            return await Task.Run(() => CreateDataFromPath<ScenarioData>(Path.Combine(path, projectFilename)));
         }
 
         public override object Copy(IDictionary<object, object> shared)
