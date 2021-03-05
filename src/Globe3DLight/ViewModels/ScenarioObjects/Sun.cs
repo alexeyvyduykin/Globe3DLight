@@ -16,8 +16,6 @@ namespace Globe3DLight.ScenarioObjects
         private ISunRenderModel _renderModel;
         private bool _isVisible;
         private ILogicalTreeNode _logicalTreeNode;
-        private IDataProvider _provider;
-
 
         public ISunRenderModel RenderModel 
         {
@@ -29,11 +27,6 @@ namespace Globe3DLight.ScenarioObjects
             get => _isVisible;
             set => Update(ref _isVisible, value); 
         }      
-        public IDataProvider Provider 
-        {
-            get => _provider; 
-            set => Update(ref _provider, value);
-        }
         public ILogicalTreeNode LogicalTreeNode 
         {
             get => _logicalTreeNode; 

@@ -14,10 +14,8 @@ namespace Globe3DLight.ScenarioObjects
     public class Sensor : BaseScenarioObject, ISensor, IDrawable
     {
         private bool _isVisible;
-        private ISensorRenderModel _renderModel;       
-        private IDataProvider _shootingProvider;
+        private ISensorRenderModel _renderModel;         
         private ILogicalTreeNode _logicalTreeNode;
-
 
         public ISensorRenderModel RenderModel
         {
@@ -28,11 +26,6 @@ namespace Globe3DLight.ScenarioObjects
         { 
             get => _isVisible; 
             set => Update(ref _isVisible, value); 
-        }
-        public IDataProvider ShootingProvider
-        {
-            get => _shootingProvider; 
-            set => Update(ref _shootingProvider, value); 
         }
         public ILogicalTreeNode LogicalTreeNode 
         {

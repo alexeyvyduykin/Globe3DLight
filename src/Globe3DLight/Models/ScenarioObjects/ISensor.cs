@@ -14,8 +14,6 @@ namespace Globe3DLight.ScenarioObjects
 
         bool IsVisible { get; set; }
 
-        IDataProvider ShootingProvider { get; set; }
-
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }
 }
