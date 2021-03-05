@@ -19,36 +19,34 @@
              d:DesignWidth="600" d:DesignHeight="600"
              x:DataType="Editor:IProjectEditor" x:CompileBindings="True"
              >
-  <i:Interaction.Behaviors>
-    <behaviors:AttachEditorBehavior/>
-  </i:Interaction.Behaviors>
+    <i:Interaction.Behaviors>
+        <behaviors:AttachEditorBehavior/>
+    </i:Interaction.Behaviors>
 
-
-  <Border BorderBrush="Red" BorderThickness="3">
     <Border ClipToBounds="True">
-      <ScrollViewer x:Name="scrollViewer"
-                    HorizontalScrollBarVisibility="Disabled"
-                    VerticalScrollBarVisibility="Disabled">
-        
-        <Panel >
-           <!--HorizontalAlignment="Center"                      
+        <ScrollViewer x:Name="scrollViewer"
+                      HorizontalScrollBarVisibility="Disabled"
+                      VerticalScrollBarVisibility="Disabled">
+
+            <Panel >
+                <!--HorizontalAlignment="Center"                      
                VerticalAlignment="Center"   
                -->
-         <!--
+                <!--
                Width="{Binding #presenterControlEditor.Container.Width}"                                
                Height="{Binding #presenterControlEditor.Container.Height}"
                -->
 
-               <views:PresenterControl x:Name="presenterControlEditor"
-                                  Renderer="{Binding Renderer}"
-                                  Container="{Binding Project.CurrentScenario}"
-                                  ClipToBounds="False"/>
+                <views:PresenterControl x:Name="presenterControlEditor"
+                                        Renderer="{Binding Renderer}"
+                                        Container="{Binding Project.CurrentScenario}"
+                                        PresenterContract="{Binding Presenter}"
+                                        ClipToBounds="False"/>
 
 
-        </Panel>
+            </Panel>
 
-      </ScrollViewer>
+        </ScrollViewer>
     </Border>
-  </Border>
 
 </UserControl>

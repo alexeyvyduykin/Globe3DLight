@@ -15,7 +15,7 @@ namespace Globe3DLight.Editor
         IEditorCanvasPlatform CanvasPlatform { get; }
         ProjectObserver Observer { get; set; }
         IRenderContext Renderer { get; }
-        
+        IPresenterContract Presenter { get; }
         IDataUpdater Updater { get; }
 
         IEditorTool CurrentTool { get; }

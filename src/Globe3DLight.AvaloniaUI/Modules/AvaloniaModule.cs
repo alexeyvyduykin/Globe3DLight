@@ -72,6 +72,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
             // Renderer
 
             builder.RegisterType<OpenTKRenderer>().As<IRenderContext>().InstancePerLifetimeScope();
+            builder.RegisterType<OpenTKPresenter>().As<IPresenterContract>().InstancePerLifetimeScope();
 
 
 

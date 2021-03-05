@@ -21,6 +21,7 @@ namespace Globe3DLight.Editor
         private readonly Lazy<IJsonSerializer> _jsonSerializer;
         private readonly Lazy<IFileSystem> _fileIO;
         private readonly Lazy<IRenderContext> _renderer;
+        private readonly Lazy<IPresenterContract> _presenter;
         private readonly Lazy<IDataUpdater> _updater;
         private IProjectContainer _project;
         private readonly Lazy<IEditorTool> _currentTool;
@@ -47,6 +48,8 @@ namespace Globe3DLight.Editor
 
         public IRenderContext Renderer => _renderer.Value;
 
+        public IPresenterContract Presenter => _presenter.Value;
+
         public IDataUpdater Updater => _updater.Value;
 
         public IContainerFactory ContainerFactory => _containerFactory.Value;
@@ -69,6 +72,7 @@ namespace Globe3DLight.Editor
             _containerFactory = _serviceProvider.GetServiceLazily<IContainerFactory>();
             _sceneFactory = _serviceProvider.GetServiceLazily<IScenarioObjectFactory>();
             _renderer = _serviceProvider.GetServiceLazily<IRenderContext>();
+            _presenter = _serviceProvider.GetServiceLazily<IPresenterContract>();
             _updater = _serviceProvider.GetServiceLazily<IDataUpdater>();
             _currentTool = _serviceProvider.GetServiceLazily<IEditorTool>();
             _jsonSerializer = _serviceProvider.GetServiceLazily<IJsonSerializer>();

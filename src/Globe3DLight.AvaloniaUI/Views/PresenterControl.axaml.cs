@@ -1,23 +1,15 @@
-﻿using Avalonia;
+﻿using System;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Globe3DLight.Renderer;
+using Avalonia.Media.Imaging;
+using Avalonia.Threading;
+using Avalonia.Visuals.Media.Imaging;
 using Globe3DLight.AvaloniaUI.Renderer;
 using Globe3DLight.Containers;
+using Globe3DLight.Renderer;
 using Globe3DLight.Renderer.Presenters;
-using Avalonia.Logging;
-using Avalonia.Media.Imaging;
-using Avalonia.Controls.Shapes;
-using Avalonia.Styling;
-using Avalonia.Visuals.Media.Imaging;
-using GlmSharp;
-using Globe3DLight;
-using System.Timers;
-using System.Runtime.InteropServices;
-using Globe3DLight.AvaloniaUI.OpenTK;
-using Avalonia.Threading;
-using System;
 
 
 namespace Globe3DLight.AvaloniaUI.Views
@@ -29,18 +21,20 @@ namespace Globe3DLight.AvaloniaUI.Views
 
         private int _width;
         private int _height;
-     //   private System.Timers.Timer _timer;
+        //   private System.Timers.Timer _timer;
         private DispatcherTimer _timer;
         private double _fps = 40;
 
         private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
-        private readonly IPresenter _presenter = new OpenTKPresenter();
 
         public static readonly StyledProperty<IScenarioContainer> ContainerProperty =
-    AvaloniaProperty.Register<PresenterControl, IScenarioContainer>(nameof(Container), null);
+            AvaloniaProperty.Register<PresenterControl, IScenarioContainer>(nameof(Container), null);
 
         public static readonly StyledProperty<IRenderContext> RendererProperty =
-    AvaloniaProperty.Register<PresenterControl, IRenderContext>(nameof(Renderer), null);
+            AvaloniaProperty.Register<PresenterControl, IRenderContext>(nameof(Renderer), null);
+
+        public static readonly StyledProperty<IPresenterContract> PresenterContractProperty =
+            AvaloniaProperty.Register<PresenterControl, IPresenterContract>(nameof(PresenterContract), null);
 
 
         public IScenarioContainer Container
@@ -55,6 +49,11 @@ namespace Globe3DLight.AvaloniaUI.Views
             set => SetValue(RendererProperty, value);
         }
 
+        public IPresenterContract PresenterContract
+        {
+            get => GetValue(PresenterContractProperty);
+            set => SetValue(PresenterContractProperty, value);
+        }
 
         public PresenterControl()
         {
@@ -98,19 +97,19 @@ namespace Globe3DLight.AvaloniaUI.Views
                 try
                 {
 
-                    _presenter.DrawBegin();
+                    PresenterContract.DrawBegin();
                     {
                         s_editorPresenter.Render(context, customState.Renderer, customState.Container);
                     }
 
                     WriteableBitmap bitmap =
-        new WriteableBitmap(new PixelSize(_presenter.Width, _presenter.Height), new Vector(/*144,144*/96.0, 96.0),
+        new WriteableBitmap(new PixelSize(PresenterContract.Width, PresenterContract.Height), new Vector(/*144,144*/96.0, 96.0),
         Avalonia.Platform.PixelFormat.Rgba8888, Avalonia.Platform.AlphaFormat.Unpremul);
 
 
                     using (var buffer = bitmap.Lock())
                     {
-                        _presenter.ReadPixels(buffer.Address, buffer.RowBytes);
+                        PresenterContract.ReadPixels(buffer.Address, buffer.RowBytes);
                     }
 
                     using (drawingContext.PushPreTransform(_translateTransform.Value))
@@ -118,7 +117,7 @@ namespace Globe3DLight.AvaloniaUI.Views
                     {
                         drawingContext.DrawImage(
                             bitmap/*, 1.0*/,
-                            new Rect(/*bitmap.Size*/new Avalonia.Size(_presenter.Width, _presenter.Height)),
+                            new Rect(/*bitmap.Size*/new Avalonia.Size(PresenterContract.Width, PresenterContract.Height)),
                             new Rect(new Avalonia.Size(_width, _height)),
                             BitmapInterpolationMode.LowQuality);
                     }
@@ -139,11 +138,11 @@ namespace Globe3DLight.AvaloniaUI.Views
         {
             base.OnAttachedToVisualTree(e);
 
-      //      _timer = new System.Timers.Timer(1000.0 / _fps);
+            //      _timer = new System.Timers.Timer(1000.0 / _fps);
             // Hook up the Elapsed event for the timer. 
-     //       _timer.Elapsed += (s, e) => base.InvalidateVisual();
-     //       _timer.AutoReset = true;
-    //        _timer.Enabled = true;
+            //       _timer.Elapsed += (s, e) => base.InvalidateVisual();
+            //       _timer.AutoReset = true;
+            //        _timer.Enabled = true;
 
 
             _timer = new DispatcherTimer();
@@ -163,7 +162,7 @@ namespace Globe3DLight.AvaloniaUI.Views
                 Container.Height = _height;
             }
 
-            _presenter.Resize(_width, _height);
+            PresenterContract.Resize(_width, _height);
 
             _translateTransform.Y = _height;
 
@@ -173,9 +172,9 @@ namespace Globe3DLight.AvaloniaUI.Views
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
             _timer.Stop();
-            
-   //         _timer.Stop();
-   //         _timer.Dispose();
+
+            //         _timer.Stop();
+            //         _timer.Dispose();
             base.OnDetachedFromVisualTree(e);
         }
     }

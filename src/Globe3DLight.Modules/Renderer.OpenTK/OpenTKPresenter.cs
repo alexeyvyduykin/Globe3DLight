@@ -1,40 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
-using OpenTK.Graphics.OpenGL;
-//using OpenTK.Graphics.OpenGL4;
+using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics;
+using OpenTK.Graphics.OpenGL;
 
-
-
-namespace Globe3DLight.AvaloniaUI.OpenTK
+namespace Globe3DLight.Renderer.OpenTK
 {
-
-    public interface IPresenter
-    {      
-        void ReadPixels(IntPtr pixels, int rowBytes);
-        void DrawBegin();
-
-        void Resize(int w, int h);
-
-        int Width { get; }
-
-        int Height { get; }
-    }
-
-
-    public class OpenTKPresenter : IPresenter
+    public class OpenTKPresenter : IPresenterContract
     {
         private readonly GameWindow _window;
-        
-        public int Width 
+
+        public int Width
         {
             get => _window.Width;
             set => _window.Width = value;
         }
 
-        public int Height 
+        public int Height
         {
             get => _window.Height;
             set => _window.Height = value;
@@ -55,7 +40,7 @@ namespace Globe3DLight.AvaloniaUI.OpenTK
             _window.Visible = false;
             _window.MakeCurrent();
 
-            
+
 
 
             //   GlWindow = new AvaloniaGraphicsWindow(this, 1/*1*/, 1/*1*/);
@@ -92,8 +77,8 @@ namespace Globe3DLight.AvaloniaUI.OpenTK
                 GL.Viewport((int)-d, 0, (int)fHeight, (int)fHeight);
                 //viewport = new IntRect((int)-d, (int)(fWidth + d), 0, (int)fHeight);
             }
-        
-            _window.ClientSize = new Size(w, h);           
+
+            _window.ClientSize = new Size(w, h);
         }
 
         public void DrawBegin()
