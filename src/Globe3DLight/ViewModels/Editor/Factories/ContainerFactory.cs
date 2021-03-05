@@ -24,7 +24,7 @@ namespace Globe3DLight.Editor
             _serviceProvider = serviceProvider;
         }
 
-        IProjectContainer IContainerFactory.GetProject()
+        public IProjectContainer GetProject()
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
@@ -45,6 +45,137 @@ namespace Globe3DLight.Editor
             project.Scenarios = scenarioBuilder.ToImmutable();
 
             // project.Selected = scenario.Pages.FirstOrDefault();
+
+            return project;
+        }
+
+        public IProjectContainer GetProject(ScenarioData data)
+        {
+            var factory = _serviceProvider.GetService<IFactory>();
+            var containerFactory = this as IContainerFactory;
+            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+
+            var epoch = FromJulianDate(data.JulianDateOnTheDay);
+            var begin = epoch.AddSeconds(data.ModelingTimeBegin);
+            var duration = TimeSpan.FromSeconds(data.ModelingTimeDuration);
+
+            var project = factory.CreateProjectContainer("Project1");
+            var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
+
+            var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
+
+            var fr_earth = CreateEarthNode("fr_j2000", root, data.Earth);
+
+            var fr_sun = CreateSunNode("fr_sun", root, data.Sun);
+
+            var fr_gss = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.GroundStations.Count; i++)
+            {
+                fr_gss.Add(CreateGroundStationNode(string.Format("fr_gs{0:00}", i + 1), fr_earth, data.GroundStations[i]));
+            }
+
+            var fr_sats = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatellitePositions.Count; i++)
+            {
+                fr_sats.Add(CreateSatelliteNode(string.Format("fr_orbital_satellite{0}", i + 1), fr_earth, data.SatellitePositions[i]));
+            }
+
+            var fr_rotations = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteRotations.Count; i++)
+            {
+                fr_rotations.Add(CreateRotationNode(string.Format("fr_rotation_satellite{0}", i + 1), fr_sats[i], data.SatelliteRotations[i]));
+            }
+
+            var fr_sensors = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteShootings.Count; i++)
+            {
+                fr_sensors.Add(CreateSensorNode(string.Format("fr_shooting_sensor{0}", i + 1), fr_rotations[i], data.SatelliteShootings[i]));
+            }
+
+            var fr_antennas = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteTransfers.Count; i++)
+            {
+                fr_antennas.Add(CreateAntennaNode(string.Format("fr_antenna{0}", i + 1), fr_rotations[i], data.SatelliteTransfers[i]));
+            }
+
+            var fr_orbits = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteOrbits.Count; i++)
+            {
+                fr_orbits.Add(CreateOrbitNode(string.Format("fr_orbit{0}", i + 1), fr_rotations[i], data.SatelliteOrbits[i]));
+            }
+
+            var fr_retrs = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.RetranslatorPositions.Count; i++)
+            {
+                fr_retrs.Add(CreateRetranslatorNode(string.Format("fr_retranslator{0}", i + 1), root, data.RetranslatorPositions[i]));
+            }
+
+            var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
+            objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
+            objBuilder.Add(objFactory.CreateEarth("Earth", fr_earth));
+
+            var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
+
+            for (int i = 0; i < fr_rotations.Count; i++)
+            {
+                var sat = objFactory.CreateSatellite(string.Format("Satellite{0}", i + 1), fr_rotations[i]);
+                objBuilder.Add(sat);
+
+                taskBuilder.Add(objFactory.CreateSatelliteTask(
+                    sat,
+                    data.SatelliteRotations[i],
+                    data.SatelliteShootings[i],
+                    data.SatelliteTransfers[i],
+                    FromJulianDate(data.JulianDateOnTheDay)));
+            }
+
+            for (int i = 0; i < fr_sensors.Count; i++)
+            {
+                objBuilder.Add(objFactory.CreateSensor(string.Format("Sensor{0}", i + 1), fr_sensors[i]));
+            }
+
+            var gss = new List<IScenarioObject>();
+            var rtrs = new List<IScenarioObject>();
+
+            for (int i = 0; i < fr_gss.Count; i++)
+            {
+                gss.Add(objFactory.CreateGroundStation(string.Format("GroundStation{0:00}", i + 1), fr_gss[i], i));
+            }
+
+            for (int i = 0; i < fr_retrs.Count; i++)
+            {
+                rtrs.Add(objFactory.CreateRetranslator(string.Format("Retranslator{0}", i + 1), fr_retrs[i], i));
+            }
+
+            objBuilder.AddRange(gss);
+            objBuilder.AddRange(rtrs);
+
+            var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            assetsBuilder.AddRange(gss);
+            assetsBuilder.AddRange(rtrs);
+
+
+            for (int i = 0; i < fr_antennas.Count; i++)
+            {
+                var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[i]);
+                antenna.Assets = assetsBuilder.ToImmutable();
+
+                objBuilder.Add(antenna);
+            }
+
+            for (int i = 0; i < fr_orbits.Count; i++)
+            {
+                objBuilder.Add(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[i]));
+            }
+
+            scenario1.ScenarioObjects = objBuilder.ToImmutable();
+
+            scenario1.SatelliteTasks = taskBuilder.ToImmutable();
+
+            project.AddScenario(scenario1);
+
+            project.SetCurrentScenario(scenario1);
 
             return project;
         }
@@ -405,197 +536,43 @@ namespace Globe3DLight.Editor
         }
 
         public async Task<IProjectContainer> GetFromDatabase()
-        {
-            var databaseProvider = _serviceProvider.GetService<IDatabaseProvider>();
-    
+        {    
             try
             {
-                return await Task.Run(() => databaseProvider.LoadProject());
-
-                //var project = databaseProvider.LoadProject(); 
-                //return project;
+                return await _serviceProvider.GetService<IDatabaseProvider>().LoadProject();
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw new Exception();
             }             
         }
-        public async Task SaveFromDatabaseToJson()
-        {
-            var databaseProvider = _serviceProvider.GetService<IDatabaseProvider>();
-            var jsonSerializer = _serviceProvider.GetService<IJsonSerializer>();
-            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
-            var fileIO = _serviceProvider.GetService<IFileSystem>();
 
-            var resourcePath = configuration["ResourcePath"];
-       
-            try
-            {
-                var data = await Task.Run(() => databaseProvider.LoadScenarioData());
-
-                var json = jsonSerializer.Serialize<ScenarioData>(data);
-
-                var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"data\project1.json");
-
-                using var stream = fileIO.Create(path);
-                fileIO.WriteUtf8Text(stream, json);         
-            }
-            catch (Exception)
-            {
-                throw new Exception();
-            }
-        }
         public async Task<IProjectContainer> GetFromJson()
         {
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
-
-            var resourcePath = configuration["ResourcePath"];
-            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
-
             try
             {
-                var data = await Task.Run(() => jsonDataProvider.CreateDataFromPath<ScenarioData>(Path.Combine(path, @"data\project1.json")));
-
-                return FromData(data);
+                return await _serviceProvider.GetService<IJsonDataProvider>().LoadProject();            
             }
             catch (Exception)
             {
                 throw new Exception();
             }
         }
+
+        public async Task SaveFromDatabaseToJson()
+        {            
+            try
+            {
+                await _serviceProvider.GetService<IDatabaseProvider>().Save();           
+            }
+            catch (Exception)
+            {
+                throw new Exception();
+            }
+        }
+
         private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
         
-        private IProjectContainer FromData(ScenarioData data)
-        {
-            var factory = _serviceProvider.GetService<IFactory>();
-            var containerFactory = this as IContainerFactory;
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-
-            var epoch = FromJulianDate(data.JulianDateOnTheDay);
-            var begin = epoch.AddSeconds(data.ModelingTimeBegin);
-            var duration = TimeSpan.FromSeconds(data.ModelingTimeDuration);
-
-            var project = factory.CreateProjectContainer("Project1");
-            var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
-
-            var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
-
-            var fr_earth = CreateEarthNode("fr_j2000", root, data.Earth);
-                       
-            var fr_sun = CreateSunNode("fr_sun", root, data.Sun);
-
-            var fr_gss = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.GroundStations.Count; i++)
-            {
-                fr_gss.Add(CreateGroundStationNode(string.Format("fr_gs{0:00}", i + 1), fr_earth, data.GroundStations[i]));
-            }
-
-            var fr_sats = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.SatellitePositions.Count; i++)
-            {
-                fr_sats.Add(CreateSatelliteNode(string.Format("fr_orbital_satellite{0}", i + 1), fr_earth, data.SatellitePositions[i]));
-            }
-
-            var fr_rotations = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.SatelliteRotations.Count; i++)
-            {
-                fr_rotations.Add(CreateRotationNode(string.Format("fr_rotation_satellite{0}", i + 1), fr_sats[i], data.SatelliteRotations[i]));
-            }
-
-            var fr_sensors = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.SatelliteShootings.Count; i++)
-            {
-                fr_sensors.Add(CreateSensorNode(string.Format("fr_shooting_sensor{0}", i + 1), fr_rotations[i], data.SatelliteShootings[i]));
-            }
-
-            var fr_antennas = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.SatelliteTransfers.Count; i++)
-            {
-                fr_antennas.Add(CreateAntennaNode(string.Format("fr_antenna{0}", i + 1), fr_rotations[i], data.SatelliteTransfers[i]));
-            }
-
-            var fr_orbits = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.SatelliteOrbits.Count; i++)
-            {
-                fr_orbits.Add(CreateOrbitNode(string.Format("fr_orbit{0}", i + 1), fr_rotations[i], data.SatelliteOrbits[i]));
-            }
-
-            var fr_retrs = new List<ILogicalTreeNode>();
-            for (int i = 0; i < data.RetranslatorPositions.Count; i++)
-            {
-                fr_retrs.Add(CreateRetranslatorNode(string.Format("fr_retranslator{0}", i + 1), root, data.RetranslatorPositions[i]));
-            }
-
-            var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
-            objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
-            objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
-            objBuilder.Add(objFactory.CreateEarth("Earth", fr_earth));
-
-            var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
-
-            for (int i = 0; i < fr_rotations.Count; i++)
-            {
-                var sat = objFactory.CreateSatellite(string.Format("Satellite{0}", i + 1), fr_rotations[i]);
-                objBuilder.Add(sat);
-
-                taskBuilder.Add(objFactory.CreateSatelliteTask(
-                    sat,
-                    data.SatelliteRotations[i],            
-                    data.SatelliteShootings[i],
-                    data.SatelliteTransfers[i],
-                    FromJulianDate(data.JulianDateOnTheDay)));
-            }
-
-            for (int i = 0; i < fr_sensors.Count; i++)
-            {
-                objBuilder.Add(objFactory.CreateSensor(string.Format("Sensor{0}", i + 1), fr_sensors[i]));
-            }
-
-            var gss = new List<IScenarioObject>();
-            var rtrs = new List<IScenarioObject>();
-
-            for (int i = 0; i < fr_gss.Count; i++)
-            {
-                gss.Add(objFactory.CreateGroundStation(string.Format("GroundStation{0:00}", i + 1), fr_gss[i], i));
-            }
-
-            for (int i = 0; i < fr_retrs.Count; i++)
-            {
-                rtrs.Add(objFactory.CreateRetranslator(string.Format("Retranslator{0}", i + 1), fr_retrs[i], i));
-            }
-
-            objBuilder.AddRange(gss);
-            objBuilder.AddRange(rtrs);
-            
-            var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
-            assetsBuilder.AddRange(gss);
-            assetsBuilder.AddRange(rtrs);
-
-
-            for (int i = 0; i < fr_antennas.Count; i++)
-            {
-                var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[i]);
-                antenna.Assets = assetsBuilder.ToImmutable();
-
-                objBuilder.Add(antenna);
-            }
-
-            for (int i = 0; i < fr_orbits.Count; i++)
-            {
-                objBuilder.Add(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[i]));
-            }
-
-            scenario1.ScenarioObjects = objBuilder.ToImmutable();
-
-            scenario1.SatelliteTasks = taskBuilder.ToImmutable();
-
-            project.AddScenario(scenario1);
-
-            project.SetCurrentScenario(scenario1);
-
-            return project;
-        }
 
         public IProjectContainer GetEmptyProject()
         {

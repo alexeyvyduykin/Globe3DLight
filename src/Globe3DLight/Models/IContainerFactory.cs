@@ -8,6 +8,7 @@ namespace Globe3DLight.Editor
     public interface IContainerFactory
     {
         IProjectContainer GetProject();
+        IProjectContainer GetProject(ScenarioData data);
         IProjectContainer GetDemo();
         Task<IProjectContainer> GetFromDatabase();
         Task<IProjectContainer> GetFromJson();
