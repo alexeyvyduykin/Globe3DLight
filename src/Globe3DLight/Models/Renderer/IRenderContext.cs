@@ -52,7 +52,7 @@ namespace Globe3DLight.Renderer
         void DrawEarth(object dc, IEarthRenderModel earth, dmat4 modelMatrix, ISceneState scene);
         
         void DrawFrame(object dc, IFrameRenderModel frame, dmat4 modelMatrix, ISceneState scene);
-   
+        void DrawOrbit(object dc, IOrbitRenderModel orbit, dmat4 modelMatrix, ISceneState scene);
         void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene);
         void DrawGroundObjectList(object dc, IGroundObjectListRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene);
         void DrawRetranslator(object dc, IRetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene);

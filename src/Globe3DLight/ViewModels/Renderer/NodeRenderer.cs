@@ -139,6 +139,39 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+
+        public void DrawOrbit(object dc, IOrbitRenderModel orbit, dmat4 modelMatrix, ISceneState scene)
+        {
+            var drawNodeCached = _drawNodeCache.Get(orbit);
+            if (drawNodeCached != null)
+            {
+                //if (sun.Style.IsDirty() || drawNodeCached.Style != sun.Style)
+                //{
+                //    drawNodeCached.Style = sun.Style;
+                //    drawNodeCached.UpdateStyle();
+                //    sun.Style.Invalidate();
+                //}
+
+                if (orbit.IsDirty())
+                {
+                    drawNodeCached.UpdateGeometry();
+                }
+
+                drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+            }
+            else
+            {
+                var drawNode = _drawNodeFactory.CreateOrbitDrawNode(orbit);
+
+                drawNode.UpdateStyle();
+                drawNode.UpdateGeometry();
+
+                _drawNodeCache.Set(orbit, drawNode);
+
+                drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+            }
+        }
+
         public void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(groundStation);
