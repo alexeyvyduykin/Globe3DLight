@@ -294,7 +294,7 @@ namespace Globe3DLight
             {
                 for (s = 0; s < sectors; s++)
                 {
-                    double y = Math.Sin((-ExtraMath.PI_1_2 + ExtraMath.PI * r * R));
+                    double y = Math.Sin((-Math.PI / 2.0 + Math.PI * r * R));
                     double x = Math.Cos(2.0 * Math.PI * s * S) * Math.Sin(Math.PI * r * R);
                     double z = Math.Sin(2.0 * Math.PI * s * S) * Math.Sin(Math.PI * r * R);
 
