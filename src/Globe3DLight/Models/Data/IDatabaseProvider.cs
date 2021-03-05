@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.Containers;
+﻿using System.Threading.Tasks;
 
 namespace Globe3DLight.Data
 {
-    public interface IDatabaseProvider 
+    public interface IDatabaseProvider : IDataProvider
     {
-        IProjectContainer LoadProject();
-        ScenarioData LoadScenarioData();
+        Task Save();
     }
 }

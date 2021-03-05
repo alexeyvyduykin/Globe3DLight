@@ -10,10 +10,11 @@ using System.IO;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Editor;
 using System.Collections.Immutable;
+using System.Threading.Tasks;
 
 namespace Globe3DLight.DatabaseProvider.PostgreSQL
 {
-    public class PostgreSQLDatabaseProvider : IDatabaseProvider
+    public class PostgreSQLDatabaseProvider : ObservableObject, IDatabaseProvider
     {
         private readonly IServiceProvider _serviceProvider;
 
@@ -22,36 +23,43 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             _serviceProvider = serviceProvider;         
         }
 
-        public IProjectContainer LoadProject()
+        public async Task<ScenarioData> LoadData() => await Task.Run(() => LoadScenarioDataFromDatabase());
+        
+        public async Task<IProjectContainer> LoadProject() => await Task.Run(() => LoadProjectFromDatabase());
+
+        public async Task Save()
+        {
+            var data = await LoadData();
+
+            _serviceProvider.GetService<IJsonDataProvider>().Save(data);
+        }
+
+        private IProjectContainer LoadProjectFromDatabase()
         {        
-            var builder = new ConfigurationBuilder();
-            // установка пути к текущему каталогу
-            builder.SetBasePath(Directory.GetCurrentDirectory());
-            // получаем конфигурацию из файла appsettings.json
-            builder.AddJsonFile("appsettings.json");
-            // создаем конфигурацию
-            var config = builder.Build();
-            // получаем строку подключения
-            string connectionString = config.GetConnectionString("DefaultConnection");
-            var major = int.Parse(config["PostgresVersionMajor"]);
-            var minor = int.Parse(config["PostgresVersionMinor"]);
-
-            var optionsBuilder = new DbContextOptionsBuilder<dbGlobe3DLightContext>();
-            var options = optionsBuilder.UseNpgsql(connectionString, options => options.SetPostgresVersion(new Version(major, minor))).Options;
-
             IProjectContainer project = null;
 
-            using (var db = new dbGlobe3DLightContext(options))
+            using (var db = new dbGlobe3DLightContext(GetOptions()))
             {
                 project = GetProject(db);
             }
 
             return project;
-            //Scaffold-DbContext "Host=localhost;Port=5432;Database=dbGlobe3DLight;Username=postgres;Password=user"
-            //Npgsql.EntityFrameworkCore.PostgreSQL
+
         }
 
-        public ScenarioData LoadScenarioData()
+        private ScenarioData LoadScenarioDataFromDatabase()
+        {
+            ScenarioData data;
+
+            using (var db = new dbGlobe3DLightContext(GetOptions()))
+            {
+                data = GetScenarioData(db);
+            }
+
+            return data;
+        }
+
+        private DbContextOptions<dbGlobe3DLightContext> GetOptions()
         {
             var builder = new ConfigurationBuilder();
             // установка пути к текущему каталогу
@@ -68,14 +76,9 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var optionsBuilder = new DbContextOptionsBuilder<dbGlobe3DLightContext>();
             var options = optionsBuilder.UseNpgsql(connectionString, options => options.SetPostgresVersion(new Version(major, minor))).Options;
 
-            ScenarioData data;
-
-            using (var db = new dbGlobe3DLightContext(options))
-            {
-                data = GetScenarioData(db);
-            }
-
-            return data;
+            return options;
+            //Scaffold-DbContext "Host=localhost;Port=5432;Database=dbGlobe3DLight;Username=postgres;Password=user"
+            //Npgsql.EntityFrameworkCore.PostgreSQL
         }
 
         private double ToJulianDate(DateTime date) => date.ToOADate() + 2415018.5;
@@ -265,6 +268,10 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 SatelliteTransfers = satellites.OrderBy(s => s.Id).Select(s => s.ToAntennaData()).ToList(),
             };
         }
-
+        
+        public override object Copy(IDictionary<object, object> shared)
+        {
+            throw new NotImplementedException();
+        }        
     }
 }
