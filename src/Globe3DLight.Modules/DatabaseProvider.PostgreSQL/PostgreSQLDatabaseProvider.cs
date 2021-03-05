@@ -93,6 +93,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var groundStations = db.GroundStations.ToList();
             var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
             var groundObjects = db.GroundObjects.ToList();
+            db.SatelliteOrbitPositions.Load();
             db.SatellitePositions.Load();
             db.SatelliteRotations.Load();
             db.SatelliteShootings.Load();
@@ -135,17 +136,19 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListState(gos));
             fr_j2000.AddChild(fr_gos);
 
-            var fr_orbits = new List<ILogicalTreeNode>();
+            var fr_sats = new List<ILogicalTreeNode>();
             var fr_rotations = new List<ILogicalTreeNode>();
             var fr_sensors = new List<ILogicalTreeNode>();
             var fr_antennas = new List<ILogicalTreeNode>();
+            var fr_orbits = new List<ILogicalTreeNode>();
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                fr_orbits.Add(containerFactory.CreateSatelliteNode(string.Format("fr_orbital_{0}", satellites[i].Name), fr_j2000, satellites[i].ToSatelliteData()));
-                fr_rotations.Add(containerFactory.CreateRotationNode(string.Format("fr_rotation_{0}", satellites[i].Name), fr_orbits[i], satellites[i].ToRotationData()));
+                fr_sats.Add(containerFactory.CreateSatelliteNode(string.Format("fr_orbital_{0}", satellites[i].Name), fr_j2000, satellites[i].ToSatelliteData()));
+                fr_rotations.Add(containerFactory.CreateRotationNode(string.Format("fr_rotation_{0}", satellites[i].Name), fr_sats[i], satellites[i].ToRotationData()));
                 fr_sensors.Add(containerFactory.CreateSensorNode(string.Format("fr_shooting_sensor{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToSensorData()));
                 fr_antennas.Add(containerFactory.CreateAntennaNode(string.Format("fr_antenna{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToAntennaData()));
+                fr_orbits.Add(containerFactory.CreateOrbitNode(string.Format("fr_orbit{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToOrbitData()));
             }
 
             var fr_retrs = new List<ILogicalTreeNode>();
@@ -214,6 +217,11 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 objBuilder.Add(antenna);
             }
 
+            for (int i = 0; i < satellites.Count; i++)
+            {
+                objBuilder.Add(objFactory.CreateOrbit(string.Format("Orbit{0}", satellites[i].Id), fr_orbits[i]));
+            }
+
             scenario1.ScenarioObjects = objBuilder.ToImmutable();
             scenario1.SatelliteTasks = taskBuilder.ToImmutable();
 
@@ -239,7 +247,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var epoch = initialConditions.JulianDateOnTheDay;
             var begin = initialConditions.ModelingTimeBegin;
             var duration = initialConditions.ModelingTimeDuration;
-             
+
             return new ScenarioData()
             {
                 JulianDateOnTheDay = epoch,
@@ -251,6 +259,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 GroundStations = groundStations.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
                 RetranslatorPositions = retranslators.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
                 SatellitePositions = satellites.OrderBy(s => s.Id).Select(s => s.ToSatelliteData()).ToList(),
+                SatelliteOrbits = satellites.OrderBy(s => s.Id).Select(s => s.ToOrbitData()).ToList(),
                 SatelliteRotations = satellites.OrderBy(s => s.Id).Select(s => s.ToRotationData()).ToList(),
                 SatelliteShootings = satellites.OrderBy(s => s.Id).Select(s => s.ToSensorData()).ToList(),
                 SatelliteTransfers = satellites.OrderBy(s => s.Id).Select(s => s.ToAntennaData()).ToList(),

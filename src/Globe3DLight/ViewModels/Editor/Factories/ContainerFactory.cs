@@ -526,6 +526,12 @@ namespace Globe3DLight.Editor
                 fr_antennas.Add(CreateAntennaNode(string.Format("fr_antenna{0}", i + 1), fr_rotations[i], data.SatelliteTransfers[i]));
             }
 
+            var fr_orbits = new List<ILogicalTreeNode>();
+            for (int i = 0; i < data.SatelliteOrbits.Count; i++)
+            {
+                fr_orbits.Add(CreateOrbitNode(string.Format("fr_orbit{0}", i + 1), fr_rotations[i], data.SatelliteOrbits[i]));
+            }
+
             var fr_retrs = new List<ILogicalTreeNode>();
             for (int i = 0; i < data.RetranslatorPositions.Count; i++)
             {
@@ -584,6 +590,11 @@ namespace Globe3DLight.Editor
                 antenna.Assets = assetsBuilder.ToImmutable();
 
                 objBuilder.Add(antenna);
+            }
+
+            for (int i = 0; i < fr_orbits.Count; i++)
+            {
+                objBuilder.Add(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[i]));
             }
 
             scenario1.ScenarioObjects = objBuilder.ToImmutable();
