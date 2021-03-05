@@ -32,6 +32,8 @@ namespace Globe3DLight.Editor
 
         IAntenna CreateAntenna(string name, ILogicalTreeNode parent);
 
+        IOrbit CreateOrbit(string name, ILogicalTreeNode parent);
+
         ISceneState CreateSceneState();
 
         ICamera CreateArcballCamera(ITargetable target);
@@ -198,6 +200,21 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
+        public IOrbit CreateOrbit(string name, ILogicalTreeNode parent)
+        {
+            var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
+
+            var obj = new Orbit()
+            {
+                Name = name,
+                IsVisible = true,
+                RenderModel = renderModelFactory.CreateOrbit(),
+                Children = ImmutableArray.Create<IScenarioObject>(),
+                LogicalTreeNode = parent,
+            };
+
+            return obj;
+        }
 
         public IGroundStation CreateGroundStation(string name, ILogicalTreeNode parent, int id)
         {

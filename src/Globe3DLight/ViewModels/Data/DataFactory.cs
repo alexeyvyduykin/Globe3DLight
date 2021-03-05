@@ -29,6 +29,9 @@ namespace Globe3DLight.Data
         IAntennaState CreateAntennaAnimator(AntennaData data); 
         IAntennaState CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1);
 
+        IOrbitState CreateOrbitState(OrbitData data);
+        IOrbitState CreateOrbitState(IList<double[]> records);
+      
         IGroundStationState CreateGroundStationState(GroundStationData data); 
         IGroundStationState CreateGroundStationState(double lon, double lat, double elevation, double earthRadius);
 
@@ -135,6 +138,17 @@ namespace Globe3DLight.Data
             });
         }
 
+        public IOrbitState CreateOrbitState(OrbitData data)
+        {
+            return new OrbitState(data);
+        }
+        public IOrbitState CreateOrbitState(IList<double[]> records)
+        {
+            return new OrbitState(new OrbitData()
+            {
+                Records = records,
+            });
+        }
         public IGroundStationState CreateGroundStationState(GroundStationData data)
         {
             return new GroundStationState(data);

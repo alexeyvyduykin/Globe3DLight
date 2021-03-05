@@ -49,6 +49,12 @@ namespace Globe3DLight.Renderer.OpenTK
         {
             return new AntennaDrawNode(antenna);
         }
+
+        public IOrbitDrawNode CreateOrbitDrawNode(IOrbitRenderModel orbit)
+        {
+            return new OrbitDrawNode(orbit);
+        }
+
         public ISpaceboxDrawNode CreateSpaceboxDrawNode(ISpaceboxRenderModel spacebox)
         {
             return new SpaceboxDrawNode(spacebox);

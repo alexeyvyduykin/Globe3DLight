@@ -20,6 +20,7 @@ namespace Globe3DLight.Editor
         ILogicalTreeNode CreateSensorNode(string name, ILogicalTreeNode parent, SensorData data);
         ILogicalTreeNode CreateRetranslatorNode(string name, ILogicalTreeNode parent, RetranslatorData data);
         ILogicalTreeNode CreateAntennaNode(string name, ILogicalTreeNode parent, AntennaData data);
+        ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data);
         ILogicalTreeNode CreateGroundStationNode(string name, ILogicalTreeNode parent, GroundStationData data);
         ILogicalTreeNode CreateEarthNode(string name, ILogicalTreeNode parent, J2000Data data);
     }

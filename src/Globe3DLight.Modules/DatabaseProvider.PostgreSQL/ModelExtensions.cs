@@ -84,7 +84,22 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 Records = records,
             };
         }
+        public static OrbitData ToOrbitData(this Satellite satellite)
+        {      
+            var records = satellite.SatelliteOrbitPositions.OrderBy(s => s.SatelliteId).OrderBy(s => s.TrueAnomaly).Select(s =>
+            new double[]
+            {
+                s.PositionX,
+                s.PositionY,
+                s.PositionZ,
+                s.TrueAnomaly
+            }).ToList();
 
+            return new OrbitData()
+            {
+                Records = records,
+            };
+        }
         public static RotationData ToRotationData(this Satellite satellite)
         {
             var begin = satellite.LifetimeBegin;

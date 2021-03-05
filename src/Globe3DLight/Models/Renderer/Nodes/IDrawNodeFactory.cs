@@ -13,7 +13,7 @@ namespace Globe3DLight.Renderer
         IEarthDrawNode CreateEarthDrawNode(IEarthRenderModel earth);
     
         IFrameDrawNode CreateFrameDrawNode(IFrameRenderModel frame);
-
+        IOrbitDrawNode CreateOrbitDrawNode(IOrbitRenderModel orbit);
         IGroundStationDrawNode CreateGroundStationDrawNode(IGroundStationRenderModel groundStation);
         IGroundObjectListDrawNode CreateGroundObjectListDrawNode(IGroundObjectListRenderModel groundStation);
         IRetranslatorDrawNode CreateRetranslatorDrawNode(IRetranslatorRenderModel retranslator);

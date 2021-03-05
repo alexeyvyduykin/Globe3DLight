@@ -34,6 +34,8 @@ namespace Globe3DLight.Editor
         IRetranslatorRenderModel CreateRetranslator(double scale);
 
         IAntennaRenderModel CreateAntenna();
+
+        IOrbitRenderModel CreateOrbit();
     }
 
     public class RenderModelFactory : IRenderModelFactory
@@ -342,6 +344,16 @@ namespace Globe3DLight.Editor
             var obj = new AntennaRenderModel()
             {
                 AttachPosition = new dvec3(67.74, -12.22, -23.5),
+            };
+
+            return obj;
+        }
+
+        public IOrbitRenderModel CreateOrbit()
+        {
+            var obj = new OrbitRenderModel()
+            { 
+            
             };
 
             return obj;

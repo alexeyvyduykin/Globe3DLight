@@ -232,6 +232,17 @@ namespace Globe3DLight.Editor
 
             return fr_antenna;
         }
+        public ILogicalTreeNode CreateOrbitNode(string name, ILogicalTreeNode parent, OrbitData data)
+        {
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+
+            var orbit_data = dataFactory.CreateOrbitState(data);
+            var fr_orbit = factory.CreateLogicalTreeNode(name, orbit_data);
+            parent.AddChild(fr_orbit);
+
+            return fr_orbit;
+        }
         public ILogicalTreeNode CreateGroundStationNode(string name, ILogicalTreeNode parent, GroundStationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
