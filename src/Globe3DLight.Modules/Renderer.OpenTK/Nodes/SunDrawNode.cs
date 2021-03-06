@@ -659,20 +659,10 @@ vec3 color = temperatureColor * unColorMult;
         }
 
         public int SetImage(IDdsImage image)
-        {          
-        //    _textureSunGlowName = _textureCreator.Create(image, 0, 0);
-
-            //A.GL.TexParameter(A.TextureTarget.Texture2D, A.TextureParameterName.TextureWrapS, (int)A.TextureWrapMode.Repeat);
-            //A.GL.TexParameter(A.TextureTarget.Texture2D, A.TextureParameterName.TextureWrapT, (int)A.TextureWrapMode.Repeat);
-            //A.GL.TexParameter(A.TextureTarget.Texture2D, A.TextureParameterName.TextureMinFilter, (int)A.TextureMinFilter.LinearMipmapLinear);
-            //A.GL.TexParameter(A.TextureTarget.Texture2D, A.TextureParameterName.TextureMagFilter, (int)A.TextureMagFilter.Linear);
-
-            //_sunGlow = new B.Texture2D(_textureSunGlowName, A.TextureTarget.Texture2D);
-
-       SOIL soil = new SOIL();
-        _textureSunGlowName = soil.SOIL_load_OGL_texture("C:/data/textures/Sun/starSpectrum.dds", 0, 0, SOILFlags.DdsLoadDirect);
-
-
+        {                  
+            var class1 = new B.TextureCreator();
+            _textureSunGlowName = class1.Create1(image, 0, 0);
+        
             _isComplete = true;
 
             return  _textureSunGlowName;
