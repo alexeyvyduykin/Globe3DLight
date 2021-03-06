@@ -1,32 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using GlmSharp;
-using Globe3DLight;
 using Globe3DLight.Data;
-using Globe3DLight.Renderer;
-
 
 namespace Globe3DLight.Scene
 {
-
-
-
     public class SensorRenderModel : BaseRenderModel, ISensorRenderModel
     {
         private IScan _scan;
         private IShoot _shoot;
 
-        public IScan Scan 
-        { 
-            get => _scan; 
-            set => Update(ref _scan, value); 
+        public IScan Scan
+        {
+            get => _scan;
+            set => Update(ref _scan, value);
         }
 
-        public IShoot Shoot 
+        public IShoot Shoot
         {
             get => _shoot;
-            set => Update(ref _shoot, value); 
+            set => Update(ref _shoot, value);
         }
 
         public override bool IsDirty()
@@ -39,7 +31,6 @@ namespace Globe3DLight.Scene
             return isDirty;
         }
 
-        /// <inheritdoc/>
         public override void Invalidate()
         {
             base.Invalidate();
@@ -47,13 +38,9 @@ namespace Globe3DLight.Scene
             Shoot.Invalidate();
         }
 
-
         public override object Copy(IDictionary<object, object> shared)
         {
             throw new NotImplementedException();
         }
-
     }
-
-
 }

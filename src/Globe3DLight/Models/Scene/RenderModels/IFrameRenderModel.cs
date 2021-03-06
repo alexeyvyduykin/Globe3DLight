@@ -1,16 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GlmSharp;
-
-namespace Globe3DLight.Scene
+﻿namespace Globe3DLight.Scene
 {
-    public interface IFrameRenderModel : IRenderModel//, IObservableObject
+    public interface IFrameRenderModel : IRenderModel
     {
-     //   dvec3 Position { get; set; }
-
-     //   dmat4 ModelMatrix { get; set; }
-
         float Scale { get; set; }
     }
 }

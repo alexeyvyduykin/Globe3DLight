@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GlmSharp;
+﻿using GlmSharp;
 
 namespace Globe3DLight.Scene
 {
