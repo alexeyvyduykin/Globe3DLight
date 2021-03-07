@@ -12,7 +12,7 @@ namespace Globe3DLight.ScenarioObjects
     public interface IGroundObjectList : IScenarioObject
     {
         IGroundObjectListRenderModel RenderModel { get; set; }
-        bool IsVisible { get; set; }
+
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }
 }

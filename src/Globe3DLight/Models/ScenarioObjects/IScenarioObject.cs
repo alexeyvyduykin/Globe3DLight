@@ -9,7 +9,7 @@ namespace Globe3DLight.ScenarioObjects
 {
     public interface IScenarioObject : IObservableObject
     {
-
+        bool IsVisible { get; set; }
 
         ImmutableArray<IScenarioObject> Children { get; set; }
     }

@@ -12,8 +12,6 @@ namespace Globe3DLight.ScenarioObjects
     {
         IOrbitRenderModel RenderModel { get; set; }
 
-        bool IsVisible { get; set; }
-
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }
 }

@@ -8,12 +8,10 @@ using System.Text;
 using GlmSharp;
 using System.Collections.Immutable;
 
-
 namespace Globe3DLight.ScenarioObjects
 {
     public class Sensor : BaseScenarioObject, ISensor, IDrawable
     {
-        private bool _isVisible;
         private ISensorRenderModel _renderModel;         
         private ILogicalTreeNode _logicalTreeNode;
 
@@ -22,11 +20,7 @@ namespace Globe3DLight.ScenarioObjects
             get => _renderModel; 
             set => Update(ref _renderModel, value); 
         }
-        public bool IsVisible 
-        { 
-            get => _isVisible; 
-            set => Update(ref _isVisible, value); 
-        }
+
         public ILogicalTreeNode LogicalTreeNode 
         {
             get => _logicalTreeNode; 

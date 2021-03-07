@@ -11,8 +11,7 @@ using GlmSharp;
 namespace Globe3DLight.ScenarioObjects
 {
     public class Retranslator : BaseScenarioObject, IRetranslator, IDrawable
-    {
-        private bool _isVisible;
+    {       
         private IRetranslatorRenderModel _renderModel;
         private UniqueName _uniqueName;
         private ILogicalTreeNode _logicalTreeNode;
@@ -21,12 +20,6 @@ namespace Globe3DLight.ScenarioObjects
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
-        }
-
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value);
         }
 
         public ILogicalTreeNode LogicalTreeNode

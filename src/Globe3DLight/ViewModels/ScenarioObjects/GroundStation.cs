@@ -11,8 +11,7 @@ using GlmSharp;
 namespace Globe3DLight.ScenarioObjects
 {
     public class GroundStation : BaseScenarioObject, IGroundStation, IDrawable
-    {
-        private bool _isVisible;
+    { 
         private IGroundStationRenderModel _renderModel;
         private UniqueName _uniqueName;
 
@@ -22,11 +21,6 @@ namespace Globe3DLight.ScenarioObjects
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
-        }
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value);
         }
 
         public ILogicalTreeNode LogicalTreeNode

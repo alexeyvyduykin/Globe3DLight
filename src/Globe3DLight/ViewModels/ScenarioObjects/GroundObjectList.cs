@@ -12,22 +12,15 @@ namespace Globe3DLight.ScenarioObjects
 {
     public class GroundObjectList : BaseScenarioObject, IGroundObjectList, IDrawable
     {
-        private bool _isVisible;
-        private IGroundObjectListRenderModel _renderModel;
-  
+        private IGroundObjectListRenderModel _renderModel;  
         private ILogicalTreeNode _logicalTreeNode;
-
 
         public IGroundObjectListRenderModel RenderModel 
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value); 
         }
-        public bool IsVisible 
-        {
-            get => _isVisible; 
-            set => Update(ref _isVisible, value);
-        }
+
         public ILogicalTreeNode LogicalTreeNode 
         {
             get => _logicalTreeNode; 

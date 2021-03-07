@@ -11,7 +11,6 @@ namespace Globe3DLight.ScenarioObjects
     public interface IGroundStation : IScenarioObject, IUniquable
     {
         IGroundStationRenderModel RenderModel { get; set; }
-        bool IsVisible { get; set; }
 
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }

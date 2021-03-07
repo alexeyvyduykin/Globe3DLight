@@ -14,11 +14,6 @@ namespace Globe3DLight.ScenarioObjects
 
         IFrameRenderModel FrameRenderModel { get; set; }
 
-
-        bool IsVisible { get; set; }
-      
-    //    IDataProvider Provider { get; set; }
-
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }
 }

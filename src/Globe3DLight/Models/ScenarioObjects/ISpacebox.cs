@@ -11,11 +11,7 @@ namespace Globe3DLight.ScenarioObjects
 {
     public interface ISpacebox : IScenarioObject
     {
-      //  ILibrary<IRenderModel> RenderModelLibrary { get; set; }
-
         ISpaceboxRenderModel RenderModel { get; set; }
-
-        bool IsVisible { get; set; }
 
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }

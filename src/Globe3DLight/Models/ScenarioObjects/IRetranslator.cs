@@ -11,8 +11,7 @@ namespace Globe3DLight.ScenarioObjects
     public interface IRetranslator : IScenarioObject, IUniquable
     {
         IRetranslatorRenderModel RenderModel { get; set; }
-        bool IsVisible { get; set; }
-
+        
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }
 }

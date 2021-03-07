@@ -8,13 +8,11 @@ using System.Text;
 using Globe3DLight.Renderer;
 using GlmSharp;
 
-
 namespace Globe3DLight.ScenarioObjects
 {
     public class Sun : BaseScenarioObject, ISun, IDrawable
     {
         private ISunRenderModel _renderModel;
-        private bool _isVisible;
         private ILogicalTreeNode _logicalTreeNode;
 
         public ISunRenderModel RenderModel 
@@ -22,11 +20,7 @@ namespace Globe3DLight.ScenarioObjects
             get => _renderModel; 
             set => Update(ref _renderModel, value);
         }
-        public bool IsVisible 
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value); 
-        }      
+   
         public ILogicalTreeNode LogicalTreeNode 
         {
             get => _logicalTreeNode; 

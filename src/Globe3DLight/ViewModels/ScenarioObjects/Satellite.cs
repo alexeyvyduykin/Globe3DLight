@@ -12,22 +12,16 @@ namespace Globe3DLight.ScenarioObjects
 {
     public class Satellite : BaseScenarioObject, ISatellite, IDrawable
     {
-        private bool _isVisible;
         private ISatelliteRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
         private ILogicalTreeNode _logicalTreeNode;
     
-
         public ISatelliteRenderModel RenderModel 
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value);
         }
-        public bool IsVisible 
-        {
-            get => _isVisible; 
-            set => Update(ref _isVisible, value); 
-        }
+
         public ILogicalTreeNode LogicalTreeNode 
         {
             get => _logicalTreeNode; 
