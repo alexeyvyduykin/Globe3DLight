@@ -11,6 +11,8 @@ namespace Globe3DLight.ScenarioObjects
     {
         bool IsVisible { get; set; }
 
+        bool IsExpanded { get; set; }
+
         ImmutableArray<IScenarioObject> Children { get; set; }
     }
 }

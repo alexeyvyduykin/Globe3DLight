@@ -9,6 +9,7 @@ namespace Globe3DLight.ScenarioObjects
     {
         private ImmutableArray<IScenarioObject> _children;
         private bool _isVisible;
+        private bool _isExpanded;
 
         public ImmutableArray<IScenarioObject> Children
         {
@@ -20,6 +21,12 @@ namespace Globe3DLight.ScenarioObjects
         {
             get => _isVisible;
             set => Update(ref _isVisible, value);
+        }
+
+        public bool IsExpanded 
+        {
+            get => _isExpanded; 
+            set => Update(ref _isExpanded, value); 
         }
 
         public override bool IsDirty()
