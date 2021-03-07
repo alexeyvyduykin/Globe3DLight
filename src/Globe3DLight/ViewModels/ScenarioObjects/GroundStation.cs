@@ -10,7 +10,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class GroundStation : BaseScenarioObject, IGroundStation, IDrawable
+    public class GroundStation : BaseScenarioObject, IGroundStation
     { 
         private IGroundStationRenderModel _renderModel;
         private UniqueName _uniqueName;

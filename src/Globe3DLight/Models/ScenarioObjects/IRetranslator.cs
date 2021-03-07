@@ -8,7 +8,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IRetranslator : IScenarioObject, IUniquable
+    public interface IRetranslator : IScenarioObject, IDrawable, IUniquable
     {
         IRetranslatorRenderModel RenderModel { get; set; }
         

@@ -10,7 +10,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class GroundObjectList : BaseScenarioObject, IGroundObjectList, IDrawable
+    public class GroundObjectList : BaseScenarioObject, IGroundObjectList
     {
         private IGroundObjectListRenderModel _renderModel;  
         private ILogicalTreeNode _logicalTreeNode;

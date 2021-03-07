@@ -9,7 +9,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Spacebox : BaseScenarioObject, ISpacebox, IDrawable
+    public class Spacebox : BaseScenarioObject, ISpacebox
     {
         private ISpaceboxRenderModel _renderModel;
         private ILogicalTreeNode _logicalTreeNode;

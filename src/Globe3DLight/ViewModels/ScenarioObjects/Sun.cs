@@ -10,7 +10,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Sun : BaseScenarioObject, ISun, IDrawable
+    public class Sun : BaseScenarioObject, ISun
     {
         private ISunRenderModel _renderModel;
         private ILogicalTreeNode _logicalTreeNode;

@@ -10,7 +10,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Earth : BaseScenarioObject, IEarth, IDrawable
+    public class Earth : BaseScenarioObject, IEarth
     {   
         private IEarthRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;

@@ -11,7 +11,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Orbit : BaseScenarioObject, IOrbit, IDrawable
+    public class Orbit : BaseScenarioObject, IOrbit
     {
         private IOrbitRenderModel _renderModel;    
         private ILogicalTreeNode _logicalTreeNode;

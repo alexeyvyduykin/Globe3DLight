@@ -7,7 +7,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface ISun : IScenarioObject
+    public interface ISun : IScenarioObject, IDrawable
     { 
         ISunRenderModel RenderModel { get; set; }
 

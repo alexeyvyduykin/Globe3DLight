@@ -10,7 +10,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Retranslator : BaseScenarioObject, IRetranslator, IDrawable
+    public class Retranslator : BaseScenarioObject, IRetranslator
     {       
         private IRetranslatorRenderModel _renderModel;
         private UniqueName _uniqueName;

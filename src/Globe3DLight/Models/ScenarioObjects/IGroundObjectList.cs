@@ -9,7 +9,7 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IGroundObjectList : IScenarioObject
+    public interface IGroundObjectList : IScenarioObject, IDrawable
     {
         IGroundObjectListRenderModel RenderModel { get; set; }
 

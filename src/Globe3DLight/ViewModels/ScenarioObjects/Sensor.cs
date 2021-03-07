@@ -10,7 +10,7 @@ using System.Collections.Immutable;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Sensor : BaseScenarioObject, ISensor, IDrawable
+    public class Sensor : BaseScenarioObject, ISensor
     {
         private ISensorRenderModel _renderModel;         
         private ILogicalTreeNode _logicalTreeNode;

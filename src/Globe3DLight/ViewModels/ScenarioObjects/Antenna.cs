@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Antenna : BaseScenarioObject, IAntenna, IDrawable
+    public class Antenna : BaseScenarioObject, IAntenna
     {
         private IAntennaRenderModel _renderModel; 
         private IFrameRenderModel _frameRenderModel;

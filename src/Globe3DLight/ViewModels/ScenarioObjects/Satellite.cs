@@ -10,7 +10,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Satellite : BaseScenarioObject, ISatellite, IDrawable
+    public class Satellite : BaseScenarioObject, ISatellite
     {
         private ISatelliteRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
