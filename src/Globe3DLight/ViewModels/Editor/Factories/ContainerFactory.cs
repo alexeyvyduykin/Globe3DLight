@@ -119,7 +119,7 @@ namespace Globe3DLight.Editor
 
             for (int i = 0; i < fr_rotations.Count; i++)
             {
-                var sat = objFactory.CreateSatellite(string.Format("Satellite{0}", i + 1), fr_rotations[i]);
+                var sat = objFactory.CreateSatellite(string.Format("Satellite{0}", i + 1), fr_rotations[i]);                
                 objBuilder.Add(sat);
 
                 taskBuilder.Add(objFactory.CreateSatelliteTask(
