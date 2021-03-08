@@ -117,7 +117,7 @@ namespace Globe3DLight.Editor
 
             var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
 
-            var satellites = new List<IScenarioObject>();
+            var satellites = new List<ISatellite>();
 
             for (int i = 0; i < fr_rotations.Count; i++)
             {

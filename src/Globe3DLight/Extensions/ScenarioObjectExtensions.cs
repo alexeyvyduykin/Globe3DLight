@@ -9,7 +9,7 @@ namespace Globe3DLight
 {
     public static class ScenarioObjectExtensions
     {
-        public static void AddChild(this IScenarioObject obj, IScenarioObject child)
+        public static void AddChild(this IChildren obj, IScenarioObject child)
         {
             if (child != null)
             {
@@ -23,7 +23,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddChildren(this IScenarioObject obj, IEnumerable<IScenarioObject> children)
+        public static void AddChildren(this IChildren obj, IEnumerable<IScenarioObject> children)
         {
             if (children != null)
             {

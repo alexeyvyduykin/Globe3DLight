@@ -384,10 +384,13 @@ namespace Globe3DLight.Renderer
             {
                 drawable.DrawShape(dc, this, scene);
 
-                foreach (var obj in scenarioObject.Children)
+                if (scenarioObject is IChildren obj)
                 {
-                    DrawScenarioObject(dc, obj, scene);
-                    //obj.DrawShape(dc, this, scene);
+                    foreach (var item in obj.Children)
+                    {
+                        DrawScenarioObject(dc, item, scene);
+                        //obj.DrawShape(dc, this, scene);
+                    }
                 }
             }
         }

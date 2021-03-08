@@ -8,7 +8,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface ISatellite : IScenarioObject, IDrawable, ITargetable
+    public interface ISatellite : IScenarioObject, IDrawable, ITargetable, IChildren
     {
         ISatelliteRenderModel RenderModel { get; set; }
 
