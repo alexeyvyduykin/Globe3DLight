@@ -54,6 +54,7 @@ namespace Globe3DLight.Editor
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
             var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
 
             var epoch = FromJulianDate(data.JulianDateOnTheDay);
             var begin = epoch.AddSeconds(data.ModelingTimeBegin);
@@ -64,15 +65,15 @@ namespace Globe3DLight.Editor
 
             var root = scenario.LogicalTreeNodeRoot.FirstOrDefault();
 
-            var fr_earth = CreateEarthNode(root, data.Earth);
-            var fr_sun = CreateSunNode(root, data.Sun);
-            var fr_gss = data.GroundStations.Select(s => CreateGroundStationNode(fr_earth, s)).ToList();
-            var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => CreateSatelliteNode(fr_earth, s));
-            var fr_rotations = data.SatelliteRotations.ToDictionary(s => s.SatelliteName, s => CreateRotationNode(fr_sats[s.SatelliteName], s));
-            var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => CreateSensorNode(fr_rotations[s.SatelliteName], s));
-            var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => CreateAntennaNode(fr_rotations[s.SatelliteName], s));            
-            var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
-            var fr_retrs = data.RetranslatorPositions.Select(s => CreateRetranslatorNode(root, s)).ToList();
+            var fr_earth = dataFactory.CreateEarthNode(root, data.Earth);
+            var fr_sun = dataFactory.CreateSunNode(root, data.Sun);
+            var fr_gss = data.GroundStations.Select(s => dataFactory.CreateGroundStationNode(fr_earth, s)).ToList();
+            var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(fr_earth, s));
+            var fr_rotations = data.SatelliteRotations.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateRotationNode(fr_sats[s.SatelliteName], s));
+            var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateSensorNode(fr_rotations[s.SatelliteName], s));
+            var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateAntennaNode(fr_rotations[s.SatelliteName], s));            
+            var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
+            var fr_retrs = data.RetranslatorPositions.Select(s => dataFactory.CreateRetranslatorNode(root, s)).ToList();
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
@@ -167,216 +168,7 @@ namespace Globe3DLight.Editor
             return scenario;
         }
 
-        private ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, string path)
-        {      
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();    
 
-            var db1 = jsonDataProvider.CreateDataFromPath<SatelliteData>(path);
-            var satelliteState = dataFactory.CreateSatelliteAnimator(db1);
-            var name = Path.GetFileNameWithoutExtension(path);
-            var fr_satellite = factory.CreateLogicalTreeNode(name, satelliteState);
-            parent.AddChild(fr_satellite);
-
-            return fr_satellite;
-        }
-        public ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, SatelliteData data)
-        {          
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}", data.Name.ToLower());
-
-            var satelliteState = dataFactory.CreateSatelliteAnimator(data);      
-            var fr_satellite = factory.CreateLogicalTreeNode(name, satelliteState);
-            parent.AddChild(fr_satellite);
-
-            return fr_satellite;
-        }
-        private ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path)
-        {            
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-         
-            var db2 = jsonDataProvider.CreateDataFromPath<RotationData>(path);
-            var rotationData = dataFactory.CreateRotationAnimator(db2);
-            var name = Path.GetFileNameWithoutExtension(path);
-
-            var fr_rotation = factory.CreateLogicalTreeNode(name, rotationData);
-
-            parent.AddChild(fr_rotation);
-
-            return fr_rotation;
-
-        }
-        public ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, RotationData data)
-        {  
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
-
-            var rotationData = dataFactory.CreateRotationAnimator(data); 
-            var fr_rotation = factory.CreateLogicalTreeNode(name, rotationData);
-
-            parent.AddChild(fr_rotation);
-
-            return fr_rotation;
-        }
-        private ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, string path)
-        {     
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();          
-    
-            var db = jsonDataProvider.CreateDataFromPath<SunData>(path);
-            var sun_data = dataFactory.CreateSunAnimator(db);
-            var name = Path.GetFileNameWithoutExtension(path);
-
-            var fr_sun = factory.CreateLogicalTreeNode(name, sun_data);
-            parent.AddChild(fr_sun);
-            return fr_sun;
-            //  return objFactory.CreateSun(name, fr_sun);
-        }
-        public ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, SunData data)
-        {       
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}", data.Name.ToLower());
-
-            var sun_data = dataFactory.CreateSunAnimator(data);      
-            var fr_sun = factory.CreateLogicalTreeNode(name, sun_data);
-            parent.AddChild(fr_sun);
-            return fr_sun;  
-        }
-        private ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, string path)
-        {     
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>(); 
-    
-            var db = jsonDataProvider.CreateDataFromPath<SensorData>(path);
-            var sensor_data = dataFactory.CreateSensorAnimator(db);
-            var name = Path.GetFileNameWithoutExtension(path);
-
-            var fr_sensor = factory.CreateLogicalTreeNode(name, sensor_data);
-            parent.AddChild(fr_sensor);
-
-            return fr_sensor;
-            // return objFactory.CreateSensor(name, fr_sensor);
-        }
-        public ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, SensorData data)
-        {          
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
-
-            var sensor_data = dataFactory.CreateSensorAnimator(data);         
-            var fr_sensor = factory.CreateLogicalTreeNode(name, sensor_data);
-            parent.AddChild(fr_sensor);
-
-            return fr_sensor;        
-        }
-        private ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, string path)
-        {        
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();       
-  
-            var db1 = jsonDataProvider.CreateDataFromPath<RetranslatorData>(path);
-            var retranslatorData = dataFactory.CreateRetranslatorAnimator(db1);
-            var name = Path.GetFileNameWithoutExtension(path);
-            var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
-            parent.AddChild(fr_retranslator);
-
-            return fr_retranslator;
-        }
-        public ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, RetranslatorData data)
-        {           
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}", data.Name.ToLower());
-
-            var retranslatorData = dataFactory.CreateRetranslatorAnimator(data);         
-            var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
-            parent.AddChild(fr_retranslator);
-
-            return fr_retranslator;
-        }
-        private ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, string path)
-        {      
-            var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();      
-
-            //var p0LeftPos = new dvec3(67.74, -12.22, -23.5);
-            //   var p0LeftPos = new dvec3(0.6774, -0.1222, -0.235);
-  
-            var db = jsonDataProvider.CreateDataFromPath<AntennaData>(path);
-            var antenna_data = dataFactory.CreateAntennaAnimator(db/*, p0LeftPos*/);
-            var name = Path.GetFileNameWithoutExtension(path);
-
-            var fr_antenna = factory.CreateLogicalTreeNode(name, antenna_data);
-            parent.AddChild(fr_antenna);
-
-            return fr_antenna;
-        }
-        public ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, AntennaData data)
-        {     
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
-
-            var antenna_data = dataFactory.CreateAntennaAnimator(data);            
-            var fr_antenna = factory.CreateLogicalTreeNode(name, antenna_data);
-            parent.AddChild(fr_antenna);
-
-            return fr_antenna;
-        }
-        public ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, OrbitData data)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
-
-            var orbit_data = dataFactory.CreateOrbitState(data);
-            var fr_orbit = factory.CreateLogicalTreeNode(name, orbit_data);
-            parent.AddChild(fr_orbit);
-
-            return fr_orbit;
-        }
-        public ILogicalTreeNode CreateGroundStationNode(ILogicalTreeNode parent, GroundStationData data)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}", data.Name.ToLower());
-
-            var groundStationData = dataFactory.CreateGroundStationState(data);
-            var fr_groundStation = factory.CreateLogicalTreeNode(name, groundStationData);
-            parent.AddChild(fr_groundStation);
-
-            return fr_groundStation;       
-        }
-        public ILogicalTreeNode CreateEarthNode(ILogicalTreeNode parent, J2000Data data)
-        {
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var factory = _serviceProvider.GetService<IFactory>();
-
-            var name = string.Format("fr_{0}", data.Name.ToLower());
-
-            var earth_data = dataFactory.CreateJ2000Animator(data);
-            var fr_earth = factory.CreateLogicalTreeNode(name, earth_data);
-            parent.AddChild(fr_earth);
-            return fr_earth;
-        }
         public IProjectContainer GetDemo()
         {
             var factory = _serviceProvider.GetService<IFactory>();
@@ -398,7 +190,7 @@ namespace Globe3DLight.Editor
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(begin, 0.0));
             root.AddChild(fr_j2000);
 
-            var fr_sun = CreateSunNode(root, Path.Combine(path, @"data\fr_sun.json"));
+            var fr_sun = dataFactory.CreateSunNode(root, Path.Combine(path, @"data\fr_sun.json"));
 
 
             var fr_gs01 = factory.CreateLogicalTreeNode("fr_gs01", dataFactory.CreateGroundStationState(36.26, 54.97, 0.223, 6371.0));
@@ -421,29 +213,29 @@ namespace Globe3DLight.Editor
             fr_j2000.AddChild(fr_gs08);
             fr_j2000.AddChild(fr_gs09);
 
-            var fr_satellite1 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite1.json"));
-            var fr_satellite2 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite2.json"));
-            var fr_satellite3 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite3.json"));
-            var fr_satellite4 = CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite4.json"));
+            var fr_satellite1 = dataFactory.CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite1.json"));
+            var fr_satellite2 = dataFactory.CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite2.json"));
+            var fr_satellite3 = dataFactory.CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite3.json"));
+            var fr_satellite4 = dataFactory.CreateSatelliteNode(fr_j2000, Path.Combine(path, @"data\fr_orbital_satellite4.json"));
 
-            var fr_rotation1 = CreateRotationNode(fr_satellite1, Path.Combine(path, @"data\fr_rotation_satellite1.json"));
-            var fr_rotation2 = CreateRotationNode(fr_satellite2, Path.Combine(path, @"data\fr_rotation_satellite2.json"));
-            var fr_rotation3 = CreateRotationNode(fr_satellite3, Path.Combine(path, @"data\fr_rotation_satellite3.json"));
-            var fr_rotation4 = CreateRotationNode(fr_satellite4, Path.Combine(path, @"data\fr_rotation_satellite4.json"));
+            var fr_rotation1 = dataFactory.CreateRotationNode(fr_satellite1, Path.Combine(path, @"data\fr_rotation_satellite1.json"));
+            var fr_rotation2 = dataFactory.CreateRotationNode(fr_satellite2, Path.Combine(path, @"data\fr_rotation_satellite2.json"));
+            var fr_rotation3 = dataFactory.CreateRotationNode(fr_satellite3, Path.Combine(path, @"data\fr_rotation_satellite3.json"));
+            var fr_rotation4 = dataFactory.CreateRotationNode(fr_satellite4, Path.Combine(path, @"data\fr_rotation_satellite4.json"));
 
-            var fr_sensor1 = CreateSensorNode(fr_rotation1, Path.Combine(path, @"data\fr_shooting_sensor1.json"));
-            var fr_sensor2 = CreateSensorNode(fr_rotation2, Path.Combine(path, @"data\fr_shooting_sensor2.json"));
-            var fr_sensor3 = CreateSensorNode(fr_rotation3, Path.Combine(path, @"data\fr_shooting_sensor3.json"));
-            var fr_sensor4 = CreateSensorNode(fr_rotation4, Path.Combine(path, @"data\fr_shooting_sensor4.json"));
+            var fr_sensor1 = dataFactory.CreateSensorNode(fr_rotation1, Path.Combine(path, @"data\fr_shooting_sensor1.json"));
+            var fr_sensor2 = dataFactory.CreateSensorNode(fr_rotation2, Path.Combine(path, @"data\fr_shooting_sensor2.json"));
+            var fr_sensor3 = dataFactory.CreateSensorNode(fr_rotation3, Path.Combine(path, @"data\fr_shooting_sensor3.json"));
+            var fr_sensor4 = dataFactory.CreateSensorNode(fr_rotation4, Path.Combine(path, @"data\fr_shooting_sensor4.json"));
             
-            var fr_antenna1 = CreateAntennaNode(fr_rotation1, Path.Combine(path, @"data\fr_antenna1.json"));
-            var fr_antenna2 = CreateAntennaNode(fr_rotation2, Path.Combine(path, @"data\fr_antenna2.json"));
-            var fr_antenna3 = CreateAntennaNode(fr_rotation3, Path.Combine(path, @"data\fr_antenna3.json"));
-            var fr_antenna4 = CreateAntennaNode(fr_rotation4, Path.Combine(path, @"data\fr_antenna4.json"));
+            var fr_antenna1 = dataFactory.CreateAntennaNode(fr_rotation1, Path.Combine(path, @"data\fr_antenna1.json"));
+            var fr_antenna2 = dataFactory.CreateAntennaNode(fr_rotation2, Path.Combine(path, @"data\fr_antenna2.json"));
+            var fr_antenna3 = dataFactory.CreateAntennaNode(fr_rotation3, Path.Combine(path, @"data\fr_antenna3.json"));
+            var fr_antenna4 = dataFactory.CreateAntennaNode(fr_rotation4, Path.Combine(path, @"data\fr_antenna4.json"));
 
-            var fr_retr1 = CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator1.json"));
-            var fr_retr2 = CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator2.json"));
-            var fr_retr3 = CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator3.json"));
+            var fr_retr1 = dataFactory.CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator1.json"));
+            var fr_retr2 = dataFactory.CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator2.json"));
+            var fr_retr3 = dataFactory.CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator3.json"));
 
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();

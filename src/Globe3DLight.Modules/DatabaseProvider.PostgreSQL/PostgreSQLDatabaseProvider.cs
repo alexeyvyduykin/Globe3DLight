@@ -119,7 +119,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
             root.AddChild(fr_j2000);
 
-            var fr_sun = containerFactory.CreateSunNode(root, initialConditions.ToSunData());
+            var fr_sun = dataFactory.CreateSunNode(root, initialConditions.ToSunData());
 
             var fr_gss = new List<ILogicalTreeNode>();
 
@@ -147,18 +147,18 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                fr_sats.Add(containerFactory.CreateSatelliteNode(fr_j2000, satellites[i].ToSatelliteData()));
-                fr_rotations.Add(containerFactory.CreateRotationNode(fr_sats[i], satellites[i].ToRotationData()));
-                fr_sensors.Add(containerFactory.CreateSensorNode(fr_rotations[i], satellites[i].ToSensorData()));
-                fr_antennas.Add(containerFactory.CreateAntennaNode(fr_rotations[i], satellites[i].ToAntennaData()));
-                fr_orbits.Add(containerFactory.CreateOrbitNode(fr_rotations[i], satellites[i].ToOrbitData()));
+                fr_sats.Add(dataFactory.CreateSatelliteNode(fr_j2000, satellites[i].ToSatelliteData()));
+                fr_rotations.Add(dataFactory.CreateRotationNode(fr_sats[i], satellites[i].ToRotationData()));
+                fr_sensors.Add(dataFactory.CreateSensorNode(fr_rotations[i], satellites[i].ToSensorData()));
+                fr_antennas.Add(dataFactory.CreateAntennaNode(fr_rotations[i], satellites[i].ToAntennaData()));
+                fr_orbits.Add(dataFactory.CreateOrbitNode(fr_rotations[i], satellites[i].ToOrbitData()));
             }
 
             var fr_retrs = new List<ILogicalTreeNode>();
 
             for (int i = 0; i < retranslators.Count; i++)
             {
-                fr_retrs.Add(containerFactory.CreateRetranslatorNode(root, retranslators[i].ToData()));
+                fr_retrs.Add(dataFactory.CreateRetranslatorNode(root, retranslators[i].ToData()));
             }
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
