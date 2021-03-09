@@ -40,7 +40,9 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             using (var db = new dbGlobe3DLightContext(GetOptions()))
             {
-                project = GetProject(db);
+                var scenarioData = GetScenarioData(db);
+                //project = GetProject(db);
+                project = _serviceProvider.GetService<IContainerFactory>().GetProject(scenarioData);
             }
 
             return project;
@@ -85,157 +87,157 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         
         private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
         
-        private IProjectContainer GetProject(dbGlobe3DLightContext db)
-        {
-            var factory = _serviceProvider.GetService<IFactory>();
-            var containerFactory = _serviceProvider.GetService<IContainerFactory>();
-            var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
-            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+        //private IProjectContainer GetProject(dbGlobe3DLightContext db)
+        //{
+        //    var factory = _serviceProvider.GetService<IFactory>();
+        //    var containerFactory = _serviceProvider.GetService<IContainerFactory>();
+        //    var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+        //    var dataFactory = _serviceProvider.GetService<IDataFactory>();
   
-            var initialConditions = db.InitialConditions.FirstOrDefault();
-            var groundStations = db.GroundStations.ToList();
-            var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
-            var groundObjects = db.GroundObjects.ToList();
-            db.SatelliteOrbitPositions.Load();
-            db.SatellitePositions.Load();
-            db.SatelliteRotations.Load();
-            db.SatelliteShootings.Load();
-            db.SatelliteToGroundStationTransfers.Load();
-            db.SatelliteToRetranslatorTransfers.Load();     
-            var satellites = db.Satellites.ToList();
+        //    var initialConditions = db.InitialConditions.FirstOrDefault();
+        //    var groundStations = db.GroundStations.ToList();
+        //    var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
+        //    var groundObjects = db.GroundObjects.ToList();
+        //    db.SatelliteOrbitPositions.Load();
+        //    db.SatellitePositions.Load();
+        //    db.SatelliteRotations.Load();
+        //    db.SatelliteShootings.Load();
+        //    db.SatelliteToGroundStationTransfers.Load();
+        //    db.SatelliteToRetranslatorTransfers.Load();     
+        //    var satellites = db.Satellites.ToList();
            
-            var epoch = FromJulianDate(initialConditions.JulianDateOnTheDay);
-            var earthAngleDeg = initialConditions.EarthAngleBegin;
+        //    var epoch = FromJulianDate(initialConditions.JulianDateOnTheDay);
+        //    var earthAngleDeg = initialConditions.EarthAngleBegin;
 
-            var begin = epoch.AddSeconds(initialConditions.ModelingTimeBegin);            
-            var duration = TimeSpan.FromSeconds(initialConditions.ModelingTimeDuration);
+        //    var begin = epoch.AddSeconds(initialConditions.ModelingTimeBegin);            
+        //    var duration = TimeSpan.FromSeconds(initialConditions.ModelingTimeDuration);
 
-            var project = factory.CreateProjectContainer("Project1");
+        //    var project = factory.CreateProjectContainer("Project1");
 
-            var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
+        //    var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
 
-            var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
+        //    var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
          
-            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
-            root.AddChild(fr_j2000);
+        //    var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
+        //    root.AddChild(fr_j2000);
 
-            var fr_sun = dataFactory.CreateSunNode(root, initialConditions.ToSunData());
+        //    var fr_sun = dataFactory.CreateSunNode(root, initialConditions.ToSunData());
 
-            var fr_gss = new List<ILogicalTreeNode>();
+        //    var fr_gss = new List<ILogicalTreeNode>();
 
-            for (int i = 0; i < groundStations.Count; i++)
-            {
-                var gs = groundStations[i];
+        //    for (int i = 0; i < groundStations.Count; i++)
+        //    {
+        //        var gs = groundStations[i];
 
-                var fr_gs = factory.CreateLogicalTreeNode(string.Format("fr_gs{0:00}", i + 1), dataFactory.CreateGroundStationState(gs.Lon, gs.Lat, 0.0, 6371.0));
+        //        var fr_gs = factory.CreateLogicalTreeNode(string.Format("fr_gs{0:00}", i + 1), dataFactory.CreateGroundStationState(gs.Lon, gs.Lat, 0.0, 6371.0));
 
-                fr_gss.Add(fr_gs);
+        //        fr_gss.Add(fr_gs);
 
-                fr_j2000.AddChild(fr_gs);
-            }
+        //        fr_j2000.AddChild(fr_gs);
+        //    }
 
-            var gos = groundObjects.ToDictionary(s => s.Name, s => (s.Lon, s.Lat, 6371.0));
+        //    var gos = groundObjects.ToDictionary(s => s.Name, s => (s.Lon, s.Lat, 6371.0));
 
-            var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListState(gos));
-            fr_j2000.AddChild(fr_gos);
+        //    var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListState(gos));
+        //    fr_j2000.AddChild(fr_gos);
 
-            var fr_sats = new List<ILogicalTreeNode>();
-            var fr_rotations = new List<ILogicalTreeNode>();
-            var fr_sensors = new List<ILogicalTreeNode>();
-            var fr_antennas = new List<ILogicalTreeNode>();
-            var fr_orbits = new List<ILogicalTreeNode>();
+        //    var fr_sats = new List<ILogicalTreeNode>();
+        //    var fr_rotations = new List<ILogicalTreeNode>();
+        //    var fr_sensors = new List<ILogicalTreeNode>();
+        //    var fr_antennas = new List<ILogicalTreeNode>();
+        //    var fr_orbits = new List<ILogicalTreeNode>();
 
-            for (int i = 0; i < satellites.Count; i++)
-            {
-                fr_sats.Add(dataFactory.CreateSatelliteNode(fr_j2000, satellites[i].ToSatelliteData()));
-                fr_rotations.Add(dataFactory.CreateRotationNode(fr_sats[i], satellites[i].ToRotationData()));
-                fr_sensors.Add(dataFactory.CreateSensorNode(fr_rotations[i], satellites[i].ToSensorData()));
-                fr_antennas.Add(dataFactory.CreateAntennaNode(fr_rotations[i], satellites[i].ToAntennaData()));
-                fr_orbits.Add(dataFactory.CreateOrbitNode(fr_rotations[i], satellites[i].ToOrbitData()));
-            }
+        //    for (int i = 0; i < satellites.Count; i++)
+        //    {
+        //        fr_sats.Add(dataFactory.CreateSatelliteNode(fr_j2000, satellites[i].ToSatelliteData()));
+        //        fr_rotations.Add(dataFactory.CreateRotationNode(fr_sats[i], satellites[i].ToRotationData()));
+        //        fr_sensors.Add(dataFactory.CreateSensorNode(fr_rotations[i], satellites[i].ToSensorData()));
+        //        fr_antennas.Add(dataFactory.CreateAntennaNode(fr_rotations[i], satellites[i].ToAntennaData()));
+        //        fr_orbits.Add(dataFactory.CreateOrbitNode(fr_rotations[i], satellites[i].ToOrbitData()));
+        //    }
 
-            var fr_retrs = new List<ILogicalTreeNode>();
+        //    var fr_retrs = new List<ILogicalTreeNode>();
 
-            for (int i = 0; i < retranslators.Count; i++)
-            {
-                fr_retrs.Add(dataFactory.CreateRetranslatorNode(root, retranslators[i].ToData()));
-            }
+        //    for (int i = 0; i < retranslators.Count; i++)
+        //    {
+        //        fr_retrs.Add(dataFactory.CreateRetranslatorNode(root, retranslators[i].ToData()));
+        //    }
 
-            var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
-            objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
-            objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
-            objBuilder.Add(objFactory.CreateEarth("Earth", fr_j2000));
+        //    var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+        //    objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
+        //    objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
+        //    objBuilder.Add(objFactory.CreateEarth("Earth", fr_j2000));
 
-            var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
+        //    var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
 
-            var satelliteList = new List<ISatellite>();
+        //    var satelliteList = new List<ISatellite>();
 
-            for (int i = 0; i < satellites.Count; i++)
-            {
-                var sat = objFactory.CreateSatellite(satellites[i].Name, fr_rotations[i]);
-                satelliteList.Add(sat);
+        //    for (int i = 0; i < satellites.Count; i++)
+        //    {
+        //        var sat = objFactory.CreateSatellite(satellites[i].Name, fr_rotations[i]);
+        //        satelliteList.Add(sat);
 
-                taskBuilder.Add(objFactory.CreateSatelliteTask(
-                    sat,
-                    satellites[i].ToRotationData(),
-                    satellites[i].ToSensorData(),
-                    satellites[i].ToAntennaData(),
-                    FromJulianDate(satellites[i].JulianDateOnTheDay)));
-            }
-
-
-            for (int i = 0; i < satellites.Count; i++)
-            {
-                satelliteList[i].AddChild(objFactory.CreateSensor(string.Format("Sensor{0}", satellites[i].Id), fr_sensors[i]));
-            }
-
-            var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
-
-            var rtrs = new List<IScenarioObject>();
-            for (int i = 0; i < retranslators.Count; i++)
-            {
-                var rtr = objFactory.CreateRetranslator(retranslators[i].Name, fr_retrs[i], i);
-                rtrs.Add(rtr);
-            }
-
-            var gss = new List<IScenarioObject>();
-            for (int i = 0; i < groundStations.Count; i++)
-            {
-                var gs = objFactory.CreateGroundStation(groundStations[i].Name, fr_gss[i], i);
-                gss.Add(gs);
-            }
+        //        taskBuilder.Add(objFactory.CreateSatelliteTask(
+        //            sat,
+        //            satellites[i].ToRotationData(),
+        //            satellites[i].ToSensorData(),
+        //            satellites[i].ToAntennaData(),
+        //            FromJulianDate(satellites[i].JulianDateOnTheDay)));
+        //    }
 
 
-            objBuilder.Add(objFactory.CreateGroundObjectList("GroundObjectList", fr_gos));
+        //    for (int i = 0; i < satellites.Count; i++)
+        //    {
+        //        satelliteList[i].AddChild(objFactory.CreateSensor(string.Format("Sensor{0}", satellites[i].Id), fr_sensors[i]));
+        //    }
+
+        //    var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+
+        //    var rtrs = new List<IScenarioObject>();
+        //    for (int i = 0; i < retranslators.Count; i++)
+        //    {
+        //        var rtr = objFactory.CreateRetranslator(retranslators[i].Name, fr_retrs[i], i);
+        //        rtrs.Add(rtr);
+        //    }
+
+        //    var gss = new List<IScenarioObject>();
+        //    for (int i = 0; i < groundStations.Count; i++)
+        //    {
+        //        var gs = objFactory.CreateGroundStation(groundStations[i].Name, fr_gss[i], i);
+        //        gss.Add(gs);
+        //    }
 
 
-            objBuilder.AddRange(gss);
-            objBuilder.AddRange(rtrs);
+        //    objBuilder.Add(objFactory.CreateGroundObjectList("GroundObjectList", fr_gos));
 
-            assetsBuilder.AddRange(gss);
-            assetsBuilder.AddRange(rtrs);
 
-            for (int i = 0; i < satellites.Count; i++)
-            {
-                var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", satellites[i].Id), fr_antennas[i]);
-                antenna.Assets = assetsBuilder.ToImmutable();
-                satelliteList[i].AddChild(antenna);
-            }
+        //    objBuilder.AddRange(gss);
+        //    objBuilder.AddRange(rtrs);
 
-            for (int i = 0; i < satellites.Count; i++)
-            {
-                satelliteList[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", satellites[i].Id), fr_orbits[i]));
-            }
+        //    assetsBuilder.AddRange(gss);
+        //    assetsBuilder.AddRange(rtrs);
 
-            objBuilder.AddRange(satelliteList);
+        //    for (int i = 0; i < satellites.Count; i++)
+        //    {
+        //        var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", satellites[i].Id), fr_antennas[i]);
+        //        antenna.Assets = assetsBuilder.ToImmutable();
+        //        satelliteList[i].AddChild(antenna);
+        //    }
 
-            scenario1.ScenarioObjects = objBuilder.ToImmutable();
-            scenario1.SatelliteTasks = taskBuilder.ToImmutable();
+        //    for (int i = 0; i < satellites.Count; i++)
+        //    {
+        //        satelliteList[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", satellites[i].Id), fr_orbits[i]));
+        //    }
 
-            project.AddScenario(scenario1);
-            project.SetCurrentScenario(scenario1);
-            return project;
-        }
+        //    objBuilder.AddRange(satelliteList);
+
+        //    scenario1.ScenarioObjects = objBuilder.ToImmutable();
+        //    scenario1.SatelliteTasks = taskBuilder.ToImmutable();
+
+        //    project.AddScenario(scenario1);
+        //    project.SetCurrentScenario(scenario1);
+        //    return project;
+        //}
                             
         private ScenarioData GetScenarioData(dbGlobe3DLightContext db)
         {                  

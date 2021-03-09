@@ -75,6 +75,12 @@ namespace Globe3DLight.Editor
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
             var fr_retrs = data.RetranslatorPositions.Select(s => dataFactory.CreateRetranslatorNode(root, s)).ToList();
 
+
+            var gos = data.GroundObjects.ToDictionary(s => s.Name, s => (s.Lon, s.Lat, 6371.0));
+
+            var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListState(gos));
+            fr_earth.AddChild(fr_gos);
+
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
             objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
@@ -132,6 +138,10 @@ namespace Globe3DLight.Editor
                 satellites[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[satellites[i].Name]));
             }
 
+
+            objBuilder.Add(objFactory.CreateGroundObjectList("GroundObjectList", fr_gos));
+
+
             objBuilder.AddRange(satellites);
 
             scenario.ScenarioObjects = objBuilder.ToImmutable();
@@ -167,7 +177,6 @@ namespace Globe3DLight.Editor
 
             return scenario;
         }
-
 
         public IProjectContainer GetDemo()
         {
