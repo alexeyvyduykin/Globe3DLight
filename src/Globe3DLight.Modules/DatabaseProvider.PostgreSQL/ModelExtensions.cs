@@ -28,6 +28,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             return new RetranslatorData()
             {
+                Name = retranslator.Name,
                 Records = records,
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
@@ -39,6 +40,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         {
             return new GroundStationData()
             {
+                Name = groundStation.Name,
                 Lon = groundStation.Lon,
                 Lat = groundStation.Lat,
                 Elevation = 0.0,
@@ -50,6 +52,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         {
             return new GroundObjectData()
             {
+                Name = groundObject.Name,
                 Lon = groundObject.Lon,
                 Lat = groundObject.Lat,
                 EarthRadius = 6371.0,
@@ -78,12 +81,14 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             return new SatelliteData()
             {
+                Name = satellite.Name,
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
                 TimeStep = step,
                 Records = records,
             };
         }
+        
         public static OrbitData ToOrbitData(this Satellite satellite)
         {      
             var records = satellite.SatelliteOrbitPositions.OrderBy(s => s.SatelliteId).OrderBy(s => s.TrueAnomaly).Select(s =>
@@ -97,9 +102,12 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             return new OrbitData()
             {
+                SatelliteName = satellite.Name,
+                Name = "Orbit",
                 Records = records,
             };
         }
+        
         public static RotationData ToRotationData(this Satellite satellite)
         {
             var begin = satellite.LifetimeBegin;
@@ -115,6 +123,8 @@ new RotationRecord()
 
             return new RotationData()
             {
+                SatelliteName = satellite.Name,
+                Name = "Rotation",
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
                 Rotations = rots,
@@ -139,6 +149,8 @@ new RotationRecord()
 
             return new SensorData()
             {
+                SatelliteName = satellite.Name,
+                Name = "SAR",
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
                 Shootings = shoots,
@@ -168,6 +180,8 @@ new RotationRecord()
 
             return new AntennaData()
             {
+                SatelliteName = satellite.Name,
+                Name = "TransmitAntenna",
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
                 Translations = arr,
@@ -191,6 +205,7 @@ new RotationRecord()
 
             return new SunData()
             {
+                Name = "Sun",
                 TimeBegin = begin,
                 TimeEnd = begin + duration,
                 Position0 = pos0,
@@ -202,6 +217,7 @@ new RotationRecord()
         {
             return new J2000Data()
             {
+                Name = "Earth",
                 Epoch = DateTime.FromOADate(initialCondition.JulianDateOnTheDay - 2415018.5),
                 AngleDeg = initialCondition.EarthAngleBegin,
             };

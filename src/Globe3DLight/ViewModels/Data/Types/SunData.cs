@@ -5,6 +5,8 @@ namespace Globe3DLight.Data
 {
     public struct SunData
     {
+        public string Name;
+
         public dvec3 Position0;
 
         public dvec3 Position1;

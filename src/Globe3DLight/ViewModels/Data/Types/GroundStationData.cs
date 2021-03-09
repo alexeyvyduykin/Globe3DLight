@@ -2,6 +2,8 @@
 {
     public struct GroundStationData
     {
+        public string Name;
+
         public double Lon;
 
         public double Lat;

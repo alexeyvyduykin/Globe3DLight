@@ -4,6 +4,10 @@ namespace Globe3DLight.Data
 {
     public struct RotationData
     {
+        public string SatelliteName;
+
+        public string Name;
+
         //  public ContinuousEvents<RotationState> RotationEvents { get; set; }
 
         public IList<RotationRecord> Rotations;

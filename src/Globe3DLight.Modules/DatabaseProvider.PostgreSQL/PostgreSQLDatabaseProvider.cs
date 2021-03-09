@@ -119,7 +119,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
             root.AddChild(fr_j2000);
 
-            var fr_sun = containerFactory.CreateSunNode("fr_sun", root, initialConditions.ToSunData());
+            var fr_sun = containerFactory.CreateSunNode(root, initialConditions.ToSunData());
 
             var fr_gss = new List<ILogicalTreeNode>();
 
@@ -147,18 +147,18 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                fr_sats.Add(containerFactory.CreateSatelliteNode(string.Format("fr_orbital_{0}", satellites[i].Name), fr_j2000, satellites[i].ToSatelliteData()));
-                fr_rotations.Add(containerFactory.CreateRotationNode(string.Format("fr_rotation_{0}", satellites[i].Name), fr_sats[i], satellites[i].ToRotationData()));
-                fr_sensors.Add(containerFactory.CreateSensorNode(string.Format("fr_shooting_sensor{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToSensorData()));
-                fr_antennas.Add(containerFactory.CreateAntennaNode(string.Format("fr_antenna{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToAntennaData()));
-                fr_orbits.Add(containerFactory.CreateOrbitNode(string.Format("fr_orbit{0}", satellites[i].Id), fr_rotations[i], satellites[i].ToOrbitData()));
+                fr_sats.Add(containerFactory.CreateSatelliteNode(fr_j2000, satellites[i].ToSatelliteData()));
+                fr_rotations.Add(containerFactory.CreateRotationNode(fr_sats[i], satellites[i].ToRotationData()));
+                fr_sensors.Add(containerFactory.CreateSensorNode(fr_rotations[i], satellites[i].ToSensorData()));
+                fr_antennas.Add(containerFactory.CreateAntennaNode(fr_rotations[i], satellites[i].ToAntennaData()));
+                fr_orbits.Add(containerFactory.CreateOrbitNode(fr_rotations[i], satellites[i].ToOrbitData()));
             }
 
             var fr_retrs = new List<ILogicalTreeNode>();
 
             for (int i = 0; i < retranslators.Count; i++)
             {
-                fr_retrs.Add(containerFactory.CreateRetranslatorNode(string.Format("fr_{0}", retranslators[i].Name), root, retranslators[i].ToData()));
+                fr_retrs.Add(containerFactory.CreateRetranslatorNode(root, retranslators[i].ToData()));
             }
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
@@ -194,7 +194,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var rtrs = new List<IScenarioObject>();
             for (int i = 0; i < retranslators.Count; i++)
             {
-                var rtr = objFactory.CreateRetranslator(string.Format("Retranslator{0}", retranslators[i].Id), fr_retrs[i], i);
+                var rtr = objFactory.CreateRetranslator(retranslators[i].Name, fr_retrs[i], i);
                 rtrs.Add(rtr);
             }
 
@@ -257,6 +257,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             return new ScenarioData()
             {
+                Name = "Scenario1",
                 JulianDateOnTheDay = epoch,
                 ModelingTimeBegin = begin,
                 ModelingTimeDuration = duration,

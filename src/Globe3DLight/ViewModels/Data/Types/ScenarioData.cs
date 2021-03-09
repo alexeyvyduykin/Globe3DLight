@@ -8,6 +8,8 @@ namespace Globe3DLight.Data
 {
     public struct ScenarioData
     {
+        public string Name;
+
         public double JulianDateOnTheDay;
         public double ModelingTimeBegin;
         public double ModelingTimeDuration;

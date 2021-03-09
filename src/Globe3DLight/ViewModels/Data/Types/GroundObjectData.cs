@@ -8,6 +8,8 @@ namespace Globe3DLight.Data
 {
     public struct GroundObjectData
     {
+        public string Name;
+
         public double Lon;
 
         public double Lat; 

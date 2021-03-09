@@ -5,6 +5,10 @@ namespace Globe3DLight.Data
 {
     public struct AntennaData
     {
+        public string SatelliteName;
+
+        public string Name;
+
         public IList<TranslationRecord> Translations;
 
         public double TimeBegin;

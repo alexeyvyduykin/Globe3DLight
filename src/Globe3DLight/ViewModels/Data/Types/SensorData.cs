@@ -4,6 +4,10 @@ namespace Globe3DLight.Data
 {
     public struct SensorData
     {
+        public string SatelliteName;
+
+        public string Name;
+
         public IList<ShootingRecord> Shootings;
 
         public double TimeBegin;

@@ -8,6 +8,10 @@ namespace Globe3DLight.Data
 {
     public struct OrbitData
     {
+        public string SatelliteName;
+
+        public string Name;
+
         // x y z u   
         public IList<double[]> Records;
     }
