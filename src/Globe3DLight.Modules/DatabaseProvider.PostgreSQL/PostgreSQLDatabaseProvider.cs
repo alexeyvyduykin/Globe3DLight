@@ -168,10 +168,12 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
 
+            var satelliteList = new List<ISatellite>();
+
             for (int i = 0; i < satellites.Count; i++)
             {
                 var sat = objFactory.CreateSatellite(satellites[i].Name, fr_rotations[i]);
-                objBuilder.Add(sat);
+                satelliteList.Add(sat);
 
                 taskBuilder.Add(objFactory.CreateSatelliteTask(
                     sat,
@@ -184,7 +186,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                objBuilder.Add(objFactory.CreateSensor(string.Format("Sensor{0}", satellites[i].Id), fr_sensors[i]));
+                satelliteList[i].AddChild(objFactory.CreateSensor(string.Format("Sensor{0}", satellites[i].Id), fr_sensors[i]));
             }
 
             var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
@@ -217,13 +219,15 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             {
                 var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", satellites[i].Id), fr_antennas[i]);
                 antenna.Assets = assetsBuilder.ToImmutable();
-                objBuilder.Add(antenna);
+                satelliteList[i].AddChild(antenna);
             }
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                objBuilder.Add(objFactory.CreateOrbit(string.Format("Orbit{0}", satellites[i].Id), fr_orbits[i]));
+                satelliteList[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", satellites[i].Id), fr_orbits[i]));
             }
+
+            objBuilder.AddRange(satelliteList);
 
             scenario1.ScenarioObjects = objBuilder.ToImmutable();
             scenario1.SatelliteTasks = taskBuilder.ToImmutable();
