@@ -8,11 +8,9 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IOrbit : IScenarioObject
+    public interface IOrbit : IScenarioObject, IDrawable
     {
         IOrbitRenderModel RenderModel { get; set; }
-
-        bool IsVisible { get; set; }
 
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }

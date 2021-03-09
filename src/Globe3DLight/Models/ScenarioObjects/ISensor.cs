@@ -8,11 +8,9 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface ISensor : IScenarioObject
+    public interface ISensor : IScenarioObject, IDrawable
     {
         ISensorRenderModel RenderModel { get; set; }
-
-        bool IsVisible { get; set; }
 
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }

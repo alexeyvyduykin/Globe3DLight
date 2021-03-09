@@ -12,9 +12,8 @@ using System.Linq;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Antenna : BaseScenarioObject, IAntenna, IDrawable
+    public class Antenna : BaseScenarioObject, IAntenna
     {
-        private bool _isVisible;
         private IAntennaRenderModel _renderModel; 
         private IFrameRenderModel _frameRenderModel;
 
@@ -31,11 +30,6 @@ namespace Globe3DLight.ScenarioObjects
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
-        }
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value);
         }
 
         public ILogicalTreeNode LogicalTreeNode

@@ -7,13 +7,11 @@ using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.Data;
 
-
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Spacebox : BaseScenarioObject, ISpacebox, IDrawable
+    public class Spacebox : BaseScenarioObject, ISpacebox
     {
         private ISpaceboxRenderModel _renderModel;
-        private bool _isVisible;
         private ILogicalTreeNode _logicalTreeNode;
 
         public ISpaceboxRenderModel RenderModel
@@ -21,11 +19,7 @@ namespace Globe3DLight.ScenarioObjects
             get => _renderModel; 
             set => Update(ref _renderModel, value);
         }
-        public bool IsVisible 
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value);
-        }
+
         public ILogicalTreeNode LogicalTreeNode
         {
             get => _logicalTreeNode;

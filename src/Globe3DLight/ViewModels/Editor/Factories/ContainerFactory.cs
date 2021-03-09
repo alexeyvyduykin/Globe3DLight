@@ -117,10 +117,13 @@ namespace Globe3DLight.Editor
 
             var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
 
+            var satellites = new List<ISatellite>();
+
             for (int i = 0; i < fr_rotations.Count; i++)
             {
                 var sat = objFactory.CreateSatellite(string.Format("Satellite{0}", i + 1), fr_rotations[i]);
-                objBuilder.Add(sat);
+                
+                satellites.Add(sat);
 
                 taskBuilder.Add(objFactory.CreateSatelliteTask(
                     sat,
@@ -132,7 +135,7 @@ namespace Globe3DLight.Editor
 
             for (int i = 0; i < fr_sensors.Count; i++)
             {
-                objBuilder.Add(objFactory.CreateSensor(string.Format("Sensor{0}", i + 1), fr_sensors[i]));
+                satellites[i].AddChild(objFactory.CreateSensor(string.Format("Sensor{0}", i + 1), fr_sensors[i]));
             }
 
             var gss = new List<IScenarioObject>();
@@ -155,19 +158,20 @@ namespace Globe3DLight.Editor
             assetsBuilder.AddRange(gss);
             assetsBuilder.AddRange(rtrs);
 
-
             for (int i = 0; i < fr_antennas.Count; i++)
             {
                 var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[i]);
                 antenna.Assets = assetsBuilder.ToImmutable();
 
-                objBuilder.Add(antenna);
+                satellites[i].AddChild(antenna);
             }
 
             for (int i = 0; i < fr_orbits.Count; i++)
             {
-                objBuilder.Add(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[i]));
+                satellites[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[i]));
             }
+
+            objBuilder.AddRange(satellites);
 
             scenario1.ScenarioObjects = objBuilder.ToImmutable();
 

@@ -9,6 +9,5 @@ namespace Globe3DLight.ScenarioObjects
     public interface IGroundObject : IScenarioObject
     {
         IGroundObjectList ParentList { get; set; }
-        bool IsVisible { get; set; }
     }
 }

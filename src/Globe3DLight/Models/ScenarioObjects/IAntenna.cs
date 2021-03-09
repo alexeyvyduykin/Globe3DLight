@@ -8,7 +8,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IAntenna : IScenarioObject, IAssetable
+    public interface IAntenna : IScenarioObject, IDrawable, IAssetable
     {
         IAntennaRenderModel RenderModel { get; set; }
 

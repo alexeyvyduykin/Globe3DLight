@@ -1,24 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using GlmSharp;
-using Globe3DLight;
-using Globe3DLight.Data;
-using Globe3DLight.Renderer;
 
 namespace Globe3DLight.Scene
 {
-
     public class OrbitRenderModel : BaseRenderModel, IOrbitRenderModel
     {
         private IList<dvec3> _vertices;
 
-        public IList<dvec3> Vertices 
+        public IList<dvec3> Vertices
         {
-            get => _vertices; 
-            set => Update(ref _vertices, value); 
+            get => _vertices;
+            set => Update(ref _vertices, value);
         }
 
         public override bool IsDirty()
@@ -37,7 +30,5 @@ namespace Globe3DLight.Scene
         {
             throw new NotImplementedException();
         }
-
     }
-
 }

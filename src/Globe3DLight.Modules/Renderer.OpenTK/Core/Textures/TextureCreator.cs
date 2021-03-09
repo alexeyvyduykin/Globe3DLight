@@ -39,7 +39,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             var compressed = image1.Compressed;// 1 - (int)(header.sPixelFormat.dwFlags & DDPF_FOURCC) / DDPF_FOURCC;
             var cubemap = (int)(Header.Caps2 & DDSCAPS2_CUBEMAP) / DDSCAPS2_CUBEMAP;
         
-            if (compressed == false)
+            if (compressed == true)
             {
                 S3TC_type = A.PixelInternalFormat.Rgb;
                 S3TC_type_ = A.PixelFormat.Rgb;
@@ -106,7 +106,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                 int shift_offset;
                 mipmaps = (int)(Header.MipMapCount - 1);
                 DDS_full_size = DDS_main_size;
-                if (compressed == false)
+                if (compressed == true)
                 {
                     /*	uncompressed DDS, simple MIPmap size calculation	*/
                     shift_offset = 0;
@@ -161,7 +161,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     buffer_index += DDS_full_size;
                     /*	upload the main chunk	*/
 
-                    if (compressed == false)
+                    if (compressed == true)
                     {
                         /*	and remember, DXT uncompressed uses BGR(A),
                             so swap to RGB(A) for ALL MIPmap levels	*/
@@ -206,7 +206,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                                 byte* pt = source + byte_offset;
 
                                 /*	upload this mipmap	*/
-                                if (compressed == false)
+                                if (compressed == true)
                                 {
                                     mip_size = w * h * block_size;
                                     A.GL.TexImage2D(
@@ -456,7 +456,6 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
             return tex_ID;
         }
-
 
     }
 }

@@ -8,16 +8,11 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IEarth : IScenarioObject, ITargetable
+    public interface IEarth : IScenarioObject, IDrawable, ITargetable
     { 
         IEarthRenderModel RenderModel { get; set; }
 
         IFrameRenderModel FrameRenderModel { get; set; }
-
-
-        bool IsVisible { get; set; }
-      
-    //    IDataProvider Provider { get; set; }
 
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }

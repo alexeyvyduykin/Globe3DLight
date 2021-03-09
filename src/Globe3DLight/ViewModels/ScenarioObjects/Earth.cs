@@ -8,16 +8,12 @@ using System.Collections.Immutable;
 using System.Text;
 using GlmSharp;
 
-
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Earth : BaseScenarioObject, IEarth, IDrawable
-    {
-        private bool _isVisible;
-   
+    public class Earth : BaseScenarioObject, IEarth
+    {   
         private IEarthRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
-      //  private IDataProvider _provider;
         private ILogicalTreeNode _logicalTreeNode;
 
         public IEarthRenderModel RenderModel 
@@ -32,17 +28,6 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _frameRenderModel, value);
         }
 
-        public bool IsVisible 
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value); 
-        }
-
-        //public IDataProvider Provider 
-        //{
-        //    get => _provider; 
-        //    set => Update(ref _provider, value); 
-        //}
         public ILogicalTreeNode LogicalTreeNode
         {
             get => _logicalTreeNode; 

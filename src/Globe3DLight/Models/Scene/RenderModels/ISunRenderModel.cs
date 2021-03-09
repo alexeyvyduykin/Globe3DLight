@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.Geometry;
-using Globe3DLight.Renderer;
+﻿using Globe3DLight.Geometry;
 
 namespace Globe3DLight.Scene
 {
+    public interface ISunRenderModel : IRenderModel
+    {
+        IAMesh Billboard { get; set; }
 
+        string SunGlowKey { get; set; }
+    }
 }

@@ -8,10 +8,9 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IGroundStation : IScenarioObject, IUniquable
+    public interface IGroundStation : IScenarioObject, IDrawable, IUniquable
     {
         IGroundStationRenderModel RenderModel { get; set; }
-        bool IsVisible { get; set; }
 
         ILogicalTreeNode LogicalTreeNode { get; set; }
     }

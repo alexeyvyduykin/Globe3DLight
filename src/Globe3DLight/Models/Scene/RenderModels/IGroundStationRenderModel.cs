@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Immutable;
-using System.Text;
-using Globe3DLight.Geometry;
+﻿using Globe3DLight.Geometry;
 
 namespace Globe3DLight.Scene
 {
@@ -10,5 +7,4 @@ namespace Globe3DLight.Scene
         IAMesh Mesh { get; set; }
         double Scale { get; set; }
     }
-
 }

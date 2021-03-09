@@ -11,9 +11,8 @@ using GlmSharp;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class Orbit : BaseScenarioObject, IOrbit, IDrawable
+    public class Orbit : BaseScenarioObject, IOrbit
     {
-        private bool _isVisible;
         private IOrbitRenderModel _renderModel;    
         private ILogicalTreeNode _logicalTreeNode;
      
@@ -22,11 +21,7 @@ namespace Globe3DLight.ScenarioObjects
             get => _renderModel;
             set => Update(ref _renderModel, value);
         }
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value);
-        }
+
         public ILogicalTreeNode LogicalTreeNode
         {
             get => _logicalTreeNode;
