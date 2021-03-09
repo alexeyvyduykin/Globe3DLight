@@ -68,7 +68,7 @@ namespace Globe3DLight.ScenarioObjects
                         {
                             if(item is IGroundStation groundStation)
                             {
-                                if(groundStation.UniqueName.Name.Equals(target) == true)
+                                if(groundStation.Name.Equals(target) == true)
                                 {                        
                                     if (groundStation.LogicalTreeNode.State is IGroundStationState groundStationData)
                                     {
@@ -86,7 +86,7 @@ namespace Globe3DLight.ScenarioObjects
                         {
                             if (item is IRetranslator retranslator)
                             {
-                                if (retranslator.UniqueName.Name.Equals(target) == true)
+                                if (retranslator.Name.Equals(target) == true)
                                 {
                                     if (retranslator.LogicalTreeNode.State is IRetranslatorState retranslatorData)
                                     {

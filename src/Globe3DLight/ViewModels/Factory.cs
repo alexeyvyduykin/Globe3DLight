@@ -397,11 +397,6 @@ namespace Globe3DLight
             };
         }
 
-        public UniqueName CreateUniqueName(string name)
-        {
-            return new UniqueName(name);
-        }
-
         public void SaveProjectContainer(IProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer)
         {
             //if (project is IImageCache imageCache)

@@ -13,8 +13,6 @@ namespace Globe3DLight.ScenarioObjects
     public class GroundStation : BaseScenarioObject, IGroundStation
     { 
         private IGroundStationRenderModel _renderModel;
-        private UniqueName _uniqueName;
-
         private ILogicalTreeNode _logicalTreeNode;
       
         public IGroundStationRenderModel RenderModel
@@ -27,11 +25,6 @@ namespace Globe3DLight.ScenarioObjects
         {
             get => _logicalTreeNode;
             set => Update(ref _logicalTreeNode, value);
-        }
-        public UniqueName UniqueName
-        {
-            get => _uniqueName;
-            set => Update(ref _uniqueName, value); 
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)

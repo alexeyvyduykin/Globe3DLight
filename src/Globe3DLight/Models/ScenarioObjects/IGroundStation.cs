@@ -8,7 +8,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IGroundStation : IScenarioObject, IDrawable, IUniquable
+    public interface IGroundStation : IScenarioObject, IDrawable
     {
         IGroundStationRenderModel RenderModel { get; set; }
 
