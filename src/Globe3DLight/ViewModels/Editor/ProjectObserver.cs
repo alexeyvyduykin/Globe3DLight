@@ -112,20 +112,7 @@ namespace Globe3DLight.Editor
 
             if(root != null)
             {
-                UpdateData(t, root);
-            }
-        }
-
-        private void UpdateData(double t, ILogicalTreeNode node)
-        {
-            if(node.State is IAnimator animator)
-            {
-                animator.Animate(t);
-            }
-
-            foreach (var item in node.Children)
-            {
-                UpdateData(t, item);
+                _editor.Updater.Update(t, root);
             }
         }
 

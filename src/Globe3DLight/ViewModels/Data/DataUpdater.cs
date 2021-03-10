@@ -3,21 +3,18 @@ using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Containers;
-
+using System.Linq;
 
 namespace Globe3DLight.Data
 {
     public interface IDataUpdater : IObservableObject
     {
-        void Update(double t, ILogicalTreeNode logicalTreeNode);
+        void Update(double t, IObservableObject obj);
     }
-
 
     public class DataUpdater : ObservableObject, IDataUpdater
     {
         private readonly IServiceProvider _serviceProvider;
-
-
 
         public DataUpdater(IServiceProvider serviceProvider)
         {
@@ -30,19 +27,40 @@ namespace Globe3DLight.Data
             throw new NotImplementedException();
         }
 
-        public void Update(double t, ILogicalTreeNode logicalTreeNode)
+        public void Update(double t, IObservableObject obj)
         {
-            if(logicalTreeNode.State is IAnimator animator)
+            if (obj is ILogical logical)
             {
-                animator.Animate(t);
-            }
+                if (logical.State is IAnimator animator)
+                {
+                    animator.Animate(t);
+                }
 
-            foreach (var item in logicalTreeNode.Children)
+                foreach (var item in logical.Children)
+                {
+                    Update(t, item);
+                }
+            }
+            else if (obj is ILogicalCollection collection)
             {
-                Update(t, item);
-            }
-        }
+                var first = collection.Values.FirstOrDefault();
 
-        
+                if (first.State is IAnimator animator)
+                {
+                    foreach (IAnimator item in collection.Values.Select(s => s.State))
+                    {
+                        item.Animate(t);
+                    }
+                }
+                // collection states not is animate
+                //foreach (var item in collection)
+                //{
+                //    if (item.State is IAnimator animator)
+                //    {
+                //        animator.Animate(t);
+                //    }
+                //}
+            }
+        }        
     }
 }

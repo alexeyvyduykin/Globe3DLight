@@ -11,6 +11,6 @@ namespace Globe3DLight.ScenarioObjects
     { 
         ISunRenderModel RenderModel { get; set; }
 
-        ILogicalTreeNode LogicalTreeNode { get; set; }
+        ILogical Logical { get; set; }
     }
 }

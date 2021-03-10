@@ -33,6 +33,37 @@ namespace Globe3DLight.Renderer
             _drawNodeFactory = drawNodeFactory;
         }
 
+        public void DrawScenario(object dc, IScenarioContainer container)
+        {
+            foreach (var obj in container.ScenarioObjects)
+            {
+                DrawScenarioObject(dc, obj, container.SceneState);
+            }
+        }
+
+        private void DrawScenarioObject(object dc, IScenarioObject scenarioObject, ISceneState scene)
+        {
+            if (scenarioObject != null)
+            {
+                if (scenarioObject is IDrawable drawable)
+                {
+                    drawable.DrawShape(dc, this, scene);
+
+                    if (scenarioObject is IChildren obj)
+                    {
+                        foreach (var item in obj.Children)
+                        {
+                            DrawScenarioObject(dc, item, scene);
+                            //obj.DrawShape(dc, this, scene);
+                        }
+                    }
+                }
+                //else if (scenarioObject is IDrawableCollection drawableCollection)
+                //{
+                //    drawableCollection.DrawShapeCollection(dc, this, scene);
+                //}
+            }
+        }
 
         public void DrawSun(object dc, ISunRenderModel sun, dmat4 modelMatrix, ISceneState scene)
         {
@@ -173,40 +204,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
-
-        public void DrawGroundStations(object dc, IGroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene)
-        {
-            var drawNodeCached = _drawNodeCache.Get(groundStation);
-            if (drawNodeCached != null)
-            {
-                //if (sun.Style.IsDirty() || drawNodeCached.Style != sun.Style)
-                //{
-                //    drawNodeCached.Style = sun.Style;
-                //    drawNodeCached.UpdateStyle();
-                //    sun.Style.Invalidate();
-                //}
-
-                if (groundStation.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
-
-                drawNodeCached.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
-            }
-            else
-            {
-                var drawNode = _drawNodeFactory.CreateGroundStationDrawNode(groundStation);
-
-                drawNode.UpdateStyle();
-
-                drawNode.UpdateGeometry();
-
-                _drawNodeCache.Set(groundStation, drawNode);
-
-                drawNode.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
-            }
-        }
-        
+      
         public void DrawRetranslator(object dc, IRetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(retranslator);
@@ -376,40 +374,100 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
-
-        public void DrawScenario(object dc, IScenarioContainer container)
+    
+        public void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene)
         {
-            foreach (var obj in container.ScenarioObjects)
+            var drawNodeCached = _drawNodeCache.Get(groundStation);
+            if (drawNodeCached != null)
             {
-                DrawScenarioObject(dc, obj, container.SceneState);
+                //if (sun.Style.IsDirty() || drawNodeCached.Style != sun.Style)
+                //{
+                //    drawNodeCached.Style = sun.Style;
+                //    drawNodeCached.UpdateStyle();
+                //    sun.Style.Invalidate();
+                //}
+
+                if (groundStation.IsDirty())
+                {
+                    drawNodeCached.UpdateGeometry();
+                }
+
+                drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+            }
+            else
+            {
+                var drawNode = _drawNodeFactory.CreateGroundStationDrawNode(groundStation);
+
+                drawNode.UpdateStyle();
+
+                drawNode.UpdateGeometry();
+
+                _drawNodeCache.Set(groundStation, drawNode);
+
+                drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
 
-        private void DrawScenarioObject(object dc, IScenarioObject scenarioObject, ISceneState scene)
+        public void DrawGroundStationList(object dc, IGroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene)
         {
-            if (scenarioObject != null)
+            var drawNodeCached = _drawNodeCache.Get(groundStation);
+            if (drawNodeCached != null)
             {
-                if (scenarioObject is IDrawable drawable)
-                {
-                    drawable.DrawShape(dc, this, scene);
+                //if (sun.Style.IsDirty() || drawNodeCached.Style != sun.Style)
+                //{
+                //    drawNodeCached.Style = sun.Style;
+                //    drawNodeCached.UpdateStyle();
+                //    sun.Style.Invalidate();
+                //}
 
-                    if (scenarioObject is IChildren obj)
-                    {
-                        foreach (var item in obj.Children)
-                        {
-                            DrawScenarioObject(dc, item, scene);
-                            //obj.DrawShape(dc, this, scene);
-                        }
-                    }
-                }
-                else if(scenarioObject is IDrawableCollection drawableCollection)
+                if (groundStation.IsDirty())
                 {
-                    drawableCollection.DrawShapeCollection(dc, this, scene);
+                    drawNodeCached.UpdateGeometry();
                 }
+
+                drawNodeCached.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
+            }
+            else
+            {
+                var drawNode = _drawNodeFactory.CreateGroundStationDrawNode(groundStation);
+
+                drawNode.UpdateStyle();
+
+                drawNode.UpdateGeometry();
+
+                _drawNodeCache.Set(groundStation, drawNode);
+
+                drawNode.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
             }
         }
-        
-        public void DrawGroundObjects(object dc, IGroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+
+        public void DrawGroundObject(object dc, IGroundObjectRenderModel groundobject, dmat4 modelMatrix, ISceneState scene)
+        {
+            var drawNodeCached = _drawNodeCache.Get(groundobject);
+            if (drawNodeCached != null)
+            {
+                if (groundobject.IsDirty())
+                {
+                    drawNodeCached.UpdateGeometry();
+                }
+
+                drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+            }
+            else
+            {
+                var drawNode = _drawNodeFactory.CreateGroundObjectListDrawNode(groundobject);
+
+                drawNode.UpdateStyle();
+
+                drawNode.UpdateGeometry();
+
+                _drawNodeCache.Set(groundobject, drawNode);
+
+                drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+            }
+        }
+
+        public void DrawGroundObjectList(object dc, IGroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(groundobject);
             if (drawNodeCached != null)

@@ -46,37 +46,39 @@ namespace Globe3DLight.Data
         IRetranslatorState CreateRetranslatorAnimator(RetranslatorData data); 
         IRetranslatorState CreateRetranslatorAnimator(IList<double[]> records, double t0, double t1, double tStep);
 
-        ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, string path);
+        ILogical CreateSatelliteNode(ILogical parent, string path);
 
-        ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, SatelliteData data);
+        ILogical CreateSatelliteNode(ILogical parent, SatelliteData data);
 
-        ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path);
+        ILogical CreateRotationNode(ILogical parent, string path);
 
-        ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, RotationData data);
+        ILogical CreateRotationNode(ILogical parent, RotationData data);
 
-        ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, string path);
+        ILogical CreateSunNode(ILogical parent, string path);
 
-        ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, SunData data);
+        ILogical CreateSunNode(ILogical parent, SunData data);
 
-        ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, string path);
+        ILogical CreateSensorNode(ILogical parent, string path);
 
-        ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, SensorData data);
+        ILogical CreateSensorNode(ILogical parent, SensorData data);
 
-        ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, string path);
+        ILogical CreateRetranslatorNode(ILogical parent, string path);
 
-        ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, RetranslatorData data);
+        ILogical CreateRetranslatorNode(IObservableObject parent, RetranslatorData data);
 
-        ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, string path);
+        ILogical CreateAntennaNode(ILogical parent, string path);
 
-        ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, AntennaData data);
+        ILogical CreateAntennaNode(ILogical parent, AntennaData data);
 
-        ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, OrbitData data);
+        ILogical CreateOrbitNode(ILogical parent, OrbitData data);
 
-        ILogicalTreeNode CreateGroundStationNode(ILogicalTreeNode parent, GroundStationData data);
+        ILogical CreateGroundStationNode(IObservableObject parent, GroundStationData data);
         
-        ILogicalTreeNode CreateGroundObjectNode(ILogicalTreeNode parent, GroundObjectData data);
+        ILogical CreateGroundObjectNode(IObservableObject parent, GroundObjectData data);
 
-        ILogicalTreeNode CreateEarthNode(ILogicalTreeNode parent, J2000Data data);
+        ILogical CreateEarthNode(ILogical parent, J2000Data data);
+
+        ILogicalCollection CreateCollectionNode(string name, ILogical parent);
     }
 
 
@@ -257,7 +259,7 @@ namespace Globe3DLight.Data
             });
         }
 
-        public ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, string path)
+        public ILogical CreateSatelliteNode(ILogical parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -266,13 +268,13 @@ namespace Globe3DLight.Data
             var db1 = jsonDataProvider.CreateDataFromPath<SatelliteData>(path);
             var satelliteState = dataFactory.CreateSatelliteAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
-            var fr_satellite = factory.CreateLogicalTreeNode(name, satelliteState);
+            var fr_satellite = factory.CreateLogical(name, satelliteState);
             parent.AddChild(fr_satellite);
 
             return fr_satellite;
         }
         
-        public ILogicalTreeNode CreateSatelliteNode(ILogicalTreeNode parent, SatelliteData data)
+        public ILogical CreateSatelliteNode(ILogical parent, SatelliteData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -280,13 +282,13 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
             var satelliteState = dataFactory.CreateSatelliteAnimator(data);
-            var fr_satellite = factory.CreateLogicalTreeNode(name, satelliteState);
+            var fr_satellite = factory.CreateLogical(name, satelliteState);
             parent.AddChild(fr_satellite);
 
             return fr_satellite;
         }
 
-        public ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, string path)
+        public ILogical CreateRotationNode(ILogical parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -296,7 +298,7 @@ namespace Globe3DLight.Data
             var rotationData = dataFactory.CreateRotationAnimator(db2);
             var name = Path.GetFileNameWithoutExtension(path);
 
-            var fr_rotation = factory.CreateLogicalTreeNode(name, rotationData);
+            var fr_rotation = factory.CreateLogical(name, rotationData);
 
             parent.AddChild(fr_rotation);
 
@@ -304,7 +306,7 @@ namespace Globe3DLight.Data
 
         }
         
-        public ILogicalTreeNode CreateRotationNode(ILogicalTreeNode parent, RotationData data)
+        public ILogical CreateRotationNode(ILogical parent, RotationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -312,14 +314,14 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
 
             var rotationData = dataFactory.CreateRotationAnimator(data);
-            var fr_rotation = factory.CreateLogicalTreeNode(name, rotationData);
+            var fr_rotation = factory.CreateLogical(name, rotationData);
 
             parent.AddChild(fr_rotation);
 
             return fr_rotation;
         }
 
-        public ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, string path)
+        public ILogical CreateSunNode(ILogical parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -329,13 +331,13 @@ namespace Globe3DLight.Data
             var sun_data = dataFactory.CreateSunAnimator(db);
             var name = Path.GetFileNameWithoutExtension(path);
 
-            var fr_sun = factory.CreateLogicalTreeNode(name, sun_data);
+            var fr_sun = factory.CreateLogical(name, sun_data);
             parent.AddChild(fr_sun);
             return fr_sun;
             //  return objFactory.CreateSun(name, fr_sun);
         }
         
-        public ILogicalTreeNode CreateSunNode(ILogicalTreeNode parent, SunData data)
+        public ILogical CreateSunNode(ILogical parent, SunData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -343,12 +345,12 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
             var sun_data = dataFactory.CreateSunAnimator(data);
-            var fr_sun = factory.CreateLogicalTreeNode(name, sun_data);
+            var fr_sun = factory.CreateLogical(name, sun_data);
             parent.AddChild(fr_sun);
             return fr_sun;
         }
         
-        public ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, string path)
+        public ILogical CreateSensorNode(ILogical parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -358,14 +360,14 @@ namespace Globe3DLight.Data
             var sensor_data = dataFactory.CreateSensorAnimator(db);
             var name = Path.GetFileNameWithoutExtension(path);
 
-            var fr_sensor = factory.CreateLogicalTreeNode(name, sensor_data);
+            var fr_sensor = factory.CreateLogical(name, sensor_data);
             parent.AddChild(fr_sensor);
 
             return fr_sensor;
             // return objFactory.CreateSensor(name, fr_sensor);
         }
         
-        public ILogicalTreeNode CreateSensorNode(ILogicalTreeNode parent, SensorData data)
+        public ILogical CreateSensorNode(ILogical parent, SensorData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -373,13 +375,13 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
 
             var sensor_data = dataFactory.CreateSensorAnimator(data);
-            var fr_sensor = factory.CreateLogicalTreeNode(name, sensor_data);
+            var fr_sensor = factory.CreateLogical(name, sensor_data);
             parent.AddChild(fr_sensor);
 
             return fr_sensor;
         }
         
-        public ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, string path)
+        public ILogical CreateRetranslatorNode(ILogical parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -388,13 +390,13 @@ namespace Globe3DLight.Data
             var db1 = jsonDataProvider.CreateDataFromPath<RetranslatorData>(path);
             var retranslatorData = dataFactory.CreateRetranslatorAnimator(db1);
             var name = Path.GetFileNameWithoutExtension(path);
-            var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
+            var fr_retranslator = factory.CreateLogical(name, retranslatorData);
             parent.AddChild(fr_retranslator);
 
             return fr_retranslator;
         }
         
-        public ILogicalTreeNode CreateRetranslatorNode(ILogicalTreeNode parent, RetranslatorData data)
+        public ILogical CreateRetranslatorNode(IObservableObject parent, RetranslatorData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -402,13 +404,21 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
             var retranslatorData = dataFactory.CreateRetranslatorAnimator(data);
-            var fr_retranslator = factory.CreateLogicalTreeNode(name, retranslatorData);
-            parent.AddChild(fr_retranslator);
+            var fr_retranslator = factory.CreateLogical(name, retranslatorData);
+          
+            if (parent is ILogical logical)
+            {
+                logical.AddChild(fr_retranslator);
+            }
+            else if (parent is ILogicalCollection collection)
+            {
+                collection.AddValue(fr_retranslator);
+            }
 
             return fr_retranslator;
         }
 
-        public ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, string path)
+        public ILogical CreateAntennaNode(ILogical parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -421,13 +431,13 @@ namespace Globe3DLight.Data
             var antenna_data = dataFactory.CreateAntennaAnimator(db/*, p0LeftPos*/);
             var name = Path.GetFileNameWithoutExtension(path);
 
-            var fr_antenna = factory.CreateLogicalTreeNode(name, antenna_data);
+            var fr_antenna = factory.CreateLogical(name, antenna_data);
             parent.AddChild(fr_antenna);
 
             return fr_antenna;
         }
         
-        public ILogicalTreeNode CreateAntennaNode(ILogicalTreeNode parent, AntennaData data)
+        public ILogical CreateAntennaNode(ILogical parent, AntennaData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -435,13 +445,13 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
 
             var antenna_data = dataFactory.CreateAntennaAnimator(data);
-            var fr_antenna = factory.CreateLogicalTreeNode(name, antenna_data);
+            var fr_antenna = factory.CreateLogical(name, antenna_data);
             parent.AddChild(fr_antenna);
 
             return fr_antenna;
         }
         
-        public ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, OrbitData data)
+        public ILogical CreateOrbitNode(ILogical parent, OrbitData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -449,13 +459,13 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}_{1}", data.Name.ToLower(), data.SatelliteName.ToLower());
 
             var orbit_data = dataFactory.CreateOrbitState(data);
-            var fr_orbit = factory.CreateLogicalTreeNode(name, orbit_data);
+            var fr_orbit = factory.CreateLogical(name, orbit_data);
             parent.AddChild(fr_orbit);
 
             return fr_orbit;
         }
         
-        public ILogicalTreeNode CreateGroundStationNode(ILogicalTreeNode parent, GroundStationData data)
+        public ILogical CreateGroundStationNode(IObservableObject parent, GroundStationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -463,13 +473,21 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
             var groundStationData = dataFactory.CreateGroundStationState(data);
-            var fr_groundStation = factory.CreateLogicalTreeNode(name, groundStationData);
-            parent.AddChild(fr_groundStation);
+            var fr_groundStation = factory.CreateLogical(name, groundStationData);
+        
+            if (parent is ILogical logical)
+            {
+                logical.AddChild(fr_groundStation);
+            }
+            else if (parent is ILogicalCollection collection)
+            {
+                collection.AddValue(fr_groundStation);
+            }
 
             return fr_groundStation;
         }
 
-        public ILogicalTreeNode CreateGroundObjectNode(ILogicalTreeNode parent, GroundObjectData data)
+        public ILogical CreateGroundObjectNode(IObservableObject parent, GroundObjectData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -477,13 +495,21 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
             var groundObjectState = dataFactory.CreateGroundObjectState(data);
-            var fr_groundObject = factory.CreateLogicalTreeNode(name, groundObjectState);
-            parent.AddChild(fr_groundObject);
+            var fr_groundObject = factory.CreateLogical(name, groundObjectState);
+
+            if (parent is ILogical logical)
+            {
+                logical.AddChild(fr_groundObject);
+            }
+            else if(parent is ILogicalCollection collection)
+            {
+                collection.AddValue(fr_groundObject);
+            }
 
             return fr_groundObject;
         }
 
-        public ILogicalTreeNode CreateEarthNode(ILogicalTreeNode parent, J2000Data data)
+        public ILogical CreateEarthNode(ILogical parent, J2000Data data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -491,9 +517,19 @@ namespace Globe3DLight.Data
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
             var earth_data = dataFactory.CreateJ2000Animator(data);
-            var fr_earth = factory.CreateLogicalTreeNode(name, earth_data);
+            var fr_earth = factory.CreateLogical(name, earth_data);
             parent.AddChild(fr_earth);
             return fr_earth;
+        }
+
+        public ILogicalCollection CreateCollectionNode(string name, ILogical parent)
+        {
+            var factory = _serviceProvider.GetService<IFactory>();
+
+            var fr_collection = factory.CreateLogicalCollection(name);
+            parent.AddChild(fr_collection);
+
+            return fr_collection;
         }
     }
 }

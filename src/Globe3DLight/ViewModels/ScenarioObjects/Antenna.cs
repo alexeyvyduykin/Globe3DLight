@@ -17,7 +17,7 @@ namespace Globe3DLight.ScenarioObjects
         private IAntennaRenderModel _renderModel; 
         private IFrameRenderModel _frameRenderModel;
 
-        private ILogicalTreeNode _logicalTreeNode; 
+        private ILogical _logical; 
         private ImmutableArray<IScenarioObject> _assets;
         
         public ImmutableArray<IScenarioObject> Assets
@@ -32,10 +32,10 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode
+        public ILogical Logical
         {
-            get => _logicalTreeNode;
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical;
+            set => Update(ref _logical, value);
         }
         public IFrameRenderModel FrameRenderModel
         {
@@ -52,11 +52,8 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IAntennaState antennaData)
+                if (Logical.State is IAntennaState antennaData)
                 {
-                    //        if (antennaData.Enable == true)
-                    //       {
-
                     dvec3 targetPosition = default;
                     bool enable = antennaData.Enable;
 
@@ -66,15 +63,16 @@ namespace Globe3DLight.ScenarioObjects
 
                         foreach (var item in Assets)
                         {
-                            if(item is IGroundStation groundStation)
+                            if (item is IGroundStation groundStation)
                             {
-                                if(groundStation.Name.Equals(target) == true)
-                                {                        
-                                    if (groundStation.LogicalTreeNode.State is IGroundStationState groundStationData)
+                                if (groundStation.Name.Equals(target) == true)
+                                {
+                                    if (groundStation.Logical.State is IGroundStationState groundStationData)
                                     {
-                                        var j2000Node = (ILogicalTreeNode)groundStation.LogicalTreeNode.Owner;
+                                        var collection = (ILogicalCollection)groundStation.Logical.Owner;
+                                        var j2000Node = (ILogical)collection.Owner;
                                         if (j2000Node.State is IJ2000State j2000Data)
-                                        {                                            
+                                        {
                                             targetPosition = new dvec3(j2000Data.ModelMatrix * new dvec4(groundStationData.Position, 1.0));
                                         }
                                     }
@@ -88,21 +86,20 @@ namespace Globe3DLight.ScenarioObjects
                             {
                                 if (retranslator.Name.Equals(target) == true)
                                 {
-                                    if (retranslator.LogicalTreeNode.State is IRetranslatorState retranslatorData)
+                                    if (retranslator.Logical.State is IRetranslatorState retranslatorData)
                                     {
-                                        targetPosition = retranslatorData.Position;                               
+                                        targetPosition = retranslatorData.Position;
                                     }
                                 }
                             }
                         }
                     }
 
-
-                        var rotationNode = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                        if (rotationNode.State is IRotationState rotationData)
-                        {
-                            var orbitNode = (ILogicalTreeNode)rotationNode.Owner;
-                            if (orbitNode.State is ISatelliteState satelliteState)
+                    var rotationNode = (ILogical)Logical.Owner;
+                    if (rotationNode.State is IRotationState rotationData)
+                    {
+                        var orbitNode = (ILogical)rotationNode.Owner;
+                        if (orbitNode.State is ISatelliteState satelliteState)
                         {
                             var attach = RenderModel.AttachPosition;
 
@@ -117,8 +114,6 @@ namespace Globe3DLight.ScenarioObjects
 
                             var antennaModelMatrix = satelliteModelMatrix * dmat4.Translate(attach);
 
-
-
                             renderer.DrawFrame(dc, FrameRenderModel, antennaModelMatrix, scene);
 
                             if (enable == true)
@@ -127,8 +122,8 @@ namespace Globe3DLight.ScenarioObjects
 
                                 renderer.DrawAntenna(dc, RenderModel, antennaModelMatrix, scene);
                             }
-                        }                       
-                    }                                
+                        }
+                    }
                 }
             }
         }

@@ -273,7 +273,7 @@ namespace Globe3DLight.Editor
                 var selected = Project?.Scenarios.FirstOrDefault();
                 Project?.SetCurrentScenario(selected);
             }
-            if (item is ILogicalTreeNode node)
+            if (item is ILogical node)
             {
                 Project?.RemoveLogicalNode(node);
               //  var selected = Project?.CurrentScenario?.LogicalTreeNodeRoot.SingleOrDefault();
@@ -293,11 +293,11 @@ namespace Globe3DLight.Editor
         //void OnAddChildFrame(ITreeNode<IFrame> node);
         public void OnAddFrame(object item)
         {
-            if (item is ILogicalTreeNode node)
+            if (item is ILogical node)
             {
                 if (Project?.CurrentScenario != null)
                 {
-                    var child = Factory.CreateLogicalTreeNode("Frame", DataFactory.CreateFrameState());
+                    var child = Factory.CreateLogical("Frame", DataFactory.CreateFrameState());
 
                     Project.AddChildFrame(node, child);
                 }

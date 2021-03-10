@@ -13,6 +13,6 @@ namespace Globe3DLight.ScenarioObjects
     {
         ISpaceboxRenderModel RenderModel { get; set; }
 
-        ILogicalTreeNode LogicalTreeNode { get; set; }
+        ILogical Logical { get; set; }
     }
 }

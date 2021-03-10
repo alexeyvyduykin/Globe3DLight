@@ -13,13 +13,13 @@ namespace Globe3DLight.Containers
     {
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
-        private ImmutableArray<ILogicalTreeNode> _logicalTreeNodeRoot;
+        private ImmutableArray<ILogical> _logicalTreeNodeRoot;
         private bool _isExpanded = true;
         private ImmutableArray<IScenarioObject> _sceneObjects;
         private IScenarioObject _currentScenarioObject;
         private ImmutableArray<ISatelliteTask> _satelliteTasks;
 
-        private ILogicalTreeNode _currentLogicalTreeNode;
+        private ILogical _currentLogicalTreeNode;
         private ISceneState _sceneState;
         private ITimePresenter _timePresenter;
 
@@ -31,7 +31,7 @@ namespace Globe3DLight.Containers
 
         private double _height;
 
-        public ImmutableArray<ILogicalTreeNode> LogicalTreeNodeRoot 
+        public ImmutableArray<ILogical> LogicalTreeNodeRoot 
         {
             get => _logicalTreeNodeRoot; 
             set => Update(ref _logicalTreeNodeRoot, value); 
@@ -49,7 +49,7 @@ namespace Globe3DLight.Containers
         //    set => Update(ref _duration, value); 
         //}
 
-        public ILogicalTreeNode CurrentLogicalTreeNode
+        public ILogical CurrentLogicalTreeNode
         {
             get => _currentLogicalTreeNode;
             set => Update(ref _currentLogicalTreeNode, value);

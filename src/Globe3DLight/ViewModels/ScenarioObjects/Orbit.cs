@@ -14,7 +14,7 @@ namespace Globe3DLight.ScenarioObjects
     public class Orbit : BaseScenarioObject, IOrbit
     {
         private IOrbitRenderModel _renderModel;    
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
      
         public IOrbitRenderModel RenderModel
         {
@@ -22,17 +22,17 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode
+        public ILogical Logical
         {
-            get => _logicalTreeNode;
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical;
+            set => Update(ref _logical, value);
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IOrbitState orbitState)
+                if (Logical.State is IOrbitState orbitState)
                 {                    
                     RenderModel.Vertices = orbitState.Vertices.Select(s => new dvec3(s.x, s.y, s.z)).ToList();
 

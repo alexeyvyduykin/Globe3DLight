@@ -30,7 +30,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void AddChildFrame(this IProjectContainer project, ILogicalTreeNode node, ILogicalTreeNode child)
+        public static void AddChildFrame(this IProjectContainer project, ILogical node, ILogical child)
         {
             if (node != null && child != null)
             {
@@ -66,7 +66,7 @@ namespace Globe3DLight.Editor
         //    return;
         //}
 
-        public static void RemoveLogicalNode(this IProjectContainer project, ILogicalTreeNode node)
+        public static void RemoveLogicalNode(this IProjectContainer project, ILogical node)
         {
             if (node != null)
             {

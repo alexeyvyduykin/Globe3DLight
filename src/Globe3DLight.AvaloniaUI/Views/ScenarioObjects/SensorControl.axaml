@@ -19,8 +19,8 @@
 
 
       <TabControl Grid.Row="1" Grid.ColumnSpan="2">
-        <TabItem Header="LogicalTreeNode" FontSize="14">
-          <ContentControl Content="{Binding LogicalTreeNode, Mode=TwoWay}"/>
+        <TabItem Header="Logical" FontSize="14">
+          <ContentControl Content="{Binding Logical, Mode=TwoWay}"/>
         </TabItem>
       </TabControl>
 

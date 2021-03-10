@@ -13,7 +13,7 @@ namespace Globe3DLight.ScenarioObjects
     public class Sun : BaseScenarioObject, ISun
     {
         private ISunRenderModel _renderModel;
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
 
         public ISunRenderModel RenderModel 
         {
@@ -21,17 +21,17 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
    
-        public ILogicalTreeNode LogicalTreeNode 
+        public ILogical Logical
         {
-            get => _logicalTreeNode; 
-            set => Update(ref _logicalTreeNode, value); 
+            get => _logical; 
+            set => Update(ref _logical, value); 
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is ISunState sunData)
+                if (Logical.State is ISunState sunData)
                 {
                     double r = sunData.Position.Length;
                     var orbitRadius = r;// * scene.WorldScale;

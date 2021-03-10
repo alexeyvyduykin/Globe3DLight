@@ -349,7 +349,7 @@ namespace Globe3DLight
             return new ScenarioContainer()
             {
                 Name = name,   
-                LogicalTreeNodeRoot = ImmutableArray.Create<ILogicalTreeNode>(),                   
+                LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(),                   
                 ScenarioObjects = ImmutableArray.Create<IScenarioObject>(),
                 SceneState = CreateSceneState(),             
             };
@@ -357,13 +357,25 @@ namespace Globe3DLight
 
 
 
-        public ILogicalTreeNode CreateLogicalTreeNode(string name, IState state)
+        public ILogical CreateLogical(string name, IState state)
         {
-            return new LogicalTreeNode()
+            return new Logical()
             {
                 Name = name,
-                Children = ImmutableArray.Create<ILogicalTreeNode>(),
+                Children = ImmutableArray.Create<IObservableObject>(),
                 State = state,              
+            };
+        }
+
+        public ILogicalCollection CreateLogicalCollection(string name)
+        {          
+            var builder = ImmutableArray.CreateBuilder<ILogical>();
+
+            return new LogicalCollection()
+            {
+                Name = name,             
+                //State = states,
+                Values = builder.ToImmutable(),
             };
         }
 

@@ -13,7 +13,7 @@ namespace Globe3DLight.ScenarioObjects
     public class GroundStation : BaseScenarioObject, IGroundStation
     { 
         private IGroundStationRenderModel _renderModel;
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
       
         public IGroundStationRenderModel RenderModel
         {
@@ -21,26 +21,27 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode
+        public ILogical Logical
         {
-            get => _logicalTreeNode;
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical;
+            set => Update(ref _logical, value);
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IGroundStationState groundStationData)
+                if (Logical.State is IGroundStationState groundStationData)
                 {
-                    var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
+                    var collection = Logical.Owner;
+                    var parent = (ILogical)collection.Owner;
                     if (parent.State is IJ2000State j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 
                         var groundStationModelMatrix = m * groundStationData.ModelMatrix;
 
-                        renderer.DrawGroundStations(dc, RenderModel, Enumerable.Repeat(groundStationModelMatrix, 1), scene);
+                        renderer.DrawGroundStation(dc, RenderModel, groundStationModelMatrix, scene);
                     }
                 }
             }

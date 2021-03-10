@@ -12,7 +12,7 @@ namespace Globe3DLight.ScenarioObjects
     public class Spacebox : BaseScenarioObject, ISpacebox
     {
         private ISpaceboxRenderModel _renderModel;
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
 
         public ISpaceboxRenderModel RenderModel
         {
@@ -20,10 +20,10 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode
+        public ILogical Logical
         {
-            get => _logicalTreeNode;
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical;
+            set => Update(ref _logical, value);
         }
 
         public override object Copy(IDictionary<object, object> shared)
@@ -35,7 +35,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IFrameState frameData)
+                if (Logical.State is IFrameState frameData)
                 {
                     renderer.DrawSpacebox(dc, RenderModel, frameData.ModelMatrix, scene);
                 }

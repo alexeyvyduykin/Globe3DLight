@@ -23,9 +23,9 @@ namespace Globe3DLight.Containers
 
         bool IsExpanded { get; set; }
 
-        ImmutableArray<ILogicalTreeNode> LogicalTreeNodeRoot { get; set; }
+        ImmutableArray<ILogical> LogicalTreeNodeRoot { get; set; }
 
-        ILogicalTreeNode CurrentLogicalTreeNode { get; set; }
+        ILogical CurrentLogicalTreeNode { get; set; }
 
         ImmutableArray<IScenarioObject> ScenarioObjects { get; set; }
 

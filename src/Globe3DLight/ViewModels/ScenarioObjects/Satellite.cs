@@ -14,7 +14,7 @@ namespace Globe3DLight.ScenarioObjects
     {
         private ISatelliteRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
     
         public ISatelliteRenderModel RenderModel 
         {
@@ -22,10 +22,10 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode 
+        public ILogical Logical
         {
-            get => _logicalTreeNode; 
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical; 
+            set => Update(ref _logical, value);
         }
         public IFrameRenderModel FrameRenderModel
         {
@@ -39,7 +39,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             get
             {
-                if(((ILogicalTreeNode)_logicalTreeNode?.Owner).State is IFrameable frameable)
+                if(((ILogical)_logical?.Owner).State is IFrameable frameable)
                 {
                     return frameable.ModelMatrix.Inverse;
                 }
@@ -57,9 +57,9 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IRotationState rotationData)
+                if (Logical.State is IRotationState rotationData)
                 {
-                    var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
+                    var parent = (ILogical)Logical.Owner;
                     if (parent.State is ISatelliteState satelliteState)
                     {
                         //   double r = orbitData.Position.Length;

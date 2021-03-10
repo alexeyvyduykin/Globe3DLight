@@ -9,7 +9,7 @@ namespace Globe3DLight
 {
     public static class LogicalTreeNodeExtensions
     {
-        public static void AddChild(this ILogicalTreeNode node, ILogicalTreeNode child) 
+        public static void AddChild(this ILogical node, IObservableObject child) 
         {
             if (child != null)
             {
@@ -17,7 +17,7 @@ namespace Globe3DLight
 
                 child.Owner = node;
 
-                child.State.Owner = node.State;
+                //child.State.Owner = node.State;
 
                 builder.Add(child);
 
@@ -25,7 +25,23 @@ namespace Globe3DLight
             }
         }
 
-        public static void RemoveChild(this ILogicalTreeNode node, ILogicalTreeNode child)
+        public static void AddValue(this ILogicalCollection collection, ILogical value)
+        {
+            if (value != null)
+            {
+                var builder = collection.Values.ToBuilder();
+
+                value.Owner = collection;
+
+                //child.State.Owner = node.State;
+
+                builder.Add(value);
+
+                collection.Values = builder.ToImmutable();
+            }
+        }
+
+        public static void RemoveChild(this ILogical node, ILogical child)
         {
             if (child != null)
             {
@@ -39,7 +55,7 @@ namespace Globe3DLight
                 }
                 else
                 {
-                    foreach (var item in node.Children)
+                    foreach (ILogical item in node.Children)
                     {
                         item.RemoveChild(child);
                     }
@@ -48,30 +64,30 @@ namespace Globe3DLight
 
         }
 
-        public static ILogicalTreeNode GetRoot(this ILogicalTreeNode node)
+        public static ILogical GetRoot(this ILogical node)
         {
             var root = node;
 
             while (root?.Owner != null)
             {
-                root = (ILogicalTreeNode)root.Owner;
+                root = (ILogical)root.Owner;
             }
 
             return root;
         }
 
-        public static ILogicalTreeNode GetRoot(this ImmutableArray<ILogicalTreeNode> nodes)
-        {
-            return nodes.FirstOrDefault().GetRoot();
-        }
+        //public static ILogical GetRoot(this ImmutableArray<ILogical> nodes)
+        //{
+        //    return nodes.FirstOrDefault().GetRoot();
+        //}
 
 
-        public static ILogicalTreeNode Find(this ILogicalTreeNode node, ILogicalTreeNode find) 
+        public static ILogical Find(this ILogical node, ILogical find) 
         {
             if (node.Equals(find) == true)
                 return node;
 
-            foreach (var item in node.Children)
+            foreach (ILogical item in node.Children)
             {
                 var res = item.Find(find);
                 if (res != default)
@@ -81,14 +97,14 @@ namespace Globe3DLight
             return default;
         }
 
-        public static string GetFullName(this ILogicalTreeNode node) 
-        {
-            if (node.Owner == null)
-            {
-                return node.State.Name;
-            }
+        //public static string GetFullName(this ILogical node) 
+        //{
+        //    if (node.Owner == null)
+        //    {
+        //        return node.State.Name;
+        //    }
 
-            return string.Format("{0}.{1}", ((ILogicalTreeNode)node.Owner).GetFullName(), node.State.Name);
-        }
+        //    return string.Format("{0}.{1}", ((ILogical)node.Owner).GetFullName(), node.State.Name);
+        //}
     }
 }

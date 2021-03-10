@@ -15,7 +15,7 @@ namespace Globe3DLight.ScenarioObjects
     public class GroundObject : BaseScenarioObject, IGroundObject
     {
         private IGroundObjectRenderModel _renderModel;
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
 
         public IGroundObjectRenderModel RenderModel
         {
@@ -23,48 +23,33 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode
+        public ILogical Logical
         {
-            get => _logicalTreeNode;
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical;
+            set => Update(ref _logical, value);
         }
 
-        public void DrawShapeCollection(object dc, IRenderContext renderer, ISceneState scene)
+        public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IGroundObjectState groundObjectState)
+                if (Logical.State is IGroundObjectState groundObjectState)
                 {
-                    var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
+                    var collection = Logical.Owner;
+                    var parent = (ILogical)collection.Owner;
                     if (parent.State is IJ2000State j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 
-                        var states = parent.Children.Where(s => s.State is IGroundObjectState).Select(s => s.State).Cast<IGroundObjectState>();
+                        var matrix = m * groundObjectState.ModelMatrix;
 
-                        var matrices = states.Select(s => m * s.ModelMatrix);
-
-                        renderer.DrawGroundObjects(dc, RenderModel, matrices, scene);
+                        renderer.DrawGroundObject(dc, RenderModel, matrix, scene);
                     }
                 }
             }
         }
-
-        
-    //            if (LogicalTreeNode.State is IGroundObjectListState groundObjectListState)
-    //            {
-    //                var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
-    //                if (parent.State is IJ2000State j2000Data)
-    //                {
-    //                    var m = j2000Data.ModelMatrix;
-
-    //                    var matrices = groundObjectListState.States.Values.Select(s => m * s.ModelMatrix);
-                 
-    //                    renderer.DrawGroundObjectList(dc, RenderModel, matrices, scene);
-    //                }
-    //            }
-
-    public bool Invalidate(IRenderContext renderer)
+   
+        public bool Invalidate(IRenderContext renderer)
         {
             return false;
         }

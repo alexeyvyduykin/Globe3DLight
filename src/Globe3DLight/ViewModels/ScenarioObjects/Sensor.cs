@@ -13,7 +13,7 @@ namespace Globe3DLight.ScenarioObjects
     public class Sensor : BaseScenarioObject, ISensor
     {
         private ISensorRenderModel _renderModel;         
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
 
         public ISensorRenderModel RenderModel
         {
@@ -21,10 +21,10 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _renderModel, value); 
         }
 
-        public ILogicalTreeNode LogicalTreeNode 
+        public ILogical Logical 
         {
-            get => _logicalTreeNode; 
-            set => Update(ref _logicalTreeNode, value);
+            get => _logical; 
+            set => Update(ref _logical, value);
         }
 
         public override object Copy(IDictionary<object, object> shared)
@@ -37,14 +37,14 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is ISensorState sensorData)
+                if (Logical.State is ISensorState sensorData)
                 {
                     if (sensorData.Enable == true)
                     {
-                        var rotationNode = (ILogicalTreeNode)LogicalTreeNode.Owner;
+                        var rotationNode = (ILogical)Logical.Owner;
                         if (rotationNode.State is IRotationState /*rotationData*/)
                         {
-                            var orbitNode = (ILogicalTreeNode)rotationNode.Owner;
+                            var orbitNode = (ILogical)rotationNode.Owner;
                             if (orbitNode.State is ISatelliteState satelliteState)
                             {
                                 //   double r = orbitData.Position.Length;

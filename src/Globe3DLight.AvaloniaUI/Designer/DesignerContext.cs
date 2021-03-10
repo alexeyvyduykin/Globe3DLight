@@ -30,11 +30,11 @@ namespace Globe3DLight.AvaloniaUI.Designer
         public static ISensor Sensor { get; set; }
 
 
-        public static ILogicalTreeNode SatelliteNode { get; set; }
-        public static ILogicalTreeNode SensorNode { get; set; }
-        public static ILogicalTreeNode RotationNode { get; set; }
-        public static ILogicalTreeNode SunNode { get; set; }
-        public static ILogicalTreeNode J2000Node { get; set; }
+        public static ILogical SatelliteNode { get; set; }
+        public static ILogical SensorNode { get; set; }
+        public static ILogical RotationNode { get; set; }
+        public static ILogical SunNode { get; set; }
+        public static ILogical J2000Node { get; set; }
 
         public static SatelliteData SatelliteData { get; set; }
         public static SensorData SensorData { get; set; }
@@ -151,14 +151,14 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Frames
 
-            SatelliteNode = factory.CreateLogicalTreeNode("fr_orbit_satellite1", SatelliteAnimator);
-            RotationNode = factory.CreateLogicalTreeNode("fr_rotation_satellite1", RotationAnimator);
+            SatelliteNode = factory.CreateLogical("fr_orbit_satellite1", SatelliteAnimator);
+            RotationNode = factory.CreateLogical("fr_rotation_satellite1", RotationAnimator);
 
             SatelliteNode.AddChild(RotationNode);
 
-            SensorNode = factory.CreateLogicalTreeNode("fr_sensor1", SensorAnimator);
+            SensorNode = factory.CreateLogical("fr_sensor1", SensorAnimator);
 
-            SunNode = factory.CreateLogicalTreeNode("fr_sun", SunAnimator);
+            SunNode = factory.CreateLogical("fr_sun", SunAnimator);
 
             // Scenario objects
 
@@ -167,7 +167,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             Sensor = objFactory.CreateSensor("Sensor1", null);
 
             Project.AddChildFrame(Project.CurrentScenario.LogicalTreeNodeRoot.FirstOrDefault(),
-                factory.CreateLogicalTreeNode("Frame1", dataFactory.CreateFrameState()));
+                factory.CreateLogical("Frame1", dataFactory.CreateFrameState()));
 
 
 

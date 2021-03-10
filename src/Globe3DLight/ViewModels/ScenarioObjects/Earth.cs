@@ -14,7 +14,7 @@ namespace Globe3DLight.ScenarioObjects
     {   
         private IEarthRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
-        private ILogicalTreeNode _logicalTreeNode;
+        private ILogical _logical;
 
         public IEarthRenderModel RenderModel 
         {
@@ -28,10 +28,10 @@ namespace Globe3DLight.ScenarioObjects
             set => Update(ref _frameRenderModel, value);
         }
 
-        public ILogicalTreeNode LogicalTreeNode
+        public ILogical Logical
         {
-            get => _logicalTreeNode; 
-            set => Update(ref _logicalTreeNode, value); 
+            get => _logical; 
+            set => Update(ref _logical, value); 
         }
 
         public dmat4 InverseAbsoluteModel => dmat4.Identity.Inverse;
@@ -45,7 +45,7 @@ namespace Globe3DLight.ScenarioObjects
         {
             if (IsVisible == true)
             {
-                if (LogicalTreeNode.State is IJ2000State j2000Data)
+                if (Logical.State is IJ2000State j2000Data)
                 {
                     renderer.DrawFrame(dc, FrameRenderModel, j2000Data.ModelMatrix, scene);
 

@@ -46,10 +46,10 @@ namespace Globe3DLight
         bool Invalidate(IRenderContext renderer);
     }
 
-    public interface IDrawableCollection
-    {
-        void DrawShapeCollection(object dc, IRenderContext renderer, ISceneState scene);
+    //public interface IDrawableCollection
+    //{
+    //    void DrawShapeCollection(object dc, IRenderContext renderer, ISceneState scene);
 
-        bool Invalidate(IRenderContext renderer);
-    }
+    //    bool Invalidate(IRenderContext renderer);
+    //}
 }

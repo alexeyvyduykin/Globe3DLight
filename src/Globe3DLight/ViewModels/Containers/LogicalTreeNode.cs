@@ -8,9 +8,9 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Containers
 {
-    public class LogicalTreeNode : ObservableObject, ILogicalTreeNode
-    {       
-        private ImmutableArray<ILogicalTreeNode> _children;    
+    public class Logical : ObservableObject, ILogical
+    {
+        private ImmutableArray<IObservableObject> _children;
         private bool _isExpanded = true;
         private IState _state;
 
@@ -20,20 +20,7 @@ namespace Globe3DLight.Containers
             set => Update(ref _isExpanded, value);
         }
 
-        //public new string Name
-        //{
-        //    get => (this.Data != null) ? this.Data.Name : string.Empty;
-        //    set
-        //    {
-        //        if (this.Data != null)
-        //        {
-        //            this.Data.Name = value;
-        //        }
-        //    }
-        //}
-
-
-        public ImmutableArray<ILogicalTreeNode> Children
+        public ImmutableArray<IObservableObject> Children
         {
             get => _children;
             set => Update(ref _children, value);
@@ -62,7 +49,6 @@ namespace Globe3DLight.Containers
             return isDirty;
         }
 
-        /// <inheritdoc/>
         public override void Invalidate()
         {
             base.Invalidate();
@@ -75,7 +61,56 @@ namespace Globe3DLight.Containers
             }
         }
 
+        public override object Copy(IDictionary<object, object> shared)
+        {
+            throw new NotImplementedException();
+        }
+    }
 
+    public class LogicalCollection : ObservableObject, ILogicalCollection
+    {
+        private ImmutableArray<ILogical> _values;
+        private bool _isExpanded = true;
+        private IEnumerable<IState> _state;
+
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set => Update(ref _isExpanded, value);
+        }
+
+        public IEnumerable<IState> State
+        {
+            get => _state;
+            set => Update(ref _state, value);
+        }
+        public ImmutableArray<ILogical> Values
+        {
+            get => _values;
+            set => Update(ref _values, value);
+        }
+
+        public override bool IsDirty()
+        {
+            var isDirty = base.IsDirty();
+
+            foreach (var st in State)
+            {
+                isDirty |= st.IsDirty();
+            }
+
+            return isDirty;
+        }
+
+        public override void Invalidate()
+        {
+            base.Invalidate();
+      
+            foreach (var st in State)
+            {
+                st.Invalidate();
+            }
+        }
 
         public override object Copy(IDictionary<object, object> shared)
         {

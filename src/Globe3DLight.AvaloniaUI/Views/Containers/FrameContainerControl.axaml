@@ -33,7 +33,7 @@
         </Style>
       </TreeView.Styles>
       <TreeView.DataTemplates>
-        <TreeDataTemplate DataType="Containers:ILogicalTreeNode"
+        <TreeDataTemplate DataType="Containers:ILogical"
                   ItemsSource="{Binding Children}" x:CompileBindings="False">
           <TextBlock Text="{Binding Name}" Background="Transparent">
             <TextBlock.ContextMenu>

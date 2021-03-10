@@ -34,18 +34,68 @@ namespace Globe3DLight.ScenarioObjects
             {
                 var proto = Values.FirstOrDefault();
 
-                if (proto is IDrawableCollection obj)
+                if (proto is IGroundObject groundObject)
                 {
-                    obj.DrawShapeCollection(dc, renderer, scene);
-                }
-                else
-                {
-                    foreach (IDrawable item in Values)
+                    if (groundObject.IsVisible == true)
                     {
-                        //item.RenderModel = RenderModel;
-                        item.DrawShape(dc, renderer, scene);
+                        if (groundObject.Logical.State is IGroundObjectState groundObjectState)
+                        {
+                            var collection = (ILogicalCollection)groundObject.Logical.Owner;
+                            var parent = (ILogical)collection.Owner;
+                            if (parent.State is IJ2000State j2000Data)
+                            {
+                                var m = j2000Data.ModelMatrix;
 
-                        //renderer.DrawGroundObject(dc, RenderModel, matrix, scene);
+                                //foreach (var item in collection.Values)
+                                //{
+                                //    var matrix = m * ((IGroundObjectState)item.State).ModelMatrix;
+
+                                //    renderer.DrawGroundObject(dc, groundObject.RenderModel, matrix, scene);
+                                //}
+
+                                var matrices = collection.Values.Select(s => m * ((IGroundObjectState)s.State).ModelMatrix);
+                                renderer.DrawGroundObjectList(dc, groundObject.RenderModel, matrices, scene);
+                            }
+                        }
+                    }
+                }
+                else if(proto is IGroundStation groundStation)
+                {
+                    if (groundStation.IsVisible == true)
+                    {
+                        if (groundStation.Logical.State is IGroundStationState groundStationData)
+                        {
+                            var collection = (ILogicalCollection)groundStation.Logical.Owner;
+                            var parent = (ILogical)collection.Owner;
+                            if (parent.State is IJ2000State j2000Data)
+                            {
+                                var m = j2000Data.ModelMatrix;
+
+                                foreach (var item in collection.Values)
+                                {
+                                    var matrix = m * ((IGroundStationState)item.State).ModelMatrix;
+
+                                    renderer.DrawGroundStation(dc, groundStation.RenderModel, matrix, scene);
+                                }
+                            }
+                        }
+                    }
+                }
+                else if (proto is IRetranslator retranslator)
+                {
+                    if (retranslator.IsVisible == true)
+                    {
+                        if (retranslator.Logical.State is IRetranslatorState retranslatorData)
+                        {
+                            var collection = (ILogicalCollection)retranslator.Logical.Owner;
+
+                            foreach (var item in collection.Values)
+                            {
+                                var matrix = ((IRetranslatorState)item.State).ModelMatrix;
+
+                                renderer.DrawRetranslator(dc, retranslator.RenderModel, matrix, scene);
+                            }
+                        }
                     }
                 }
             }

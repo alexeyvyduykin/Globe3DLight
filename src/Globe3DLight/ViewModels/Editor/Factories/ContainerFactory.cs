@@ -67,14 +67,17 @@ namespace Globe3DLight.Editor
 
             var fr_earth = (Name: data.Earth.Name, Node: dataFactory.CreateEarthNode(root, data.Earth));
             var fr_sun = (Name: data.Sun.Name, Node: dataFactory.CreateSunNode(root, data.Sun));
-            var fr_gss = data.GroundStations.ToDictionary(s => s.Name, s => dataFactory.CreateGroundStationNode(fr_earth.Node, s));
-            var fr_gos = data.GroundObjects.ToDictionary(s => s.Name, s => dataFactory.CreateGroundObjectNode(fr_earth.Node, s));
+            var fr_gs_collection = dataFactory.CreateCollectionNode("fr_gs_collection1", fr_earth.Node);
+            var fr_go_collection = dataFactory.CreateCollectionNode("fr_go_collection1", fr_earth.Node);
+            var fr_rtr_collection = dataFactory.CreateCollectionNode("fr_rtr_collection1", root);
+            var fr_gss = data.GroundStations.ToDictionary(s => s.Name, s => dataFactory.CreateGroundStationNode(fr_gs_collection, s));
+            var fr_gos = data.GroundObjects.ToDictionary(s => s.Name, s => dataFactory.CreateGroundObjectNode(fr_go_collection, s));
             var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(fr_earth.Node, s));
             var fr_rotations = data.SatelliteRotations.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateRotationNode(fr_sats[s.SatelliteName], s));
             var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateSensorNode(fr_rotations[s.SatelliteName], s));
             var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateAntennaNode(fr_rotations[s.SatelliteName], s));            
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
-            var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(root, s));
+            var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(fr_rtr_collection, s));
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
@@ -120,11 +123,10 @@ namespace Globe3DLight.Editor
             {
                 satellites[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[satellites[i].Name]));
             }
-
-
-            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundStations", gss));
-            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundObjects", gos));
-            objBuilder.Add(objFactory.CreateScenarioObjectList("Retranslators", rtrs));
+            
+            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundObjects", fr_go_collection, gos));
+            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundStations", fr_gs_collection, gss));
+            objBuilder.Add(objFactory.CreateScenarioObjectList("Retranslators", fr_rtr_collection, rtrs));
 
             objBuilder.AddRange(satellites);
 
@@ -146,11 +148,11 @@ namespace Globe3DLight.Editor
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var sceneFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
-            var root = factory.CreateLogicalTreeNode("Root", dataFactory.CreateFrameState());
+            var root = factory.CreateLogical("Root", dataFactory.CreateFrameState());
 
             //        root.Owner = scenario; ????????????????????????????????
 
-            scenario.LogicalTreeNodeRoot = ImmutableArray.Create<ILogicalTreeNode>(root);
+            scenario.LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(root);
             scenario.CurrentLogicalTreeNode = scenario.LogicalTreeNodeRoot.FirstOrDefault();
 
             scenario.SceneState = sceneFactory.CreateSceneState();
@@ -180,21 +182,21 @@ namespace Globe3DLight.Editor
             var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
 
             var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
-            var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(begin, 0.0));
+            var fr_j2000 = factory.CreateLogical("fr_j2000", dataFactory.CreateJ2000Animator(begin, 0.0));
             root.AddChild(fr_j2000);
 
             var fr_sun = dataFactory.CreateSunNode(root, Path.Combine(path, @"data\fr_sun.json"));
 
 
-            var fr_gs01 = factory.CreateLogicalTreeNode("fr_gs01", dataFactory.CreateGroundStationState(36.26, 54.97, 0.223, 6371.0));
-            var fr_gs02 = factory.CreateLogicalTreeNode("fr_gs02", dataFactory.CreateGroundStationState(30.201389, 59.712777, 0.128, 6371.0));
-            var fr_gs03 = factory.CreateLogicalTreeNode("fr_gs03", dataFactory.CreateGroundStationState(37.0532, 55.5856, 0.204, 6371.0));
-            var fr_gs04 = factory.CreateLogicalTreeNode("fr_gs04", dataFactory.CreateGroundStationState(107.945, 51.87111, 0.621, 6371.0));
-            var fr_gs05 = factory.CreateLogicalTreeNode("fr_gs05", dataFactory.CreateGroundStationState(37.9678, 55.9494, 0.157, 6371.0));
-            var fr_gs06 = factory.CreateLogicalTreeNode("fr_gs06", dataFactory.CreateGroundStationState(131.7575, 44.0247, 0.080, 6371.0));
-            var fr_gs07 = factory.CreateLogicalTreeNode("fr_gs07", dataFactory.CreateGroundStationState(136.7536, 50.6856, 0.222, 6371.0));
-            var fr_gs08 = factory.CreateLogicalTreeNode("fr_gs08", dataFactory.CreateGroundStationState(38.39, 55.1536111, 0.189, 6371.0));
-            var fr_gs09 = factory.CreateLogicalTreeNode("fr_gs09", dataFactory.CreateGroundStationState(107.934166, 51.864722, 0.633, 6371.0));
+            var fr_gs01 = factory.CreateLogical("fr_gs01", dataFactory.CreateGroundStationState(36.26, 54.97, 0.223, 6371.0));
+            var fr_gs02 = factory.CreateLogical("fr_gs02", dataFactory.CreateGroundStationState(30.201389, 59.712777, 0.128, 6371.0));
+            var fr_gs03 = factory.CreateLogical("fr_gs03", dataFactory.CreateGroundStationState(37.0532, 55.5856, 0.204, 6371.0));
+            var fr_gs04 = factory.CreateLogical("fr_gs04", dataFactory.CreateGroundStationState(107.945, 51.87111, 0.621, 6371.0));
+            var fr_gs05 = factory.CreateLogical("fr_gs05", dataFactory.CreateGroundStationState(37.9678, 55.9494, 0.157, 6371.0));
+            var fr_gs06 = factory.CreateLogical("fr_gs06", dataFactory.CreateGroundStationState(131.7575, 44.0247, 0.080, 6371.0));
+            var fr_gs07 = factory.CreateLogical("fr_gs07", dataFactory.CreateGroundStationState(136.7536, 50.6856, 0.222, 6371.0));
+            var fr_gs08 = factory.CreateLogical("fr_gs08", dataFactory.CreateGroundStationState(38.39, 55.1536111, 0.189, 6371.0));
+            var fr_gs09 = factory.CreateLogical("fr_gs09", dataFactory.CreateGroundStationState(107.934166, 51.864722, 0.633, 6371.0));
 
             fr_j2000.AddChild(fr_gs01);
             fr_j2000.AddChild(fr_gs02);

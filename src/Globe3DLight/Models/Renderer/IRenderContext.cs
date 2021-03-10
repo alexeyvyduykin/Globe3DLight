@@ -22,9 +22,13 @@ namespace Globe3DLight.Renderer
         
         void DrawOrbit(object dc, IOrbitRenderModel orbit, dmat4 modelMatrix, ISceneState scene);
         
-        void DrawGroundStations(object dc, IGroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene);
-    
-        void DrawGroundObjects(object dc, IGroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene);
+        void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene);
+       
+        void DrawGroundStationList(object dc, IGroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene);
+
+        void DrawGroundObject(object dc, IGroundObjectRenderModel groundobject, dmat4 modelMatrix, ISceneState scene);
+      
+        void DrawGroundObjectList(object dc, IGroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene);
 
         void DrawRetranslator(object dc, IRetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene);
         

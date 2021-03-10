@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.Immutable;
+using Globe3DLight.Containers;
 
 namespace Globe3DLight.ScenarioObjects
 {
     public abstract class BaseScenarioObject : ObservableObject, IScenarioObject
     {
         private ImmutableArray<IScenarioObject> _children;
+        private ILogicalCollection _logicalCollection;
         private bool _isVisible;
         private bool _isExpanded;
 
@@ -15,6 +17,13 @@ namespace Globe3DLight.ScenarioObjects
         {
             get => _children;
             set => Update(ref _children, value);
+        }
+       
+
+        public ILogicalCollection LogicalCollection
+        {
+            get => _logicalCollection;
+            set => Update(ref _logicalCollection, value);
         }
 
         public bool IsVisible
