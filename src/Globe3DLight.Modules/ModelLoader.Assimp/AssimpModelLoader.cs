@@ -16,9 +16,7 @@ namespace Globe3DLight.ModelLoader.Assimp
         private readonly IServiceProvider _serviceProvider;
         private readonly IFactory _factory;
 
-
-        IList<IMesh> _meshes;
-
+        private IList<IMesh> _meshes;
 
         public AssimpModelLoader(IServiceProvider serviceProvider)
         {
@@ -40,16 +38,15 @@ namespace Globe3DLight.ModelLoader.Assimp
                 //     Flips face winding order from CCW (default) to CW.
                 // FlipWindingOrder = 16777216,
 
-                using (var importer = new A.AssimpContext())
-                {
-                    scene = importer.ImportFile(
-                        path,
-                        A.PostProcessSteps.PreTransformVertices |
-                        A.PostProcessSteps.Triangulate |
-                        A.PostProcessSteps.GenerateSmoothNormals |
-                        A.PostProcessSteps.CalculateTangentSpace | 
-                        A.PostProcessSteps.FlipWindingOrder);
-                }
+                using var importer = new A.AssimpContext();
+                
+                scene = importer.ImportFile(
+                    path,
+                    A.PostProcessSteps.PreTransformVertices |
+                    A.PostProcessSteps.Triangulate |
+                    A.PostProcessSteps.GenerateSmoothNormals |
+                    A.PostProcessSteps.CalculateTangentSpace |
+                    A.PostProcessSteps.FlipWindingOrder);
             }
             catch (Exception)
             {
@@ -274,44 +271,42 @@ namespace Globe3DLight.ModelLoader.Assimp
         //{
         //    return new vec4(color.R, color.G, color.B, color.A);
         //}
-        int ggg;
-
+   
         //-----------------------------------------------
 
-        private string _directory;
+        //private string _directory;
         private readonly IList<IAMesh> _ameshes;
 
-        private IList<Texture> texturesLoaded = new List<Texture>();
+        private readonly IList<Texture> _texturesLoaded = new List<Texture>();
 
         public IEnumerable<IAMesh> AMeshes => _ameshes;
 
 
-        private bool withTextureMode = false;
+        private bool _withTextureMode = false;
 
         public bool LoadFromFile(string path, bool withTexture)
         {
-            this.withTextureMode = withTexture;
+            _withTextureMode = withTexture;
 
             A.Scene scene;
 
             try
             {
-                using (var importer = new A.AssimpContext())
-                {
-                    scene = importer.ImportFile(
-                        path,
-                        A.PostProcessSteps.PreTransformVertices |
-                        A.PostProcessSteps.Triangulate |
-                        A.PostProcessSteps.GenerateSmoothNormals |
-                        A.PostProcessSteps.CalculateTangentSpace);
-                }
+                using var importer = new A.AssimpContext();
+
+                scene = importer.ImportFile(
+                    path,
+                    A.PostProcessSteps.PreTransformVertices |
+                    A.PostProcessSteps.Triangulate |
+                    A.PostProcessSteps.GenerateSmoothNormals |
+                    A.PostProcessSteps.CalculateTangentSpace);
             }
             catch (Exception)
             {
                 return false;
             }
 
-            _directory = Path.GetDirectoryName(path);
+            //_directory = Path.GetDirectoryName(path);
 
             _ameshes.Clear();
 
@@ -331,7 +326,7 @@ namespace Globe3DLight.ModelLoader.Assimp
                 // The scene contains all the data, node is just to keep stuff organized (like relations between nodes).
                 var mesh = scene.Meshes[node.MeshIndices[i]];
 
-                if (withTextureMode == true)
+                if (_withTextureMode == true)
                 {
                     _ameshes.Add(processMesh1__(mesh, scene));
                 }
@@ -347,21 +342,21 @@ namespace Globe3DLight.ModelLoader.Assimp
             }
         }
 
-        private IAMesh processMesh__(A.Mesh aMesh, A.Scene aScene)
+        private IAMesh processMesh__(A.Mesh aMesh, A.Scene _)
         {
             var positionsAttribute = _factory.CreateVertexAttributePosition<vec3>(VertexAttributeType.FloatVector3);
             var normalsAttribute = _factory.CreateVertexAttributeNormal<vec3>(VertexAttributeType.FloatVector3);
             var texCoordsAttribute = _factory.CreateVertexAttributeTextCoord<vec2>(VertexAttributeType.FloatVector2);
             var tangentsAttribute = _factory.CreateVertexAttributeTangent<vec3>(VertexAttributeType.FloatVector3);
 
-            IList<vec3> positions = positionsAttribute.Values;
-            IList<vec3> normals = normalsAttribute.Values;
-            IList<vec2> texCoords = texCoordsAttribute.Values;
-            IList<vec3> tangents = tangentsAttribute.Values;
+            var positions = positionsAttribute.Values;
+            var normals = normalsAttribute.Values;
+            var texCoords = texCoordsAttribute.Values;
+            var tangents = tangentsAttribute.Values;
 
             var indicesAttr = _factory.CreateIndicesUnsignedShort();// indicesBase.Values;
 
-            IList<ushort> indices = indicesAttr.Values;
+            var indices = indicesAttr.Values;
 
             // Walk through each of the mesh's vertices
             for (int i = 0; i < aMesh.VertexCount; i++)
@@ -472,7 +467,7 @@ namespace Globe3DLight.ModelLoader.Assimp
                 material.Shininess = 20.0f;// aMaterial.Shininess;
 
                 // 1. Diffuse maps
-                List<Texture> diffuseMaps = loadMaterialTextures(aMaterial, A.TextureType.Diffuse, "u_textureDiffuse");
+                var diffuseMaps = loadMaterialTextures(aMaterial, A.TextureType.Diffuse, "u_textureDiffuse");
                 //textures.InsertRange(textures.Count, diffuseMaps);
                 if (diffuseMaps.Count != 0)
                     material.MapDiffuse = diffuseMaps[0];
@@ -528,29 +523,32 @@ namespace Globe3DLight.ModelLoader.Assimp
             List<Texture> textures = new List<Texture>();
             for (int i = 0; i < mat.GetMaterialTextureCount(type); i++)
             {
-                mat.GetMaterialTexture(type, i, out A.TextureSlot str);
+                mat.GetMaterialTexture(type, i, out var str);
                 // Check if texture was loaded before and if so, continue to next iteration: skip loading a new texture
                 bool skip = false;
-                for (int j = 0; j < texturesLoaded.Count; j++)
+                for (int j = 0; j < _texturesLoaded.Count; j++)
                 {
-                    if (texturesLoaded[j].Path == str.FilePath)
+                    if (_texturesLoaded[j].Path == str.FilePath)
                     {
-                        textures.Add(texturesLoaded[j]);
+                        textures.Add(_texturesLoaded[j]);
                         skip = true; // A texture with the same filepath has already been loaded, continue to next one. (optimization)
                         break;
                     }
                 }
 
                 if (skip == false)
-                {   // If texture hasn't been loaded already, load it
-                    Texture texture = new Texture();
+                {   
+                    // If texture hasn't been loaded already, load it
+                    var texture = new Texture()
+                    {
+                        Type = typeName,
+                        Path = str.FilePath,
+                    };
 
                     //var temp = "resources/textures/satellite/" + str.FilePath;
                     // !!!!!!!                   texture.Id = load2DTexture(temp/*str.FilePath*/, OpenTK.Graphics.OpenGL.TextureWrapMode.Repeat, true);// textureFromFile(str.FilePath, directory);
-                    texture.Type = typeName;
-                    texture.Path = str.FilePath;
                     textures.Add(texture);
-                    texturesLoaded.Add(texture);  // Store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
+                    _texturesLoaded.Add(texture);  // Store it as texture loaded for entire model, to ensure we won't unnecesery load duplicate textures.
                 }
             }
             return textures;

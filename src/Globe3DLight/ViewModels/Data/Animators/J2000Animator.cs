@@ -21,12 +21,10 @@ namespace Globe3DLight.Data
         private dmat4 _modelMatrix;
         private DateTime _epoch;
 
-        private J2000Data _data;
-
         public J2000Animator(J2000Data data)
         {
-            _angleDeg0 = _data.AngleDeg;
-            _epoch = _data.Epoch;
+            _angleDeg0 = data.AngleDeg;
+            _epoch = data.Epoch;
         }
 
         public dmat4 ModelMatrix 

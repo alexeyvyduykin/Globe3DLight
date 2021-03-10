@@ -15,7 +15,7 @@ namespace Globe3DLight.Renderer
 
         int Count { get; }
 
-        void CopyFromSystemMemory<T>(T[] bufferInSystemMemory) where T : struct;
+        //void CopyFromSystemMemory<T>(T[] bufferInSystemMemory) where T : struct;
 
 
         void CopyFromSystemMemory<T>(T[] bufferInSystemMemory, int destinationOffsetInBytes) where T : struct;

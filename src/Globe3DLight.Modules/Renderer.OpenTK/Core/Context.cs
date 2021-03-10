@@ -14,14 +14,14 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
     internal class Context
     {
-        private Device _device;
+        private readonly Device _device;
 
         public Context(/*GraphicsWindow window, int width, int height*/)
         {
-            renderState = new RenderState();
-            textureUnits = new TextureUnits();
+            _renderState = new RenderState();
+            _textureUnits = new TextureUnits();
 
-            ForceApplyRenderState(renderState);
+            ForceApplyRenderState(_renderState);
 
             _device = new Device();
 
@@ -138,7 +138,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                         indices[j] = meshIndices[j];
                     }
 
-                    IndexBuffer indexBuffer = _device.CreateIndexBuffer(usageHint, indices.Length * sizeof(ushort));
+                    var indexBuffer = _device.CreateIndexBuffer(usageHint, indices.Length * sizeof(ushort));
                     indexBuffer.CopyFromSystemMemory(indices);
                     va.IndexBuffer = indexBuffer;
                 }
@@ -152,7 +152,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                         indices[j] = meshIndices[j];
                     }
 
-                    IndexBuffer indexBuffer = _device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));
+                    var indexBuffer = _device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));
                     indexBuffer.CopyFromSystemMemory(indices);
                     va.IndexBuffer = indexBuffer;
                 }
@@ -174,7 +174,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
                     
-                    VertexBuffer vertexBuffer =
+                    var vertexBuffer =
                         _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<float>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] = 
@@ -186,7 +186,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
 
-                    VertexBuffer vertexBuffer =
+                    var vertexBuffer =
                         _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<vec2>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] =
@@ -198,7 +198,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
 
-                    VertexBuffer vertexBuffer =
+                    var vertexBuffer =
                         _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<vec3>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] =
@@ -210,7 +210,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
 
-                    VertexBuffer vertexBuffer =
+                    var vertexBuffer =
                         _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<vec4>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] =
@@ -316,67 +316,67 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         private void ApplyPrimitiveRestart(PrimitiveRestart primitiveRestart)
         {
-            if (renderState.PrimitiveRestart.Enabled != primitiveRestart.Enabled)
+            if (_renderState.PrimitiveRestart.Enabled != primitiveRestart.Enabled)
             {
                 Enable(A.EnableCap.PrimitiveRestart, primitiveRestart.Enabled);
-                renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
+                _renderState.PrimitiveRestart.Enabled = primitiveRestart.Enabled;
             }
 
             if (primitiveRestart.Enabled)
             {
-                if (renderState.PrimitiveRestart.Index != primitiveRestart.Index)
+                if (_renderState.PrimitiveRestart.Index != primitiveRestart.Index)
                 {
                     A.GL.PrimitiveRestartIndex(primitiveRestart.Index);
-                    renderState.PrimitiveRestart.Index = primitiveRestart.Index;
+                    _renderState.PrimitiveRestart.Index = primitiveRestart.Index;
                 }
             }
         }
 
         private void ApplyFacetCulling(FacetCulling facetCulling)
         {
-            if (renderState.FacetCulling.Enabled != facetCulling.Enabled)
+            if (_renderState.FacetCulling.Enabled != facetCulling.Enabled)
             {
                 Enable(A.EnableCap.CullFace, facetCulling.Enabled);
-                renderState.FacetCulling.Enabled = facetCulling.Enabled;
+                _renderState.FacetCulling.Enabled = facetCulling.Enabled;
             }
 
             if (facetCulling.Enabled)
             {
-                if (renderState.FacetCulling.Face != facetCulling.Face)
+                if (_renderState.FacetCulling.Face != facetCulling.Face)
                 {
                     A.GL.CullFace(facetCulling.Face);
-                    renderState.FacetCulling.Face = facetCulling.Face;
+                    _renderState.FacetCulling.Face = facetCulling.Face;
                 }
 
-                if (renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
+                if (_renderState.FacetCulling.FrontFaceWindingOrder != facetCulling.FrontFaceWindingOrder)
                 {
                     A.GL.FrontFace(facetCulling.FrontFaceWindingOrder);
-                    renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
+                    _renderState.FacetCulling.FrontFaceWindingOrder = facetCulling.FrontFaceWindingOrder;
                 }
             }
         }
 
         private void ApplyProgramPointSize(ProgramPointSize programPointSize)
         {
-            if (renderState.ProgramPointSize != programPointSize)
+            if (_renderState.ProgramPointSize != programPointSize)
             {
                 Enable(A.EnableCap.ProgramPointSize, programPointSize == ProgramPointSize.Enabled);
-                renderState.ProgramPointSize = programPointSize;
+                _renderState.ProgramPointSize = programPointSize;
             }
         }
 
         private void ApplyRasterizationMode(A.PolygonMode rasterizationMode)
         {
-            if (renderState.RasterizationMode != rasterizationMode)
+            if (_renderState.RasterizationMode != rasterizationMode)
             {
                 A.GL.PolygonMode(A.MaterialFace.FrontAndBack, rasterizationMode);
-                renderState.RasterizationMode = rasterizationMode;
+                _renderState.RasterizationMode = rasterizationMode;
             }
         }
 
         private void ApplyScissorTest(ScissorTest scissorTest)
         {
-            Rectangle rectangle = scissorTest.Rectangle;
+            var rectangle = scissorTest.Rectangle;
 
             if (rectangle.Width < 0)
             {
@@ -392,18 +392,18 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     "renderState");
             }
 
-            if (renderState.ScissorTest.Enabled != scissorTest.Enabled)
+            if (_renderState.ScissorTest.Enabled != scissorTest.Enabled)
             {
                 Enable(A.EnableCap.ScissorTest, scissorTest.Enabled);
-                renderState.ScissorTest.Enabled = scissorTest.Enabled;
+                _renderState.ScissorTest.Enabled = scissorTest.Enabled;
             }
 
             if (scissorTest.Enabled)
             {
-                if (renderState.ScissorTest.Rectangle != scissorTest.Rectangle)
+                if (_renderState.ScissorTest.Rectangle != scissorTest.Rectangle)
                 {
                     A.GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
-                    renderState.ScissorTest.Rectangle = scissorTest.Rectangle;
+                    _renderState.ScissorTest.Rectangle = scissorTest.Rectangle;
                 }
             }
         }
@@ -453,18 +453,18 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         private void ApplyDepthTest(DepthTest depthTest)
         {
-            if (renderState.DepthTest.Enabled != depthTest.Enabled)
+            if (_renderState.DepthTest.Enabled != depthTest.Enabled)
             {
                 Enable(A.EnableCap.DepthTest, depthTest.Enabled);
-                renderState.DepthTest.Enabled = depthTest.Enabled;
+                _renderState.DepthTest.Enabled = depthTest.Enabled;
             }
 
             if (depthTest.Enabled)
             {
-                if (renderState.DepthTest.Function != depthTest.Function)
+                if (_renderState.DepthTest.Function != depthTest.Function)
                 {
                     A.GL.DepthFunc(depthTest.Function);
-                    renderState.DepthTest.Function = depthTest.Function;
+                    _renderState.DepthTest.Function = depthTest.Function;
                 }
             }
         }
@@ -473,42 +473,38 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         {
             if (depthRange.Near < 0.0 || depthRange.Near > 1.0)
             {
-                throw new ArgumentOutOfRangeException(
-                    "renderState.DepthRange.Near must be between zero and one.",
-                    "depthRange");
+                throw new ArgumentOutOfRangeException(nameof(depthRange), "renderState.DepthRange.Near must be between zero and one.");
             }
 
             if (depthRange.Far < 0.0 || depthRange.Far > 1.0)
             {
-                throw new ArgumentOutOfRangeException(
-                    "renderState.DepthRange.Far must be between zero and one.",
-                    "depthRange");
+                throw new ArgumentOutOfRangeException(nameof(depthRange), "renderState.DepthRange.Far must be between zero and one.");
             }
 
-            if ((renderState.DepthRange.Near != depthRange.Near) ||
-                (renderState.DepthRange.Far != depthRange.Far))
+            if ((_renderState.DepthRange.Near != depthRange.Near) ||
+                (_renderState.DepthRange.Far != depthRange.Far))
             {
                 A.GL.DepthRange(depthRange.Near, depthRange.Far);
 
-                renderState.DepthRange.Near = depthRange.Near;
-                renderState.DepthRange.Far = depthRange.Far;
+                _renderState.DepthRange.Near = depthRange.Near;
+                _renderState.DepthRange.Far = depthRange.Far;
             }
         }
 
         private void ApplyBlending(Blending blending)
         {
-            if (renderState.Blending.Enabled != blending.Enabled)
+            if (_renderState.Blending.Enabled != blending.Enabled)
             {
                 Enable(A.EnableCap.Blend, blending.Enabled);
-                renderState.Blending.Enabled = blending.Enabled;
+                _renderState.Blending.Enabled = blending.Enabled;
             }
 
             if (blending.Enabled)
             {
-                if ((renderState.Blending.SourceRGBFactor != blending.SourceRGBFactor) ||
-                    (renderState.Blending.DestinationRGBFactor != blending.DestinationRGBFactor) ||
-                    (renderState.Blending.SourceAlphaFactor != blending.SourceAlphaFactor) ||
-                    (renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
+                if ((_renderState.Blending.SourceRGBFactor != blending.SourceRGBFactor) ||
+                    (_renderState.Blending.DestinationRGBFactor != blending.DestinationRGBFactor) ||
+                    (_renderState.Blending.SourceAlphaFactor != blending.SourceAlphaFactor) ||
+                    (_renderState.Blending.DestinationAlphaFactor != blending.DestinationAlphaFactor))
                 {
                     A.GL.BlendFuncSeparate(
                         blending.SourceRGBFactor,
@@ -516,10 +512,10 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                         blending.SourceAlphaFactor,
                         blending.DestinationAlphaFactor);
 
-                    renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
-                    renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
-                    renderState.Blending.SourceAlphaFactor = blending.SourceAlphaFactor;
-                    renderState.Blending.DestinationAlphaFactor = blending.DestinationAlphaFactor;
+                    _renderState.Blending.SourceRGBFactor = blending.SourceRGBFactor;
+                    _renderState.Blending.DestinationRGBFactor = blending.DestinationRGBFactor;
+                    _renderState.Blending.SourceAlphaFactor = blending.SourceAlphaFactor;
+                    _renderState.Blending.DestinationAlphaFactor = blending.DestinationAlphaFactor;
                 }
 
                 A.GL.BlendFuncSeparate(
@@ -528,19 +524,19 @@ namespace Globe3DLight.Renderer.OpenTK.Core
     blending.SourceAlphaFactor,
     blending.DestinationAlphaFactor);
 
-                if ((renderState.Blending.RGBEquation != blending.RGBEquation) ||
-                    (renderState.Blending.AlphaEquation != blending.AlphaEquation))
+                if ((_renderState.Blending.RGBEquation != blending.RGBEquation) ||
+                    (_renderState.Blending.AlphaEquation != blending.AlphaEquation))
                 {
                     A.GL.BlendEquationSeparate(blending.RGBEquation, blending.AlphaEquation);
 
-                    renderState.Blending.RGBEquation = blending.RGBEquation;
-                    renderState.Blending.AlphaEquation = blending.AlphaEquation;
+                    _renderState.Blending.RGBEquation = blending.RGBEquation;
+                    _renderState.Blending.AlphaEquation = blending.AlphaEquation;
                 }
 
-                if (renderState.Blending.Color != blending.Color)
+                if (_renderState.Blending.Color != blending.Color)
                 {
                     A.GL.BlendColor(blending.Color);
-                    renderState.Blending.Color = blending.Color;
+                    _renderState.Blending.Color = blending.Color;
                 }
                
             }
@@ -548,19 +544,19 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         private void ApplyColorMask(ColorMask colorMask)
         {
-            if (renderState.ColorMask != colorMask)
+            if (_renderState.ColorMask != colorMask)
             {
                 A.GL.ColorMask(colorMask.Red, colorMask.Green, colorMask.Blue, colorMask.Alpha);
-                renderState.ColorMask = colorMask;
+                _renderState.ColorMask = colorMask;
             }
         }
 
         private void ApplyDepthMask(bool depthMask)
         {
-            if (renderState.DepthMask != depthMask)
+            if (_renderState.DepthMask != depthMask)
             {
                 A.GL.DepthMask(depthMask);
-                renderState.DepthMask = depthMask;
+                _renderState.DepthMask = depthMask;
             }
         }
 
@@ -592,37 +588,37 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             ApplyDepthMask(renderState.DepthMask);
         }
 
-        public void ApplyVertexArray(VertexArray vertexArray)
+        public static void ApplyVertexArray(VertexArray vertexArray)
         {
             vertexArray.Bind();
             vertexArray.Clean();
         }
 
-        private void VerifyDraw(DrawState drawState, Globe3DLight.Scene.ISceneState sceneState)
+        private static void VerifyDraw(DrawState drawState, Globe3DLight.Scene.ISceneState sceneState)
         {
             if (drawState == null)
             {
-                throw new ArgumentNullException("drawState");
+                throw new ArgumentNullException(nameof(drawState));
             }
 
             if (drawState.RenderState == null)
             {
-                throw new ArgumentNullException("drawState.RenderState");
+                throw new ArgumentNullException(nameof(drawState.RenderState), "");             
             }
 
             if (drawState.ShaderProgram == null)
             {
-                throw new ArgumentNullException("drawState.ShaderProgram");
+                throw new ArgumentNullException(nameof(drawState.ShaderProgram), "");
             }
 
             if (drawState.VertexArray == null)
             {
-                throw new ArgumentNullException("drawState.VertexArray");
+                throw new ArgumentNullException(nameof(drawState.VertexArray), "");   
             }
 
             if (sceneState == null)
             {
-                throw new ArgumentNullException("sceneState");
+                throw new ArgumentNullException(nameof(sceneState));
             }
 
             //if (setFramebuffer != null)
@@ -642,21 +638,21 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             ApplyVertexArray(drawState.VertexArray);
             ApplyShaderProgram(drawState, sceneState);
 
-            textureUnits.Clean();
+            _textureUnits.Clean();
            // ApplyFramebuffer();
         }
 
-        public void ApplyShaderProgram(DrawState drawState, Globe3DLight.Scene.ISceneState sceneState)
+        public void ApplyShaderProgram(DrawState drawState, Globe3DLight.Scene.ISceneState _)
         {
-            ShaderProgram shaderProgram = drawState.ShaderProgram;
+            var shaderProgram = drawState.ShaderProgram;
 
-            if (shaderProgram != boundShaderProgram)
+            if (shaderProgram != _boundShaderProgram)
             {                
-                boundShaderProgram = shaderProgram;               
+                _boundShaderProgram = shaderProgram;               
             }
 
-            boundShaderProgram.Bind();
-            boundShaderProgram.Clean(this, drawState/*, null*//*sceneState*/);
+            _boundShaderProgram.Bind();
+            _boundShaderProgram.Clean(this, drawState/*, null*//*sceneState*/);
 
             //ShaderProgram shaderProgram = drawState.ShaderProgram;
 
@@ -669,7 +665,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             //boundShaderProgram.Clean(this, drawState, sceneState);
         }
 
-        private void ForceApplyRenderState(RenderState renderState)
+        private static void ForceApplyRenderState(RenderState renderState)
         {
   //          Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
   //          GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
@@ -715,8 +711,8 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);
 
-            VertexArray vertexArray = drawState.VertexArray;
-            IndexBuffer indexBuffer = vertexArray.IndexBuffer;
+            var vertexArray = drawState.VertexArray;
+            var indexBuffer = vertexArray.IndexBuffer;
 
             if (indexBuffer != null)
             {
@@ -734,7 +730,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         public TextureUnits TextureUnits
         {
-            get { return textureUnits; }
+            get { return _textureUnits; }
         }
 
         //private Color clearColor;
@@ -742,12 +738,12 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         //private int clearStencil;
        // private Rectangle viewport;
 
-        private RenderState renderState;
-        private ShaderProgram boundShaderProgram;
+        private readonly RenderState _renderState;
+        private ShaderProgram _boundShaderProgram;
       //  private Framebuffer boundFramebuffer;
       //  private Framebuffer setFramebuffer;
 
-        public TextureUnits textureUnits;
+        private readonly TextureUnits _textureUnits;
 
         //private GameWindow gameWindow;
        // private GraphicsWindow window;

@@ -29,13 +29,13 @@ namespace Globe3DLight.Geometry
         }
         public vec4 Specular
         {
-            get => _emission;
-            set => _emission = value;
+            get => _specular;
+            set => _specular = value;
         }
         public vec4 Emission
         {
-            get => _ambient;
-            set => _ambient = value;
+            get => _emission;
+            set => _emission = value;
         }
         public float Shininess
         {

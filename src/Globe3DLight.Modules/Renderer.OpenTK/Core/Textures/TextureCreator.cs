@@ -252,18 +252,18 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureMinFilter, (int)A.TextureMinFilter.Linear);
                 }
                 /*	does the user want clamping, or wrapping?	*/
-                if (false/*(flags & SOILFlags.TextureRepeats) != 0*/)
-                {
-                    A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapS, (int)A.TextureWrapMode.Repeat);
-                    A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapT, (int)A.TextureWrapMode.Repeat);
-                    A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapR, (int)A.TextureWrapMode.Repeat);
-                }
-                else
-                {
+                //if (false/*(flags & SOILFlags.TextureRepeats) != 0*/)
+                //{
+                //    A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapS, (int)A.TextureWrapMode.Repeat);
+                //    A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapT, (int)A.TextureWrapMode.Repeat);
+                //    A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapR, (int)A.TextureWrapMode.Repeat);
+                //}
+                //else
+                //{
                     A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapS, (int)A.TextureWrapMode.Clamp);
                     A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapT, (int)A.TextureWrapMode.Clamp);
                     A.GL.TexParameter(opengl_texture_type, A.TextureParameterName.TextureWrapR, (int)A.TextureWrapMode.Clamp);
-                }
+                //}
             }
 
             return tex_ID;

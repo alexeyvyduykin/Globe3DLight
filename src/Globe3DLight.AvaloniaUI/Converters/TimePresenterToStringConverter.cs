@@ -71,7 +71,7 @@ namespace Globe3DLight.AvaloniaUI.Converters
                 {
                     string[] parameters = parameterString.Split(new char[] { '|' });
 
-                    if (int.TryParse(parameters[0], out int min) && int.TryParse(parameters[1], out int max))
+                    if (int.TryParse(parameters[0], out _) && int.TryParse(parameters[1], out int max))
                     {
                         var _currentTimeNEW = timeInterval.CurrentTime * max / timeInterval.TimeSpan.TotalSeconds;
                         return (int)_currentTimeNEW;
@@ -119,8 +119,8 @@ namespace Globe3DLight.AvaloniaUI.Converters
         {
             throw new NotImplementedException();
 
-            if (value != null && value is ITimePresenter timePresenter)
-            {
+            //if (value != null && value is ITimePresenter timePresenter)
+            //{
                 //var _currentTimeNEW = value * Span.TotalSeconds / SliderTimeMaximum;
 
                 //StringTime = ToCurrentTime(_currentTimeNEW);
@@ -134,9 +134,9 @@ namespace Globe3DLight.AvaloniaUI.Converters
 
                 //this.Update(ref _currentTime, _currentTimeNEW);
 
-                return 22;
-            }
-            return 0;
+                //return 22;
+            //}
+            //return 0;
         }
     }
 }

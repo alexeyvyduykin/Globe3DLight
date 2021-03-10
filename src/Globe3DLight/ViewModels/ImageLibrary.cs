@@ -58,9 +58,9 @@ namespace Globe3DLight
 
         public void AddKeys(IEnumerable<(string key, string path)> pairs)
         {
-            foreach (var item in pairs)
+            foreach (var (key, path) in pairs)
             {
-                AddKey(item.key, item.path);
+                AddKey(key, path);
             }
         }
 

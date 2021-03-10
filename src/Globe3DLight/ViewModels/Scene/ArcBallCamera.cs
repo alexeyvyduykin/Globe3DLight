@@ -241,8 +241,6 @@ namespace Globe3DLight.Scene
 
     //}
 
-    class fdf { }
-
     //public class ArcballCamera : BaseCamera, IArcballCamera
     //{
     //    private dvec3 _rotateBegin;
@@ -525,9 +523,9 @@ namespace Globe3DLight.Scene
 
         public override void LookAt(dvec3 eye, dvec3 target, dvec3 up)
         {
-            this.Eye = eye;
-            this.Target = target;
-            this.Up = up;
+            Eye = eye;
+            Target = target;
+            Up = up;
             _view = dmat4.LookAt(Eye, Target, Up);
             _translation = dmat4.Translate(0.0, 0.0, -glm.Length(Eye));
             _orientation = dquat.FromMat4(_view);
@@ -536,8 +534,8 @@ namespace Globe3DLight.Scene
 
         public void Resize(int width, int height)
         {
-            this.Width = width;
-            this.Height = height;
+            Width = width;
+            Height = height;
 
             if ((double)height / (double)width >= 1.0)
             {
@@ -548,15 +546,15 @@ namespace Globe3DLight.Scene
                 width = height;
             }
 
-            this.AdjustWidth = 1.0 / ((width - 1) * 0.5);
-            this.AdjustHeight = 1.0 / ((height - 1) * 0.5);
+            AdjustWidth = 1.0 / ((width - 1) * 0.5);
+            AdjustHeight = 1.0 / ((height - 1) * 0.5);
             //   this.AspectRatio = (double)width / (double)height;
         }
 
 
         public void Zoom(double deltaZ)
         {
-            _translation = _translation * dmat4.Translate(new dvec3(0.0, 0.0, -deltaZ));
+            _translation *= dmat4.Translate(new dvec3(0.0, 0.0, -deltaZ));
             _view = _translation * _rotation;
 
             dvec3 zAxis = new dvec3(_view.m02, _view.m12, _view.m22);
@@ -571,7 +569,7 @@ namespace Globe3DLight.Scene
 
         public void RotateEnd(int x, int y)
         {
-            dquat ThisQuat = Drag(x, y);
+            var ThisQuat = Drag(x, y);
             _orientation = ThisQuat * _orientationSaved;
 
             _rotation = ToMatrixRotate(_orientation);
@@ -582,7 +580,7 @@ namespace Globe3DLight.Scene
             Eye = -zAxis * _translation.m32;
         }
 
-        private dmat4 ToMatrixRotate(dquat q)
+        private static dmat4 ToMatrixRotate(dquat q)
         {
             // Converts this quaternion to a rotation matrix.
             //

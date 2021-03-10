@@ -14,7 +14,7 @@ namespace Globe3DLight.Editor
     public class ProjectObserver : IDisposable
     {
         private readonly IProjectEditor _editor;
-        private readonly Action _invalidateContainer;    
+        //private readonly Action _invalidateContainer;    
         private readonly Action _invalidateScenario;
         private readonly Action _invalidateShapes;
         private readonly Action _invalidateCamera;
@@ -25,7 +25,7 @@ namespace Globe3DLight.Editor
             {
                 _editor = editor;
 
-                _invalidateContainer = () => { };            
+                //_invalidateContainer = () => { };            
                 _invalidateScenario = () => Invalidate();
                 _invalidateShapes = () => Invalidate();
                 _invalidateCamera = () => InvalidateCamera();
@@ -45,12 +45,12 @@ namespace Globe3DLight.Editor
         {
             if (_editor?.Project?.CurrentScenario != null)
             {
-                if (_editor.Project.CurrentScenario.SceneState.Camera is Scene.IArcballCamera)
+                if (_editor.Project.CurrentScenario.SceneState.Camera is Scene.IArcballCamera arcballCamera)
                 {
                     var w = _editor.Project.CurrentScenario.Width;
                     var h = _editor.Project.CurrentScenario.Height;
 
-                    ((Scene.IArcballCamera)_editor.Project.CurrentScenario.SceneState.Camera).Resize((int)w, (int)h);
+                    arcballCamera.Resize((int)w, (int)h);
                 }
             }
         }
@@ -134,24 +134,24 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Remove(IProjectContainer project)
-        {
-            if (project == null)
-            {
-                return;
-            }
+        //private void Remove(IProjectContainer project)
+        //{
+        //    if (project == null)
+        //    {
+        //        return;
+        //    }
 
-            project.PropertyChanged -= ObserveProject;
+        //    project.PropertyChanged -= ObserveProject;
 
 
-            if (project.Scenarios != null)
-            {
-                foreach (var scenario in project.Scenarios)
-                {
-                    Remove(scenario);
-                }
-            }
-        }
+        //    if (project.Scenarios != null)
+        //    {
+        //        foreach (var scenario in project.Scenarios)
+        //        {
+        //            Remove(scenario);
+        //        }
+        //    }
+        //}
 
         private void Add(IScenarioContainer scenario)
         {
@@ -249,27 +249,6 @@ namespace Globe3DLight.Editor
             timePresenter/*SceneTimer*/.OnUpdate -= SceneTimer_OnUpdate;
 
             timePresenter.PropertyChanged -= ObserveTimePresenter;
-        }
-
-        private void Add(ICamera camera)
-        {
-            if(camera == null)
-            {
-                return;
-            }
-
-            camera.PropertyChanged += ObserveCamera;
-
-        }
-
-        private void Remove(ICamera camera)
-        {
-            if (camera == null)
-            {
-                return;
-            }
-
-            camera.PropertyChanged -= ObserveCamera;
         }
 
         private void Add(IScenarioObject shape)
@@ -386,7 +365,7 @@ namespace Globe3DLight.Editor
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            GC.SuppressFinalize(this);
         }
     }
 }

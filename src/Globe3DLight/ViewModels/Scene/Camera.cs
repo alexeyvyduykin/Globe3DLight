@@ -10,8 +10,8 @@ namespace Globe3DLight.Scene
         private dvec3 _eye;
         private dvec3 _target;
         private dvec3 _up;
-        private dvec3 _forward;
-        private dvec3 _right;
+        //private dvec3 _forward;
+        //private dvec3 _right;
 
         public abstract dmat4 ViewMatrix { get; }
 

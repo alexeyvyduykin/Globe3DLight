@@ -33,7 +33,7 @@ namespace Globe3DLight.ScenarioObjects
             {
                 if (Logical.State is IRetranslatorState retranslatorData)
                 {
-                    var m = retranslatorData.ModelMatrix;
+                    //var m = retranslatorData.ModelMatrix;
 
                     renderer.DrawRetranslator(dc, RenderModel, retranslatorData.ModelMatrix, scene);
                 }

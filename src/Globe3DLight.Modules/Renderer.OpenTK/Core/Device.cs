@@ -11,8 +11,8 @@ namespace Globe3DLight.Renderer.OpenTK.Core
     internal class Device
     {
         private int s_maximumNumberOfVertexAttributes = 16;
-        private int s_numberOfTextureUnits = 192;
-        private int s_maximumNumberOfColorAttachments;
+        //private int s_numberOfTextureUnits = 192;
+        //private int s_maximumNumberOfColorAttachments;
 
         public bool AnisotropicFiltering => true;
 
