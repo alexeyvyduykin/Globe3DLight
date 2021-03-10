@@ -73,6 +73,8 @@ namespace Globe3DLight.Data
         ILogicalTreeNode CreateOrbitNode(ILogicalTreeNode parent, OrbitData data);
 
         ILogicalTreeNode CreateGroundStationNode(ILogicalTreeNode parent, GroundStationData data);
+        
+        ILogicalTreeNode CreateGroundObjectNode(ILogicalTreeNode parent, GroundObjectData data);
 
         ILogicalTreeNode CreateEarthNode(ILogicalTreeNode parent, J2000Data data);
     }
@@ -221,7 +223,7 @@ namespace Globe3DLight.Data
         public IGroundObjectListState CreateGroundObjectListState(IDictionary<string, (double lon, double lat, double earthRadius)> groundObjects)
         {
             return new GroundObjectListState(
-                new Dictionary<string, IGroundObjectState>(groundObjects.Select(s => KeyValuePair.Create(s.Key, CreateGroundObjectState(s.Value.lon, s.Value.lat, s.Value.earthRadius)))));
+                groundObjects.ToDictionary(s => s.Key, s => CreateGroundObjectState(s.Value.lon, s.Value.lat, s.Value.earthRadius)));
         }
 
         public IGroundObjectState CreateGroundObjectState(GroundObjectData data)
@@ -466,7 +468,21 @@ namespace Globe3DLight.Data
 
             return fr_groundStation;
         }
-        
+
+        public ILogicalTreeNode CreateGroundObjectNode(ILogicalTreeNode parent, GroundObjectData data)
+        {
+            var dataFactory = _serviceProvider.GetService<IDataFactory>();
+            var factory = _serviceProvider.GetService<IFactory>();
+
+            var name = string.Format("fr_{0}", data.Name.ToLower());
+
+            var groundObjectState = dataFactory.CreateGroundObjectState(data);
+            var fr_groundObject = factory.CreateLogicalTreeNode(name, groundObjectState);
+            parent.AddChild(fr_groundObject);
+
+            return fr_groundObject;
+        }
+
         public ILogicalTreeNode CreateEarthNode(ILogicalTreeNode parent, J2000Data data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();

@@ -63,8 +63,29 @@
           </Grid>
         </TreeDataTemplate>
 
+          <TreeDataTemplate DataType="SceneObjects:IScenarioObjectList"  
+                            ItemsSource="{Binding Values}" x:CompileBindings="False">
 
-        <TreeDataTemplate DataType="SceneObjects:IScenarioObject"
+              <Grid ShowGridLines="True" ColumnDefinitions="*, 46" RowDefinitions="*">
+
+                  <TextBlock Text="{Binding Name}"
+                             Grid.Column="0"
+                             Background="Transparent">
+                  </TextBlock>
+
+                  <Button Grid.Column="1"
+                          IsVisible="{Binding, Converter={StaticResource IsTargetableConverter}}"
+                          Command="{Binding $parent[TopLevel].DataContext.OnSetCameraTo}">
+                      <Button.Content>
+                          <TextBlock Padding="0" Margin="-6,-12" Text="Cam" FontSize="16"></TextBlock>
+                      </Button.Content>
+                  </Button>
+
+              </Grid>
+          </TreeDataTemplate>
+
+
+          <TreeDataTemplate DataType="SceneObjects:IScenarioObject"
                   ItemsSource="{Binding Children}" x:CompileBindings="False">
 
           <Grid ShowGridLines="True" ColumnDefinitions="*, 46" RowDefinitions="*">
@@ -84,8 +105,8 @@
 
           </Grid>
         </TreeDataTemplate>
-        
-        
+
+
       </TreeView.DataTemplates>
     
   

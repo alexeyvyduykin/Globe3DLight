@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Globe3DLight.Scene
 {
-    public class GroundObjectListRenderModel : BaseRenderModel, IGroundObjectListRenderModel
+    public class GroundObjectRenderModel : BaseRenderModel, IGroundObjectRenderModel
     {
         public override object Copy(IDictionary<object, object> shared)
         {

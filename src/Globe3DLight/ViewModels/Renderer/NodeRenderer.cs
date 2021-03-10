@@ -71,6 +71,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+        
         public void DrawEarth(object dc, IEarthRenderModel earth, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(earth);
@@ -109,6 +110,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+        
         public void DrawFrame(object dc, IFrameRenderModel frame, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(frame);
@@ -172,7 +174,7 @@ namespace Globe3DLight.Renderer
             }
         }
 
-        public void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene)
+        public void DrawGroundStations(object dc, IGroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(groundStation);
             if (drawNodeCached != null)
@@ -189,7 +191,7 @@ namespace Globe3DLight.Renderer
                     drawNodeCached.UpdateGeometry();
                 }
 
-                drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+                drawNodeCached.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
             }
             else
             {
@@ -201,9 +203,10 @@ namespace Globe3DLight.Renderer
 
                 _drawNodeCache.Set(groundStation, drawNode);
 
-                drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
+                drawNode.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
             }
         }
+        
         public void DrawRetranslator(object dc, IRetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(retranslator);
@@ -235,6 +238,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+        
         public void DrawSatellite(object dc, ISatelliteRenderModel satellite, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(satellite);
@@ -267,6 +271,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+        
         public void DrawSensor(object dc, ISensorRenderModel sensor, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(sensor);
@@ -299,6 +304,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+        
         public void DrawAntenna(object dc, IAntennaRenderModel antenna, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(antenna);
@@ -331,6 +337,7 @@ namespace Globe3DLight.Renderer
                 drawNode.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
         }
+       
         public void DrawSpacebox(object dc, ISpaceboxRenderModel spacebox, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(spacebox);
@@ -380,22 +387,29 @@ namespace Globe3DLight.Renderer
 
         private void DrawScenarioObject(object dc, IScenarioObject scenarioObject, ISceneState scene)
         {
-            if (scenarioObject != null && scenarioObject is IDrawable drawable)
+            if (scenarioObject != null)
             {
-                drawable.DrawShape(dc, this, scene);
-
-                if (scenarioObject is IChildren obj)
+                if (scenarioObject is IDrawable drawable)
                 {
-                    foreach (var item in obj.Children)
+                    drawable.DrawShape(dc, this, scene);
+
+                    if (scenarioObject is IChildren obj)
                     {
-                        DrawScenarioObject(dc, item, scene);
-                        //obj.DrawShape(dc, this, scene);
+                        foreach (var item in obj.Children)
+                        {
+                            DrawScenarioObject(dc, item, scene);
+                            //obj.DrawShape(dc, this, scene);
+                        }
                     }
+                }
+                else if(scenarioObject is IDrawableCollection drawableCollection)
+                {
+                    drawableCollection.DrawShapeCollection(dc, this, scene);
                 }
             }
         }
-
-        public void DrawGroundObjectList(object dc, IGroundObjectListRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+        
+        public void DrawGroundObjects(object dc, IGroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(groundobject);
             if (drawNodeCached != null)
@@ -419,7 +433,6 @@ namespace Globe3DLight.Renderer
 
                 drawNode.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
             }
-
         }
     }
 }

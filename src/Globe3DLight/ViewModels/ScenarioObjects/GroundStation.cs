@@ -4,7 +4,7 @@ using Globe3DLight.Scene;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
+using System.Linq;
 using Globe3DLight.Renderer;
 using GlmSharp;
 
@@ -40,7 +40,7 @@ namespace Globe3DLight.ScenarioObjects
 
                         var groundStationModelMatrix = m * groundStationData.ModelMatrix;
 
-                        renderer.DrawGroundStation(dc, RenderModel, groundStationModelMatrix, scene);
+                        renderer.DrawGroundStations(dc, RenderModel, Enumerable.Repeat(groundStationModelMatrix, 1), scene);
                     }
                 }
             }

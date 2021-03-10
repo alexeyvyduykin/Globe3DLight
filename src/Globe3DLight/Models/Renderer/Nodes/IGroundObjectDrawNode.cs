@@ -7,8 +7,8 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.Renderer
 {
-    public interface IGroundObjectListDrawNode : IDrawNode
+    public interface IGroundObjectDrawNode : IDrawNode
     {
-        IGroundObjectListRenderModel GroundObjectList { get; set; }
+        IGroundObjectRenderModel GroundObject { get; set; }
     }
 }

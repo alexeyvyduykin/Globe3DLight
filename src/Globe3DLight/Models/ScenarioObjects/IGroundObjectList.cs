@@ -9,10 +9,10 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IGroundObjectList : IScenarioObject, IDrawable
-    {
-        IGroundObjectListRenderModel RenderModel { get; set; }
+    //public interface IGroundObjectList : IScenarioObject, IDrawable
+    //{
+    //    IGroundObjectListRenderModel RenderModel { get; set; }
 
-        ILogicalTreeNode LogicalTreeNode { get; set; }
-    }
+    //    ILogicalTreeNode LogicalTreeNode { get; set; }
+    //}
 }

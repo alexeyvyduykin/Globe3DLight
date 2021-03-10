@@ -10,49 +10,49 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public class GroundObjectList : BaseScenarioObject, IGroundObjectList
-    {
-        private IGroundObjectListRenderModel _renderModel;  
-        private ILogicalTreeNode _logicalTreeNode;
+    //public class GroundObjectList : BaseScenarioObject, IGroundObjectList
+    //{
+    //    private IGroundObjectListRenderModel _renderModel;  
+    //    private ILogicalTreeNode _logicalTreeNode;
 
-        public IGroundObjectListRenderModel RenderModel 
-        {
-            get => _renderModel; 
-            set => Update(ref _renderModel, value); 
-        }
+    //    public IGroundObjectListRenderModel RenderModel 
+    //    {
+    //        get => _renderModel; 
+    //        set => Update(ref _renderModel, value); 
+    //    }
 
-        public ILogicalTreeNode LogicalTreeNode 
-        {
-            get => _logicalTreeNode; 
-            set => Update(ref _logicalTreeNode, value); 
-        }
+    //    public ILogicalTreeNode LogicalTreeNode 
+    //    {
+    //        get => _logicalTreeNode; 
+    //        set => Update(ref _logicalTreeNode, value); 
+    //    }
 
-        public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
-        {
-            if (IsVisible == true)
-            {
-                if (LogicalTreeNode.State is IGroundObjectListState groundObjectListState)
-                {
-                    var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
-                    if (parent.State is IJ2000State j2000Data)
-                    {
-                        var m = j2000Data.ModelMatrix;
+    //    public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
+    //    {
+    //        if (IsVisible == true)
+    //        {
+    //            if (LogicalTreeNode.State is IGroundObjectListState groundObjectListState)
+    //            {
+    //                var parent = (ILogicalTreeNode)LogicalTreeNode.Owner;
+    //                if (parent.State is IJ2000State j2000Data)
+    //                {
+    //                    var m = j2000Data.ModelMatrix;
 
-                        var matrices = groundObjectListState.States.Values.Select(s => m * s.ModelMatrix);
+    //                    var matrices = groundObjectListState.States.Values.Select(s => m * s.ModelMatrix);
                  
-                        renderer.DrawGroundObjectList(dc, RenderModel, matrices, scene);
-                    }
-                }
-            }
-        }
+    //                    renderer.DrawGroundObjectList(dc, RenderModel, matrices, scene);
+    //                }
+    //            }
+    //        }
+    //    }
 
-        public bool Invalidate(IRenderContext renderer)
-        {
-            return false;
-        }
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-    }
+    //    public bool Invalidate(IRenderContext renderer)
+    //    {
+    //        return false;
+    //    }
+    //    public override object Copy(IDictionary<object, object> shared)
+    //    {
+    //        throw new NotImplementedException();
+    //    }
+    //}
 }

@@ -24,11 +24,13 @@ namespace Globe3DLight.Editor
 
         ISensor CreateSensor(string name, ILogicalTreeNode parent);
 
-        IGroundStation CreateGroundStation(string name, ILogicalTreeNode parent, int id);
+        IGroundStation CreateGroundStation(string name, ILogicalTreeNode parent);
 
-        IGroundObjectList CreateGroundObjectList(string name, ILogicalTreeNode parent);
+        IScenarioObjectList CreateScenarioObjectList(string name, IEnumerable<IScenarioObject> values);
 
-        IRetranslator CreateRetranslator(string name, ILogicalTreeNode parent, int id);
+        IGroundObject CreateGroundObject(string name, ILogicalTreeNode parent);
+
+        IRetranslator CreateRetranslator(string name, ILogicalTreeNode parent);
 
         IAntenna CreateAntenna(string name, ILogicalTreeNode parent);
 
@@ -216,13 +218,13 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IGroundStation CreateGroundStation(string name, ILogicalTreeNode parent, int id)
+        public IGroundStation CreateGroundStation(string name, ILogicalTreeNode parent)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
 
-            var obj = new Globe3DLight.ScenarioObjects.GroundStation()
+            var obj = new GroundStation()
             {
                 Name = name,
                 IsVisible = true,
@@ -230,22 +232,41 @@ namespace Globe3DLight.Editor
                 
                 Children = ImmutableArray.Create<IScenarioObject>(),
                 LogicalTreeNode = parent,// factory.CreateLogicalTreeNode(),
-                UniqueName = factory.CreateUniqueName(string.Format("GST{0:0000000}", Math.Abs(id))),
+                //UniqueName = factory.CreateUniqueName(string.Format("GST{0:0000000}", Math.Abs(id))),
             };
 
             return obj;
         }
 
-        public IGroundObjectList CreateGroundObjectList(string name, ILogicalTreeNode parent)
+        public IScenarioObjectList CreateScenarioObjectList(string name, IEnumerable<IScenarioObject> values)
+        {           
+            //var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
+
+            var builder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            builder.AddRange(values);
+
+            var obj = new ScenarioObjectList()
+            { 
+                Name = name,
+                IsVisible = true,
+                IsExpanded = false,
+                //RenderModel = renderModelFactory.CreateGroundStation(100.0),                
+                Values = builder.ToImmutable(),
+            };
+
+            return obj;
+        }
+
+        public IGroundObject CreateGroundObject(string name, ILogicalTreeNode parent)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
-            var obj = new Globe3DLight.ScenarioObjects.GroundObjectList()
+            var obj = new GroundObject()
             {
                 Name = name,
-                IsVisible = true,
-                RenderModel = renderModelFactory.CreateGroundObjectList(),
+                IsVisible = true,           
+                RenderModel = renderModelFactory.CreateGroundObject(),
 
                 Children = ImmutableArray.Create<IScenarioObject>(),               
                 LogicalTreeNode = parent,                
@@ -254,7 +275,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IRetranslator CreateRetranslator(string name, ILogicalTreeNode parent, int id)
+        public IRetranslator CreateRetranslator(string name, ILogicalTreeNode parent)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
@@ -264,7 +285,7 @@ namespace Globe3DLight.Editor
             //builder1.Add(renderModelFactory.CreateSatellite());
             //libRenderModel.Items = builder1.ToImmutable();
 
-            var obj = new Globe3DLight.ScenarioObjects.Retranslator()
+            var obj = new Retranslator()
             {
                 Name = name,
                 IsVisible = true,
@@ -272,7 +293,7 @@ namespace Globe3DLight.Editor
                 RenderModel = renderModelFactory.CreateRetranslator(1000), //0.009 //libRenderModel.Items.FirstOrDefault(),             
                 Children = ImmutableArray.Create<IScenarioObject>(),
                 LogicalTreeNode = parent,// factory.CreateLogicalTreeNode(),        
-                UniqueName = factory.CreateUniqueName(string.Format("RTR{0:0000000}", Math.Abs(id))),
+                //UniqueName = factory.CreateUniqueName(string.Format("RTR{0:0000000}", Math.Abs(id))),
             };
 
             return obj;

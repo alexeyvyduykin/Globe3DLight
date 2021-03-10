@@ -15,7 +15,7 @@ namespace Globe3DLight.Renderer
         IFrameDrawNode CreateFrameDrawNode(IFrameRenderModel frame);
         IOrbitDrawNode CreateOrbitDrawNode(IOrbitRenderModel orbit);
         IGroundStationDrawNode CreateGroundStationDrawNode(IGroundStationRenderModel groundStation);
-        IGroundObjectListDrawNode CreateGroundObjectListDrawNode(IGroundObjectListRenderModel groundStation);
+        IGroundObjectDrawNode CreateGroundObjectListDrawNode(IGroundObjectRenderModel groundStation);
         IRetranslatorDrawNode CreateRetranslatorDrawNode(IRetranslatorRenderModel retranslator);
         ISatelliteDrawNode CreateSatelliteDrawNode(ISatelliteRenderModel satellite, ICache<string, int> textureCache);
         ISensorDrawNode CreateSensorDrawNode(ISensorRenderModel sensor);

@@ -16,7 +16,7 @@ namespace Globe3DLight.ScenarioObjects
 
     }
 
-    public interface IScenarioObjectList : IScenarioObject, ICollection<IScenarioObject>
+    public interface IScenarioObjectList : IScenarioObject, IDrawable, ICollection<IScenarioObject>
     {   
         
     }

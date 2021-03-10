@@ -29,7 +29,7 @@ namespace Globe3DLight.Editor
 
         IGroundStationRenderModel CreateGroundStation(double scale);
 
-        IGroundObjectListRenderModel CreateGroundObjectList();
+        IGroundObjectRenderModel CreateGroundObject();
 
         IRetranslatorRenderModel CreateRetranslator(double scale);
 
@@ -225,9 +225,9 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IGroundObjectListRenderModel CreateGroundObjectList()
+        public IGroundObjectRenderModel CreateGroundObject()
         {
-            var obj = new GroundObjectListRenderModel()
+            var obj = new GroundObjectRenderModel()
             {
 
             };

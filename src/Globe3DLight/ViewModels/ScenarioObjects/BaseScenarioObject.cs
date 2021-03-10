@@ -33,11 +33,13 @@ namespace Globe3DLight.ScenarioObjects
         {
             var isDirty = base.IsDirty();
 
-            foreach (var child in Children)
+            if (Children != null)
             {
-                isDirty |= child.IsDirty();
+                foreach (var child in Children)
+                {
+                    isDirty |= child.IsDirty();
+                }
             }
-
             //   isDirty |= State.IsDirty();
             //   isDirty |= Data.IsDirty();
 
@@ -48,11 +50,13 @@ namespace Globe3DLight.ScenarioObjects
         {
             base.Invalidate();
 
-            foreach (var child in Children)
+            if (Children != null)
             {
-                child.Invalidate();
+                foreach (var child in Children)
+                {
+                    child.Invalidate();
+                }
             }
-
             //    State.Invalidate();
             //    Data.Invalidate();
         }

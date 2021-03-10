@@ -39,6 +39,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <AvaloniaResource Remove="ViewModels\**" />
+    <AvaloniaXaml Remove="ViewModels\**" />
+    <Compile Remove="ViewModels\**" />
+    <EmbeddedResource Remove="ViewModels\**" />
+    <None Remove="ViewModels\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Models\" />
     <AvaloniaXaml Remove="Views\Containers\ProjectContainerControl.axaml" />
     <AvaloniaXaml Remove="Views\MainControl.axaml" />
@@ -47,7 +55,6 @@
     <AvaloniaResource Include="Views\MainControl.axaml" />
     <AvaloniaResource Include="Views\MainWindow.axaml" />
     <Folder Include="Themes\" />
-    <Folder Include="ViewModels\" />
   </ItemGroup>
   
   

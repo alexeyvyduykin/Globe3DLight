@@ -65,26 +65,21 @@ namespace Globe3DLight.Editor
 
             var root = scenario.LogicalTreeNodeRoot.FirstOrDefault();
 
-            var fr_earth = dataFactory.CreateEarthNode(root, data.Earth);
-            var fr_sun = dataFactory.CreateSunNode(root, data.Sun);
-            var fr_gss = data.GroundStations.Select(s => dataFactory.CreateGroundStationNode(fr_earth, s)).ToList();
-            var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(fr_earth, s));
+            var fr_earth = (Name: data.Earth.Name, Node: dataFactory.CreateEarthNode(root, data.Earth));
+            var fr_sun = (Name: data.Sun.Name, Node: dataFactory.CreateSunNode(root, data.Sun));
+            var fr_gss = data.GroundStations.ToDictionary(s => s.Name, s => dataFactory.CreateGroundStationNode(fr_earth.Node, s));
+            var fr_gos = data.GroundObjects.ToDictionary(s => s.Name, s => dataFactory.CreateGroundObjectNode(fr_earth.Node, s));
+            var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(fr_earth.Node, s));
             var fr_rotations = data.SatelliteRotations.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateRotationNode(fr_sats[s.SatelliteName], s));
             var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateSensorNode(fr_rotations[s.SatelliteName], s));
             var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateAntennaNode(fr_rotations[s.SatelliteName], s));            
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
-            var fr_retrs = data.RetranslatorPositions.Select(s => dataFactory.CreateRetranslatorNode(root, s)).ToList();
-
-
-            var gos = data.GroundObjects.ToDictionary(s => s.Name, s => (s.Lon, s.Lat, 6371.0));
-
-            var fr_gos = factory.CreateLogicalTreeNode("fr_gos", dataFactory.CreateGroundObjectListState(gos));
-            fr_earth.AddChild(fr_gos);
+            var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(root, s));
 
             var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
-            objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
-            objBuilder.Add(objFactory.CreateEarth("Earth", fr_earth));
+            objBuilder.Add(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
+            objBuilder.Add(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
 
             var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
         
@@ -105,21 +100,9 @@ namespace Globe3DLight.Editor
                 satellites[i].AddChild(objFactory.CreateSensor(string.Format("Sensor{0}", i + 1), fr_sensors[satellites[i].Name]));
             }
 
-            var gss = new List<IScenarioObject>();
-            var rtrs = new List<IScenarioObject>();
-
-            for (int i = 0; i < fr_gss.Count; i++)
-            {
-                gss.Add(objFactory.CreateGroundStation(string.Format("GroundStation{0:00}", i + 1), fr_gss[i], i));
-            }
-
-            for (int i = 0; i < fr_retrs.Count; i++)
-            {
-                rtrs.Add(objFactory.CreateRetranslator(string.Format("Retranslator{0}", i + 1), fr_retrs[i], i));
-            }
-
-            objBuilder.AddRange(gss);
-            objBuilder.AddRange(rtrs);
+            var gss = fr_gss.Select(s => objFactory.CreateGroundStation(s.Key, s.Value));
+            var gos = fr_gos.Select(s => objFactory.CreateGroundObject(s.Key, s.Value));
+            var rtrs = fr_retrs.Select(s => objFactory.CreateRetranslator(s.Key, s.Value));
 
             var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
             assetsBuilder.AddRange(gss);
@@ -139,8 +122,9 @@ namespace Globe3DLight.Editor
             }
 
 
-            objBuilder.Add(objFactory.CreateGroundObjectList("GroundObjectList", fr_gos));
-
+            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundStations", gss));
+            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundObjects", gos));
+            objBuilder.Add(objFactory.CreateScenarioObjectList("Retranslators", rtrs));
 
             objBuilder.AddRange(satellites);
 
@@ -263,19 +247,19 @@ namespace Globe3DLight.Editor
 
             var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
 
-            var gs1 = objFactory.CreateGroundStation("GroundStation01", fr_gs01, 0);
-            var gs2 = objFactory.CreateGroundStation("GroundStation02", fr_gs02, 1);
-            var gs3 = objFactory.CreateGroundStation("GroundStation03", fr_gs03, 2);
-            var gs4 = objFactory.CreateGroundStation("GroundStation04", fr_gs04, 3);
-            var gs5 = objFactory.CreateGroundStation("GroundStation05", fr_gs05, 4);
-            var gs6 = objFactory.CreateGroundStation("GroundStation06", fr_gs06, 5);
-            var gs7 = objFactory.CreateGroundStation("GroundStation07", fr_gs07, 6);
-            var gs8 = objFactory.CreateGroundStation("GroundStation08", fr_gs08, 7);
-            var gs9 = objFactory.CreateGroundStation("GroundStation09", fr_gs09, 8);
+            var gs1 = objFactory.CreateGroundStation("GroundStation01", fr_gs01/*, 0*/);
+            var gs2 = objFactory.CreateGroundStation("GroundStation02", fr_gs02/*, 1*/);
+            var gs3 = objFactory.CreateGroundStation("GroundStation03", fr_gs03/*, 2*/);
+            var gs4 = objFactory.CreateGroundStation("GroundStation04", fr_gs04/*, 3*/);
+            var gs5 = objFactory.CreateGroundStation("GroundStation05", fr_gs05/*, 4*/);
+            var gs6 = objFactory.CreateGroundStation("GroundStation06", fr_gs06/*, 5*/);
+            var gs7 = objFactory.CreateGroundStation("GroundStation07", fr_gs07/*, 6*/);
+            var gs8 = objFactory.CreateGroundStation("GroundStation08", fr_gs08/*, 7*/);
+            var gs9 = objFactory.CreateGroundStation("GroundStation09", fr_gs09/*, 8*/);
 
-            var rtr1 = objFactory.CreateRetranslator("Retranslator1", fr_retr1, 0);
-            var rtr2 = objFactory.CreateRetranslator("Retranslator2", fr_retr2, 1);
-            var rtr3 = objFactory.CreateRetranslator("Retranslator3", fr_retr3, 2);
+            var rtr1 = objFactory.CreateRetranslator("Retranslator1", fr_retr1/*, 0*/);
+            var rtr2 = objFactory.CreateRetranslator("Retranslator2", fr_retr2/*, 1*/);
+            var rtr3 = objFactory.CreateRetranslator("Retranslator3", fr_retr3/*, 2*/);
 
 
             var gss = new IScenarioObject[] { gs1, gs2, gs3, gs4, gs5, gs6, gs7, gs8, gs9 };
