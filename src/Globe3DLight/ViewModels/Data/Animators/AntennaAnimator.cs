@@ -15,7 +15,7 @@ namespace Globe3DLight.Data
 
     public class AntennaAnimator : ObservableObject, IAntennaState
     {      
-        private readonly ContinuousEvents<AntennaEventState> _translationEvents;
+        private readonly IEventList<AntennaEventState> _translationEvents;
         private bool _enable;
         private string _target;
 
@@ -23,7 +23,6 @@ namespace Globe3DLight.Data
         {
             _translationEvents = create(data.Translations);
         }
-
 
         public bool Enable
         {
@@ -37,23 +36,16 @@ namespace Globe3DLight.Data
             protected set => Update(ref _target, value);
         }
 
-        private ContinuousEvents<AntennaEventState> create(IList<TranslationRecord> translations)
+        private static IEventList<AntennaEventState> create(IList<TranslationRecord> translations)
         {
-            var translationEvents = new ContinuousEvents<AntennaEventState>();
+            var translationEvents = new EventList<AntennaEventState>();
 
             foreach (var item in translations)
             {
-                translationEvents.AddFrom(new AntennaEventState()
-                {
-                    t = item.BeginTime,
-                    Target = item.Target,                    
-                });
-
-                translationEvents.AddTo(new AntennaEventState()
-                {
-                    t = item.EndTime,
-                    Target = item.Target,
-                });
+                translationEvents.Add(
+                    new AntennaEventState(item.BeginTime, item.Target), 
+                    new AntennaEventState(item.EndTime, item.Target)
+                    );
             }
 
             return translationEvents;
@@ -63,13 +55,13 @@ namespace Globe3DLight.Data
         {
             _translationEvents.Update(t);
 
-            this.Enable = _translationEvents.IsActiveState;
+            Enable = _translationEvents.HasActiveState;
 
             if (Enable == true)
             {
                 var activeState = _translationEvents.ActiveState;
 
-                this.Target = activeState.Target;
+                Target = activeState.Target;
             }
         }
 

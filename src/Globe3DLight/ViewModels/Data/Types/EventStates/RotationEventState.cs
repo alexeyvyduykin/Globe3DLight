@@ -5,37 +5,37 @@ using System.Diagnostics;
 
 namespace Globe3DLight.Data
 {
-    public class RotationEventState : EventState
+    public class RotationEventState : IEventState
     {
-        internal override EventState FromHit(EventState state0, EventState state1, double t)
+        private readonly double _angle;
+        private readonly double _t;
+
+        public RotationEventState(double t, double angle)
+        {
+            _t = t;
+            _angle = angle;
+        }
+
+        public IEventState FromHit(IEventState state0, IEventState state1, double t)
         {
             double tB = state0.t;
             double tE = state1.t;
-            double Angle0 = (state0 as RotationEventState).Angle;
-            double Angle1 = (state1 as RotationEventState).Angle;
+            double angle0 = ((RotationEventState)state0).Angle;
+            double angle1 = ((RotationEventState)state1).Angle;
 
             float d = (float)(t - tB) / (float)(tE - tB);
 
-            double dGAM = Math.Abs(Angle0 - Angle1);
-            int pls = Angle1 >= 0.0 ? 1 : -1;
+            double dGAM = Math.Abs(angle0 - angle1);
+            
+            int pls = angle1 >= 0.0 ? 1 : -1;
 
+            var angle = angle0 + dGAM * d * (pls);
 
-            Debug.WriteLine(string.Format("Rotation: t = {0}", t));
-
-
-            return new RotationEventState()
-            {
-                t = t,
-                Angle = Angle0 + dGAM * d * (pls),
-            };
-
-
-
-
-            // this.t = t;
-            // this.Angle = Angle0 + dGAM * d * pls;
+            return new RotationEventState(t, angle);
         }
 
-        public double Angle { get; internal set; }
+        public double t => _t;
+
+        public double Angle => _angle;
     }
 }

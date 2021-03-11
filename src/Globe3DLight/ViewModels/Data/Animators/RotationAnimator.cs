@@ -16,7 +16,7 @@ namespace Globe3DLight.Data
 
     public class RotationAnimator : ObservableObject, IRotationState
     {      
-        private readonly ContinuousEvents<RotationEventState> _rotationEvents;
+        private readonly EventList<RotationEventState> _rotationEvents;
 
         private dmat4 _rotationMatrix;
         private double _gamDEG;
@@ -38,25 +38,18 @@ namespace Globe3DLight.Data
             _rotationEvents = create(data.Rotations);
         }
 
-        private ContinuousEvents<RotationEventState> create(IList<RotationRecord> rotations)
+        private static EventList<RotationEventState> create(IList<RotationRecord> rotations)
         {
-            var rotationEvents = new ContinuousEvents<RotationEventState>() { MissMode = MissMode.LastActive };
+            var rotationEvents = new EventList<RotationEventState>(EventMissMode.LastActive);
 
             double lastAngle = 0.0;
 
             foreach (var item in rotations)
             {
-                rotationEvents.AddFrom(new RotationEventState()
-                {
-                    t = item.BeginTime,
-                    Angle = lastAngle,
-                });
-
-                rotationEvents.AddTo(new RotationEventState()
-                {
-                    t = item.EndTime,
-                    Angle = item.Angle,
-                });
+                rotationEvents.Add(
+                    new RotationEventState(item.BeginTime, lastAngle), 
+                    new RotationEventState(item.EndTime, item.Angle)
+                    );
 
                 lastAngle = item.Angle;
             }
@@ -65,18 +58,9 @@ namespace Globe3DLight.Data
         }
     
 
-        private dmat4 Rotation(double t)
+        private dmat4 Rotation()
         {
-            GamDEG = 0.0;
-
-            if (_rotationEvents.IsActiveState == true)
-            {
-                var activeState = _rotationEvents.ActiveState;
-
-                GamDEG = activeState.Angle;
-
-                Debug.WriteLine(string.Format("RotationMatrix({0}): t = {1}, gamDEG = {2}", Name, t, GamDEG));
-            }
+            GamDEG = (_rotationEvents.HasActiveState == true) ? _rotationEvents.ActiveState.Angle : 0.0;
 
             return dmat4.Rotate(-glm.Radians(GamDEG), new dvec3(1.0f, 0.0f, 0.0f));
         }
@@ -85,7 +69,7 @@ namespace Globe3DLight.Data
         {
             _rotationEvents.Update(t);
 
-            RotationMatrix = Rotation(t);
+            RotationMatrix = Rotation();
         }
 
         public override object Copy(IDictionary<object, object> shared)

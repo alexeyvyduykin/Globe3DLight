@@ -124,7 +124,7 @@ namespace Globe3DLight.Data
 
     public class SensorAnimator : ObservableObject, ISensorState
     {      
-        private readonly ContinuousEvents<SensorEventState> _shootingEvents;
+        private readonly EventList<SensorEventState> _shootingEvents;
 
 
         private bool _enable;
@@ -153,29 +153,16 @@ namespace Globe3DLight.Data
             _shootingEvents = create(data.Shootings);
         }
 
-        private ContinuousEvents<SensorEventState> create(IList<ShootingRecord> shootings)
+        private static EventList<SensorEventState> create(IList<ShootingRecord> shootings)
         {
-            var shootingEvents = new ContinuousEvents<SensorEventState>();
+            var shootingEvents = new EventList<SensorEventState>();
 
             foreach (var item in shootings)
             {
-                shootingEvents.AddFrom(new SensorEventState()
-                {
-                    t = item.BeginTime,
-                    Range1 = item.Range1,
-                    Range2 = item.Range2,
-                    Gam1RAD = glm.Radians(item.Gam1),
-                    Gam2RAD = glm.Radians(item.Gam2),
-                });
-
-                shootingEvents.AddTo(new SensorEventState()
-                {
-                    t = item.EndTime,
-                    Range1 = item.Range1,
-                    Range2 = item.Range2,
-                    Gam1RAD = glm.Radians(item.Gam1),
-                    Gam2RAD = glm.Radians(item.Gam2),
-                });
+                shootingEvents.Add(
+                    new SensorEventState(item.BeginTime, glm.Radians(item.Gam1), glm.Radians(item.Gam2), item.Range1, item.Range2), 
+                    new SensorEventState(item.EndTime, glm.Radians(item.Gam1), glm.Radians(item.Gam2), item.Range1, item.Range2)
+                    );
             }
 
             return shootingEvents;
@@ -185,7 +172,7 @@ namespace Globe3DLight.Data
         {
             _shootingEvents.Update(t);
 
-            Enable = _shootingEvents.IsActiveState;
+            Enable = _shootingEvents.HasActiveState;
 
             if (Enable == true)
             {

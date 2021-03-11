@@ -4,50 +4,32 @@ using System.Text;
 
 namespace Globe3DLight.Data
 {
-    internal class EventInterval<T> where T : EventState
+    internal class EventInterval<T> where T : IEventState
     {
+        private readonly double _beginTime;
+        private readonly double _endTime;
+        private readonly T _beginState;
+        private readonly T _endState;
+
         public EventInterval(T state0, T state1)
         {
-            this.StateBegin = state0;
-            this.StateEnd = state1;
+            _beginState = state0;
+            _endState = state1;
 
-            this.TimeBegin = state0.t;
-            this.TimeEnd = state1.t;
+            _beginTime = state0.t;
+            _endTime = state1.t;
         }
 
-        public bool IsRange(double t)
-        {
-            if (t >= TimeBegin && t <= TimeEnd)
-                return true;
+        public T BeginState => _beginState;
 
-            return false;
-        }
+        public T EndState => _endState;
 
-        public bool IsForward(double t)
-        {
-            if (t > TimeEnd)
-                return true;
+        public bool IsRange(double t) => (t >= _beginTime && t <= _endTime);
+        
+        public bool IsForward(double t) => (t > _endTime);
 
-            return false;
-        }
+        public bool IsBackward(double t) => (t < _beginTime);
 
-        public bool IsBackward(double t)
-        {
-            if (t < TimeBegin)
-                return true;
-
-            return false;
-        }
-
-        public T InRange(double t)
-        {
-            return StateBegin.FromHit(StateBegin, StateEnd, t) as T;
-        }
-
-        public double TimeBegin { get; set; }
-        public double TimeEnd { get; set; }
-
-        public T StateBegin { get; set; }
-        public T StateEnd { get; set; }
+        public T InRange(double t) => (T)_beginState.FromHit(_beginState, _endState, t);        
     }
 }

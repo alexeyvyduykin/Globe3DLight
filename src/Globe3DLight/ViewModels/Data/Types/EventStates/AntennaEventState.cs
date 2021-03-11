@@ -4,29 +4,24 @@ using System.Text;
 
 namespace Globe3DLight.Data
 {
-    //public enum TranslationType
-    //{
-    //    GroundStation = 0,
-    //    Retranslator = 1
-    //}
-
-
-    public class AntennaEventState : EventState
+    public class AntennaEventState : IEventState
     {
-        internal override EventState FromHit(EventState state0, EventState state1, double t)
+        private readonly double _t;
+        private readonly string _target;
+
+        public AntennaEventState(double t, string target)
         {
-            return new AntennaEventState()
-            {
-                Target = this.Target,
-       //         IndexTarget = this.IndexTarget,
-       //         Type = this.Type,
-            };
+            _t = t;
+            _target = target;
         }
 
-        public string Target { get; internal set; }
+        public IEventState FromHit(IEventState state0, IEventState state1, double t)
+        {
+            return new AntennaEventState(t, _target);
+        }
 
-     //   public TranslationType Type { get; internal set; }  // 0 - PPI, 1 - Retranslator
+        public double t => _t;
 
-     //   public int IndexTarget { get; internal set; }
+        public string Target => _target;
     }
 }
