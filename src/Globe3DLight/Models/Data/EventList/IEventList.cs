@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace Globe3DLight.Data
 {
-    public interface IEventList<T> where T : IEventState
+    public interface IEventList<T> where T : IEventInterval
     {
-        T ActiveState { get; }
-
-        bool HasActiveState { get; }
-
-        void Add(T from, T to);
+        void Add(T interval);
 
         void Clear();
 
-        void Update(double t);
+        T ActiveInterval(double t);
     }
 }

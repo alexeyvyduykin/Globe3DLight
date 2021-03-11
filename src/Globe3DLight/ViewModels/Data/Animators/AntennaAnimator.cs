@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
+using System.Linq;
 
 namespace Globe3DLight.Data
 {
@@ -15,13 +16,13 @@ namespace Globe3DLight.Data
 
     public class AntennaAnimator : ObservableObject, IAntennaState
     {      
-        private readonly IEventList<AntennaEventState> _translationEvents;
+        private readonly IEventList<AntennaInterval> _translationEvents;
         private bool _enable;
         private string _target;
 
         public AntennaAnimator(AntennaData data)
         {
-            _translationEvents = create(data.Translations);
+            _translationEvents = data.Translations.Select(s => new AntennaInterval(s.BeginTime, s.EndTime, s.Target)).ToEventList();
         }
 
         public bool Enable
@@ -36,32 +37,15 @@ namespace Globe3DLight.Data
             protected set => Update(ref _target, value);
         }
 
-        private static IEventList<AntennaEventState> create(IList<TranslationRecord> translations)
-        {
-            var translationEvents = new EventList<AntennaEventState>();
-
-            foreach (var item in translations)
-            {
-                translationEvents.Add(
-                    new AntennaEventState(item.BeginTime, item.Target), 
-                    new AntennaEventState(item.EndTime, item.Target)
-                    );
-            }
-
-            return translationEvents;
-        }
-
         public void Animate(double t)
         {
-            _translationEvents.Update(t);
+            var activeInterval = _translationEvents.ActiveInterval(t);
 
-            Enable = _translationEvents.HasActiveState;
+            Enable = activeInterval != default;
 
             if (Enable == true)
-            {
-                var activeState = _translationEvents.ActiveState;
-
-                Target = activeState.Target;
+            {       
+                Target = activeInterval.Animate(t).Target;
             }
         }
 

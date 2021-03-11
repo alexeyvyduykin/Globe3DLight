@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace Globe3DLight.Data
 {
-    public interface IEventState
+    internal interface IAnimatableInterval<T> where T : IEventState
     {
-        double Time { get; }
+        T Animate(double t);
     }
 }

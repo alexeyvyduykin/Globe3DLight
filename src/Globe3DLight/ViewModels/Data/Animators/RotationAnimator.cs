@@ -16,8 +16,7 @@ namespace Globe3DLight.Data
 
     public class RotationAnimator : ObservableObject, IRotationState
     {      
-        private readonly EventList<RotationEventState> _rotationEvents;
-
+        private readonly IEventList<RotationInterval> _rotationEvents;
         private dmat4 _rotationMatrix;
         private double _gamDEG;
 
@@ -35,21 +34,18 @@ namespace Globe3DLight.Data
 
         public RotationAnimator(RotationData data)
         {         
-            _rotationEvents = create(data.Rotations);
+            _rotationEvents = Create(data.Rotations);
         }
 
-        private static EventList<RotationEventState> create(IList<RotationRecord> rotations)
+        private static IEventList<RotationInterval> Create(IList<RotationRecord> rotations)
         {
-            var rotationEvents = new EventList<RotationEventState>(EventMissMode.LastActive);
+            var rotationEvents = new EventList<RotationInterval>(EventMissMode.LastActive);
 
             double lastAngle = 0.0;
 
             foreach (var item in rotations)
             {
-                rotationEvents.Add(
-                    new RotationEventState(item.BeginTime, lastAngle), 
-                    new RotationEventState(item.EndTime, item.Angle)
-                    );
+                rotationEvents.Add(new RotationInterval(item.BeginTime, item.EndTime, lastAngle, item.Angle)); 
 
                 lastAngle = item.Angle;
             }
@@ -57,19 +53,13 @@ namespace Globe3DLight.Data
             return rotationEvents;
         }
     
-
-        private dmat4 Rotation()
-        {
-            GamDEG = (_rotationEvents.HasActiveState == true) ? _rotationEvents.ActiveState.Angle : 0.0;
-
-            return dmat4.Rotate(-glm.Radians(GamDEG), new dvec3(1.0f, 0.0f, 0.0f));
-        }
-
         public void Animate(double t)
         {
-            _rotationEvents.Update(t);
+            var activeInterval = _rotationEvents.ActiveInterval(t);
 
-            RotationMatrix = Rotation();
+            GamDEG = (activeInterval != default) ? activeInterval.Animate(t).Angle : 0.0;
+            
+            RotationMatrix = dmat4.Rotate(-glm.Radians(GamDEG), new dvec3(1.0f, 0.0f, 0.0f));
         }
 
         public override object Copy(IDictionary<object, object> shared)

@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Globe3DLight.Data
 {
-    public class AntennaEventState : IEventState
+    public interface IAntennaEventState : IEventState
+    {
+        string Target { get; }
+    }
+
+    public class AntennaEventState : IAntennaEventState
     {
         private readonly double _t;
         private readonly string _target;
@@ -15,12 +22,7 @@ namespace Globe3DLight.Data
             _target = target;
         }
 
-        public IEventState FromHit(IEventState state0, IEventState state1, double t)
-        {
-            return new AntennaEventState(t, _target);
-        }
-
-        public double t => _t;
+        public double Time => _t;
 
         public string Target => _target;
     }

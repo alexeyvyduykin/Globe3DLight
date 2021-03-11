@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using GlmSharp;
+using System.Linq;
 
 namespace Globe3DLight.Data
 {
@@ -124,12 +125,11 @@ namespace Globe3DLight.Data
 
     public class SensorAnimator : ObservableObject, ISensorState
     {      
-        private readonly EventList<SensorEventState> _shootingEvents;
-
-
+        private readonly IEventList<SensorInterval> _shootingEvents;
         private bool _enable;
         private IShoot _shoot;
         private int _direction;
+
         public bool Enable
         {
             get => _enable;
@@ -150,33 +150,19 @@ namespace Globe3DLight.Data
 
         public SensorAnimator(SensorData data)
         {                      
-            _shootingEvents = create(data.Shootings);
-        }
-
-        private static EventList<SensorEventState> create(IList<ShootingRecord> shootings)
-        {
-            var shootingEvents = new EventList<SensorEventState>();
-
-            foreach (var item in shootings)
-            {
-                shootingEvents.Add(
-                    new SensorEventState(item.BeginTime, glm.Radians(item.Gam1), glm.Radians(item.Gam2), item.Range1, item.Range2), 
-                    new SensorEventState(item.EndTime, glm.Radians(item.Gam1), glm.Radians(item.Gam2), item.Range1, item.Range2)
-                    );
-            }
-
-            return shootingEvents;
+            _shootingEvents = 
+                data.Shootings.Select(s => new SensorInterval(s.BeginTime, s.EndTime, s.Gam1, s.Gam2, s.Range1, s.Range2)).ToEventList();
         }
 
         public void Animate(double t)
         {
-            _shootingEvents.Update(t);
+            var activeInterval = _shootingEvents.ActiveInterval(t);
 
-            Enable = _shootingEvents.HasActiveState;
+            Enable = activeInterval != default;
 
             if (Enable == true)
             {
-                var activeState = _shootingEvents.ActiveState;
+                var activeState = activeInterval.Animate(t);
 
                 Shoot = activeState.Shoot;
 
