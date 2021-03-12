@@ -189,7 +189,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Scene
 
-            ArcballCamera = objFactory.CreateArcballCamera(Satellite);
+            ArcballCamera = objFactory.CreateArcballCamera(GlmSharp.dvec3.UnitZ);
         }
     }
 

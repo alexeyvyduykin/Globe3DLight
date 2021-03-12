@@ -5,7 +5,7 @@ using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Time;
-
+using GlmSharp;
 
 namespace Globe3DLight.Containers
 {
@@ -100,6 +100,23 @@ namespace Globe3DLight.Containers
         {
             get => _timePresenter;
             set => Update(ref _timePresenter, value);
+        }
+
+        public void SetCameraTo(ITargetable target)
+        {            
+            var behaviours = SceneState.CameraBehaviours;
+            var targetType = target.GetType();
+
+            if (behaviours.ContainsKey(targetType))
+            {         
+                // save behaviour for current target type
+                var (_, func) = behaviours[SceneState.Target.GetType()];
+                behaviours[SceneState.Target.GetType()] = (SceneState.Camera.Eye, func);
+          
+                var newBehaviour = behaviours[targetType];
+                SceneState.Camera.LookAt(newBehaviour.eye, dvec3.Zero, dvec3.UnitY);
+                SceneState.Target = target;
+            }
         }
 
         public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, new InvalidateScenarioEventArgs());

@@ -72,16 +72,16 @@ namespace Globe3DLight.Editor.Tools
             }
             else if (_currentState == State.Zoom)
             {
-                var camera = (IArcballCamera)editor.Project.CurrentScenario.SceneState.Camera;
+                var sceneState = editor.Project.CurrentScenario.SceneState;
+                var camera = (IArcballCamera)sceneState.Camera;
+                var target = sceneState.Target;
+                var (_, func) = sceneState.CameraBehaviours[target.GetType()];
 
                 double value = (double)(args.Y - _lastPoint.y);
-                value /= 15.0;// 0.01;// 15.0;
-            
-                double c = (value != 0.0) ? value / Math.Abs(value) : 0.0;
+         
+                var dz = func.Invoke(camera.Eye.Length);
 
-                value = 1000/* 2000.0 */* c;
-
-                camera.Zoom(value);
+                camera.Zoom(Math.Sign(value) * dz);
             }
 
             _lastPoint = (args.X, args.Y);            

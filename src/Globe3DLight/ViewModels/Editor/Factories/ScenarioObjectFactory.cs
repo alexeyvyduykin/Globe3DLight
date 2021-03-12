@@ -38,7 +38,7 @@ namespace Globe3DLight.Editor
 
         ISceneState CreateSceneState();
 
-        ICamera CreateArcballCamera(ITargetable target);
+        ICamera CreateArcballCamera(dvec3 eye);
 
         ISatelliteTask CreateSatelliteTask(ISatellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay);
 
@@ -240,8 +240,14 @@ namespace Globe3DLight.Editor
         public ISceneState CreateSceneState()
         {
             var target = new RootFrame();
-            var camera = CreateArcballCamera(target);
-        
+            var camera = CreateArcballCamera(new dvec3(0.0, 0.0, 20000.0));
+
+            var cameraBehaviours = new Dictionary<Type, (dvec3 eye, Func<double, double> func)>();
+
+            cameraBehaviours.Add(typeof(RootFrame), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))));
+            cameraBehaviours.Add(typeof(Earth), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))));
+            cameraBehaviours.Add(typeof(Satellite), (new dvec3(-200.0, 200.0, -200.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))));
+
             return new SceneState()
             {
                 DiffuseIntensity = 0.65f,
@@ -252,30 +258,17 @@ namespace Globe3DLight.Editor
                 Camera = camera,
                 Target = target,
                 LightPosition = dvec4.Zero,
-                //           LightPosition = new dvec4(-15.0, -53.0, -23, 1.0),
-                //            WorldScale = 10.0 / 6371.0,
                 FieldOfViewY = 70.0f * (float)Math.PI / 180.0f, //Math.PI / 6.0, //70.0;
                 AspectRatio = 1,
-
+                CameraBehaviours = cameraBehaviours,
                 PerspectiveNearPlaneDistance = 10.5, // 0.5;
                 PerspectiveFarPlaneDistance = 2500000.0,
             };
         }
 
-        public ICamera CreateArcballCamera(ITargetable target)
-        {
-            if (target is ISatellite/* satellite*/)
-            {                    
-                return new ArcballCamera(new dvec3(-200.0, 200.0, -200.0), dvec3.Zero, dvec3.UnitY);
-            }
-            else if (target is IEarth/* earth*/)
-            {
-                return new ArcballCamera(new dvec3(0.0, 0.0, 20000.0), dvec3.Zero, dvec3.UnitY);
-            }
-            else
-            {
-                return new ArcballCamera(new dvec3(0.0, 0.0, 20000.0), dvec3.Zero, dvec3.UnitY);            
-            }
+        public ICamera CreateArcballCamera(dvec3 eye)
+        {                
+            return new ArcballCamera(eye, dvec3.Zero, dvec3.UnitY);                        
         }
 
         public ISatelliteTask CreateSatelliteTask(ISatellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay)

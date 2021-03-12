@@ -40,5 +40,7 @@ namespace Globe3DLight.Containers
         ISceneState SceneState { get; set; }
 
         ITimePresenter TimePresenter { get; set; }
+
+        void SetCameraTo(ITargetable target);
     }
 }

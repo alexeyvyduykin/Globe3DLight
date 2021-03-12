@@ -310,9 +310,7 @@ namespace Globe3DLight.Editor
             {
                 if (Project.Selected is ITargetable target)
                 {
-                    var camera = SceneFactory.CreateArcballCamera(target);
-                    Project.CurrentScenario.SceneState.Camera = camera;
-                    Project.CurrentScenario.SceneState.Target = target;
+                    Project.CurrentScenario.SetCameraTo(target);
                 }       
             }
         }

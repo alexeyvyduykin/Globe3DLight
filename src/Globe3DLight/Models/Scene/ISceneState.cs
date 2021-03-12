@@ -7,14 +7,15 @@ namespace Globe3DLight.Scene
 {
     public interface ISceneState : IObservableObject
     {
-     //   double WorldScale { get; set; }
-
         dmat4 ViewMatrix { get; }
 
         dmat4 ProjectionMatrix { get; }
 
         ICamera Camera { get; set; }
+
         ITargetable Target { get; set; }
+
+        IDictionary<Type, (dvec3 eye, Func<double, double> func)> CameraBehaviours { get; set; }
 
         dvec4 LightPosition { get; set; }
 
@@ -38,6 +39,5 @@ namespace Globe3DLight.Scene
         double PerspectiveNearPlaneDistance { get; set; }
 
         double PerspectiveFarPlaneDistance { get; set; }
-
     }
 }

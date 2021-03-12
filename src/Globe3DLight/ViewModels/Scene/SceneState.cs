@@ -16,6 +16,7 @@ namespace Globe3DLight.Scene
         private ICamera _camera;
         private dvec4 _lightPosition;
         private ITargetable _target;
+        private IDictionary<Type, (dvec3 eye, Func<double, double> func)> _cameraBehaviours;
 
         private double _fieldOfViewX;
         private double _fieldOfViewY;
@@ -39,6 +40,12 @@ namespace Globe3DLight.Scene
         {
             get => _target;
             set => Update(ref _target, value);
+        }
+
+        public IDictionary<Type, (dvec3 eye, Func<double, double> func)> CameraBehaviours 
+        {
+            get => _cameraBehaviours;
+            set => Update(ref _cameraBehaviours, value);
         }
 
         public dvec4 LightPosition 
