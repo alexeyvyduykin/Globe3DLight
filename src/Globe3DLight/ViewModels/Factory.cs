@@ -13,7 +13,7 @@ using System.Linq;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Data;
 using System.IO;
-//using System.IO.Compression;
+using Globe3DLight.Editor;
 using Globe3DLight.SceneTimer;
 using Globe3DLight.Time;
 using Globe3DLight.Timer;
@@ -350,8 +350,7 @@ namespace Globe3DLight
             {
                 Name = name,   
                 LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(),                   
-                ScenarioObjects = ImmutableArray.Create<IScenarioObject>(),
-                SceneState = CreateSceneState(),             
+                ScenarioObjects = ImmutableArray.Create<IScenarioObject>(),                
             };
         }
 
@@ -376,21 +375,6 @@ namespace Globe3DLight
                 Name = name,             
                 //State = states,
                 Values = builder.ToImmutable(),
-            };
-        }
-
-        private ISceneState CreateSceneState()
-        {
-            return new SceneState()
-            {
-                //DiffuseIntensity = 0.65f,
-                //SpecularIntensity = 0.25f,
-                //AmbientIntensity = 0.10f,
-                //Shininess = 12,
-                //HighResolutionSnapScale = 1,
-                //Camera = CreateArcBallCamera(),
-                //LightPosition = new dvec4(-15.0, -53.0, -23, 1.0),
-                //WorldScale = 10.0 / 6371.0,
             };
         }
 

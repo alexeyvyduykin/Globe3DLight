@@ -18,7 +18,6 @@ namespace Globe3DLight
         ILibrary<T> CreateLibrary<T>(string name, IEnumerable<T> items);
 
         ICache<TKey, TValue> CreateCache<TKey, TValue>(Action<TValue> dispose = null);
-   //     IShapeRendererState CreateShapeRendererState();
 
         IVertexAttribute CreateVertexAttributePosition();
 
@@ -35,18 +34,19 @@ namespace Globe3DLight
         IVertexAttribute<T> CreateVertexAttributeNormal<T>(VertexAttributeType type);
 
         IVertexAttribute<T> CreateVertexAttributeTextCoord<T>(VertexAttributeType type);
+
         IVertexAttribute<T> CreateVertexAttributeTangent<T>(VertexAttributeType type);
 
         IIndices<ushort> CreateIndicesUnsignedShort();
+
         IIndices<uint> CreateIndicesUnsignedInt();
-
-
 
         IAMesh CreateMesh();
 
         IAMesh CreateBillboard();
 
         IAMesh CreateCube(float width);
+
         IAMesh CreateSolidSphere(float radius, int rings, int sectors);
 
         IProjectContainer CreateProjectContainer(string name = "Project");
@@ -58,21 +58,13 @@ namespace Globe3DLight
         ILogicalCollection CreateLogicalCollection(string name);
 
         ITimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan);
-        //IRenderState CreateRenderState();
-
-        // ISceneState CreateSceneState();
-
-
-        //   ICamera CreateArcBallCamera();
 
         void SaveProjectContainer(IProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer);
      
         IProjectContainer OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer);
 
-
         IProjectContainer OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
 
         void SaveProjectContainer(IProjectContainer project/*, IImageCache imageCache*/, Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
-
     }
 }

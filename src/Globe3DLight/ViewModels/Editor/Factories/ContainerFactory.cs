@@ -143,22 +143,18 @@ namespace Globe3DLight.Editor
 
         public IScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration)
         {
-            var factory = _serviceProvider.GetService<IFactory>();
-            var scenario = factory.CreateScenarioContainer(name);
+            var factory = _serviceProvider.GetService<IFactory>();          
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
-            var sceneFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
+            var scenarioObjectFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
+            var scenario = factory.CreateScenarioContainer(name);
             var root = factory.CreateLogical("Root", dataFactory.CreateFrameState());
-
+              
             //        root.Owner = scenario; ????????????????????????????????
 
             scenario.LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(root);
             scenario.CurrentLogicalTreeNode = scenario.LogicalTreeNodeRoot.FirstOrDefault();
-
-            scenario.SceneState = sceneFactory.CreateSceneState();
-
-            //scenario.SceneTimer = _serviceProvider.GetService<ISceneTimer>();
-
+            scenario.SceneState = scenarioObjectFactory.CreateSceneState();  
             scenario.TimePresenter = factory.CreateTimePresenter(begin, duration);
 
             return scenario;
