@@ -5,11 +5,9 @@ using GlmSharp;
 
 namespace Globe3DLight.Data
 {
-    public interface IGroundStationState : IState   
+    public interface IGroundStationState : IState, IFrameable
     {    
         dvec3 Position { get; }
-
-        dmat4 ModelMatrix { get; }
 
         double Lon { get; }
 

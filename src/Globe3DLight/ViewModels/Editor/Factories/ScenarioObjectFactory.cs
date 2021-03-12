@@ -180,7 +180,8 @@ namespace Globe3DLight.Editor
             {
                 Name = name,
                 IsVisible = true,
-                RenderModel = renderModelFactory.CreateGroundStation(100.0),//libRenderModel.Items.FirstOrDefault(),                
+                RenderModel = renderModelFactory.CreateGroundStation(70.0),
+                FrameRenderModel = renderModelFactory.CreateFrame(200.0f),
                 Children = ImmutableArray.Create<IScenarioObject>(),
                 Logical = parent,  
             };
@@ -242,11 +243,13 @@ namespace Globe3DLight.Editor
             var target = new RootFrame();
             var camera = CreateArcballCamera(new dvec3(0.0, 0.0, 20000.0));
 
-            var cameraBehaviours = new Dictionary<Type, (dvec3 eye, Func<double, double> func)>();
-
-            cameraBehaviours.Add(typeof(RootFrame), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))));
-            cameraBehaviours.Add(typeof(Earth), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))));
-            cameraBehaviours.Add(typeof(Satellite), (new dvec3(-200.0, 200.0, -200.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))));
+            var cameraBehaviours = new Dictionary<Type, (dvec3 eye, Func<double, double> func)>
+            {
+                { typeof(RootFrame), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))) },
+                { typeof(Earth), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))) },
+                { typeof(Satellite), (new dvec3(-200.0, 200.0, -200.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))) },
+                { typeof(GroundStation), (new dvec3(0.0, 500.0, 0.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))) }
+            };
 
             return new SceneState()
             {

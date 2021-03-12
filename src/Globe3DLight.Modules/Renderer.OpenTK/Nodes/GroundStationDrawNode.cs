@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-//using Globe3DScene;
 using A = OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK
@@ -37,9 +36,9 @@ void main(void)
 {
 color = u_color;
 }";
-        private bool dirty;
-        private readonly B.ShaderProgram sp;
-        private readonly B.DrawState drawState;   
+        private bool _dirty;
+        private readonly B.ShaderProgram _sp;
+        private readonly B.DrawState _drawState;   
         private readonly double _scale;
 
         private readonly B.Uniform<mat4> u_mvp;
@@ -53,35 +52,35 @@ color = u_color;
 
             _scale = groundStation.Scale;
 
-            dirty = true;
+            _dirty = true;
 
             _device = new B.Device();
 
-            sp = _device.CreateShaderProgram(groundStationVS, groundStationFS);
+            _sp = _device.CreateShaderProgram(groundStationVS, groundStationFS);
 
-            u_mvp = ((B.Uniform<mat4>)sp.Uniforms["u_mvp"]);
-            u_color = ((B.Uniform<vec4>)sp.Uniforms["u_color"]);
+            u_mvp = ((B.Uniform<mat4>)_sp.Uniforms["u_mvp"]);
+            u_color = ((B.Uniform<vec4>)_sp.Uniforms["u_color"]);
 
-            u_color.Value = new vec4(0.0f, 1.0f, 0.0f, 1.0f);
+            u_color.Value = new vec4(0.0f, 0.7f, 0.0f, 1.0f);
 
 
-            A.GL.BindAttribLocation(sp.Handle, (int)0, "POSITION");
+            A.GL.BindAttribLocation(_sp.Handle, (int)0, "POSITION");
 
-            drawState = new B.DrawState();
-            drawState.ShaderProgram = sp;
+            _drawState = new B.DrawState();
+            _drawState.ShaderProgram = _sp;
         }
 
         public override void UpdateGeometry()
         {
-            if (dirty)
+            if (_dirty)
             {
                 var mesh = GroundStation.Mesh;// new SolidSphere(1.0f, 16, 16);// 32, 32);
 
-                drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
-                drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Front;
-                drawState.RenderState.FacetCulling.FrontFaceWindingOrder = 
+                _drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
+                _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Front;
+                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = 
                     (mesh.FrontFaceWindingOrder == Geometry.FrontFaceDirection.Cw) ? A.FrontFaceDirection.Cw : A.FrontFaceDirection.Ccw;
-                dirty = false;
+                _dirty = false;
             }
         }
 
@@ -89,15 +88,15 @@ color = u_color;
         {
           //  sp.Bind();
                 
-            dmat4 model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
-            dmat4 view = scene.ViewMatrix;
-            dmat4 mvp = scene.ProjectionMatrix * view * model;
+            var model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
+            var view = scene.ViewMatrix;
+            var mvp = scene.ProjectionMatrix * view * model;
 
             u_mvp.Value = mvp.ToMat4();
 
-            _context.Draw(A.PrimitiveType.Triangles, drawState, scene);
+            _context.Draw(A.PrimitiveType.Triangles, _drawState, scene);
 
-         //   ShaderProgram.UnBind();
+            B.ShaderProgram.UnBind();
         }
     }
 

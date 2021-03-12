@@ -526,7 +526,7 @@ namespace Globe3DLight.Scene
             Eye = eye;
             Target = target;
             Up = up;
-            _view = dmat4.LookAt(Eye, Target, Up);
+            _view = dmat4.LookAtSafe(Eye, Target, Up);
             _translation = dmat4.Translate(0.0, 0.0, -glm.Length(Eye));
             _orientation = dquat.FromMat4(_view);
             _rotation = ToMatrixRotate(_orientation);

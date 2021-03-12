@@ -75,6 +75,8 @@ namespace Globe3DLight.ScenarioObjects
                                 {
                                     var matrix = m * ((IGroundStationState)item.State).ModelMatrix;
 
+                                    renderer.DrawFrame(dc, groundStation.FrameRenderModel, matrix, scene);
+
                                     renderer.DrawGroundStation(dc, groundStation.RenderModel, matrix, scene);
                                 }
                             }
