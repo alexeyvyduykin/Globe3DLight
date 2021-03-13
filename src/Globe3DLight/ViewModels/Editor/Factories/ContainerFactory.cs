@@ -63,6 +63,9 @@ namespace Globe3DLight.Editor
             var project = factory.CreateProjectContainer("Project1");
             var scenario = containerFactory.GetScenario(data.Name, begin, duration);
 
+            project.AddScenario(scenario);
+            project.SetCurrentScenario(scenario);
+
             var root = scenario.LogicalTreeNodeRoot.FirstOrDefault();
 
             var fr_earth = (Name: data.Earth.Name, Node: dataFactory.CreateEarthNode(root, data.Earth));
@@ -78,19 +81,16 @@ namespace Globe3DLight.Editor
             var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateAntennaNode(fr_rotations[s.SatelliteName], s));            
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
             var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(fr_rtr_collection, s));
-
-            var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
-            objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
-            objBuilder.Add(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
-            objBuilder.Add(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
-
-            var taskBuilder = ImmutableArray.CreateBuilder<ISatelliteTask>();
         
+            project.AddScenarioObject(objFactory.CreateSpacebox("Spacebox", root));
+            project.AddScenarioObject(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
+            project.AddScenarioObject(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
+            
             var satellites = fr_rotations.Select(s => objFactory.CreateSatellite(s.Key, s.Value)).ToList();
 
             for (int i = 0; i < satellites.Count; i++)
             {
-                taskBuilder.Add(objFactory.CreateSatelliteTask(
+                scenario.AddSatelliteTask(objFactory.CreateSatelliteTask(
                     satellites[i],
                     data.SatelliteRotations[i],
                     data.SatelliteShootings[i],
@@ -107,14 +107,11 @@ namespace Globe3DLight.Editor
             var gos = fr_gos.Select(s => objFactory.CreateGroundObject(s.Key, s.Value));
             var rtrs = fr_retrs.Select(s => objFactory.CreateRetranslator(s.Key, s.Value));
 
-            var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
-            assetsBuilder.AddRange(gss);
-            assetsBuilder.AddRange(rtrs);
-
             for (int i = 0; i < fr_antennas.Count; i++)
             {
                 var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[satellites[i].Name]);
-                antenna.Assets = assetsBuilder.ToImmutable();
+                antenna.AddAssets(gss);
+                antenna.AddAssets(rtrs);
 
                 satellites[i].AddChild(antenna);
             }
@@ -123,20 +120,12 @@ namespace Globe3DLight.Editor
             {
                 satellites[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[satellites[i].Name]));
             }
-            
-            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundObjects", fr_go_collection, gos));
-            objBuilder.Add(objFactory.CreateScenarioObjectList("GroundStations", fr_gs_collection, gss));
-            objBuilder.Add(objFactory.CreateScenarioObjectList("Retranslators", fr_rtr_collection, rtrs));
 
-            objBuilder.AddRange(satellites);
+            project.AddScenarioObject(objFactory.CreateScenarioObjectList("GroundObjects", fr_go_collection, gos));
+            project.AddScenarioObject(objFactory.CreateScenarioObjectList("GroundStations", fr_gs_collection, gss));
+            project.AddScenarioObject(objFactory.CreateScenarioObjectList("Retranslators", fr_rtr_collection, rtrs));
 
-            scenario.ScenarioObjects = objBuilder.ToImmutable();
-
-            scenario.SatelliteTasks = taskBuilder.ToImmutable();
-
-            project.AddScenario(scenario);
-
-            project.SetCurrentScenario(scenario);
+            project.AddScenarioObjects(satellites);
 
             return project;
         }
@@ -156,6 +145,7 @@ namespace Globe3DLight.Editor
             scenario.CurrentLogicalTreeNode = scenario.LogicalTreeNodeRoot.FirstOrDefault();
             scenario.SceneState = scenarioObjectFactory.CreateSceneState();  
             scenario.TimePresenter = factory.CreateTimePresenter(begin, duration);
+            scenario.SatelliteTasks = ImmutableArray.Create<ISatelliteTask>();
 
             return scenario;
         }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.Containers;
@@ -19,6 +20,16 @@ namespace Globe3DLight.Editor
                 builder.Add(scenarioObject);
                 project.CurrentScenario.ScenarioObjects = builder.ToImmutable();
             }            
+        }
+
+        public static void AddScenarioObjects(this IProjectContainer project, IEnumerable<IScenarioObject> scenarioObjects)
+        {
+            if (project?.Scenarios != null && scenarioObjects != null)
+            {
+                var builder = project.CurrentScenario.ScenarioObjects.ToBuilder();
+                builder.AddRange(scenarioObjects);
+                project.CurrentScenario.ScenarioObjects = builder.ToImmutable();
+            }
         }
 
         public static void AddScenario(this IProjectContainer project, IScenarioContainer scenario)

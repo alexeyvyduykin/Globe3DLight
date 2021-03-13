@@ -42,5 +42,15 @@ namespace Globe3DLight
                 obj.Children = builder.ToImmutable();
             }
         }
+
+        public static void AddAssets(this IAssetable assetable, IEnumerable<IScenarioObject> objects)
+        {
+            if (assetable.Assets != null && objects != null)
+            {
+                var builder = assetable.Assets.ToBuilder();
+                builder.AddRange(objects);
+                assetable.Assets = builder.ToImmutable();
+            }
+        }
     }
 }
