@@ -7,11 +7,9 @@ using GlmSharp;
 
 namespace Globe3DLight.Data
 {
-    public interface IGroundObjectState : IState
+    public interface IGroundObjectState : IState, IFrameable
     {
         dvec3 Position { get; }
-
-        dmat4 ModelMatrix { get; }
 
         double Lon { get; }
 

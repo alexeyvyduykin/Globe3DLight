@@ -173,6 +173,32 @@ namespace Globe3DLight.Renderer
             }
         }
 
+        public void DrawFrameList(object dc, IFrameRenderModel frame, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+        {
+            var drawNodeCached = _drawNodeCache.Get(frame);
+            if (drawNodeCached != null)
+            {
+                if (frame.IsDirty())
+                {
+                    drawNodeCached.UpdateGeometry();
+                }
+
+                drawNodeCached.Draw(dc, modelMatrices, scene);
+            }
+            else
+            {
+                var drawNode = _drawNodeFactory.CreateFrameDrawNode(frame);
+
+                drawNode.UpdateStyle();
+
+                drawNode.UpdateGeometry();
+
+                _drawNodeCache.Set(frame, drawNode);
+
+                drawNode.Draw(dc, modelMatrices, scene);
+            }
+        }
+
         public void DrawOrbit(object dc, IOrbitRenderModel orbit, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(orbit);

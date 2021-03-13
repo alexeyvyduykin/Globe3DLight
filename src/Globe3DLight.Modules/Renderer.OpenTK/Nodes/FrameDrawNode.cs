@@ -8,21 +8,61 @@ using OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    internal class FrameDrawNode : DrawNode, Globe3DLight.Renderer.IFrameDrawNode, IDisposable
+    internal class FrameDrawNode : DrawNode, IFrameDrawNode, IDisposable
     {
-
         private IFrameRenderModel _frame;
-
-        public IFrameRenderModel Frame { get => _frame; set => _frame = value; }
-
+       
         public FrameDrawNode(IFrameRenderModel frame)
         {
-            this._frame = frame;
+            _frame = frame;
+        }
+
+        public IFrameRenderModel Frame 
+        {
+            get => _frame; 
+            set => _frame = value;
+        }
+
+        public override void Draw(object dc, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+        {
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadMatrix(scene.ProjectionMatrix.Values1D);
+
+            var scale = Frame.Scale;
+
+            foreach (var item in modelMatrices)
+            {
+                var modelView = scene.ViewMatrix * item;
+
+                GL.MatrixMode(MatrixMode.Modelview);
+                GL.LoadMatrix(modelView.Values1D);
+
+                // zAxis
+                GL.Color3(0.0, 0.0, 1.0);
+                GL.Begin(PrimitiveType.Lines);
+                GL.Vertex3(0.0, 0.0, 0.0);
+                GL.Vertex3(0.0, 0.0, 1.0 * scale);
+                GL.End();
+
+                // xAxis                    
+                GL.Color3(1.0, 0.0, 0.0);
+                GL.Begin(PrimitiveType.Lines);
+                GL.Vertex3(0.0, 0.0, 0.0);
+                GL.Vertex3(1.0 * scale, 0.0, 0.0);
+                GL.End();
+
+                // yAxis                  
+                GL.Color3(0.0, 1.0, 0.0);
+                GL.Begin(PrimitiveType.Lines);
+                GL.Vertex3(0.0, 0.0, 0.0);
+                GL.Vertex3(0.0, 1.0 * scale, 0.0);
+                GL.End();
+            }
         }
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
-            dmat4 modelView = scene.ViewMatrix * modelMatrix;
+            var modelView = scene.ViewMatrix * modelMatrix;
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(scene.ProjectionMatrix.Values1D);

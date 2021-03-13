@@ -13,11 +13,11 @@ namespace Globe3DLight.Renderer.OpenTK
 {
     internal class GroundObjectDrawNode : DrawNode, IGroundObjectDrawNode
     {
-        public Scene.IGroundObjectRenderModel GroundObject { get; set; }
+        public IGroundObjectRenderModel GroundObject { get; set; }
 
-        public GroundObjectDrawNode(Scene.IGroundObjectRenderModel groundObject)
+        public GroundObjectDrawNode(IGroundObjectRenderModel groundObject)
         {
-            this.GroundObject = groundObject;
+            GroundObject = groundObject;
         }
 
         public override void UpdateGeometry()
@@ -34,12 +34,12 @@ namespace Globe3DLight.Renderer.OpenTK
             
             foreach (var item in modelMatrices)
             {
-                dmat4 modelView = scene.ViewMatrix * item;
+                var modelView = scene.ViewMatrix * item;
 
                 A.GL.MatrixMode(A.MatrixMode.Modelview);
                 A.GL.LoadMatrix(modelView.Values1D);
 
-                A.GL.Color3(1.0, 0.0, 0.0);
+                A.GL.Color3(0.15, 0.15, 0.15);
                 A.GL.Begin(A.PrimitiveType.Points);
                 A.GL.Vertex3(0.0, 0.0, 0.0);
                 A.GL.End();
@@ -50,7 +50,7 @@ namespace Globe3DLight.Renderer.OpenTK
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
-            dmat4 modelView = scene.ViewMatrix * modelMatrix;
+            var modelView = scene.ViewMatrix * modelMatrix;
 
             A.GL.MatrixMode(A.MatrixMode.Projection);
             A.GL.LoadMatrix(scene.ProjectionMatrix.Values1D);                      

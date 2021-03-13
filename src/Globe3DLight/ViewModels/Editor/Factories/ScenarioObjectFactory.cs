@@ -215,6 +215,7 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,           
                 RenderModel = renderModelFactory.CreateGroundObject(),
+                FrameRenderModel = renderModelFactory.CreateFrame(30.0f),
                 Children = ImmutableArray.Create<IScenarioObject>(),               
                 Logical = parent,                
             };
@@ -248,7 +249,8 @@ namespace Globe3DLight.Editor
                 { typeof(RootFrame), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))) },
                 { typeof(Earth), (new dvec3(0.0, 0.0, 20000.0), (x) => Math.Max(20.0, 0.025 * (x - 6400.0))) },
                 { typeof(Satellite), (new dvec3(-200.0, 200.0, -200.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))) },
-                { typeof(GroundStation), (new dvec3(0.0, 500.0, 0.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))) }
+                { typeof(GroundStation), (new dvec3(0.0, 500.0, 0.0), (x) => Math.Max(5.0, 0.05 * (x - 100.0))) },
+                { typeof(GroundObject), (new dvec3(0.0, 250.0, 0.0), (x) => Math.Max(5.0, 0.05 * (x - 5.0))) }
             };
 
             return new SceneState()

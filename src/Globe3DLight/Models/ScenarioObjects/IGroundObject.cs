@@ -8,9 +8,11 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.ScenarioObjects
 {
-    public interface IGroundObject : IScenarioObject, IDrawable
+    public interface IGroundObject : IScenarioObject, IDrawable, ITargetable
     {
         IGroundObjectRenderModel RenderModel { get; set; }
+
+        IFrameRenderModel FrameRenderModel { get; set; }
 
         ILogical Logical { get; set; }
     }

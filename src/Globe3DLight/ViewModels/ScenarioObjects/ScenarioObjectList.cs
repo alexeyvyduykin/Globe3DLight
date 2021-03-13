@@ -54,6 +54,7 @@ namespace Globe3DLight.ScenarioObjects
                                 //}
 
                                 var matrices = collection.Values.Select(s => m * ((IGroundObjectState)s.State).ModelMatrix);
+                                renderer.DrawFrameList(dc, groundObject.FrameRenderModel, matrices, scene);
                                 renderer.DrawGroundObjectList(dc, groundObject.RenderModel, matrices, scene);
                             }
                         }
