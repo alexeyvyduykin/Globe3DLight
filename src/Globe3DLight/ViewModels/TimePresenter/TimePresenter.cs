@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.Timer;
+using System.Diagnostics;
 
 namespace Globe3DLight.Time
 {
@@ -179,10 +180,10 @@ namespace Globe3DLight.Time
             }
         }
 
-        private void TimerThread_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
-        {
-            //  double current = Stopwatch.GetTimestamp() - last;
+        private double last = 0.0;
 
+        private void TimerThread_Elapsed(object sender, System.Timers.ElapsedEventArgs e)
+        {            
             if (_timer.IsRunning == true)
             {
                 // it's tick -> *.Time() do t += dt;
@@ -193,17 +194,21 @@ namespace Globe3DLight.Time
                 SliderInterval = new SliderInterval(this, 0, 1000);
                 //   var startTicks = Stopwatch.GetTimestamp();
 
+     //           double current = Stopwatch.GetTimestamp() - last;
+
                 // Do stuff
-                OnUpdate?.Invoke(TimeInterval.CurrentTime/* CurrentTime*/);
+     //           OnUpdate?.Invoke(TimeInterval.CurrentTime/* CurrentTime*/);
+
+      //          last = Stopwatch.GetTimestamp();
 
                 // var ticks = Stopwatch.GetTimestamp() - startTicks;
 
                 // UpdateTicks = string.Format("update globeviewer, ticks: {0}", ticks);
 
                 //  ThreadElapsed = string.Format("thread elapsed, seconds: {0}", current / Stopwatch.Frequency);
-            }
 
-            //  last = Stopwatch.GetTimestamp();
+     //           Debug.WriteLine(string.Format("Elapsed, seconds: {0}", current / Stopwatch.Frequency));
+            }        
         }
 
         public void OnReset()

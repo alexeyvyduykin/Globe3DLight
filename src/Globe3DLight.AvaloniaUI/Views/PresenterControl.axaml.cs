@@ -10,7 +10,9 @@ using Globe3DLight.AvaloniaUI.Renderer;
 using Globe3DLight.Containers;
 using Globe3DLight.Renderer;
 using Globe3DLight.Renderer.Presenters;
-
+using System.Diagnostics;
+using System.Linq;
+using Globe3DLight.Data;
 
 namespace Globe3DLight.AvaloniaUI.Views
 {
@@ -23,7 +25,7 @@ namespace Globe3DLight.AvaloniaUI.Views
         private int _height;
         //   private System.Timers.Timer _timer;
         private DispatcherTimer _timer;
-        private double _fps = 40;
+        private double _fps = 60;
 
         private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
 
@@ -71,6 +73,9 @@ namespace Globe3DLight.AvaloniaUI.Views
             public IRenderContext Renderer;
         }
 
+        private double last = 0.0;
+        private int frames = 0;
+        private double totalTime = 0.0;
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -81,9 +86,61 @@ namespace Globe3DLight.AvaloniaUI.Views
                 Renderer = Renderer ?? GetValue(RendererOptions.RendererProperty),
             };
 
+
+            double current = Stopwatch.GetTimestamp() - last;
+
+            if (Container.TimePresenter.Timer.IsRunning == true)
+            {
+                var curTime = Container.TimePresenter.Timer.CurrentTime;
+                                    
+                LogicalUpdate(curTime, Container.LogicalTreeNodeRoot.SingleOrDefault());
+            }
+
             Draw(customState, context);
+
+            frames++;
+            totalTime += current / Stopwatch.Frequency;
+
+            if (totalTime >= 1.0)
+            {
+                Debug.WriteLine(string.Format("Frames: {0}", frames));
+                frames = 0;
+                totalTime = 0.0;
+            }
+            
+            last = Stopwatch.GetTimestamp();
+
+            //Debug.WriteLine(string.Format("Elapsed, seconds: {0}", current / Stopwatch.Frequency));
         }
 
+        public void LogicalUpdate(double t, IObservableObject obj)
+        {
+            if (obj is ILogical logical)
+            {
+                if (logical.State is IAnimator animator)
+                {
+                    animator.Animate(t);
+                }
+
+                foreach (var item in logical.Children)
+                {
+                    LogicalUpdate(t, item);
+                }
+            }
+            else if (obj is ILogicalCollection collection)
+            {
+                var first = collection.Values.FirstOrDefault();
+
+                if (first.State is IAnimator animator)
+                {
+                    foreach (IAnimator item in collection.Values.Select(s => s.State))
+                    {
+                        item.Animate(t);
+                    }
+                }
+            }
+        }
+            
         internal void Draw(CustomState customState, object context)
         {
             var drawingContext = context as DrawingContext;
