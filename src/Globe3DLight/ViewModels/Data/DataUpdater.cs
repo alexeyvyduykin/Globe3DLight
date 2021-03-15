@@ -7,26 +7,13 @@ using System.Linq;
 
 namespace Globe3DLight.Data
 {
-    public interface IDataUpdater : IObservableObject
+    public interface IDataUpdater
     {
         void Update(double t, IObservableObject obj);
     }
 
-    public class DataUpdater : ObservableObject, IDataUpdater
+    public class DataUpdater : IDataUpdater
     {
-        private readonly IServiceProvider _serviceProvider;
-
-        public DataUpdater(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-
         public void Update(double t, IObservableObject obj)
         {
             if (obj is ILogical logical)

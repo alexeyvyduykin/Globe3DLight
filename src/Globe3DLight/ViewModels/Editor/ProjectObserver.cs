@@ -106,15 +106,15 @@ namespace Globe3DLight.Editor
             MarkAsDirty();
         }
 
-        private void SceneTimer_OnUpdate(double t)
-        {
-            var root = _editor?.Project?.CurrentScenario.LogicalTreeNodeRoot.SingleOrDefault();
+        //private void SceneTimer_OnUpdate(double t)
+        //{
+        //    var root = _editor?.Project?.CurrentScenario.LogicalTreeNodeRoot.SingleOrDefault();
 
-            if(root != null)
-            {
-                _editor.Updater.Update(t, root);
-            }
-        }
+        //    if(root != null)
+        //    {
+        //        _editor.Updater.Update(t, root);
+        //    }
+        //}
 
         private void Add(IProjectContainer project)
         {
@@ -234,7 +234,7 @@ namespace Globe3DLight.Editor
                 return;
             }
             
-            timePresenter/*SceneTimer*/.OnUpdate += SceneTimer_OnUpdate;
+            //timePresenter.OnUpdate += SceneTimer_OnUpdate;
 
             timePresenter.PropertyChanged += ObserveTimePresenter;
         }
@@ -246,7 +246,7 @@ namespace Globe3DLight.Editor
                 return;
             }
 
-            timePresenter/*SceneTimer*/.OnUpdate -= SceneTimer_OnUpdate;
+            //timePresenter.OnUpdate -= SceneTimer_OnUpdate;
 
             timePresenter.PropertyChanged -= ObserveTimePresenter;
         }

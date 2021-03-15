@@ -59,6 +59,8 @@ namespace Globe3DLight
 
         ITimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan);
 
+        IDataUpdater CreateDataUpdater();
+
         void SaveProjectContainer(IProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer);
      
         IProjectContainer OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer);

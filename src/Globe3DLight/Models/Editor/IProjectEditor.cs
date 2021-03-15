@@ -16,11 +16,11 @@ namespace Globe3DLight.Editor
         ProjectObserver Observer { get; set; }
         IRenderContext Renderer { get; }
         IPresenterContract Presenter { get; }
-        IDataUpdater Updater { get; }
 
         IEditorTool CurrentTool { get; }
         IProjectEditorPlatform Platform { get; }
-        void OnUpdate(double t);
+       
+        void OnUpdate();
         
         void OnNewProject();
         void OnDemoProject();

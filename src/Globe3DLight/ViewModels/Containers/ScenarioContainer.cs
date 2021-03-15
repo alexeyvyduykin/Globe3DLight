@@ -2,10 +2,11 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Text;
+using System.Linq;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Time;
 using GlmSharp;
+using Globe3DLight.Data;
 
 namespace Globe3DLight.Containers
 {
@@ -14,6 +15,7 @@ namespace Globe3DLight.Containers
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
         private ImmutableArray<ILogical> _logicalTreeNodeRoot;
+        private IDataUpdater _updater;
         private bool _isExpanded = true;
         private ImmutableArray<IScenarioObject> _sceneObjects;
         private IScenarioObject _currentScenarioObject;
@@ -22,10 +24,6 @@ namespace Globe3DLight.Containers
         private ILogical _currentLogicalTreeNode;
         private ISceneState _sceneState;
         private ITimePresenter _timePresenter;
-
-        //private DateTime _begin;
-
-        //private TimeSpan _duration;
 
         private double _width;
 
@@ -37,22 +35,16 @@ namespace Globe3DLight.Containers
             set => Update(ref _logicalTreeNodeRoot, value); 
         }
 
-        //public DateTime Begin 
-        //{
-        //    get => _begin;
-        //    set => Update(ref _begin, value);
-        //}
-
-        //public TimeSpan Duration 
-        //{
-        //    get => _duration; 
-        //    set => Update(ref _duration, value); 
-        //}
-
         public ILogical CurrentLogicalTreeNode
         {
             get => _currentLogicalTreeNode;
             set => Update(ref _currentLogicalTreeNode, value);
+        }
+
+        public IDataUpdater Updater 
+        {
+            get => _updater;
+            set => Update(ref _updater, value);
         }
 
         public bool IsExpanded
@@ -84,6 +76,7 @@ namespace Globe3DLight.Containers
             get => _sceneState; 
             set => Update(ref _sceneState, value); 
         }
+
         public double Width 
         {
             get => _width; 
@@ -116,6 +109,14 @@ namespace Globe3DLight.Containers
                 var newBehaviour = behaviours[targetType];
                 SceneState.Camera.LookAt(newBehaviour.eye, dvec3.Zero, dvec3.UnitY);
                 SceneState.Target = target;
+            }
+        }
+
+        public void LogicalUpdate()
+        {
+            //if (TimePresenter.Timer.IsRunning == true)
+            {
+                Updater.Update(TimePresenter.Timer.CurrentTime, LogicalTreeNodeRoot.SingleOrDefault());
             }
         }
 

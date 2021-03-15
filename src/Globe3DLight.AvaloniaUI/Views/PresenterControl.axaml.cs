@@ -23,9 +23,12 @@ namespace Globe3DLight.AvaloniaUI.Views
 
         private int _width;
         private int _height;
-        //   private System.Timers.Timer _timer;
         private DispatcherTimer _timer;
         private double _fps = 60;
+        private double _last = 0.0;
+        private int _frames = 0;
+        private double _totalTime = 0.0;
+        private double _currentFps = 0.0;
 
         private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
 
@@ -37,7 +40,6 @@ namespace Globe3DLight.AvaloniaUI.Views
 
         public static readonly StyledProperty<IPresenterContract> PresenterContractProperty =
             AvaloniaProperty.Register<PresenterControl, IPresenterContract>(nameof(PresenterContract), null);
-
 
         public IScenarioContainer Container
         {
@@ -73,9 +75,6 @@ namespace Globe3DLight.AvaloniaUI.Views
             public IRenderContext Renderer;
         }
 
-        private double last = 0.0;
-        private int frames = 0;
-        private double totalTime = 0.0;
         public override void Render(DrawingContext context)
         {
             base.Render(context);
@@ -86,59 +85,50 @@ namespace Globe3DLight.AvaloniaUI.Views
                 Renderer = Renderer ?? GetValue(RendererOptions.RendererProperty),
             };
 
+#if USE_DIAGNOSTICS
+            double current = Stopwatch.GetTimestamp() - _last;
+#endif
 
-            double current = Stopwatch.GetTimestamp() - last;
-
-            if (Container.TimePresenter.Timer.IsRunning == true)
-            {
-                var curTime = Container.TimePresenter.Timer.CurrentTime;
-                                    
-                LogicalUpdate(curTime, Container.LogicalTreeNodeRoot.SingleOrDefault());
-            }
+            Container.LogicalUpdate();
 
             Draw(customState, context);
 
-            frames++;
-            totalTime += current / Stopwatch.Frequency;
+#if USE_DIAGNOSTICS
+            _frames++;
+            _totalTime += current / Stopwatch.Frequency;
 
-            if (totalTime >= 1.0)
+            if (_totalTime >= 1.0)
             {
-                Debug.WriteLine(string.Format("Frames: {0}", frames));
-                frames = 0;
-                totalTime = 0.0;
+                _currentFps = _frames;            
+                _frames = 0;
+                _totalTime = 0.0;
             }
             
-            last = Stopwatch.GetTimestamp();
-
-            //Debug.WriteLine(string.Format("Elapsed, seconds: {0}", current / Stopwatch.Frequency));
+            _last = Stopwatch.GetTimestamp();
+          
+            DrawDiagnostics(context);                  
+#endif
         }
 
-        public void LogicalUpdate(double t, IObservableObject obj)
+        private void DrawDiagnostics(DrawingContext context)
         {
-            if (obj is ILogical logical)
-            {
-                if (logical.State is IAnimator animator)
-                {
-                    animator.Animate(t);
-                }
+            var foreground = new SolidColorBrush(Colors.White, 0.85);
 
-                foreach (var item in logical.Children)
-                {
-                    LogicalUpdate(t, item);
-                }
-            }
-            else if (obj is ILogicalCollection collection)
-            {
-                var first = collection.Values.FirstOrDefault();
+            var topLeft = new Point(4, 4);
+            var size = new Size(60, 20);
 
-                if (first.State is IAnimator animator)
-                {
-                    foreach (IAnimator item in collection.Values.Select(s => s.State))
-                    {
-                        item.Animate(t);
-                    }
-                }
-            }
+            var text = new FormattedText()
+            {
+                Text = string.Format("Fps: {0}", _currentFps),
+                Typeface = new Typeface(new FontFamily("Comic Sans MS, Verdana"), FontStyle.Normal, FontWeight.Normal),
+                FontSize = 14,
+                TextAlignment = TextAlignment.Left,
+                TextWrapping = TextWrapping.NoWrap,
+                Constraint = size,
+            };
+
+            context.DrawRectangle(new SolidColorBrush(Colors.Black, 0.70), null, new Rect(topLeft, size));
+            context.DrawText(foreground, topLeft, text);
         }
             
         internal void Draw(CustomState customState, object context)

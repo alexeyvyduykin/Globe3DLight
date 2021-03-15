@@ -393,6 +393,11 @@ namespace Globe3DLight
             };
         }
 
+        public IDataUpdater CreateDataUpdater()
+        {     
+            return new DataUpdater();
+        }
+
         public void SaveProjectContainer(IProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer)
         {
             //if (project is IImageCache imageCache)

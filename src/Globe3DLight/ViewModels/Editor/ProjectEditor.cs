@@ -21,8 +21,7 @@ namespace Globe3DLight.Editor
         private readonly Lazy<IJsonSerializer> _jsonSerializer;
         private readonly Lazy<IFileSystem> _fileIO;
         private readonly Lazy<IRenderContext> _renderer;
-        private readonly Lazy<IPresenterContract> _presenter;
-        private readonly Lazy<IDataUpdater> _updater;
+        private readonly Lazy<IPresenterContract> _presenter;    
         private IProjectContainer _project;
         private readonly Lazy<IEditorTool> _currentTool;
         private readonly Lazy<IEditorCanvasPlatform> _canvasPlatform;
@@ -50,8 +49,6 @@ namespace Globe3DLight.Editor
 
         public IPresenterContract Presenter => _presenter.Value;
 
-        public IDataUpdater Updater => _updater.Value;
-
         public IContainerFactory ContainerFactory => _containerFactory.Value;
         public IFactory Factory => _factory.Value;
         public IDataFactory DataFactory => _dataFactory.Value;
@@ -72,23 +69,19 @@ namespace Globe3DLight.Editor
             _containerFactory = _serviceProvider.GetServiceLazily<IContainerFactory>();
             _sceneFactory = _serviceProvider.GetServiceLazily<IScenarioObjectFactory>();
             _renderer = _serviceProvider.GetServiceLazily<IRenderContext>();
-            _presenter = _serviceProvider.GetServiceLazily<IPresenterContract>();
-            _updater = _serviceProvider.GetServiceLazily<IDataUpdater>();
+            _presenter = _serviceProvider.GetServiceLazily<IPresenterContract>();   
             _currentTool = _serviceProvider.GetServiceLazily<IEditorTool>();
             _jsonSerializer = _serviceProvider.GetServiceLazily<IJsonSerializer>();
-            _fileIO = _serviceProvider.GetServiceLazily<IFileSystem>();
-            //      _shapeFactory = _serviceProvider.GetServiceLazily<IShapeFactory>();
-            
+            _fileIO = _serviceProvider.GetServiceLazily<IFileSystem>();       
             _platform = _serviceProvider.GetServiceLazily<IProjectEditorPlatform>();         
             _canvasPlatform = _serviceProvider.GetServiceLazily<IEditorCanvasPlatform>();
-
         }
 
-        public void OnUpdate(double t)
+        public void OnUpdate()
         {
             if (Project != null)
             {
-                Updater.Update(t, Project.CurrentScenario.LogicalTreeNodeRoot.SingleOrDefault());                
+                Project.CurrentScenario.LogicalUpdate();            
             }
         }
 
@@ -136,7 +129,7 @@ namespace Globe3DLight.Editor
                     OnLoad(project, path);
                     //    OnAddRecent(path, project.Name);
                     //    CanvasPlatform?.ResetZoom?.Invoke();
-                    OnUpdate(0.0);
+                    OnUpdate();
                     CanvasPlatform?.InvalidateControl?.Invoke();
                 }
             }

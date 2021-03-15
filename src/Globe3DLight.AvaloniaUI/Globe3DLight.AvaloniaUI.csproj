@@ -24,6 +24,10 @@
     <Copyright>kekw</Copyright>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);USE_DIAGNOSTICS</DefineConstants>
+  </PropertyGroup>
+
   <ItemGroup>
     <Compile Include="**\*.cs" Exclude="obj\**" />
     <Compile Update="**\*.xaml.cs">

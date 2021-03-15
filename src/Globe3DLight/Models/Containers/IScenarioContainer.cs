@@ -4,7 +4,7 @@ using System.Text;
 using Globe3DLight.Scene;
 using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Time;
-
+using Globe3DLight.Data;
 
 namespace Globe3DLight.Containers
 {
@@ -15,6 +15,7 @@ namespace Globe3DLight.Containers
     public interface IScenarioContainer : IBaseContainer//, IGrid
     {
         event InvalidateScenarioEventHandler InvalidateScenarioHandler;
+
         void InvalidateScenario();
 
         double Width { get; set; }
@@ -33,14 +34,14 @@ namespace Globe3DLight.Containers
 
         IScenarioObject CurrentScenarioObject { get; set; }  
 
-        //DateTime Begin { get; set; }
-
-        //TimeSpan Duration { get; set; }
-
         ISceneState SceneState { get; set; }
 
         ITimePresenter TimePresenter { get; set; }
 
+        IDataUpdater Updater { get; set; }
+
         void SetCameraTo(ITargetable target);
+
+        void LogicalUpdate();
     }
 }

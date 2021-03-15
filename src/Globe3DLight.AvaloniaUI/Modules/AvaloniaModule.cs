@@ -60,7 +60,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
             builder.RegisterType<DotNetFileSystem>().As<IFileSystem>().InstancePerLifetimeScope();
             //builder.RegisterType<RoslynScriptRunner>().As<IScriptRunner>().InstancePerLifetimeScope();
             builder.RegisterType<NewtonsoftJsonSerializer>().As<IJsonSerializer>().InstancePerLifetimeScope();            
-            builder.RegisterType<DataUpdater>().As<IDataUpdater>().InstancePerLifetimeScope();
+            //builder.RegisterType<DataUpdater>().As<IDataUpdater>().InstancePerLifetimeScope();
 
 
 
