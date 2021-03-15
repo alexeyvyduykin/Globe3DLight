@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GlmSharp\GlmSharp.csproj" />
-    <ProjectReference Include="..\..\..\..\Spatial\Spatial.csproj" />
+    <ProjectReference Include="..\..\..\..\GlmSharp\GlmSharp\GlmSharp.csproj" />
   </ItemGroup>
 
 </Project>
