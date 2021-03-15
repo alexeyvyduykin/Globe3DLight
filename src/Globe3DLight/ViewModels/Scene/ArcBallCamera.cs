@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Spatial;
+using Globe3DLight.Spatial;
 
 
 namespace Globe3DLight.Scene
