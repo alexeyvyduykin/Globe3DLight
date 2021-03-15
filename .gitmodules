@@ -1,6 +1,6 @@
 [submodule "GlmSharp"]
 
-	path = tools/GlmSharp
+	path = GlmSharp
 
 	url = https://github.com/alexeyvyduykin/GlmSharp
 
