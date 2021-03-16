@@ -7,7 +7,6 @@ using Globe3DLight.Containers;
 using System.Collections.Immutable;
 using Globe3DLight.Scene;
 using Globe3DLight.Renderer;
-using Spatial;
 using Globe3DLight.Style;
 using System.Linq;
 using Globe3DLight.ScenarioObjects;

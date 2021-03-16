@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Spatial;
 
 namespace Globe3DLight.Scene
 {
