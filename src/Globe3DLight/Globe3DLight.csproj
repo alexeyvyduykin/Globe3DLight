@@ -5,13 +5,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="GlmSharp" Version="1.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="5.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\GlmSharp\GlmSharp\GlmSharp\GlmSharp.csproj" />
   </ItemGroup>
 
 </Project>
