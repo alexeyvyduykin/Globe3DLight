@@ -4,28 +4,28 @@ using System.Text;
 
 namespace Globe3DLight.SceneTimer
 {
-    public delegate void TimerHandler(double t);
+    //public delegate void TimerHandler(double t);
 
-    public interface ISceneTimer : IObservableObject
-    {
-        event TimerHandler OnUpdate;
+    //public interface ISceneTimer : IObservableObject
+    //{
+    //    event TimerHandler OnUpdate;
 
-        void OnReset();
+    //    void OnReset();
 
-        void OnPlay();
+    //    void OnPlay();
 
-        void OnPause();
+    //    void OnPause();
 
-        void OnSlower();
+    //    void OnSlower();
 
-        void OnFaster();
+    //    void OnFaster();
 
-        string StringTime { get; set; }
+    //    string StringTime { get; set; }
 
-        double SliderTimeMinumum { get; set; }
+    //    double SliderTimeMinumum { get; set; }
 
-        double SliderTimeMaximum { get; set; }
+    //    double SliderTimeMaximum { get; set; }
 
-        double SliderTime { get; set; }
-    }
+    //    double SliderTime { get; set; }
+    //}
 }
