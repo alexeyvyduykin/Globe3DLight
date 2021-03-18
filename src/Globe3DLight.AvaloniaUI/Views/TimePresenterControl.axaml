@@ -13,7 +13,7 @@
              >
 
   <UserControl.Resources>
-    <converters:TimePresenterToStringConverter x:Key="TimePresenterToStringConverter"/>
+    <!--<converters:TimePresenterToStringConverter x:Key="TimePresenterToStringConverter"/>-->
       <!--<converters:TimePresenterToSliderConverter x:Key="TimePresenterToSliderConverter"/>-->
   </UserControl.Resources>
 
