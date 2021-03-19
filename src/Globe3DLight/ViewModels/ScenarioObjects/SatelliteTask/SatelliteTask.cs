@@ -11,6 +11,7 @@ namespace Globe3DLight.ScenarioObjects
     {
         private readonly IList<ISatelliteEvent> _sourceEvents;
 
+        private bool _isVisible;
         private bool _hasRotations;
         private bool _hasObservations;
         private bool _hasTransmission;
@@ -18,6 +19,7 @@ namespace Globe3DLight.ScenarioObjects
 
         private IList<ISatelliteEvent> _events;
         private ISatelliteEvent _selectedEvent;
+        private ISatellite _satellite;
 
         public SatelliteTask(IList<ISatelliteEvent> events)
         {
@@ -45,6 +47,12 @@ namespace Globe3DLight.ScenarioObjects
         {
             Events = CreateFrom(_sourceEvents);
             SelectedEvent = Events.FirstOrDefault();
+        }
+
+        public bool IsVisible 
+        {
+            get => _isVisible; 
+            set => Update(ref _isVisible, value); 
         }
 
         public bool HasRotations
@@ -86,7 +94,13 @@ namespace Globe3DLight.ScenarioObjects
                 Update();
             }
         }
-        
+
+        public ISatellite Satellite 
+        {
+            get => _satellite; 
+            set => Update(ref _satellite, value); 
+        }
+
         public IList<ISatelliteEvent> Events 
         {
             get => _events; 

@@ -30,7 +30,9 @@ namespace Globe3DLight.Containers
 
         ImmutableArray<IScenarioObject> ScenarioObjects { get; set; }
 
-        ImmutableArray<ISatelliteTask> SatelliteTasks { get; set; }
+        ImmutableArray<ISatelliteTask> Tasks { get; set; }
+
+        ISatelliteTask CurrentTask { get; set; }
 
         IScenarioObject CurrentScenarioObject { get; set; }  
 

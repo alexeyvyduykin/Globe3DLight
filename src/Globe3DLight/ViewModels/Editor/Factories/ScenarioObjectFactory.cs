@@ -291,6 +291,7 @@ namespace Globe3DLight.Editor
             return new SatelliteTask(sortEvents)
             {
                 Name = name,
+                Satellite = satellite,
                 HasRotations = true,
                 HasObservations = true,
                 HasTransmissions = true,

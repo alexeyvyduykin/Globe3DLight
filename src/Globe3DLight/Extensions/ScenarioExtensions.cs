@@ -12,11 +12,11 @@ namespace Globe3DLight
     {
         public static void AddSatelliteTask(this IScenarioContainer scenario, ISatelliteTask task)
         {
-            if (scenario.SatelliteTasks != null && task != null)
+            if (scenario?.Tasks != null && task != null)
             {
-                var builder = scenario.SatelliteTasks.ToBuilder();
+                var builder = scenario.Tasks.ToBuilder();
                 builder.Add(task);
-                scenario.SatelliteTasks = builder.ToImmutable();
+                scenario.Tasks = builder.ToImmutable();
             }
         }
     }

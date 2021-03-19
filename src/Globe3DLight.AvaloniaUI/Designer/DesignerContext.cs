@@ -183,9 +183,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             SatelliteTask = objFactory.CreateSatelliteTask(Satellite, RotationData, SensorData, AntennaData, DateTime.Now);
             //SatelliteTask.Events = events.OrderBy(s => s.Begin).ToList();
 
-            Scenario.SatelliteTasks = ImmutableArray.Create(SatelliteTask);
-
-
+            Scenario.AddSatelliteTask(SatelliteTask);
 
             // Scene
 

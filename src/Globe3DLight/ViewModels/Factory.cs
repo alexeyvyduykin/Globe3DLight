@@ -349,11 +349,10 @@ namespace Globe3DLight
             {
                 Name = name,   
                 LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(),                   
-                ScenarioObjects = ImmutableArray.Create<IScenarioObject>(),                
+                ScenarioObjects = ImmutableArray.Create<IScenarioObject>(),
+                Tasks = ImmutableArray.Create<ISatelliteTask>(),
             };
         }
-
-
 
         public ILogical CreateLogical(string name, IState state)
         {

@@ -3,7 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                                                    
-             xmlns:vm="clr-namespace:Globe3DLight.AvaloniaUI.ViewModels;assembly=Globe3DLight.AvaloniaUI"
+             xmlns:vm="clr-namespace:Globe3DLight.AvaloniaUI.ViewModels;assembly=Globe3DLight.AvaloniaUI"             
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"                  
              xmlns:converters="clr-namespace:Globe3DLight.AvaloniaUI.Converters;assembly=Globe3DLight.AvaloniaUI"
              xmlns:scenarioObjects="clr-namespace:Globe3DLight.AvaloniaUI.Views.ScenarioObjects;assembly=Globe3DLight.AvaloniaUI"
              xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
@@ -102,10 +105,10 @@
     </UserControl.Styles>
 
     <Grid ColumnDefinitions="*" RowDefinitions="*">
-        <ItemsControl Items="{Binding SatelliteTasks}">
+        <ItemsControl Items="{Binding Tasks}">
             <ItemsControl.DataTemplates>
                 <DataTemplate DataType="SceneObjects:ISatelliteTask">
-                    <Expander Header="{Binding Name}">
+                    <Expander x:Name="expander" Header="{Binding Name}" IsExpanded="{Binding IsVisible}">                                                                
                         <Expander.Content>                                                                     
                             <scenarioObjects:SatelliteTaskControl DataContext="{Binding}"/>                        
                         </Expander.Content>
@@ -114,8 +117,7 @@
             </ItemsControl.DataTemplates>
         </ItemsControl>
     </Grid>
-    
-    
+
     
     
 </UserControl>

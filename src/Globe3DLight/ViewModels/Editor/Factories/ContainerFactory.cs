@@ -145,7 +145,7 @@ namespace Globe3DLight.Editor
             scenario.CurrentLogicalTreeNode = scenario.LogicalTreeNodeRoot.FirstOrDefault();
             scenario.SceneState = scenarioObjectFactory.CreateSceneState();  
             scenario.TimePresenter = factory.CreateTimePresenter(begin, duration);
-            scenario.SatelliteTasks = ImmutableArray.Create<ISatelliteTask>();
+            //scenario.Tasks = ImmutableArray.Create<ISatelliteTask>();
             scenario.Updater = factory.CreateDataUpdater();
 
             return scenario;
