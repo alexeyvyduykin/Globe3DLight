@@ -236,7 +236,7 @@
             <Grid ColumnDefinitions="*" RowDefinitions="*" Grid.Column="0" Grid.Row="1">
 
                 <ListBox Items="{Binding Events}"
-                         SelectedItems="{Binding SelectedEvent}"
+                         SelectedItem="{Binding SelectedEvent}"
                          Background="Transparent"
                          ScrollViewer.VerticalScrollBarVisibility="Auto">
 

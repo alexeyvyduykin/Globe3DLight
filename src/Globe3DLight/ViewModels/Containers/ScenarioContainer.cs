@@ -149,7 +149,7 @@ namespace Globe3DLight.Containers
         {
             foreach (var task in tasks)
             {
-                task.PropertyChanged += Task_PropertyChanged;
+                task.PropertyChanged += Task_PropertyChanged;             
             }
 
             void Task_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -170,7 +170,26 @@ namespace Globe3DLight.Containers
                         CurrentTask = task;
                     }
                 }
-            }
+
+                if (e.PropertyName == nameof(ISatelliteTask.SelectedEvent))
+                {
+                    var task = sender as ISatelliteTask;
+
+                    if(TimePresenter.Timer.IsRunning == true)
+                    {
+                        TimePresenter.OnPause();
+                    }
+
+                    if (task.SelectedEvent != null)
+                    {
+                        var time = task.SelectedEvent.Begin;
+                        var begin = TimePresenter.Begin;
+
+                        TimePresenter.Update((time - begin).TotalSeconds);
+                    }
+                }
+       
+            }    
         }
 
         public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, new InvalidateScenarioEventArgs());
