@@ -6,7 +6,7 @@ using Globe3DLight.Scene;
 using System.Linq;
 using Globe3DLight.Renderer;
 using Globe3DLight.Data;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 
 namespace Globe3DLight.Editor
 {
@@ -231,9 +231,9 @@ namespace Globe3DLight.Editor
 
         public void OnImportObject(object item, bool restore)
         {
-            if (item is IScenarioObject scenarioObject)
+            if (item is IEntity entity)
             {
-                Project.AddScenarioObject(scenarioObject);
+                Project.AddEntity(entity);
             }
             else if (item is IProjectContainer project)
             {

@@ -5,7 +5,7 @@ using Globe3DLight.Containers;
 using Globe3DLight.Scene;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using Globe3DLight.SceneTimer;
 using Globe3DLight.Data;
 using System.IO;
@@ -82,9 +82,9 @@ namespace Globe3DLight.Editor
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
             var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(fr_rtr_collection, s));
         
-            project.AddScenarioObject(objFactory.CreateSpacebox("Spacebox", root));
-            project.AddScenarioObject(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
-            project.AddScenarioObject(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
+            project.AddEntity(objFactory.CreateSpacebox("Spacebox", root));
+            project.AddEntity(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
+            project.AddEntity(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
             
             var satellites = fr_rotations.Select(s => objFactory.CreateSatellite(s.Key, s.Value)).ToList();
 
@@ -121,11 +121,11 @@ namespace Globe3DLight.Editor
                 satellites[i].AddChild(objFactory.CreateOrbit(string.Format("Orbit{0}", i + 1), fr_orbits[satellites[i].Name]));
             }
 
-            project.AddScenarioObject(objFactory.CreateScenarioObjectList("GroundObjects", fr_go_collection, gos));
-            project.AddScenarioObject(objFactory.CreateScenarioObjectList("GroundStations", fr_gs_collection, gss));
-            project.AddScenarioObject(objFactory.CreateScenarioObjectList("Retranslators", fr_rtr_collection, rtrs));
+            project.AddEntity(objFactory.CreateEntityList("GroundObjects", fr_go_collection, gos));
+            project.AddEntity(objFactory.CreateEntityList("GroundStations", fr_gs_collection, gss));
+            project.AddEntity(objFactory.CreateEntityList("Retranslators", fr_rtr_collection, rtrs));
 
-            project.AddScenarioObjects(satellites);
+            project.AddEntities(satellites);
 
             return project;
         }
@@ -220,7 +220,7 @@ namespace Globe3DLight.Editor
             var fr_retr3 = dataFactory.CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator3.json"));
 
 
-            var objBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            var objBuilder = ImmutableArray.CreateBuilder<IEntity>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
             objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
             objBuilder.Add(objFactory.CreateEarth("Earth", fr_j2000));
@@ -234,7 +234,7 @@ namespace Globe3DLight.Editor
             objBuilder.Add(objFactory.CreateSensor("Sensor4", fr_sensor4));
 
 
-            var assetsBuilder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            var assetsBuilder = ImmutableArray.CreateBuilder<IEntity>();
 
             var gs1 = objFactory.CreateGroundStation("GroundStation01", fr_gs01/*, 0*/);
             var gs2 = objFactory.CreateGroundStation("GroundStation02", fr_gs02/*, 1*/);
@@ -251,8 +251,8 @@ namespace Globe3DLight.Editor
             var rtr3 = objFactory.CreateRetranslator("Retranslator3", fr_retr3/*, 2*/);
 
 
-            var gss = new IScenarioObject[] { gs1, gs2, gs3, gs4, gs5, gs6, gs7, gs8, gs9 };
-            var rtrs = new IScenarioObject[] { rtr1, rtr2, rtr3 };
+            var gss = new IEntity[] { gs1, gs2, gs3, gs4, gs5, gs6, gs7, gs8, gs9 };
+            var rtrs = new IEntity[] { rtr1, rtr2, rtr3 };
 
             objBuilder.AddRange(gss);
             objBuilder.AddRange(rtrs);
@@ -280,7 +280,7 @@ namespace Globe3DLight.Editor
             objBuilder.Add(antenna3);
             objBuilder.Add(antenna4);
 
-            scenario1.ScenarioObjects = objBuilder.ToImmutable();
+            scenario1.Entities = objBuilder.ToImmutable();
 
 
             project.AddScenario(scenario1);

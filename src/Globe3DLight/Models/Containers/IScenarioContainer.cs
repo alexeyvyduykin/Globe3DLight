@@ -2,7 +2,7 @@
 using System.Collections.Immutable;
 using System.Text;
 using Globe3DLight.Scene;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using Globe3DLight.Time;
 using Globe3DLight.Data;
 
@@ -28,13 +28,13 @@ namespace Globe3DLight.Containers
 
         ILogical CurrentLogicalTreeNode { get; set; }
 
-        ImmutableArray<IScenarioObject> ScenarioObjects { get; set; }
+        ImmutableArray<IEntity> Entities { get; set; }
 
         ImmutableArray<ISatelliteTask> Tasks { get; set; }
 
         ISatelliteTask CurrentTask { get; set; }
 
-        IScenarioObject CurrentScenarioObject { get; set; }  
+        IEntity CurrentEntity { get; set; }  
 
         ISceneState SceneState { get; set; }
 

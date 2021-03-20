@@ -8,11 +8,11 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"                  
              xmlns:converters="clr-namespace:Globe3DLight.AvaloniaUI.Converters;assembly=Globe3DLight.AvaloniaUI"
-             xmlns:scenarioObjects="clr-namespace:Globe3DLight.AvaloniaUI.Views.ScenarioObjects;assembly=Globe3DLight.AvaloniaUI"
+             xmlns:entities="clr-namespace:Globe3DLight.AvaloniaUI.Views.Entities;assembly=Globe3DLight.AvaloniaUI"
              xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.AvaloniaUI.Designer;assembly=Globe3DLight.AvaloniaUI"
              xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
-             xmlns:SceneObjects="clr-namespace:Globe3DLight.ScenarioObjects;assembly=Globe3DLight"
+             xmlns:Entities="clr-namespace:Globe3DLight.Entities;assembly=Globe3DLight"
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Scenario}"
              d:DesignWidth="250" d:DesignHeight="500"
@@ -107,10 +107,10 @@
     <Grid ColumnDefinitions="*" RowDefinitions="*">
         <ItemsControl Items="{Binding Tasks}">
             <ItemsControl.DataTemplates>
-                <DataTemplate DataType="SceneObjects:ISatelliteTask">
+                <DataTemplate DataType="Entities:ISatelliteTask">
                     <Expander x:Name="expander" Header="{Binding Name}" IsExpanded="{Binding IsVisible}">                                                                
-                        <Expander.Content>                                                                     
-                            <scenarioObjects:SatelliteTaskControl DataContext="{Binding}"/>                        
+                        <Expander.Content>
+                            <entities:SatelliteTaskControl DataContext="{Binding}"/>                        
                         </Expander.Content>
                     </Expander>
                 </DataTemplate>

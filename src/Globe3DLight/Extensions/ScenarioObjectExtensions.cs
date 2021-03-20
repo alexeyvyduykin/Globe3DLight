@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 
 namespace Globe3DLight
 {
     public static class ScenarioObjectExtensions
     {
-        public static void AddChild(this IChildren obj, IScenarioObject child)
+        public static void AddChild(this IChildren obj, IEntity child)
         {
             if (child != null)
             {
@@ -23,7 +23,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddChildren(this IChildren obj, IEnumerable<IScenarioObject> children)
+        public static void AddChildren(this IChildren obj, IEnumerable<IEntity> children)
         {
             if (children != null)
             {
@@ -43,7 +43,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddAssets(this IAssetable assetable, IEnumerable<IScenarioObject> objects)
+        public static void AddAssets(this IAssetable assetable, IEnumerable<IEntity> objects)
         {
             if (assetable.Assets != null && objects != null)
             {

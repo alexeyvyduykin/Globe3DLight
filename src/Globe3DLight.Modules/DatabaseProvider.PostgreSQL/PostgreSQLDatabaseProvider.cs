@@ -7,7 +7,6 @@ using System.Linq;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.IO;
-using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Editor;
 using System.Collections.Immutable;
 using System.Threading.Tasks;

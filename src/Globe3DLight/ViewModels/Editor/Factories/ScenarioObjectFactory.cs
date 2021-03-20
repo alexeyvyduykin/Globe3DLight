@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using Globe3DLight.Scene;
 using System.Linq;
 using System.Collections.Immutable;
@@ -26,7 +26,7 @@ namespace Globe3DLight.Editor
 
         IGroundStation CreateGroundStation(string name, ILogical parent);
 
-        IScenarioObjectList CreateScenarioObjectList(string name, ILogicalCollection parent, IEnumerable<IScenarioObject> values);
+        IEntityList CreateEntityList(string name, ILogicalCollection parent, IEnumerable<IEntity> values);
 
         IGroundObject CreateGroundObject(string name, ILogical parent);
 
@@ -65,7 +65,7 @@ namespace Globe3DLight.Editor
                 Name = name,        
                 RenderModel = renderModelFactory.CreateSpacebox(1000000.0/*25000.0*/),//lib.Items.FirstOrDefault(),
                 IsVisible = true,    
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,
             };
 
@@ -82,7 +82,7 @@ namespace Globe3DLight.Editor
                 FrameRenderModel = renderModelFactory.CreateFrame(6371.0f * 1.3f),    
                 RenderModel = renderModelFactory.CreateEarth(),         
                 IsVisible = true,           
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,
             };
 
@@ -99,7 +99,7 @@ namespace Globe3DLight.Editor
                 IsVisible = true,            
                 RenderModel = renderModelFactory.CreateSatellite(1), //0.009 //libRenderModel.Items.FirstOrDefault(),
                 FrameRenderModel = renderModelFactory.CreateFrame(200.0f),                
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,          
             };
 
@@ -115,7 +115,7 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,         
                 RenderModel = renderModelFactory.CreateSun(),                
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,              
             };
 
@@ -131,7 +131,7 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateSensor(),
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,
             };
 
@@ -147,9 +147,9 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateAntenna(),//libRenderModel.Items.FirstOrDefault(),
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,
-                Assets = ImmutableArray.Create<IScenarioObject>(),
+                Assets = ImmutableArray.Create<IEntity>(),
                 FrameRenderModel = renderModelFactory.CreateFrame(50.0f),
             };
 
@@ -165,7 +165,7 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateOrbit(),
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,
             };
 
@@ -182,19 +182,19 @@ namespace Globe3DLight.Editor
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateGroundStation(70.0),
                 FrameRenderModel = renderModelFactory.CreateFrame(200.0f),
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,  
             };
 
             return obj;
         }
 
-        public IScenarioObjectList CreateScenarioObjectList(string name, ILogicalCollection parent, IEnumerable<IScenarioObject> values)
+        public IEntityList CreateEntityList(string name, ILogicalCollection parent, IEnumerable<IEntity> values)
         {           
-            var builder = ImmutableArray.CreateBuilder<IScenarioObject>();
+            var builder = ImmutableArray.CreateBuilder<IEntity>();
             builder.AddRange(values);
 
-            var obj = new ScenarioObjectList()
+            var obj = new EntityList()
             { 
                 Name = name,
                 IsVisible = true,
@@ -216,7 +216,7 @@ namespace Globe3DLight.Editor
                 IsVisible = true,           
                 RenderModel = renderModelFactory.CreateGroundObject(),
                 FrameRenderModel = renderModelFactory.CreateFrame(30.0f),
-                Children = ImmutableArray.Create<IScenarioObject>(),               
+                Children = ImmutableArray.Create<IEntity>(),               
                 Logical = parent,                
             };
 
@@ -232,7 +232,7 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,            
                 RenderModel = renderModelFactory.CreateRetranslator(1000), //0.009 //libRenderModel.Items.FirstOrDefault(),             
-                Children = ImmutableArray.Create<IScenarioObject>(),
+                Children = ImmutableArray.Create<IEntity>(),
                 Logical = parent,                  
             };
 

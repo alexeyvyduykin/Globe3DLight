@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using Globe3DLight.Time;
 using GlmSharp;
 using Globe3DLight.Data;
@@ -18,8 +18,8 @@ namespace Globe3DLight.Containers
         private ImmutableArray<ILogical> _logicalTreeNodeRoot;
         private IDataUpdater _updater;
         private bool _isExpanded = true;
-        private ImmutableArray<IScenarioObject> _sceneObjects;
-        private IScenarioObject _currentScenarioObject;
+        private ImmutableArray<IEntity> _entities;
+        private IEntity _currentEntity;
         private ImmutableArray<ISatelliteTask> _tasks;
         private ISatelliteTask _currentTask;
 
@@ -55,10 +55,10 @@ namespace Globe3DLight.Containers
             set => Update(ref _isExpanded, value);
         }
 
-        public ImmutableArray<IScenarioObject> ScenarioObjects
+        public ImmutableArray<IEntity> Entities
         {
-            get => _sceneObjects;
-            set => Update(ref _sceneObjects, value);
+            get => _entities;
+            set => Update(ref _entities, value);
         }
 
         public ImmutableArray<ISatelliteTask> Tasks
@@ -85,10 +85,10 @@ namespace Globe3DLight.Containers
             }
         }
 
-        public IScenarioObject CurrentScenarioObject
+        public IEntity CurrentEntity
         {
-            get => _currentScenarioObject;
-            set => Update(ref _currentScenarioObject, value);
+            get => _currentEntity;
+            set => Update(ref _currentEntity, value);
         }
 
         public ISceneState SceneState
@@ -198,7 +198,7 @@ namespace Globe3DLight.Containers
         {
             var isDirty = base.IsDirty();
 
-            foreach (var scObj in ScenarioObjects)
+            foreach (var scObj in Entities)
             {
                 isDirty |= scObj.IsDirty();
             }
@@ -210,7 +210,7 @@ namespace Globe3DLight.Containers
         {
             base.Invalidate();
 
-            foreach (var scObj in ScenarioObjects)
+            foreach (var scObj in Entities)
             {
                 scObj.Invalidate();
             }
@@ -225,9 +225,9 @@ namespace Globe3DLight.Containers
         public virtual bool ShouldSerializeSceneState() => true;
         public virtual bool ShouldSerializeLogicalTreeNodeRoot() => true;
         public virtual bool ShouldSerializeCurrentLogicalTreeNode() => _currentLogicalTreeNode != null;
-        public virtual bool ShouldSerializeScenarioObjects() => true;
+        public virtual bool ShouldSerializeEntities() => true;
         public virtual bool ShouldSerializeSatelliteTasks() => true;
-        public virtual bool ShouldSerializeCurrentScenarioObject() => _currentScenarioObject != null;
+        public virtual bool ShouldSerializeCurrentEntity() => _currentEntity != null;
         public virtual bool ShouldSerializeWidth() => _width != default;
         public virtual bool ShouldSerializeHeight() => _height != default;
         public virtual bool ShouldSerializeIsExpanded() => _isExpanded != default;

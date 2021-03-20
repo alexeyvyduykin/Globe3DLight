@@ -8,7 +8,7 @@
              xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.AvaloniaUI.Designer;assembly=Globe3DLight.AvaloniaUI"
              xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
-             xmlns:SceneObjects="clr-namespace:Globe3DLight.ScenarioObjects;assembly=Globe3DLight"
+             xmlns:Entities="clr-namespace:Globe3DLight.Entities;assembly=Globe3DLight"
              mc:Ignorable="d"  
              d:DataContext="{x:Static Designer:DesignerContext.Project}"  
              d:DesignWidth="250" d:DesignHeight="500"  
@@ -44,7 +44,7 @@
       <TreeView.DataTemplates>
 
         <TreeDataTemplate DataType="Containers:IScenarioContainer"
-                          ItemsSource="{Binding ScenarioObjects}" x:CompileBindings="False">
+                          ItemsSource="{Binding Entities}" x:CompileBindings="False">
 
           <Grid ShowGridLines="True" ColumnDefinitions="*, 36" RowDefinitions="*">
                     
@@ -63,7 +63,7 @@
           </Grid>
         </TreeDataTemplate>
 
-          <TreeDataTemplate DataType="SceneObjects:IScenarioObjectList"  
+          <TreeDataTemplate DataType="Entities:IEntityList"  
                             ItemsSource="{Binding Values}" x:CompileBindings="False">
 
               <Grid ShowGridLines="True" ColumnDefinitions="*, 46" RowDefinitions="*">
@@ -85,7 +85,7 @@
           </TreeDataTemplate>
 
 
-          <TreeDataTemplate DataType="SceneObjects:IScenarioObject"
+          <TreeDataTemplate DataType="Entities:IEntity"
                   ItemsSource="{Binding Children}" x:CompileBindings="False">
 
           <Grid ShowGridLines="True" ColumnDefinitions="*, 46" RowDefinitions="*">

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.Renderer;
 using Globe3DLight.Scene;
-using Globe3DLight.ScenarioObjects;
 
 namespace Globe3DLight
 {

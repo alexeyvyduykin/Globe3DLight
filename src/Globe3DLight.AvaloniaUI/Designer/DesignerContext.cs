@@ -5,7 +5,7 @@ using System.Linq;
 using Globe3DLight.Containers;
 using Globe3DLight.Data;
 using Globe3DLight.Editor;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using Globe3DLight.Scene;
 using Globe3DLight.Time;
 
@@ -88,7 +88,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             Project.CurrentScenario = Project.Scenarios.FirstOrDefault();
 
 
-            var objBuilder = ImmutableArray.CreateBuilder<ScenarioObjects.IScenarioObject>();
+            var objBuilder = ImmutableArray.CreateBuilder<IEntity>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", null));
             objBuilder.Add(objFactory.CreateSun("Sun", null));
             objBuilder.Add(objFactory.CreateEarth("Earth", null));
@@ -101,7 +101,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             objBuilder.Add(objFactory.CreateSensor("Sensor3", null));
             objBuilder.Add(objFactory.CreateSensor("Sensor4", null));
 
-            Project.CurrentScenario.ScenarioObjects = objBuilder.ToImmutable();
+            Project.CurrentScenario.Entities = objBuilder.ToImmutable();
 
 
             // Database

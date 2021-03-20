@@ -9,7 +9,7 @@ using Globe3DLight.Scene;
 using Globe3DLight.Renderer;
 using Globe3DLight.Style;
 using System.Linq;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using Globe3DLight.Data;
 using System.IO;
 using Globe3DLight.Editor;
@@ -348,8 +348,8 @@ namespace Globe3DLight
             return new ScenarioContainer()
             {
                 Name = name,   
-                LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(),                   
-                ScenarioObjects = ImmutableArray.Create<IScenarioObject>(),
+                LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(),
+                Entities = ImmutableArray.Create<IEntity>(),
                 Tasks = ImmutableArray.Create<ISatelliteTask>(),
             };
         }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Containers;
 using System.Linq;
 

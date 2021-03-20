@@ -14,7 +14,6 @@ using System.Collections.Immutable;
 using Globe3DLight.Scene;
 using Globe3DLight.Renderer;
 using Globe3DLight.Style;
-using Globe3DLight.ScenarioObjects;
 using Globe3DLight.Data;
 using Globe3DLight.Geometry.Models;
 

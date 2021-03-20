@@ -5,30 +5,30 @@ using System.Text;
 using Globe3DLight.Containers;
 using Globe3DLight.Scene;
 using System.Linq;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 
 namespace Globe3DLight.Editor
 {
     public static class ProjectExtensions
     {
 
-        public static void AddScenarioObject(this IProjectContainer project, IScenarioObject scenarioObject)
+        public static void AddEntity(this IProjectContainer project, IEntity entity)
         {
-            if (project?.Scenarios != null && scenarioObject != null)
+            if (project?.Scenarios != null && entity != null)
             {       
-                var builder = project.CurrentScenario.ScenarioObjects.ToBuilder();
-                builder.Add(scenarioObject);
-                project.CurrentScenario.ScenarioObjects = builder.ToImmutable();
+                var builder = project.CurrentScenario.Entities.ToBuilder();
+                builder.Add(entity);
+                project.CurrentScenario.Entities = builder.ToImmutable();
             }            
         }
 
-        public static void AddScenarioObjects(this IProjectContainer project, IEnumerable<IScenarioObject> scenarioObjects)
+        public static void AddEntities(this IProjectContainer project, IEnumerable<IEntity> entities)
         {
-            if (project?.Scenarios != null && scenarioObjects != null)
+            if (project?.Scenarios != null && entities != null)
             {
-                var builder = project.CurrentScenario.ScenarioObjects.ToBuilder();
-                builder.AddRange(scenarioObjects);
-                project.CurrentScenario.ScenarioObjects = builder.ToImmutable();
+                var builder = project.CurrentScenario.Entities.ToBuilder();
+                builder.AddRange(entities);
+                project.CurrentScenario.Entities = builder.ToImmutable();
             }
         }
 

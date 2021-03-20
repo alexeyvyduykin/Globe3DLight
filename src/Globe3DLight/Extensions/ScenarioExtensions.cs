@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Globe3DLight.Containers;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 
 namespace Globe3DLight
 {

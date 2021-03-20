@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.Containers;
 using System.ComponentModel;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 using System.Linq;
 using Globe3DLight.Data;
 using Globe3DLight.Scene;
@@ -82,11 +82,11 @@ namespace Globe3DLight.Editor
 
         private void ObserveScenario(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IScenarioContainer.ScenarioObjects))
+            if (e.PropertyName == nameof(IScenarioContainer.Entities))
             {
                 var layer = sender as IScenarioContainer;
-                Remove(layer.ScenarioObjects);
-                Add(layer.ScenarioObjects);
+                Remove(layer.Entities);
+                Add(layer.Entities);
             }
 
             if(e.PropertyName == nameof(IScenarioContainer.TimePresenter))
@@ -168,9 +168,9 @@ namespace Globe3DLight.Editor
 
             Add(scenario.TimePresenter);
 
-            if (scenario.ScenarioObjects != null)
+            if (scenario.Entities != null)
             {
-                Add(scenario.ScenarioObjects);
+                Add(scenario.Entities);
             }
 
             scenario.InvalidateScenarioHandler += ObserveInvalidateScenario;
@@ -193,9 +193,9 @@ namespace Globe3DLight.Editor
 
             Remove(scenario.TimePresenter);
 
-            if (scenario.ScenarioObjects != null)
+            if (scenario.Entities != null)
             {
-                Remove(scenario.ScenarioObjects);
+                Remove(scenario.Entities);
             }
 
             scenario.InvalidateScenarioHandler -= ObserveInvalidateScenario;
@@ -251,7 +251,7 @@ namespace Globe3DLight.Editor
             timePresenter.PropertyChanged -= ObserveTimePresenter;
         }
 
-        private void Add(IScenarioObject shape)
+        private void Add(IEntity shape)
         {
             if (shape == null)
             {
@@ -262,7 +262,7 @@ namespace Globe3DLight.Editor
 
         }
 
-        private void Remove(IScenarioObject shape)
+        private void Remove(IEntity shape)
         {
             if (shape == null)
             {
@@ -304,7 +304,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Add(IEnumerable<IScenarioObject> shapes)
+        private void Add(IEnumerable<IEntity> shapes)
         {
             if (shapes == null)
             {
@@ -317,7 +317,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Remove(IEnumerable<IScenarioObject> shapes)
+        private void Remove(IEnumerable<IEntity> shapes)
         {
             if (shapes == null)
             {

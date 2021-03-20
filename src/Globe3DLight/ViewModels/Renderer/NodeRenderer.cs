@@ -5,7 +5,7 @@ using Globe3DLight.Scene;
 using GlmSharp;
 using Globe3DLight.Containers;
 using System.Collections.Immutable;
-using Globe3DLight.ScenarioObjects;
+using Globe3DLight.Entities;
 
 namespace Globe3DLight.Renderer
 {
@@ -35,21 +35,21 @@ namespace Globe3DLight.Renderer
 
         public void DrawScenario(object dc, IScenarioContainer container)
         {
-            foreach (var obj in container.ScenarioObjects)
+            foreach (var obj in container.Entities)
             {
                 DrawScenarioObject(dc, obj, container.SceneState);
             }
         }
 
-        private void DrawScenarioObject(object dc, IScenarioObject scenarioObject, ISceneState scene)
+        private void DrawScenarioObject(object dc, IEntity entity, ISceneState scene)
         {
-            if (scenarioObject != null)
+            if (entity != null)
             {
-                if (scenarioObject is IDrawable drawable)
+                if (entity is IDrawable drawable)
                 {
                     drawable.DrawShape(dc, this, scene);
 
-                    if (scenarioObject is IChildren obj)
+                    if (entity is IChildren obj)
                     {
                         foreach (var item in obj.Children)
                         {
