@@ -1,0 +1,55 @@
+﻿<UserControl x:Class="Globe3DLight.Views.Data.Animators.SensorAnimatorControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"             
+             xmlns:Data="clr-namespace:Globe3DLight.Data;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
+             mc:Ignorable="d"                          
+             d:DataContext="{x:Static Designer:DesignerContext.SensorAnimator}"
+             d:DesignWidth="250" d:DesignHeight="400"
+             x:DataType="Data:ISensorState" x:CompileBindings="True"
+             >
+
+  <UserControl.Resources>   
+    <converters:GlmDvec3Converter x:Key="GlmDvec3Converter"/>
+  </UserControl.Resources>
+    
+  <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="Enable :"/>
+    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Enable}"/>
+
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="Shoot :"/>
+ 
+    
+    
+    <TextBlock Grid.Row="2" Grid.Column="0" Text="p0 :"/>
+    <TextBlock Grid.Row="2" Grid.Column="1" Text=
+               "{Binding Shoot.p0, Converter={StaticResource GlmDvec3Converter}}"/>
+
+    
+    <TextBlock Grid.Row="3" Grid.Column="0" Text="p1 :"/>
+    <TextBlock Grid.Row="3" Grid.Column="1" Text= 
+               "{Binding Shoot.p1, Converter={StaticResource GlmDvec3Converter}}"/>
+    
+    
+    <TextBlock Grid.Row="4" Grid.Column="0" Text="p2 :"/>
+    <TextBlock Grid.Row="4" Grid.Column="1" Text= 
+               "{Binding Shoot.p2, Converter={StaticResource GlmDvec3Converter}}"/>
+    
+  
+    <TextBlock Grid.Row="5" Grid.Column="0" Text="p3 :"/>
+    <TextBlock Grid.Row="5" Grid.Column="1" Text= 
+               "{Binding Shoot.p3, Converter={StaticResource GlmDvec3Converter}}"/>
+    
+    <TextBlock Grid.Row="6" Grid.Column="0" Text="Direction :"/>
+    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Direction}"/>
+  
+  </Grid>
+  
+  
+  
+</UserControl>

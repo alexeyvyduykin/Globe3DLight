@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="Globe3DLight.Views.Containers.FrameContainerControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"    
+             xmlns:vm="clr-namespace:Globe3DLight.ViewModels;assembly=Globe3DLight"
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
+             xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
+             xmlns:SceneObjects="clr-namespace:Globe3DLight.ScenarioObjects;assembly=Globe3DLight"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static Designer:DesignerContext.Project}"
+             d:DesignWidth="250" d:DesignHeight="500"
+             x:DataType="Containers:ProjectContainer" x:CompileBindings="True">
+
+
+  <UserControl.Resources>
+    <converters:IsTargetableConverter x:Key="IsTargetableConverter"/>
+  </UserControl.Resources>
+
+
+  <Grid ColumnDefinitions="*" RowDefinitions="*,60">
+
+    <TreeView Grid.Column="0" 
+              Grid.Row="0"
+              Items="{Binding CurrentScenario.LogicalTreeNodeRoot}"
+              SelectedItem="{Binding CurrentScenario.CurrentLogicalTreeNode}"
+              x:CompileBindings="False">
+      <TreeView.Styles>
+        <Style Selector="TreeViewItem" x:DataType="TreeViewItem">
+          <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+        </Style>
+      </TreeView.Styles>
+      <TreeView.DataTemplates>
+        <TreeDataTemplate DataType="Containers:Logical"
+                  ItemsSource="{Binding Children}" x:CompileBindings="False">
+          <TextBlock Text="{Binding Name}" Background="Transparent">
+            <TextBlock.ContextMenu>
+              <ContextMenu x:CompileBindings="False">
+                <Separator></Separator>
+                <MenuItem Header="Remove"
+                          Command="{Binding $parent[TopLevel].DataContext.OnRemove}"
+                          CommandParameter="{Binding Mode=OneWay}"/>
+                <Separator></Separator>
+                <MenuItem Header="Add">
+                  <MenuItem Header="From json..."
+                            Command="{Binding $parent[TopLevel].DataContext.Platform.OnImportJson}">
+                  </MenuItem>
+                </MenuItem>
+              </ContextMenu>
+            </TextBlock.ContextMenu>
+          </TextBlock>
+
+        </TreeDataTemplate>
+      </TreeView.DataTemplates>
+    </TreeView>
+
+
+    <Grid Grid.Column="0" Grid.Row="1"
+          ColumnDefinitions="60,Auto"
+          RowDefinitions="20,20,20"
+          DataContext="{Binding CurrentScenario.CurrentLogicalTreeNode}">
+
+      <TextBlock Text="Owner" Grid.Row="0" Grid.Column="0"></TextBlock>
+      <TextBlock Text="{Binding Owner.Name}" Grid.Row="0" Grid.Column="1"></TextBlock>
+
+      <TextBlock Text="Name" Grid.Row="1" Grid.Column="0"></TextBlock>
+      <TextBlock Text="{Binding Name}" Grid.Row="1" Grid.Column="1"></TextBlock>
+
+      <TextBlock Text="Data" Grid.Row="2" Grid.Column="0"></TextBlock>
+      <!--<TextBlock Text="{Binding State.Name}" Grid.Row="2" Grid.Column="1"></TextBlock>-->
+
+
+
+    </Grid>
+
+
+
+
+
+  </Grid>
+</UserControl>
