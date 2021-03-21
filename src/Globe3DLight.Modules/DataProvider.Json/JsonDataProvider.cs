@@ -56,7 +56,7 @@ namespace Globe3DLight.DataProvider.Json
             fileIO.WriteUtf8Text(Path.Combine(path, projectFilename), json);
         }
 
-        public async Task<IProjectContainer> LoadProject()
+        public async Task<ProjectContainer> LoadProject()
         {         
             var data = await LoadData();
 

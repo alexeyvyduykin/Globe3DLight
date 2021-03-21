@@ -32,8 +32,8 @@ namespace Globe3DLight.AvaloniaUI.Views
 
         private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
 
-        public static readonly StyledProperty<IScenarioContainer> ContainerProperty =
-            AvaloniaProperty.Register<PresenterControl, IScenarioContainer>(nameof(Container), null);
+        public static readonly StyledProperty<ScenarioContainer> ContainerProperty =
+            AvaloniaProperty.Register<PresenterControl, ScenarioContainer>(nameof(Container), null);
 
         public static readonly StyledProperty<IRenderContext> RendererProperty =
             AvaloniaProperty.Register<PresenterControl, IRenderContext>(nameof(Renderer), null);
@@ -41,7 +41,7 @@ namespace Globe3DLight.AvaloniaUI.Views
         public static readonly StyledProperty<IPresenterContract> PresenterContractProperty =
             AvaloniaProperty.Register<PresenterControl, IPresenterContract>(nameof(PresenterContract), null);
 
-        public IScenarioContainer Container
+        public ScenarioContainer Container
         {
             get => GetValue(ContainerProperty);
             set => SetValue(ContainerProperty, value);
@@ -71,7 +71,7 @@ namespace Globe3DLight.AvaloniaUI.Views
 
         internal struct CustomState
         {
-            public IScenarioContainer Container;
+            public ScenarioContainer Container;
             public IRenderContext Renderer;
         }
 

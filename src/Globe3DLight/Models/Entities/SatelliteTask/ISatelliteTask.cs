@@ -4,24 +4,24 @@ using System.Text;
 
 namespace Globe3DLight.Entities
 {
-    public interface ISatelliteTask : IObservableObject
-    {
-        bool IsVisible { get; set; }
+    //public interface ISatelliteTask : IObservableObject
+    //{
+    //    bool IsVisible { get; set; }
 
-        bool HasRotations { get; set; }
+    //    bool HasRotations { get; set; }
 
-        bool HasObservations { get; set; }
+    //    bool HasObservations { get; set; }
 
-        bool HasTransmissions { get; set; }
+    //    bool HasTransmissions { get; set; }
 
-        string SearchString { get; set; }
+    //    string SearchString { get; set; }
 
-        ISatellite Satellite { get; set; }
+    //    ISatellite Satellite { get; set; }
 
-        IList<ISatelliteEvent> Events { get; set; }
+    //    IList<ISatelliteEvent> Events { get; set; }
 
-        ISatelliteEvent SelectedEvent { get; set; }
-    }
+    //    ISatelliteEvent SelectedEvent { get; set; }
+    //}
 
 
 

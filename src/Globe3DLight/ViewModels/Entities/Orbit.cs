@@ -14,7 +14,7 @@ namespace Globe3DLight.Entities
     public class Orbit : BaseEntity, IOrbit
     {
         private IOrbitRenderModel _renderModel;    
-        private ILogical _logical;
+        private Logical _logical;
      
         public IOrbitRenderModel RenderModel
         {
@@ -22,7 +22,7 @@ namespace Globe3DLight.Entities
             set => Update(ref _renderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical;
             set => Update(ref _logical, value);

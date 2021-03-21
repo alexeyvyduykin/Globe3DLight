@@ -25,8 +25,8 @@ namespace Globe3DLight.Scene
         {
             var isDirty = base.IsDirty();
 
-            isDirty |= Scan.IsDirty();
-            isDirty |= Shoot.IsDirty();
+           // isDirty |= Scan.IsDirty();
+           // isDirty |= Shoot.IsDirty();
 
             return isDirty;
         }
@@ -34,8 +34,8 @@ namespace Globe3DLight.Scene
         public override void Invalidate()
         {
             base.Invalidate();
-            Scan.Invalidate();
-            Shoot.Invalidate();
+          //  Scan.Invalidate();
+          //  Shoot.Invalidate();
         }
 
         public override object Copy(IDictionary<object, object> shared)

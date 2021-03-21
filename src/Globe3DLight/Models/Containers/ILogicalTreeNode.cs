@@ -14,18 +14,18 @@ namespace Globe3DLight.Containers
     //    IState State { get; set; }
     //}
 
-    public interface ILogical<T>
-    {
-        T State { get; set; }
-    }
+    //public interface ILogical<T>
+    //{
+    //    T State { get; set; }
+    //}
 
-    public interface ILogical : IObservableObject, ILogical<IState>
-    {
-        ImmutableArray<IObservableObject> Children { get; set; }
-    }
+    //public interface ILogical : IObservableObject, ILogical<IState>
+    //{
+    //    ImmutableArray<IObservableObject> Children { get; set; }
+    //}
 
-    public interface ILogicalCollection : IObservableObject//, ILogical<IEnumerable<IState>>
-    {
-        ImmutableArray<ILogical> Values { get; set; }
-    }
+    //public interface ILogicalCollection : IObservableObject//, ILogical<IEnumerable<IState>>
+    //{
+    //    ImmutableArray<ILogical> Values { get; set; }
+    //}
 }

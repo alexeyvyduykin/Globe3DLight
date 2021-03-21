@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Globe3DLight.Entities
 {
-    public interface IObservationEvent : ISatelliteEvent
+    public interface IObservationEvent //: ISatelliteEvent
     {
 
     }

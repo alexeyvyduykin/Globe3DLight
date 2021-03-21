@@ -9,6 +9,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IContainerPresenter
     {
-        void Render(object dc, IRenderContext renderer, IScenarioContainer container);
+        void Render(object dc, IRenderContext renderer, ScenarioContainer container);
     }
 }

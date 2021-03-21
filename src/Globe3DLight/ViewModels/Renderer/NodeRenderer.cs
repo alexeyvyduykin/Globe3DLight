@@ -33,7 +33,7 @@ namespace Globe3DLight.Renderer
             _drawNodeFactory = drawNodeFactory;
         }
 
-        public void DrawScenario(object dc, IScenarioContainer container)
+        public void DrawScenario(object dc, ScenarioContainer container)
         {
             foreach (var obj in container.Entities)
             {
@@ -41,7 +41,7 @@ namespace Globe3DLight.Renderer
             }
         }
 
-        private void DrawScenarioObject(object dc, IEntity entity, ISceneState scene)
+        private void DrawScenarioObject(object dc, BaseEntity entity, ISceneState scene)
         {
             if (entity != null)
             {
@@ -154,10 +154,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (frame.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (frame.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -166,6 +166,8 @@ namespace Globe3DLight.Renderer
                 var drawNode = _drawNodeFactory.CreateFrameDrawNode(frame);
 
                 drawNode.UpdateStyle();
+
+                drawNode.UpdateGeometry();
 
                 _drawNodeCache.Set(frame, drawNode);
 
@@ -178,10 +180,10 @@ namespace Globe3DLight.Renderer
             var drawNodeCached = _drawNodeCache.Get(frame);
             if (drawNodeCached != null)
             {
-                if (frame.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (frame.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrices, scene);
             }
@@ -211,10 +213,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (orbit.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (orbit.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -243,10 +245,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (retranslator.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (retranslator.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -275,10 +277,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (satellite.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (satellite.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -308,10 +310,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (sensor.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (sensor.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -341,10 +343,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (antenna.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (antenna.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -413,10 +415,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (groundStation.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (groundStation.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -446,10 +448,10 @@ namespace Globe3DLight.Renderer
                 //    sun.Style.Invalidate();
                 //}
 
-                if (groundStation.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (groundStation.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
             }
@@ -472,10 +474,10 @@ namespace Globe3DLight.Renderer
             var drawNodeCached = _drawNodeCache.Get(groundobject);
             if (drawNodeCached != null)
             {
-                if (groundobject.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (groundobject.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrix, scene/*_state.ZoomX*/);
             }
@@ -498,10 +500,10 @@ namespace Globe3DLight.Renderer
             var drawNodeCached = _drawNodeCache.Get(groundobject);
             if (drawNodeCached != null)
             {
-                if (groundobject.IsDirty())
-                {
-                    drawNodeCached.UpdateGeometry();
-                }
+                //if (groundobject.IsDirty())
+                //{
+                //    drawNodeCached.UpdateGeometry();
+                //}
 
                 drawNodeCached.Draw(dc, modelMatrices, scene/*_state.ZoomX*/);
             }

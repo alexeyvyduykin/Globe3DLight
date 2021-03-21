@@ -14,27 +14,27 @@ namespace Globe3DLight.AvaloniaUI.Designer
 {
     public class DesignerContext
     {
-        public static IProjectEditor Editor { get; set; }
+        public static ProjectEditor Editor { get; set; }
 
-        public static IScenarioContainer Scenario { get; set; }
+        public static ScenarioContainer Scenario { get; set; }
 
-        public static IProjectContainer Project { get; set; }
+        public static ProjectContainer Project { get; set; }
 
-        public static ITimePresenter TimePresenter { get; set; }
+        public static TimePresenter TimePresenter { get; set; }
 
         public static ICamera ArcballCamera { get; set; }
 
-        public static ISatellite Satellite { get; set; }
+        public static Satellite Satellite { get; set; }
 
-        public static ISatelliteTask SatelliteTask { get; set; }
+        public static SatelliteTask SatelliteTask { get; set; }
         public static ISensor Sensor { get; set; }
 
 
-        public static ILogical SatelliteNode { get; set; }
-        public static ILogical SensorNode { get; set; }
-        public static ILogical RotationNode { get; set; }
-        public static ILogical SunNode { get; set; }
-        public static ILogical J2000Node { get; set; }
+        public static Logical SatelliteNode { get; set; }
+        public static Logical SensorNode { get; set; }
+        public static Logical RotationNode { get; set; }
+        public static Logical SunNode { get; set; }
+        public static Logical J2000Node { get; set; }
 
         public static SatelliteData SatelliteData { get; set; }
         public static SensorData SensorData { get; set; }
@@ -66,7 +66,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
 
             // Editor
 
-            Editor = serviceProvider.GetService<IProjectEditor>();
+            Editor = serviceProvider.GetService<ProjectEditor>();
 
             TimePresenter = factory.CreateTimePresenter(begin, duration);// serviceProvider.GetService<ISceneTimer>();
 
@@ -88,7 +88,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             Project.CurrentScenario = Project.Scenarios.FirstOrDefault();
 
 
-            var objBuilder = ImmutableArray.CreateBuilder<IEntity>();
+            var objBuilder = ImmutableArray.CreateBuilder<BaseEntity>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", null));
             objBuilder.Add(objFactory.CreateSun("Sun", null));
             objBuilder.Add(objFactory.CreateEarth("Earth", null));
@@ -176,7 +176,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
             Scenario = factory.CreateScenarioContainer();
 
             var dt = DateTime.Now;
-            var events = new List<ISatelliteEvent>();
+            var events = new List<BaseSatelliteEvent>();
             events.AddRange(objFactory.CreateRotationEvents(RotationData, dt));
             events.AddRange(objFactory.CreateObservationEvents(SensorData, dt));
             events.AddRange(objFactory.CreateTransmissionEvents(AntennaData, dt));

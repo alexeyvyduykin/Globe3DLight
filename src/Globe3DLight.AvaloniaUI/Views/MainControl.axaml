@@ -19,7 +19,7 @@
              mc:Ignorable="d"                  
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"
              d:DesignWidth="1200" d:DesignHeight="580"
-             x:DataType="Editor:IProjectEditor" x:CompileBindings="True">
+             x:DataType="Editor:ProjectEditor" x:CompileBindings="True">
 
 
   <UserControl.Resources>

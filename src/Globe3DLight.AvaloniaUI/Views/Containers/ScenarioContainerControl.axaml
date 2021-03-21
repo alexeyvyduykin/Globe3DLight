@@ -11,7 +11,7 @@
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.Scenario}"
              d:DesignWidth="250" d:DesignHeight="400"
-             x:DataType="Containers:IScenarioContainer" x:CompileBindings="True"
+             x:DataType="Containers:ScenarioContainer" x:CompileBindings="True"
              >
 
 

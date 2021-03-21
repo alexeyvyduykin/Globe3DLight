@@ -8,10 +8,10 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public interface ISensor : IEntity, IDrawable
+    public interface ISensor : /*IEntity,*/ IDrawable
     {
         ISensorRenderModel RenderModel { get; set; }
 
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

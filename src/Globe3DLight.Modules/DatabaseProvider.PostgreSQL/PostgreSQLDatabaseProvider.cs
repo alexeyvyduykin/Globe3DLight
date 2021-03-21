@@ -24,7 +24,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
         public async Task<ScenarioData> LoadData() => await Task.Run(() => LoadScenarioDataFromDatabase());
         
-        public async Task<IProjectContainer> LoadProject() => await Task.Run(() => LoadProjectFromDatabase());
+        public async Task<ProjectContainer> LoadProject() => await Task.Run(() => LoadProjectFromDatabase());
 
         public async Task Save()
         {
@@ -33,9 +33,9 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             _serviceProvider.GetService<IJsonDataProvider>().Save(data);
         }
 
-        private IProjectContainer LoadProjectFromDatabase()
+        private ProjectContainer LoadProjectFromDatabase()
         {        
-            IProjectContainer project = null;
+            ProjectContainer project = null;
 
             using (var db = new dbGlobe3DLightContext(GetOptions()))
             {

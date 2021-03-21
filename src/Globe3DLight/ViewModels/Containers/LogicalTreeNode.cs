@@ -8,9 +8,9 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Containers
 {
-    public class Logical : ObservableObject, ILogical
+    public class Logical : ObservableObject
     {
-        private ImmutableArray<IObservableObject> _children;
+        private ImmutableArray<ObservableObject> _children;
         private bool _isExpanded = true;
         private IState _state;
 
@@ -20,7 +20,7 @@ namespace Globe3DLight.Containers
             set => Update(ref _isExpanded, value);
         }
 
-        public ImmutableArray<IObservableObject> Children
+        public ImmutableArray<ObservableObject> Children
         {
             get => _children;
             set => Update(ref _children, value);
@@ -36,10 +36,10 @@ namespace Globe3DLight.Containers
         {
             var isDirty = base.IsDirty();
 
-            if (State != null)
-            {
-                isDirty |= State.IsDirty();
-            }
+            //if (State != null)
+            //{
+            //    isDirty |= State.IsDirty();
+            //}
 
             foreach (var child in Children)
             {
@@ -53,7 +53,7 @@ namespace Globe3DLight.Containers
         {
             base.Invalidate();
 
-            State?.Invalidate();
+            //State?.Invalidate();
 
             foreach (var child in Children)
             {
@@ -67,11 +67,11 @@ namespace Globe3DLight.Containers
         }
     }
 
-    public class LogicalCollection : ObservableObject, ILogicalCollection
+    public class LogicalCollection : ObservableObject
     {
-        private ImmutableArray<ILogical> _values;
+        private ImmutableArray<Logical> _values;
         private bool _isExpanded = true;
-        private IEnumerable<IState> _state;
+        private IEnumerable<ObservableObject> _state;
 
         public bool IsExpanded
         {
@@ -79,12 +79,12 @@ namespace Globe3DLight.Containers
             set => Update(ref _isExpanded, value);
         }
 
-        public IEnumerable<IState> State
+        public IEnumerable<ObservableObject> State
         {
             get => _state;
             set => Update(ref _state, value);
         }
-        public ImmutableArray<ILogical> Values
+        public ImmutableArray<Logical> Values
         {
             get => _values;
             set => Update(ref _values, value);

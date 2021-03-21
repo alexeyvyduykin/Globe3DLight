@@ -9,10 +9,10 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public interface ISpacebox : IEntity, IDrawable
+    public interface ISpacebox :/* IEntity,*/ IDrawable
     {
         ISpaceboxRenderModel RenderModel { get; set; }
 
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

@@ -9,7 +9,7 @@
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.TimePresenter}"
              d:DesignWidth="500" d:DesignHeight="64"
-             x:DataType="Time:ISliderTimePresenter" x:CompileBindings="True"
+             x:DataType="Time:SliderTimePresenter" x:CompileBindings="True"
              >
 
   <UserControl.Resources>

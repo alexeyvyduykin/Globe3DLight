@@ -7,10 +7,10 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.Entities
 {
-    public interface IEntity : IObservableObject
-    {
-        bool IsVisible { get; set; }
+    //public interface IEntity //: IObservableObject
+    //{
+    //    bool IsVisible { get; set; }
 
-        bool IsExpanded { get; set; }       
-    }
+    //    bool IsExpanded { get; set; }       
+    //}
 }

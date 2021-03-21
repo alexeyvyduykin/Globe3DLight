@@ -7,10 +7,10 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public interface ISun : IEntity, IDrawable
+    public interface ISun : /*IEntity,*/ IDrawable
     { 
         ISunRenderModel RenderModel { get; set; }
 
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

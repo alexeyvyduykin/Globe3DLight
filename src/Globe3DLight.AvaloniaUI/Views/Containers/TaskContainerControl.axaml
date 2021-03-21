@@ -16,7 +16,7 @@
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Scenario}"
              d:DesignWidth="250" d:DesignHeight="500"
-             x:DataType="Containers:IScenarioContainer" x:CompileBindings="True"
+             x:DataType="Containers:ScenarioContainer" x:CompileBindings="True"
              >
 
     <UserControl.Styles>
@@ -107,7 +107,7 @@
     <Grid ColumnDefinitions="*" RowDefinitions="*">
         <ItemsControl Items="{Binding Tasks}">
             <ItemsControl.DataTemplates>
-                <DataTemplate DataType="Entities:ISatelliteTask">
+                <DataTemplate DataType="Entities:SatelliteTask">
                     <Expander x:Name="expander" Header="{Binding Name}" IsExpanded="{Binding IsVisible}">                                                                
                         <Expander.Content>
                             <entities:SatelliteTaskControl DataContext="{Binding}"/>                        

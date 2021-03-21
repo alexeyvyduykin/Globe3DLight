@@ -12,7 +12,7 @@
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.SatelliteTask}"
              d:DesignWidth="250" d:DesignHeight="550"
-             x:DataType="Entities:ISatelliteTask" x:CompileBindings="True"
+             x:DataType="Entities:SatelliteTask" x:CompileBindings="True"
              >
   
   <UserControl.Styles>
@@ -241,7 +241,7 @@
                          ScrollViewer.VerticalScrollBarVisibility="Auto">
 
                     <ListBox.DataTemplates>
-                        <DataTemplate DataType="Entities:IRotationEvent">
+                        <DataTemplate DataType="Entities:RotationEvent">
                             <Border BorderThickness="1.5" BorderBrush="Yellow" Height="50" CornerRadius="5">
                                 <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
                                     <TextBlock Text="{Binding Begin}"/>
@@ -256,7 +256,7 @@
                             </Border>
                         </DataTemplate>
 
-                        <DataTemplate DataType="Entities:IObservationEvent">
+                        <DataTemplate DataType="Entities:ObservationEvent">
                             <Border BorderThickness="1.5" BorderBrush="Blue" Height="50" CornerRadius="5">
                                 <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
                                     <TextBlock Text="{Binding Begin}"/>
@@ -273,7 +273,7 @@
                             </Border>
                         </DataTemplate>
 
-                        <DataTemplate DataType="Entities:ITransmissionEvent">
+                        <DataTemplate DataType="Entities:TransmissionEvent">
                             <Border BorderThickness="1.5" BorderBrush="Green" Height="50" CornerRadius="5">
                                 <Grid ColumnDefinitions="*,*" RowDefinitions="*,*">
                                     <TextBlock Text="{Binding Begin}"/>

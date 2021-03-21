@@ -8,10 +8,10 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public interface IRetranslator : IEntity, IDrawable
+    public interface IRetranslator : /*IEntity,*/ IDrawable
     {
         IRetranslatorRenderModel RenderModel { get; set; }
         
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

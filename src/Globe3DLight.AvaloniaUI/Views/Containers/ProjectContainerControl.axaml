@@ -12,7 +12,7 @@
              mc:Ignorable="d"  
              d:DataContext="{x:Static Designer:DesignerContext.Project}"  
              d:DesignWidth="250" d:DesignHeight="500"  
-             x:DataType="Containers:IProjectContainer" x:CompileBindings="True">
+             x:DataType="Containers:ProjectContainer" x:CompileBindings="True">
 
   <UserControl.Resources>
        <converters:IsTargetableConverter x:Key="IsTargetableConverter"/>
@@ -43,7 +43,7 @@
         
       <TreeView.DataTemplates>
 
-        <TreeDataTemplate DataType="Containers:IScenarioContainer"
+        <TreeDataTemplate DataType="Containers:ScenarioContainer"
                           ItemsSource="{Binding Entities}" x:CompileBindings="False">
 
           <Grid ShowGridLines="True" ColumnDefinitions="*, 36" RowDefinitions="*">
@@ -63,7 +63,7 @@
           </Grid>
         </TreeDataTemplate>
 
-          <TreeDataTemplate DataType="Entities:IEntityList"  
+          <TreeDataTemplate DataType="Entities:EntityList"  
                             ItemsSource="{Binding Values}" x:CompileBindings="False">
 
               <Grid ShowGridLines="True" ColumnDefinitions="*, 46" RowDefinitions="*">
@@ -85,7 +85,7 @@
           </TreeDataTemplate>
 
 
-          <TreeDataTemplate DataType="Entities:IEntity"
+          <TreeDataTemplate DataType="Entities:BaseEntity"
                   ItemsSource="{Binding Children}" x:CompileBindings="False">
 
           <Grid ShowGridLines="True" ColumnDefinitions="*, 46" RowDefinitions="*">

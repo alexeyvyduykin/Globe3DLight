@@ -80,7 +80,7 @@ namespace Globe3DLight.AvaloniaUI
 
             var serviceProvider = container.Resolve<IServiceProvider>();
             var containerFactory = serviceProvider.GetService<IContainerFactory>();
-            var editor = serviceProvider.GetService<IProjectEditor>();
+            var editor = serviceProvider.GetService<ProjectEditor>();
 
 
             //  editor.OnOpenProject(containerFactory.GetDemo(), "");

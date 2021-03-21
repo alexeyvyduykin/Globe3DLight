@@ -23,7 +23,7 @@ namespace Globe3DLight.AvaloniaUI.Behaviors
 
         public void InvalidateChild(double zoomX, double zoomY, double offsetX, double offsetY)
         {
-            if (!(_control.DataContext is IProjectEditor projectEditor))
+            if (!(_control.DataContext is ProjectEditor projectEditor))
             {
                 return;
             }
@@ -46,7 +46,7 @@ namespace Globe3DLight.AvaloniaUI.Behaviors
 
         public void Attach()
         {
-            if (!(_control.DataContext is IProjectEditor projectEditor))
+            if (!(_control.DataContext is ProjectEditor projectEditor))
             {
                 return;
             }
@@ -84,7 +84,7 @@ namespace Globe3DLight.AvaloniaUI.Behaviors
 
         public void Detach()
         {
-            if (!(_control.DataContext is IProjectEditor projectEditor))
+            if (!(_control.DataContext is ProjectEditor projectEditor))
             {
                 return;
             }

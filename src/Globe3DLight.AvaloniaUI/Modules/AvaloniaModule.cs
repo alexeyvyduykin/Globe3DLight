@@ -43,7 +43,7 @@ namespace Globe3DLight.AvaloniaUI.Modules
 
             // Core
 
-            builder.RegisterType<ProjectEditor>().As<IProjectEditor>().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectEditor>().As<ProjectEditor>().InstancePerLifetimeScope();
             //    builder.RegisterType<StyleEditor>().As<IStyleEditor>().InstancePerLifetimeScope();
             builder.RegisterType<Factory>().As<IFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ContainerFactory>().As<IContainerFactory>().InstancePerLifetimeScope();

@@ -12,7 +12,7 @@ namespace Globe3DLight.Renderer
 {
     public interface IRenderContext
     {
-        void DrawScenario(object dc, IScenarioContainer container);
+        void DrawScenario(object dc, ScenarioContainer container);
 
         void DrawSun(object dc, ISunRenderModel sun, dmat4 modelMatrix, ISceneState scene);
         

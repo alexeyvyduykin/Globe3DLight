@@ -16,7 +16,7 @@ namespace Globe3DLight.Entities
     {
         private IGroundObjectRenderModel _renderModel; 
         private IFrameRenderModel _frameRenderModel;
-        private ILogical _logical;
+        private Logical _logical;
 
         public IGroundObjectRenderModel RenderModel
         {
@@ -30,7 +30,7 @@ namespace Globe3DLight.Entities
             set => Update(ref _frameRenderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical;
             set => Update(ref _logical, value);
@@ -45,7 +45,7 @@ namespace Globe3DLight.Entities
                     if (Logical.State is IGroundObjectState groundObjectState)
                     {
                         var collection = Logical.Owner;
-                        var parent = (ILogical)collection.Owner;
+                        var parent = (Logical)collection.Owner;
                         if (parent.State is IJ2000State j2000Data)
                         {
                             var modelMatrix = j2000Data.ModelMatrix * groundObjectState.ModelMatrix;
@@ -65,7 +65,7 @@ namespace Globe3DLight.Entities
                 if (Logical.State is IGroundObjectState groundObjectState)
                 {
                     var collection = Logical.Owner;
-                    var parent = (ILogical)collection.Owner;
+                    var parent = (Logical)collection.Owner;
                     if (parent.State is IJ2000State j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;

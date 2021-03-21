@@ -44,7 +44,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
                     var item = result.FirstOrDefault();
                     if (item != null)
                     {
-                        var editor = _serviceProvider.GetService<IProjectEditor>();
+                        var editor = _serviceProvider.GetService<ProjectEditor>();
                         editor.OnOpenProject(item);
                         editor.CanvasPlatform?.InvalidateControl?.Invoke();
                     }
@@ -54,14 +54,14 @@ namespace Globe3DLight.AvaloniaUI.Editor
             {
                 if (_serviceProvider.GetService<IFileSystem>().Exists(path))
                 {
-                    _serviceProvider.GetService<IProjectEditor>().OnOpenProject(path);
+                    _serviceProvider.GetService<ProjectEditor>().OnOpenProject(path);
                 }
             }
         }
      
         public void OnSave()
         {
-            var editor = _serviceProvider.GetService<IProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditor>();
             if (!string.IsNullOrEmpty(editor.ProjectPath))
             {
                 editor.OnSaveProject(editor.ProjectPath);
@@ -74,7 +74,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
 
         public async void OnSaveAs()
         {
-            var editor = _serviceProvider.GetService<IProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditor>();
             var dlg = new SaveFileDialog() { Title = "Save" };
             dlg.Filters.Add(new FileDialogFilter() { Name = "Project", Extensions = { "globe3d.json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
@@ -106,7 +106,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
                     {
                         if (item != null)
                         {
-                            _serviceProvider.GetService<IProjectEditor>().OnImportJson(item);
+                            _serviceProvider.GetService<ProjectEditor>().OnImportJson(item);
                         }
                     }
                 }
@@ -115,7 +115,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
             {
                 if (_serviceProvider.GetService<IFileSystem>().Exists(path))
                 {
-                    _serviceProvider.GetService<IProjectEditor>().OnImportJson(path);
+                    _serviceProvider.GetService<ProjectEditor>().OnImportJson(path);
                 }
             }
         }
@@ -137,7 +137,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
                             string resultExtension = System.IO.Path.GetExtension(item);
                             if (string.Compare(resultExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                _serviceProvider.GetService<IProjectEditor>().OnImportJson(item);
+                                _serviceProvider.GetService<ProjectEditor>().OnImportJson(item);
                             }
                         }
                     }
@@ -150,7 +150,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
                     string resultExtension = System.IO.Path.GetExtension(path);
                     if (string.Compare(resultExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        _serviceProvider.GetService<IProjectEditor>().OnImportJson(path);
+                        _serviceProvider.GetService<ProjectEditor>().OnImportJson(path);
                     }
                 }
             }
@@ -158,7 +158,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
 
         public async void OnExportJson(object item)
         {
-            var editor = _serviceProvider.GetService<IProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditor>();
             var dlg = new SaveFileDialog() { Title = "Save" };
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
@@ -173,7 +173,7 @@ namespace Globe3DLight.AvaloniaUI.Editor
   
         public async void OnExportObject(object item)
         {
-            var editor = _serviceProvider.GetService<IProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditor>();
             if (item != null)
             {
                 var dlg = new SaveFileDialog() { Title = "Save" };

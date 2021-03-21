@@ -6,9 +6,9 @@ using Globe3DLight.Containers;
 
 namespace Globe3DLight.Data
 {
-    public interface IDataProvider : IObservableObject
+    public interface IDataProvider //: IObservableObject
     {
-        Task<IProjectContainer> LoadProject();
+        Task<ProjectContainer> LoadProject();
         Task<ScenarioData> LoadData();
     }
 

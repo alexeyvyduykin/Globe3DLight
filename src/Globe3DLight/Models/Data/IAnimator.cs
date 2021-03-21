@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Globe3DLight.Data
 {
-    public interface IAnimator : IObservableObject
+    public interface IAnimator
     {
         void Animate(double t);
     }

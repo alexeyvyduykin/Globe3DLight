@@ -14,7 +14,7 @@ namespace Globe3DLight.Entities
     {
         private ISatelliteRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
-        private ILogical _logical;
+        private Logical _logical;
     
         public ISatelliteRenderModel RenderModel 
         {
@@ -22,7 +22,7 @@ namespace Globe3DLight.Entities
             set => Update(ref _renderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical; 
             set => Update(ref _logical, value);
@@ -39,7 +39,7 @@ namespace Globe3DLight.Entities
         {
             get
             {
-                if(((ILogical)_logical?.Owner).State is IFrameable frameable)
+                if(((Logical)_logical?.Owner).State is IFrameable frameable)
                 {
                     return frameable.ModelMatrix.Inverse;
                 }
@@ -59,7 +59,7 @@ namespace Globe3DLight.Entities
             {
                 if (Logical.State is IRotationState rotationData)
                 {
-                    var parent = (ILogical)Logical.Owner;
+                    var parent = (Logical)Logical.Owner;
                     if (parent.State is ISatelliteState satelliteState)
                     {
                         //   double r = orbitData.Position.Length;

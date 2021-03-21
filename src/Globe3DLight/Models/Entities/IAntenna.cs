@@ -8,12 +8,12 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public interface IAntenna : IEntity, IDrawable, IAssetable
+    public interface IAntenna : /*IEntity,*/ IDrawable, IAssetable
     {
         IAntennaRenderModel RenderModel { get; set; }
 
         IFrameRenderModel FrameRenderModel { get; set; }
 
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

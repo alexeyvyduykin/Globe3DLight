@@ -14,7 +14,7 @@ namespace Globe3DLight.Entities
     {   
         private IEarthRenderModel _renderModel;
         private IFrameRenderModel _frameRenderModel;
-        private ILogical _logical;
+        private Logical _logical;
 
         public IEarthRenderModel RenderModel 
         {
@@ -28,7 +28,7 @@ namespace Globe3DLight.Entities
             set => Update(ref _frameRenderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical; 
             set => Update(ref _logical, value); 

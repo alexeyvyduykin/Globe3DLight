@@ -8,12 +8,12 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public interface IEarth : IEntity, IDrawable, ITargetable
+    public interface IEarth : /*IEntity,*/ IDrawable, ITargetable
     { 
         IEarthRenderModel RenderModel { get; set; }
 
         IFrameRenderModel FrameRenderModel { get; set; }
 
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

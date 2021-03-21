@@ -10,7 +10,7 @@ using Globe3DLight.Entities;
 
 namespace Globe3DLight.Editor
 {
-    public class ProjectEditor : ObservableObject, IProjectEditor
+    public class ProjectEditor : ObservableObject
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly Lazy<IFactory> _factory;
@@ -22,13 +22,13 @@ namespace Globe3DLight.Editor
         private readonly Lazy<IFileSystem> _fileIO;
         private readonly Lazy<IRenderContext> _renderer;
         private readonly Lazy<IPresenterContract> _presenter;    
-        private IProjectContainer _project;
+        private ProjectContainer _project;
         private readonly Lazy<IEditorTool> _currentTool;
         private readonly Lazy<IEditorCanvasPlatform> _canvasPlatform;
         private ProjectObserver _observer;
         private readonly Lazy<IProjectEditorPlatform> _platform;
 
-        public IProjectContainer Project
+        public ProjectContainer Project
         {
             get => _project;
             set => Update(ref _project, value);
@@ -119,7 +119,7 @@ namespace Globe3DLight.Editor
             await ContainerFactory.SaveFromDatabaseToJson();
         }
 
-        public void OnOpenProject(IProjectContainer project, string path)
+        public void OnOpenProject(ProjectContainer project, string path)
         {
             try
             {
@@ -231,11 +231,11 @@ namespace Globe3DLight.Editor
 
         public void OnImportObject(object item, bool restore)
         {
-            if (item is IEntity entity)
+            if (item is BaseEntity entity)
             {
                 Project.AddEntity(entity);
             }
-            else if (item is IProjectContainer project)
+            else if (item is ProjectContainer project)
             {
                 OnUnload();
                 OnLoad(project, string.Empty);
@@ -260,13 +260,13 @@ namespace Globe3DLight.Editor
         //void OnRemoveScenario(IScenarioContainer scenario);
         public void OnRemove(object item)
         {
-            if (item is IScenarioContainer scenario)
+            if (item is ScenarioContainer scenario)
             {
                 Project?.RemoveScenario(scenario);               
                 var selected = Project?.Scenarios.FirstOrDefault();
                 Project?.SetCurrentScenario(selected);
             }
-            if (item is ILogical node)
+            if (item is Logical node)
             {
                 Project?.RemoveLogicalNode(node);
               //  var selected = Project?.CurrentScenario?.LogicalTreeNodeRoot.SingleOrDefault();
@@ -277,7 +277,7 @@ namespace Globe3DLight.Editor
                 //var selected = Project?.CurrentDocument?.Pages.FirstOrDefault();
                 //Project?.SetCurrentContainer(selected);
             }
-            else if (item is IProjectEditor || item == null)
+            else if (item is ProjectEditor || item == null)
             {
               //  OnDeleteSelected();
             }
@@ -286,7 +286,7 @@ namespace Globe3DLight.Editor
         //void OnAddChildFrame(ITreeNode<IFrame> node);
         public void OnAddFrame(object item)
         {
-            if (item is ILogical node)
+            if (item is Logical node)
             {
                 if (Project?.CurrentScenario != null)
                 {
@@ -351,7 +351,7 @@ namespace Globe3DLight.Editor
         //    }
         //}
 
-        public void OnLoad(IProjectContainer project, string path = null)
+        public void OnLoad(ProjectContainer project, string path = null)
         {
             if (project != null)
             {
@@ -402,7 +402,7 @@ namespace Globe3DLight.Editor
         {
             if (item != null)
             {
-                if (item is IObservableObject observable)
+                if (item is ObservableObject observable)
                 {
                     return observable.Name;
                 }
@@ -413,7 +413,7 @@ namespace Globe3DLight.Editor
 
         public void OnNew(object item)
         {
-            if (item is IProjectEditor)
+            if (item is ProjectEditor)
             {
                 OnNewProject();
             }

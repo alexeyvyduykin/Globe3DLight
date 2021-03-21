@@ -17,10 +17,10 @@ namespace Globe3DLight.Entities
         private IAntennaRenderModel _renderModel; 
         private IFrameRenderModel _frameRenderModel;
 
-        private ILogical _logical; 
-        private ImmutableArray<IEntity> _assets;
+        private Logical _logical; 
+        private ImmutableArray<BaseEntity> _assets;
         
-        public ImmutableArray<IEntity> Assets
+        public ImmutableArray<BaseEntity> Assets
         {
             get => _assets;
             set => Update(ref _assets, value);
@@ -32,7 +32,7 @@ namespace Globe3DLight.Entities
             set => Update(ref _renderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical;
             set => Update(ref _logical, value);
@@ -63,14 +63,14 @@ namespace Globe3DLight.Entities
 
                         foreach (var item in Assets)
                         {
-                            if (item is IGroundStation groundStation)
+                            if (item is GroundStation groundStation)
                             {
                                 if (groundStation.Name.Equals(target) == true)
                                 {
                                     if (groundStation.Logical.State is IGroundStationState groundStationData)
                                     {
-                                        var collection = (ILogicalCollection)groundStation.Logical.Owner;
-                                        var j2000Node = (ILogical)collection.Owner;
+                                        var collection = (LogicalCollection)groundStation.Logical.Owner;
+                                        var j2000Node = (Logical)collection.Owner;
                                         if (j2000Node.State is IJ2000State j2000Data)
                                         {
                                             targetPosition = new dvec3(j2000Data.ModelMatrix * new dvec4(groundStationData.Position, 1.0));
@@ -82,7 +82,7 @@ namespace Globe3DLight.Entities
 
                         foreach (var item in Assets)
                         {
-                            if (item is IRetranslator retranslator)
+                            if (item is Retranslator retranslator)
                             {
                                 if (retranslator.Name.Equals(target) == true)
                                 {
@@ -95,10 +95,10 @@ namespace Globe3DLight.Entities
                         }
                     }
 
-                    var rotationNode = (ILogical)Logical.Owner;
+                    var rotationNode = (Logical)Logical.Owner;
                     if (rotationNode.State is IRotationState rotationData)
                     {
-                        var orbitNode = (ILogical)rotationNode.Owner;
+                        var orbitNode = (Logical)rotationNode.Owner;
                         if (orbitNode.State is ISatelliteState satelliteState)
                         {
                             var attach = RenderModel.AttachPosition;

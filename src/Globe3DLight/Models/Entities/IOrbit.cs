@@ -8,10 +8,10 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.Entities
 {
-    public interface IOrbit : IEntity, IDrawable
+    public interface IOrbit : /*IEntity,*/ IDrawable
     {
         IOrbitRenderModel RenderModel { get; set; }
 
-        ILogical Logical { get; set; }
+        Logical Logical { get; set; }
     }
 }

@@ -4,13 +4,13 @@ namespace Globe3DLight.Editor
 {
     public class ProjectEditorInputTarget : IInputTarget
     {
-        private readonly IProjectEditor _editor;
+        private readonly ProjectEditor _editor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectEditorInputTarget"/> class.
         /// </summary>
         /// <param name="editor">The current <see cref="IProjectEditor"/> object.</param>
-        public ProjectEditorInputTarget(IProjectEditor editor)
+        public ProjectEditorInputTarget(ProjectEditor editor)
         {
             _editor = editor;
         }

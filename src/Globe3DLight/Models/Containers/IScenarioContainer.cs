@@ -12,38 +12,38 @@ namespace Globe3DLight.Containers
 
     public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
 
-    public interface IScenarioContainer : IBaseContainer//, IGrid
-    {
-        event InvalidateScenarioEventHandler InvalidateScenarioHandler;
+    //public interface IScenarioContainer : IBaseContainer//, IGrid
+    //{
+    //    event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
-        void InvalidateScenario();
+    //    void InvalidateScenario();
 
-        double Width { get; set; }
+    //    double Width { get; set; }
 
-        double Height { get; set; }
+    //    double Height { get; set; }
 
-        bool IsExpanded { get; set; }
+    //    bool IsExpanded { get; set; }
 
-        ImmutableArray<ILogical> LogicalTreeNodeRoot { get; set; }
+    //    ImmutableArray<ILogical> LogicalTreeNodeRoot { get; set; }
 
-        ILogical CurrentLogicalTreeNode { get; set; }
+    //    ILogical CurrentLogicalTreeNode { get; set; }
 
-        ImmutableArray<IEntity> Entities { get; set; }
+    //    ImmutableArray<IEntity> Entities { get; set; }
 
-        ImmutableArray<ISatelliteTask> Tasks { get; set; }
+    //    ImmutableArray<ISatelliteTask> Tasks { get; set; }
 
-        ISatelliteTask CurrentTask { get; set; }
+    //    ISatelliteTask CurrentTask { get; set; }
 
-        IEntity CurrentEntity { get; set; }  
+    //    IEntity CurrentEntity { get; set; }  
 
-        ISceneState SceneState { get; set; }
+    //    ISceneState SceneState { get; set; }
 
-        ITimePresenter TimePresenter { get; set; }
+    //    ITimePresenter TimePresenter { get; set; }
 
-        IDataUpdater Updater { get; set; }
+    //    IDataUpdater Updater { get; set; }
 
-        void SetCameraTo(ITargetable target);
+    //    void SetCameraTo(ITargetable target);
 
-        void LogicalUpdate();
-    }
+    //    void LogicalUpdate();
+    //}
 }
