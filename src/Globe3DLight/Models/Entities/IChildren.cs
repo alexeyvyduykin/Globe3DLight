@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Globe3DLight.Entities
 {
-    public interface IChildren //: IObservableObject
+    public interface IChildren
     {
         ImmutableArray<BaseEntity> Children { get; set; }
     }

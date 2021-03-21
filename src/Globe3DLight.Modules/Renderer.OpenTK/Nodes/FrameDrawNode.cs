@@ -10,14 +10,14 @@ namespace Globe3DLight.Renderer.OpenTK
 {
     internal class FrameDrawNode : DrawNode, IFrameDrawNode, IDisposable
     {
-        private IFrameRenderModel _frame;
+        private FrameRenderModel _frame;
        
-        public FrameDrawNode(IFrameRenderModel frame)
+        public FrameDrawNode(FrameRenderModel frame)
         {
             _frame = frame;
         }
 
-        public IFrameRenderModel Frame 
+        public FrameRenderModel Frame 
         {
             get => _frame; 
             set => _frame = value;

@@ -4,7 +4,7 @@ using Globe3DLight.Geometry;
 
 namespace Globe3DLight.Scene
 {
-    public class SpaceboxRenderModel : BaseRenderModel, ISpaceboxRenderModel
+    public class SpaceboxRenderModel : BaseRenderModel
     {
         public double Scale { get; set; }
 

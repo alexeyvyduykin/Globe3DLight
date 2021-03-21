@@ -12,19 +12,19 @@ using Globe3DLight.Scene;
 
 namespace Globe3DLight.Entities
 {
-    public class GroundObject : BaseEntity, IGroundObject
+    public class GroundObject : BaseEntity, IDrawable, ITargetable
     {
-        private IGroundObjectRenderModel _renderModel; 
-        private IFrameRenderModel _frameRenderModel;
+        private GroundObjectRenderModel _renderModel; 
+        private FrameRenderModel _frameRenderModel;
         private Logical _logical;
 
-        public IGroundObjectRenderModel RenderModel
+        public GroundObjectRenderModel RenderModel
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
         }
 
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
             set => Update(ref _frameRenderModel, value);

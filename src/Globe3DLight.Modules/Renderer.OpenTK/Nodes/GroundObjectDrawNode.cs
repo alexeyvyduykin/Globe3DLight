@@ -13,9 +13,9 @@ namespace Globe3DLight.Renderer.OpenTK
 {
     internal class GroundObjectDrawNode : DrawNode, IGroundObjectDrawNode
     {
-        public IGroundObjectRenderModel GroundObject { get; set; }
+        public GroundObjectRenderModel GroundObject { get; set; }
 
-        public GroundObjectDrawNode(IGroundObjectRenderModel groundObject)
+        public GroundObjectDrawNode(GroundObjectRenderModel groundObject)
         {
             GroundObject = groundObject;
         }

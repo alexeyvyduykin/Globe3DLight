@@ -10,19 +10,19 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class GroundStation : BaseEntity, IGroundStation
+    public class GroundStation : BaseEntity, IDrawable, ITargetable
     { 
-        private IGroundStationRenderModel _renderModel; 
-        private IFrameRenderModel _frameRenderModel;
+        private GroundStationRenderModel _renderModel; 
+        private FrameRenderModel _frameRenderModel;
         private Logical _logical;
       
-        public IGroundStationRenderModel RenderModel
+        public GroundStationRenderModel RenderModel
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
         }
 
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
             set => Update(ref _frameRenderModel, value);

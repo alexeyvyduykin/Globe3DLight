@@ -4,7 +4,7 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Scene
 {
-    public class SensorRenderModel : BaseRenderModel, ISensorRenderModel
+    public class SensorRenderModel : BaseRenderModel
     {
         private IScan _scan;
         private IShoot _shoot;

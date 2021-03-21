@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-//using Globe3DScene;
+using Globe3DLight.Scene;
 using A = OpenTK.Graphics.OpenGL;
 using Globe3DLight.Geometry;
 
@@ -24,7 +24,7 @@ namespace Globe3DLight.Renderer.OpenTK
         private readonly B.Uniform<vec4> u_color;
 
 
-        public Scene.IRetranslatorRenderModel Retranslator { get; set; }
+        public RetranslatorRenderModel Retranslator { get; set; }
 
         private readonly string meshVS = @"
 #version 330
@@ -49,7 +49,7 @@ void main(void)
 color = u_color;
 }";
 
-        public RetranslatorDrawNode(Scene.IRetranslatorRenderModel retranslator)
+        public RetranslatorDrawNode(RetranslatorRenderModel retranslator)
         {
             this.Retranslator = retranslator;
 

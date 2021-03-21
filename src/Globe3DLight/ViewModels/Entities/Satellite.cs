@@ -10,13 +10,13 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class Satellite : BaseEntity, ISatellite
+    public class Satellite : BaseEntity, IDrawable, ITargetable, IChildren
     {
-        private ISatelliteRenderModel _renderModel;
-        private IFrameRenderModel _frameRenderModel;
+        private SatelliteRenderModel _renderModel;
+        private FrameRenderModel _frameRenderModel;
         private Logical _logical;
     
-        public ISatelliteRenderModel RenderModel 
+        public SatelliteRenderModel RenderModel 
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value);
@@ -27,7 +27,7 @@ namespace Globe3DLight.Entities
             get => _logical; 
             set => Update(ref _logical, value);
         }
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel; 
             set => Update(ref _frameRenderModel, value); 

@@ -4,6 +4,7 @@ using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
+using Globe3DLight.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
@@ -11,7 +12,7 @@ namespace Globe3DLight.Renderer.OpenTK
     {
         private B.Device _device;
         private B.Context _context;
-        public Scene.IGroundStationRenderModel GroundStation { get; set; }
+        public GroundStationRenderModel GroundStation { get; set; }
 
         private readonly string groundStationVS = @"
 #version 330
@@ -44,7 +45,7 @@ color = u_color;
         private readonly B.Uniform<mat4> u_mvp;
         private readonly B.Uniform<vec4> u_color;
 
-        public GroundStationDrawNode(Scene.IGroundStationRenderModel groundStation)
+        public GroundStationDrawNode(GroundStationRenderModel groundStation)
         {
             this.GroundStation = groundStation;
 

@@ -7,7 +7,7 @@ using GlmSharp;
 
 namespace Globe3DLight.Scene
 {
-    public abstract class BaseRenderModel : ObservableObject, IRenderModel
+    public abstract class BaseRenderModel : ObservableObject
     {
         //private ImmutableArray<ISceneObject> _children;
 
@@ -16,7 +16,6 @@ namespace Globe3DLight.Scene
         //    get => _children; 
         //    set => Update(ref _children, value);
         //}
-
 
         //public dmat4 ModelMatrix { get; set; }
 

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using Globe3DLight.Image;
-//using Globe3DScene;
+using Globe3DLight.Scene;
 using A = OpenTK.Graphics.OpenGL;
 using Globe3DLight.Geometry;
 using B = Globe3DLight.Renderer.OpenTK.Core;
@@ -25,7 +25,7 @@ namespace Globe3DLight.Renderer.OpenTK
         private int _spaceboxCubemapName;
         private bool _isComplete = false;
         private string _key;
-        public Scene.ISpaceboxRenderModel Spacebox { get; set; }
+        public SpaceboxRenderModel Spacebox { get; set; }
 
         public bool IsComplete => _isComplete;
 
@@ -52,7 +52,7 @@ void main(void)
   color = texture(u_spacebox, v_texCoords);
 }";
 
-        public SpaceboxDrawNode(Scene.ISpaceboxRenderModel spacebox)
+        public SpaceboxDrawNode(SpaceboxRenderModel spacebox)
         {
             this.Spacebox = spacebox;
 

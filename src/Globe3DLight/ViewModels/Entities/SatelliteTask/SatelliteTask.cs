@@ -17,7 +17,7 @@ namespace Globe3DLight.Entities
 
         private IList<BaseSatelliteEvent> _events;
         private BaseSatelliteEvent _selectedEvent;
-        private ISatellite _satellite;
+        private Satellite _satellite;
 
         public SatelliteTask(IList<BaseSatelliteEvent> events)
         {
@@ -30,9 +30,9 @@ namespace Globe3DLight.Entities
              
         private IList<BaseSatelliteEvent> CreateFrom(IList<BaseSatelliteEvent> source)
         {
-            Func<BaseSatelliteEvent, bool> rotationPredicate = (s => (HasRotations == true) ? s is IRotationEvent : false);
-            Func<BaseSatelliteEvent, bool> observationPredicate = (s => (HasObservations == true) ? s is IObservationEvent : false);
-            Func<BaseSatelliteEvent, bool> transmissionPredicate = (s => (HasTransmissions == true) ? s is ITransmissionEvent : false);
+            Func<BaseSatelliteEvent, bool> rotationPredicate = (s => (HasRotations == true) ? s is RotationEvent : false);
+            Func<BaseSatelliteEvent, bool> observationPredicate = (s => (HasObservations == true) ? s is ObservationEvent : false);
+            Func<BaseSatelliteEvent, bool> transmissionPredicate = (s => (HasTransmissions == true) ? s is TransmissionEvent : false);
             Func<BaseSatelliteEvent, bool> namePredicate =
                 (s => (string.IsNullOrEmpty(SearchString) == false) ? s.Name.Contains(SearchString) : true);
 
@@ -93,7 +93,7 @@ namespace Globe3DLight.Entities
             }
         }
 
-        public ISatellite Satellite 
+        public Satellite Satellite 
         {
             get => _satellite; 
             set => Update(ref _satellite, value); 

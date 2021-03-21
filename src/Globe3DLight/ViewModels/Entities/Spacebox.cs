@@ -9,12 +9,12 @@ using Globe3DLight.Data;
 
 namespace Globe3DLight.Entities
 {
-    public class Spacebox : BaseEntity, ISpacebox
+    public class Spacebox : BaseEntity, IDrawable
     {
-        private ISpaceboxRenderModel _renderModel;
+        private SpaceboxRenderModel _renderModel;
         private Logical _logical;
 
-        public ISpaceboxRenderModel RenderModel
+        public SpaceboxRenderModel RenderModel
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value);

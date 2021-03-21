@@ -10,12 +10,12 @@ using System.Collections.Immutable;
 
 namespace Globe3DLight.Entities
 {
-    public class Sensor : BaseEntity, ISensor
+    public class Sensor : BaseEntity, IDrawable
     {
-        private ISensorRenderModel _renderModel;         
+        private SensorRenderModel _renderModel;         
         private Logical _logical;
 
-        public ISensorRenderModel RenderModel
+        public SensorRenderModel RenderModel
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value); 

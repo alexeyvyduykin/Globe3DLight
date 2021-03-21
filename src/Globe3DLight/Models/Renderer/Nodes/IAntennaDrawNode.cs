@@ -7,6 +7,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IAntennaDrawNode : IDrawNode
     {
-        IAntennaRenderModel Antenna { get; }
+        AntennaRenderModel Antenna { get; }
     }
 }

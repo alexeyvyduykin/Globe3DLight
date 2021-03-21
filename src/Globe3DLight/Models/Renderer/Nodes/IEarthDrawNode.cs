@@ -6,6 +6,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IEarthDrawNode : IDrawNode, IThreadLoadingNode
     {
-        IEarthRenderModel Earth { get; set; }
+        EarthRenderModel Earth { get; set; }
     }
 }

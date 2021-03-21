@@ -9,6 +9,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IOrbitDrawNode : IDrawNode
     {
-        IOrbitRenderModel Orbit { get; }
+        OrbitRenderModel Orbit { get; }
     }
 }

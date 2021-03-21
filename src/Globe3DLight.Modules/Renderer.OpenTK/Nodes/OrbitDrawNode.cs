@@ -12,11 +12,11 @@ namespace Globe3DLight.Renderer.OpenTK
     internal class OrbitDrawNode : DrawNode, Globe3DLight.Renderer.IOrbitDrawNode
     {
       
-        private readonly IOrbitRenderModel _orbit;
+        private readonly OrbitRenderModel _orbit;
 
-        public IOrbitRenderModel Orbit => _orbit;
+        public OrbitRenderModel Orbit => _orbit;
 
-        public OrbitDrawNode(IOrbitRenderModel orbit)
+        public OrbitDrawNode(OrbitRenderModel orbit)
         {
             _orbit = orbit;
         }

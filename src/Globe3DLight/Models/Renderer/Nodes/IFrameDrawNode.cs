@@ -7,6 +7,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IFrameDrawNode : IDrawNode
     {
-        IFrameRenderModel Frame { get; set; }
+        FrameRenderModel Frame { get; set; }
     }
 }

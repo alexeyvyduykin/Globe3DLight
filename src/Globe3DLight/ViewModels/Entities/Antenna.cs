@@ -12,10 +12,10 @@ using System.Linq;
 
 namespace Globe3DLight.Entities
 {
-    public class Antenna : BaseEntity, IAntenna
+    public class Antenna : BaseEntity, IDrawable, IAssetable
     {
-        private IAntennaRenderModel _renderModel; 
-        private IFrameRenderModel _frameRenderModel;
+        private AntennaRenderModel _renderModel; 
+        private FrameRenderModel _frameRenderModel;
 
         private Logical _logical; 
         private ImmutableArray<BaseEntity> _assets;
@@ -26,7 +26,7 @@ namespace Globe3DLight.Entities
             set => Update(ref _assets, value);
         }
 
-        public IAntennaRenderModel RenderModel
+        public AntennaRenderModel RenderModel
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
@@ -37,7 +37,7 @@ namespace Globe3DLight.Entities
             get => _logical;
             set => Update(ref _logical, value);
         }
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
             set => Update(ref _frameRenderModel, value);

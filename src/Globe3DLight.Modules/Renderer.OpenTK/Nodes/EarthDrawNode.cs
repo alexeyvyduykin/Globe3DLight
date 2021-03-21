@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-//using Globe3DScene;
+using Globe3DLight.Scene;
 using A = OpenTK.Graphics.OpenGL;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using Globe3DLight.Geometry;
@@ -67,7 +67,7 @@ namespace Globe3DLight.Renderer.OpenTK
 
         private readonly B.DrawState[] drawStates;
 
-        public Globe3DLight.Scene.IEarthRenderModel Earth { get; set; }
+        public EarthRenderModel Earth { get; set; }
 
         private readonly string earthGridVS = @"
 #version 330
@@ -292,7 +292,7 @@ finalColor = mix(earthNightSampler, finalColor, (v_diffuse + Terminator) * InvTe
 color = finalColor; 
 }";
 
-        public EarthDrawNode(Globe3DLight.Scene.IEarthRenderModel earth)
+        public EarthDrawNode(EarthRenderModel earth)
         {
             this.Earth = earth;
 

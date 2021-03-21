@@ -10,14 +10,4 @@ namespace Globe3DLight.Entities
     {
         ImmutableArray<T> Values { get; set; }
     }
-
-    //public interface ICollectionValue
-    //{
-
-    //}
-
-    //public interface IEntityList : IEntity, IDrawable, ICollection<IEntity>
-    //{   
-        
-    //}
 }

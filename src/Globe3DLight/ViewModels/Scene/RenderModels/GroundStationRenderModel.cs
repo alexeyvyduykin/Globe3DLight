@@ -4,7 +4,7 @@ using Globe3DLight.Geometry;
 
 namespace Globe3DLight.Scene
 {
-    public class GroundStationRenderModel : BaseRenderModel, IGroundStationRenderModel
+    public class GroundStationRenderModel : BaseRenderModel
     {
         public IAMesh Mesh { get; set; }
 

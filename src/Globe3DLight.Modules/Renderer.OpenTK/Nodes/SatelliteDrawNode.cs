@@ -5,6 +5,7 @@ using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
 using C = Globe3DLight.Geometry.Models;
+using Globe3DLight.Scene;
 
 
 namespace Globe3DLight.Renderer.OpenTK
@@ -12,7 +13,7 @@ namespace Globe3DLight.Renderer.OpenTK
     
     internal class SatelliteDrawNode : DrawNode, Globe3DLight.Renderer.ISatelliteDrawNode
     {
-        public Scene.ISatelliteRenderModel Satellite { get; set; }
+        public SatelliteRenderModel Satellite { get; set; }
 
         private readonly string satelliteVS = @"
 #version 330
@@ -141,7 +142,7 @@ color = finalColor;
 
         private IModelRenderer _modelRenderer;
 
-        public SatelliteDrawNode(Scene.ISatelliteRenderModel satellite, ICache<string, int> textureCache)
+        public SatelliteDrawNode(SatelliteRenderModel satellite, ICache<string, int> textureCache)
         {
             this.Satellite = satellite;
 

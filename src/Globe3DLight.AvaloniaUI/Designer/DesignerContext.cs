@@ -27,7 +27,7 @@ namespace Globe3DLight.AvaloniaUI.Designer
         public static Satellite Satellite { get; set; }
 
         public static SatelliteTask SatelliteTask { get; set; }
-        public static ISensor Sensor { get; set; }
+        public static Sensor Sensor { get; set; }
 
 
         public static Logical SatelliteNode { get; set; }

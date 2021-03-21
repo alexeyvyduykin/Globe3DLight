@@ -4,7 +4,6 @@ using System.Text;
 using GlmSharp;
 using Globe3DLight.Scene;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-//using Globe3DScene;
 using A = OpenTK.Graphics.OpenGL;
 using Globe3DLight.Data;
 
@@ -14,7 +13,7 @@ namespace Globe3DLight.Renderer.OpenTK
     {
         private B.Device _device;
         private readonly B.ShaderProgram sp;
-        private readonly Scene.ISensorRenderModel _sensor;
+        private readonly SensorRenderModel _sensor;
 
         private readonly string sensorVS = @"
 #version 330
@@ -110,9 +109,9 @@ void main()
   color = clr;
 }";
 
-        public Scene.ISensorRenderModel Sensor => _sensor;
+        public SensorRenderModel Sensor => _sensor;
 
-        public SensorDrawNode(Scene.ISensorRenderModel sensor)
+        public SensorDrawNode(SensorRenderModel sensor)
         {
             this._sensor = sensor;
 

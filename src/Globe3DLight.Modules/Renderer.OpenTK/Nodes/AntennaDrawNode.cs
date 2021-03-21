@@ -13,11 +13,11 @@ namespace Globe3DLight.Renderer.OpenTK
     {
 
        // private readonly ShaderProgram sp;
-        private readonly Scene.IAntennaRenderModel _antenna;
+        private readonly AntennaRenderModel _antenna;
 
-        public Scene.IAntennaRenderModel Antenna => _antenna;
+        public AntennaRenderModel Antenna => _antenna;
 
-        public AntennaDrawNode(Scene.IAntennaRenderModel antenna)
+        public AntennaDrawNode(AntennaRenderModel antenna)
         {
             this._antenna = antenna;
         }

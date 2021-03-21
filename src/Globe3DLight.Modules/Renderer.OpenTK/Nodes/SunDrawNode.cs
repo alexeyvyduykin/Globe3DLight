@@ -6,6 +6,7 @@ using Globe3DLight.Image;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
 using Globe3DLight.Geometry;
+using Globe3DLight.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
@@ -13,7 +14,7 @@ namespace Globe3DLight.Renderer.OpenTK
     internal class SunDrawNode : DrawNode, ISunDrawNode
     {
         private readonly B.Context _context;
-        public Scene.ISunRenderModel Sun { get; set; }
+        public SunRenderModel Sun { get; set; }
         private readonly B.Device _device;
         public bool IsComplete => _isComplete;
 
@@ -295,7 +296,7 @@ vec3 color = temperatureColor * unColorMult;
         private const float multColor = 1.0f;
         private vec3 colorMult = new vec3(1.0f, 1.0f, 1.0f) * multColor;
 
-        public SunDrawNode(Scene.ISunRenderModel sun)
+        public SunDrawNode(SunRenderModel sun)
         {
             this.Sun = sun;
 

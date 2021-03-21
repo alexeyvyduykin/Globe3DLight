@@ -7,6 +7,6 @@ namespace Globe3DLight.Renderer
 {
     public interface ISpaceboxDrawNode : IDrawNode, IThreadLoadingNode
     {
-        ISpaceboxRenderModel Spacebox { get; set; }
+        SpaceboxRenderModel Spacebox { get; set; }
     }
 }

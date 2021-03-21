@@ -4,7 +4,7 @@ using GlmSharp;
 
 namespace Globe3DLight.Scene
 {
-    public class OrbitRenderModel : BaseRenderModel, IOrbitRenderModel
+    public class OrbitRenderModel : BaseRenderModel
     {
         private IList<dvec3> _vertices;
 

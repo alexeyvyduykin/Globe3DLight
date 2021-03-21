@@ -4,7 +4,7 @@ using Globe3DLight.Geometry.Models;
 
 namespace Globe3DLight.Scene
 {
-    public class SatelliteRenderModel : BaseRenderModel, ISatelliteRenderModel
+    public class SatelliteRenderModel : BaseRenderModel
     {
         public double Scale { get; set; }
 

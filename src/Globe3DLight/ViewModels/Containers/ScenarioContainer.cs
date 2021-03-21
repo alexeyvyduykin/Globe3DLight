@@ -11,6 +11,10 @@ using System.ComponentModel;
 
 namespace Globe3DLight.Containers
 {
+    public class InvalidateScenarioEventArgs : EventArgs { }
+
+    public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
+
     public class ScenarioContainer : ObservableObject
     {
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
