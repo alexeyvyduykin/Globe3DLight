@@ -166,14 +166,14 @@ new RotationRecord()
             {
                 BeginTime = s.Begin,
                 EndTime = s.Begin + s.Duration,
-                Target = string.Format("GST{0:0000000}", s.GroundStationId - 1),
+                Target = s.GroundStation.Name,
             }).ToList();
 
             var arr2 = satellite.SatelliteToRetranslatorTransfers.Select(s => new TranslationRecord()
             {
                 BeginTime = s.Begin,
                 EndTime = s.Begin + s.Duration,
-                Target = string.Format("RTR{0:0000000}", s.RetranslatorId - 1),
+                Target = s.Retranslator.Name,
             }).ToList();
 
             var arr = arr1.Union(arr2).OrderBy(s => s.BeginTime).ToList();
