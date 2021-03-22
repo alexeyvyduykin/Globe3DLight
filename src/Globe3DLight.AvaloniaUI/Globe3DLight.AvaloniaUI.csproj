@@ -5,23 +5,15 @@
     <OutputType>Library</OutputType>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <IsPackable>False</IsPackable>
     <Nullable>disable</Nullable>
-    <NoWarn>$(NoWarn);NU1701</NoWarn>
+    <NoWarn>$(NoWarn);NU1701</NoWarn>    
   </PropertyGroup>
+  
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <PlatformTarget>AnyCPU</PlatformTarget>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-
-  <PropertyGroup>
-    <VersionPrefix>0.10.0</VersionPrefix>
-    <VersionSuffix>preview4</VersionSuffix>
-    <Authors>kekw</Authors>
-    <Company>kekw</Company>
-    <Description>kekw</Description>
-    <Copyright>kekw</Copyright>
   </PropertyGroup>
 
   <PropertyGroup>
@@ -51,30 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
-    <AvaloniaXaml Remove="Views\Containers\ProjectContainerControl.axaml" />
-    <AvaloniaXaml Remove="Views\MainControl.axaml" />
-    <AvaloniaXaml Remove="Views\MainWindow.axaml" />  
-    <AvaloniaResource Include="Views\Containers\ProjectContainerControl.axaml" />  
-    <AvaloniaResource Include="Views\MainControl.axaml" />
-    <AvaloniaResource Include="Views\MainWindow.axaml" />
-    <Folder Include="Themes\" />
-  </ItemGroup>
-  
-  
-  
-  
-  <ItemGroup>
-    <AvaloniaResource Remove="Themes\FluentDark.xaml" />
-    <AvaloniaResource Remove="Themes\FluentLight.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove="Themes\FluentDark.xaml" />
-    <None Remove="Themes\FluentLight.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Autofac" Version="6.1.0" />
     <PackageReference Include="Avalonia" Version="0.10.0" />
     <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
@@ -86,24 +54,9 @@
     <PackageReference Include="Avalonia.Xaml.Interactivity" Version="0.10.0" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <EmbeddedResource Include="Assets\teapot.bin" />
-  </ItemGroup>
-
-
   <ItemGroup>
     <ProjectReference Include="..\Globe3DLight.Modules\Globe3DLight.Modules.csproj" />
     <ProjectReference Include="..\Globe3DLight\Globe3DLight.csproj" />
   </ItemGroup>
 
-
-  <ItemGroup>
-    <Compile Update="Views\Data\Animators\AntennaAnimatorControl.axaml.cs">
-      <DependentUpon>AntennaAnimatorControl.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="Views\Scene\ArcballCameraControl.axaml.cs">
-      <DependentUpon>ArcballCameraControl.axaml</DependentUpon>
-    </Compile>
-  </ItemGroup>
 </Project>
