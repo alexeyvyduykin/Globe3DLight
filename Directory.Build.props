@@ -1,0 +1,14 @@
+<Project>
+ <PropertyGroup>
+    <Deterministic>true</Deterministic>
+    <LangVersion>latest</LangVersion>
+ </PropertyGroup>
+  <PropertyGroup>
+    <VersionPrefix>0.6.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <Authors>Alexey Vyduykin</Authors>
+    <Company>Alexey Vyduykin</Company>
+    <Description>Globe3DLight</Description>
+    <Copyright>Copyright © Alexey Vyduykin 2021</Copyright>
+  </PropertyGroup>
+</Project>
