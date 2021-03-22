@@ -19,8 +19,6 @@
     <PublishTrimmed>False</PublishTrimmed>
     <PublishSingleFile>False</PublishSingleFile>
     <PublishReadyToRun>False</PublishReadyToRun>
-    <PackageId>Globe3DLight</PackageId>
-    <Product>Globe3DLight</Product>
   </PropertyGroup>
 
   <ItemGroup>
