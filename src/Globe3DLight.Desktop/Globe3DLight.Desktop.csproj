@@ -5,7 +5,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <EnableDefaultCompileItems>False</EnableDefaultCompileItems>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>latest</LangVersion>
     <IsPackable>False</IsPackable>
     <Nullable>enable</Nullable>
     <NoWarn>$(NoWarn);NU1701</NoWarn>
@@ -16,18 +16,11 @@
   </PropertyGroup>
         
   <PropertyGroup>
-    <VersionPrefix>0.5.0</VersionPrefix>
-    <VersionSuffix>preview2</VersionSuffix>
-    <Authors>kekw</Authors>
-    <Company>kekw</Company>
-    <Description>kekw</Description>
-    <Copyright>kekw</Copyright>
-  </PropertyGroup>
-
-  <PropertyGroup>
     <PublishTrimmed>False</PublishTrimmed>
     <PublishSingleFile>False</PublishSingleFile>
     <PublishReadyToRun>False</PublishReadyToRun>
+    <PackageId>Globe3DLight</PackageId>
+    <Product>Globe3DLight</Product>
   </PropertyGroup>
 
   <ItemGroup>

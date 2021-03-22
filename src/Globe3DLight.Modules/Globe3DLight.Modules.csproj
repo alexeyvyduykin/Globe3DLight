@@ -2,6 +2,9 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <LangVersion>latest</LangVersion>
+    <IsPackable>False</IsPackable>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -21,10 +24,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Globe3DLight\Globe3DLight.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Serializer.Newtonsoft\Converters\" />
   </ItemGroup>
 
 </Project>
