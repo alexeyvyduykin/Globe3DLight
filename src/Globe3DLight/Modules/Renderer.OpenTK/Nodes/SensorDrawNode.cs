@@ -132,6 +132,10 @@ void main()
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
+            // Temporary solution
+            _scan = Sensor.Scan;
+            _shoot = Sensor.Shoot;
+
             RenderShoot(_shoot, modelMatrix, scene);
             RenderScan(_scan, modelMatrix, scene);
         }
