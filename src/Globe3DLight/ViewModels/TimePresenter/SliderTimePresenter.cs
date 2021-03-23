@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
+using Globe3DLight.Timer;
 
 namespace Globe3DLight.Time
 {
@@ -13,7 +14,7 @@ namespace Globe3DLight.Time
         private int _sliderMax;
         private int _sliderValue;
 
-        public SliderTimePresenter(DateTime begin, TimeSpan duration, int min, int max) : base(begin, duration)
+        public SliderTimePresenter(ITimer timer, DateTime begin, TimeSpan duration, int min, int max) : base(timer, begin, duration)
         {
             _sliderMin = min;
             _sliderMax = max;

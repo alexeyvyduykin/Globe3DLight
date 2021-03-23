@@ -1,0 +1,70 @@
+<UserControl x:Class="Globe3DLight.Views.EditorView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                          
+             xmlns:containers="clr-namespace:Globe3DLight.Views.Containers;assembly=Globe3DLight"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+             xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"         
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
+             xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
+             xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static Designer:DesignerContext.Editor}"
+             d:DesignWidth="1200" d:DesignHeight="580"
+             x:DataType="Editor:ProjectEditor" x:CompileBindings="True"
+             >
+
+    <Grid ShowGridLines="True" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,20">
+
+        <TabControl Padding="6,0,0,0" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+            <TabItem Header="Project" FontSize="20">
+                <containers:ProjectContainerControl DataContext="{Binding Project}"/>
+            </TabItem>
+            <TabItem Header="Frames" FontSize="20">
+                <containers:FrameContainerControl DataContext="{Binding Project}"/>
+            </TabItem>
+            <TabItem Header="Tasks" FontSize="20">
+                <containers:TaskContainerControl DataContext="{Binding Project.CurrentScenario}"/>
+            </TabItem>
+        </TabControl>
+
+        <GridSplitter x:Name="LeftGridSplitter" Grid.Column="1" Grid.Row="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+
+        <views:TimePresenterControl Grid.Column="2" Grid.Row="1" DataContext="{Binding Project.CurrentScenario.TimePresenter}"/>
+
+        <views:ScenarioControl x:Name="Scenario" Grid.Column="2" Grid.Row="2"/>
+
+        <GridSplitter x:Name="RightGridSplitter" Grid.Column="3" Grid.Row="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+
+        <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2">
+            <TabItem Header="Properties" FontSize="20">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentLogicalTreeNode, Mode=TwoWay}"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Scene" FontSize="20">
+                <TabControl>
+                    <TabItem Header="Scenario">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ContentControl Content="{Binding Project.CurrentScenario, Mode=TwoWay}"/>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Header="Camera">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ContentControl Content="{Binding Project.CurrentScenario.SceneState.Camera, Mode=TwoWay}"/>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+
+
+
+</UserControl>

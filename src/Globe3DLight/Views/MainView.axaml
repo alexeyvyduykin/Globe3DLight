@@ -1,0 +1,21 @@
+<UserControl x:Class="Globe3DLight.Views.MainView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"            
+             xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"         
+             xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
+             mc:Ignorable="d"                  
+             d:DataContext="{x:Static Designer:DesignerContext.Editor}"
+             d:DesignWidth="1200" d:DesignHeight="580"
+             x:DataType="Editor:ProjectEditor" x:CompileBindings="True">
+
+    <Panel>
+        <Panel>
+            <views:DashboardView IsVisible="{Binding Project, Converter={x:Static ObjectConverters.IsNull}}" />
+            <views:EditorView IsVisible="{Binding Project, Converter={x:Static ObjectConverters.IsNotNull}}" />
+        </Panel>
+    </Panel>
+
+</UserControl>

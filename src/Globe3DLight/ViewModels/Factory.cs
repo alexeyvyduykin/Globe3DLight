@@ -385,10 +385,7 @@ namespace Globe3DLight
         {
             var timer = CreateAcceleratedTimer();
 
-            return new SliderTimePresenter(dateTime, timeSpan, 0, 1000)
-            {
-                Timer = timer,            
-            };
+            return new SliderTimePresenter(timer, dateTime, timeSpan, 0, 1000);
         }
 
         public IDataUpdater CreateDataUpdater()
