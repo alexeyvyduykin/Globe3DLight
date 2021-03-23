@@ -19,8 +19,8 @@
     <PublishTrimmed>False</PublishTrimmed>
     <PublishSingleFile>False</PublishSingleFile>
     <PublishReadyToRun>False</PublishReadyToRun>
-    <PackageId>Globe3DLight</PackageId>
-    <Product>Globe3DLight</Product>
+    <PackageId>Globe3DLight.Desktop</PackageId>
+    <Product>Globe3DLight.Desktop</Product>
   </PropertyGroup>
 
   <ItemGroup>
@@ -40,7 +40,6 @@
     <PackageReference Include="Avalonia.Desktop" Version="0.10.0" />
     <PackageReference Include="Avalonia.ReactiveUI" Version="0.10.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="6.0.0-preview.1.21102.12" />
-    <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
   </ItemGroup>
 
   <ItemGroup>
