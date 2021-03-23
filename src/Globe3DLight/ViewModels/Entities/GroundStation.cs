@@ -10,25 +10,25 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class GroundStation : BaseEntity, IGroundStation
+    public class GroundStation : BaseEntity, IDrawable, ITargetable
     { 
-        private IGroundStationRenderModel _renderModel; 
-        private IFrameRenderModel _frameRenderModel;
-        private ILogical _logical;
+        private GroundStationRenderModel _renderModel; 
+        private FrameRenderModel _frameRenderModel;
+        private Logical _logical;
       
-        public IGroundStationRenderModel RenderModel
+        public GroundStationRenderModel RenderModel
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
         }
 
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
             set => Update(ref _frameRenderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical;
             set => Update(ref _logical, value);
@@ -42,7 +42,7 @@ namespace Globe3DLight.Entities
                     if (Logical.State is IGroundStationState groundStationData)
                     {
                         var collection = Logical.Owner;
-                        var parent = (ILogical)collection.Owner;
+                        var parent = (Logical)collection.Owner;
                         if (parent.State is IJ2000State j2000Data)
                         {                      
                             var modelMatrix = j2000Data.ModelMatrix * groundStationData.ModelMatrix;
@@ -62,7 +62,7 @@ namespace Globe3DLight.Entities
                 if (Logical.State is IGroundStationState groundStationData)
                 {
                     var collection = Logical.Owner;
-                    var parent = (ILogical)collection.Owner;
+                    var parent = (Logical)collection.Owner;
                     if (parent.State is IJ2000State j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;

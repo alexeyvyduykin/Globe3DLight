@@ -10,18 +10,18 @@ using System.Collections.Immutable;
 
 namespace Globe3DLight.Entities
 {
-    public class Sensor : BaseEntity, ISensor
+    public class Sensor : BaseEntity, IDrawable
     {
-        private ISensorRenderModel _renderModel;         
-        private ILogical _logical;
+        private SensorRenderModel _renderModel;         
+        private Logical _logical;
 
-        public ISensorRenderModel RenderModel
+        public SensorRenderModel RenderModel
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value); 
         }
 
-        public ILogical Logical 
+        public Logical Logical 
         {
             get => _logical; 
             set => Update(ref _logical, value);
@@ -41,10 +41,10 @@ namespace Globe3DLight.Entities
                 {
                     if (sensorData.Enable == true)
                     {
-                        var rotationNode = (ILogical)Logical.Owner;
+                        var rotationNode = (Logical)Logical.Owner;
                         if (rotationNode.State is IRotationState /*rotationData*/)
                         {
-                            var orbitNode = (ILogical)rotationNode.Owner;
+                            var orbitNode = (Logical)rotationNode.Owner;
                             if (orbitNode.State is ISatelliteState satelliteState)
                             {
                                 //   double r = orbitData.Position.Length;

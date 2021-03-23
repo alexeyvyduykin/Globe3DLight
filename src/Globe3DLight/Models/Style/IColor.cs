@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Globe3DLight.Style
 {
-    public interface IColor : IObservableObject
+    public interface IColor //: IObservableObject
     {
 
     }

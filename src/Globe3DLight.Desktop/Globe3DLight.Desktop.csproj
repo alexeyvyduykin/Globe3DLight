@@ -44,7 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Globe3DLight.AvaloniaUI\Globe3DLight.AvaloniaUI.csproj" />
+    <ProjectReference Include="..\Globe3DLight\Globe3DLight.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -9,7 +9,7 @@ namespace Globe3DLight.Renderer.Presenters
     public class EditorPresenter : IContainerPresenter
     {
         /// <inheritdoc/>
-        public void Render(object dc, IRenderContext renderer, IScenarioContainer container)
+        public void Render(object dc, IRenderContext renderer, ScenarioContainer container)
         {
             renderer.DrawScenario(dc, container);
 

@@ -7,6 +7,6 @@ namespace Globe3DLight.Renderer
 {
     public interface ISensorDrawNode : IDrawNode
     {
-        ISensorRenderModel Sensor { get; }
+        SensorRenderModel Sensor { get; }
     }
 }

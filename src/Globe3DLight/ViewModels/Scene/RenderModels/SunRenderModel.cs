@@ -4,7 +4,7 @@ using Globe3DLight.Geometry;
 
 namespace Globe3DLight.Scene
 {
-    public class SunRenderModel : BaseRenderModel, ISunRenderModel
+    public class SunRenderModel : BaseRenderModel
     {
         public IAMesh Billboard { get; set; }
 

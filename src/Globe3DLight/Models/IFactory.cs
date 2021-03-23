@@ -13,9 +13,9 @@ namespace Globe3DLight
 {
     public interface IFactory
     {
-        ILibrary<T> CreateLibrary<T>(string name);
+        Library<T> CreateLibrary<T>(string name);
 
-        ILibrary<T> CreateLibrary<T>(string name, IEnumerable<T> items);
+        Library<T> CreateLibrary<T>(string name, IEnumerable<T> items);
 
         ICache<TKey, TValue> CreateCache<TKey, TValue>(Action<TValue> dispose = null);
 
@@ -49,24 +49,24 @@ namespace Globe3DLight
 
         IAMesh CreateSolidSphere(float radius, int rings, int sectors);
 
-        IProjectContainer CreateProjectContainer(string name = "Project");
+        ProjectContainer CreateProjectContainer(string name = "Project");
 
-        IScenarioContainer CreateScenarioContainer(string name = "Scenario");
+        ScenarioContainer CreateScenarioContainer(string name = "Scenario");
 
-        ILogical CreateLogical(string name, IState state);
+        Logical CreateLogical(string name, IState state);
        
-        ILogicalCollection CreateLogicalCollection(string name);
+        LogicalCollection CreateLogicalCollection(string name);
 
-        ITimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan);
+        TimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan);
 
         IDataUpdater CreateDataUpdater();
 
-        void SaveProjectContainer(IProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer);
+        void SaveProjectContainer(ProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer);
      
-        IProjectContainer OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer);
+        ProjectContainer OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer);
 
-        IProjectContainer OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
+        ProjectContainer OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
 
-        void SaveProjectContainer(IProjectContainer project/*, IImageCache imageCache*/, Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
+        void SaveProjectContainer(ProjectContainer project/*, IImageCache imageCache*/, Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
     }
 }

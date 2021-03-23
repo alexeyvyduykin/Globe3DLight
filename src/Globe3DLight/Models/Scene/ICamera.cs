@@ -5,7 +5,7 @@ using GlmSharp;
 
 namespace Globe3DLight.Scene
 {
-    public interface ICamera : IObservableObject
+    public interface ICamera
     {
         void LookAt(dvec3 eye, dvec3 target, dvec3 up);
         dmat4 ViewMatrix { get; }

@@ -15,27 +15,27 @@ namespace Globe3DLight.Editor
 {
     public interface IRenderModelFactory
     {
-        ISpaceboxRenderModel CreateSpacebox(double scale);
+        SpaceboxRenderModel CreateSpacebox(double scale);
 
-        IEarthRenderModel CreateEarth();
+        EarthRenderModel CreateEarth();
 
-        ISatelliteRenderModel CreateSatellite(double scale);
+        SatelliteRenderModel CreateSatellite(double scale);
 
-        ISunRenderModel CreateSun();
+        SunRenderModel CreateSun();
 
-        ISensorRenderModel CreateSensor();
+        SensorRenderModel CreateSensor();
 
-        IFrameRenderModel CreateFrame(float scale);
+        FrameRenderModel CreateFrame(float scale);
 
-        IGroundStationRenderModel CreateGroundStation(double scale);
+        GroundStationRenderModel CreateGroundStation(double scale);
 
-        IGroundObjectRenderModel CreateGroundObject();
+        GroundObjectRenderModel CreateGroundObject();
 
-        IRetranslatorRenderModel CreateRetranslator(double scale);
+        RetranslatorRenderModel CreateRetranslator(double scale);
 
-        IAntennaRenderModel CreateAntenna();
+        AntennaRenderModel CreateAntenna();
 
-        IOrbitRenderModel CreateOrbit();
+        OrbitRenderModel CreateOrbit();
     }
 
     public class RenderModelFactory : IRenderModelFactory
@@ -60,7 +60,7 @@ namespace Globe3DLight.Editor
             return modelLoader.LoadModel(path, false);       
         }
 
-        public IEarthRenderModel CreateEarthDefault()
+        public EarthRenderModel CreateEarthDefault()
         {
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
 
@@ -93,7 +93,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IEarthRenderModel CreateEarth()
+        public EarthRenderModel CreateEarth()
         {
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
@@ -134,7 +134,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IEarthRenderModel CreateEarthSimple()
+        public EarthRenderModel CreateEarthSimple()
         {
           //  var ddsLoader = _serviceProvider.GetService<IDDSLoader>();
           //  var d1evice = _serviceProvider.GetService<IDevice>();
@@ -167,7 +167,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public ISunRenderModel CreateSun()
+        public SunRenderModel CreateSun()
         {            
             var factory = _serviceProvider.GetService<IFactory>();
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
@@ -188,7 +188,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public ISpaceboxRenderModel CreateSpacebox(double scale)
+        public SpaceboxRenderModel CreateSpacebox(double scale)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
@@ -210,7 +210,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IGroundStationRenderModel CreateGroundStation(double scale)
+        public GroundStationRenderModel CreateGroundStation(double scale)
         {
             var factory = _serviceProvider.GetService<IFactory>();
 
@@ -225,7 +225,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IGroundObjectRenderModel CreateGroundObject()
+        public GroundObjectRenderModel CreateGroundObject()
         {
             var obj = new GroundObjectRenderModel()
             {
@@ -235,7 +235,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
         
-        public IRetranslatorRenderModel CreateRetranslator(double scale)
+        public RetranslatorRenderModel CreateRetranslator(double scale)
         {
             var factory = _serviceProvider.GetService<IFactory>();
 
@@ -249,7 +249,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public ISensorRenderModel CreateSatelliteSensor()
+        public SensorRenderModel CreateSatelliteSensor()
         {
             var factory = _serviceProvider.GetService<IFactory>();
 
@@ -289,7 +289,7 @@ namespace Globe3DLight.Editor
         //    return obj;            
         //}
 
-        public IFrameRenderModel CreateFrame(float scale)
+        public FrameRenderModel CreateFrame(float scale)
         {
             var factory = _serviceProvider.GetService<IFactory>();
 
@@ -301,7 +301,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public ISatelliteRenderModel CreateSatellite(double scale)
+        public SatelliteRenderModel CreateSatellite(double scale)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var modelLoader = _serviceProvider.GetService<IModelLoader>();
@@ -330,7 +330,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public ISensorRenderModel CreateSensor()
+        public SensorRenderModel CreateSensor()
         {
             var obj = new SensorRenderModel()
             {
@@ -339,7 +339,7 @@ namespace Globe3DLight.Editor
 
             return obj;
         }
-        public IAntennaRenderModel CreateAntenna()
+        public AntennaRenderModel CreateAntenna()
         {                                
             var obj = new AntennaRenderModel()
             {
@@ -349,7 +349,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IOrbitRenderModel CreateOrbit()
+        public OrbitRenderModel CreateOrbit()
         {
             var obj = new OrbitRenderModel()
             { 

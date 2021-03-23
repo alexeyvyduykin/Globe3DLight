@@ -10,18 +10,18 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class Sun : BaseEntity, ISun
+    public class Sun : BaseEntity, IDrawable
     {
-        private ISunRenderModel _renderModel;
-        private ILogical _logical;
+        private SunRenderModel _renderModel;
+        private Logical _logical;
 
-        public ISunRenderModel RenderModel 
+        public SunRenderModel RenderModel 
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value);
         }
    
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical; 
             set => Update(ref _logical, value); 

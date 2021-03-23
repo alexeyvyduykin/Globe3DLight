@@ -14,37 +14,37 @@ namespace Globe3DLight.Editor
 {
     public interface IScenarioObjectFactory
     {
-        ISpacebox CreateSpacebox(string name, ILogical parent);
+        Spacebox CreateSpacebox(string name, Logical parent);
 
-        IEarth CreateEarth(string name, ILogical parent);
+        Earth CreateEarth(string name, Logical parent);
 
-        ISatellite CreateSatellite(string name, ILogical parent);
+        Satellite CreateSatellite(string name, Logical parent);
 
-        ISun CreateSun(string name, ILogical parent);
+        Sun CreateSun(string name, Logical parent);
 
-        ISensor CreateSensor(string name, ILogical parent);
+        Sensor CreateSensor(string name, Logical parent);
 
-        IGroundStation CreateGroundStation(string name, ILogical parent);
+        GroundStation CreateGroundStation(string name, Logical parent);
 
-        IEntityList CreateEntityList(string name, ILogicalCollection parent, IEnumerable<IEntity> values);
+        EntityList CreateEntityList(string name, LogicalCollection parent, IEnumerable<BaseEntity> values);
 
-        IGroundObject CreateGroundObject(string name, ILogical parent);
+        GroundObject CreateGroundObject(string name, Logical parent);
 
-        IRetranslator CreateRetranslator(string name, ILogical parent);
+        Retranslator CreateRetranslator(string name, Logical parent);
 
-        IAntenna CreateAntenna(string name, ILogical parent);
+        Antenna CreateAntenna(string name, Logical parent);
 
-        IOrbit CreateOrbit(string name, ILogical parent);
+        Orbit CreateOrbit(string name, Logical parent);
 
         ISceneState CreateSceneState();
 
         ICamera CreateArcballCamera(dvec3 eye);
 
-        ISatelliteTask CreateSatelliteTask(ISatellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay);
+        SatelliteTask CreateSatelliteTask(Satellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay);
 
-        IEnumerable<ISatelliteEvent> CreateRotationEvents(RotationData data, DateTime epochOnDay);
-        IEnumerable<ISatelliteEvent> CreateObservationEvents(SensorData data, DateTime epochOnDay);
-        IEnumerable<ISatelliteEvent> CreateTransmissionEvents(AntennaData data, DateTime epochOnDay);
+        IEnumerable<BaseSatelliteEvent> CreateRotationEvents(RotationData data, DateTime epochOnDay);
+        IEnumerable<BaseSatelliteEvent> CreateObservationEvents(SensorData data, DateTime epochOnDay);
+        IEnumerable<BaseSatelliteEvent> CreateTransmissionEvents(AntennaData data, DateTime epochOnDay);
     }
 
     public class ScenarioObjectFactory : IScenarioObjectFactory
@@ -56,7 +56,7 @@ namespace Globe3DLight.Editor
             _serviceProvider = serviceProvider;
         }
 
-        public ISpacebox CreateSpacebox(string name, ILogical parent)
+        public Spacebox CreateSpacebox(string name, Logical parent)
         {         
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -65,14 +65,14 @@ namespace Globe3DLight.Editor
                 Name = name,        
                 RenderModel = renderModelFactory.CreateSpacebox(1000000.0/*25000.0*/),//lib.Items.FirstOrDefault(),
                 IsVisible = true,    
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
             };
 
             return obj;
         }
 
-        public IEarth CreateEarth(string name, ILogical parent)
+        public Earth CreateEarth(string name, Logical parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
          
@@ -82,14 +82,14 @@ namespace Globe3DLight.Editor
                 FrameRenderModel = renderModelFactory.CreateFrame(6371.0f * 1.3f),    
                 RenderModel = renderModelFactory.CreateEarth(),         
                 IsVisible = true,           
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
             };
 
             return obj;
         }
 
-        public ISatellite CreateSatellite(string name, ILogical parent)
+        public Satellite CreateSatellite(string name, Logical parent)
         {       
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -99,14 +99,14 @@ namespace Globe3DLight.Editor
                 IsVisible = true,            
                 RenderModel = renderModelFactory.CreateSatellite(1), //0.009 //libRenderModel.Items.FirstOrDefault(),
                 FrameRenderModel = renderModelFactory.CreateFrame(200.0f),                
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,          
             };
 
             return obj;
         }
 
-        public ISun CreateSun(string name, ILogical parent)
+        public Sun CreateSun(string name, Logical parent)
         { 
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
                         
@@ -115,14 +115,14 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,         
                 RenderModel = renderModelFactory.CreateSun(),                
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,              
             };
 
             return obj;
         }
 
-        public ISensor CreateSensor(string name, ILogical parent)
+        public Sensor CreateSensor(string name, Logical parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -131,14 +131,14 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateSensor(),
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
             };
 
             return obj;
         }
 
-        public IAntenna CreateAntenna(string name, ILogical parent)
+        public Antenna CreateAntenna(string name, Logical parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -147,16 +147,16 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateAntenna(),//libRenderModel.Items.FirstOrDefault(),
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
-                Assets = ImmutableArray.Create<IEntity>(),
+                Assets = ImmutableArray.Create<BaseEntity>(),
                 FrameRenderModel = renderModelFactory.CreateFrame(50.0f),
             };
 
             return obj;
         }
 
-        public IOrbit CreateOrbit(string name, ILogical parent)
+        public Orbit CreateOrbit(string name, Logical parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -165,14 +165,14 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateOrbit(),
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
             };
 
             return obj;
         }
 
-        public IGroundStation CreateGroundStation(string name, ILogical parent)
+        public GroundStation CreateGroundStation(string name, Logical parent)
         {      
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -182,16 +182,16 @@ namespace Globe3DLight.Editor
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateGroundStation(70.0),
                 FrameRenderModel = renderModelFactory.CreateFrame(200.0f),
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,  
             };
 
             return obj;
         }
 
-        public IEntityList CreateEntityList(string name, ILogicalCollection parent, IEnumerable<IEntity> values)
+        public EntityList CreateEntityList(string name, LogicalCollection parent, IEnumerable<BaseEntity> values)
         {           
-            var builder = ImmutableArray.CreateBuilder<IEntity>();
+            var builder = ImmutableArray.CreateBuilder<BaseEntity>();
             builder.AddRange(values);
 
             var obj = new EntityList()
@@ -206,7 +206,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public IGroundObject CreateGroundObject(string name, ILogical parent)
+        public GroundObject CreateGroundObject(string name, Logical parent)
         {        
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -216,14 +216,14 @@ namespace Globe3DLight.Editor
                 IsVisible = true,           
                 RenderModel = renderModelFactory.CreateGroundObject(),
                 FrameRenderModel = renderModelFactory.CreateFrame(30.0f),
-                Children = ImmutableArray.Create<IEntity>(),               
+                Children = ImmutableArray.Create<BaseEntity>(),               
                 Logical = parent,                
             };
 
             return obj;
         }
 
-        public IRetranslator CreateRetranslator(string name, ILogical parent)
+        public Retranslator CreateRetranslator(string name, Logical parent)
         {         
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -232,7 +232,7 @@ namespace Globe3DLight.Editor
                 Name = name,
                 IsVisible = true,            
                 RenderModel = renderModelFactory.CreateRetranslator(1000), //0.009 //libRenderModel.Items.FirstOrDefault(),             
-                Children = ImmutableArray.Create<IEntity>(),
+                Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,                  
             };
 
@@ -276,11 +276,11 @@ namespace Globe3DLight.Editor
             return new ArcballCamera(eye, dvec3.Zero, dvec3.UnitY);                        
         }
 
-        public ISatelliteTask CreateSatelliteTask(ISatellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay)
+        public SatelliteTask CreateSatelliteTask(Satellite satellite, RotationData rotationData, SensorData sensorData, AntennaData antennaData, DateTime epochOnDay)
         {
             var name = satellite.Name;
         
-            var events = new List<ISatelliteEvent>();
+            var events = new List<BaseSatelliteEvent>();
 
             events.AddRange(CreateRotationEvents(rotationData, epochOnDay));
             events.AddRange(CreateObservationEvents(sensorData, epochOnDay));
@@ -301,9 +301,9 @@ namespace Globe3DLight.Editor
             };
         }
 
-        public IEnumerable<ISatelliteEvent> CreateRotationEvents(RotationData data, DateTime epochOnDay)
+        public IEnumerable<BaseSatelliteEvent> CreateRotationEvents(RotationData data, DateTime epochOnDay)
         {
-            var events = new List<ISatelliteEvent>();
+            var events = new List<BaseSatelliteEvent>();
 
             var dt = epochOnDay.AddSeconds(data.TimeBegin);
             foreach (var item in data.Rotations)
@@ -319,9 +319,9 @@ namespace Globe3DLight.Editor
             return events;
         }
 
-        public IEnumerable<ISatelliteEvent> CreateObservationEvents(SensorData data, DateTime epochOnDay)
+        public IEnumerable<BaseSatelliteEvent> CreateObservationEvents(SensorData data, DateTime epochOnDay)
         {
-            var events = new List<ISatelliteEvent>();
+            var events = new List<BaseSatelliteEvent>();
             var dt = epochOnDay.AddSeconds(data.TimeBegin);
             foreach (var item in data.Shootings)
             {
@@ -336,9 +336,9 @@ namespace Globe3DLight.Editor
             return events;
         }
        
-        public IEnumerable<ISatelliteEvent> CreateTransmissionEvents(AntennaData data, DateTime epochOnDay)
+        public IEnumerable<BaseSatelliteEvent> CreateTransmissionEvents(AntennaData data, DateTime epochOnDay)
         {
-            var events = new List<ISatelliteEvent>(); 
+            var events = new List<BaseSatelliteEvent>(); 
             var dt = epochOnDay.AddSeconds(data.TimeBegin);
             foreach (var item in data.Translations)
             {

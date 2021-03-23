@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Globe3DLight.Image
 {
-    public interface IImage : IObservableObject
+    public interface IImage //: IObservableObject
     {
 
     }

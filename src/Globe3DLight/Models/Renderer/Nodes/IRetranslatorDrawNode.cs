@@ -7,6 +7,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IRetranslatorDrawNode : IDrawNode
     {
-        IRetranslatorRenderModel Retranslator { get; set; }
+        RetranslatorRenderModel Retranslator { get; set; }
     }
 }

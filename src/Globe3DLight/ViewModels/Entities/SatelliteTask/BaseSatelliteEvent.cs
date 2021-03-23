@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Globe3DLight.Entities
 {
-    public abstract class BaseSatelliteEvent : ObservableObject, ISatelliteEvent
+    public abstract class BaseSatelliteEvent : ObservableObject//, ISatelliteEvent
     {
         private DateTime _begin;
         private TimeSpan _duration;

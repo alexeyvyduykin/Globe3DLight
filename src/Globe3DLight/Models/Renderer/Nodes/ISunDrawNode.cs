@@ -6,6 +6,6 @@ namespace Globe3DLight.Renderer
 {
     public interface ISunDrawNode : IDrawNode, IThreadLoadingNode
     {
-        ISunRenderModel Sun { get; set; } 
+        SunRenderModel Sun { get; set; } 
     }
 }

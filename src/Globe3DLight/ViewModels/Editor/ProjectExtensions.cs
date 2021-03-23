@@ -12,7 +12,7 @@ namespace Globe3DLight.Editor
     public static class ProjectExtensions
     {
 
-        public static void AddEntity(this IProjectContainer project, IEntity entity)
+        public static void AddEntity(this ProjectContainer project, BaseEntity entity)
         {
             if (project?.Scenarios != null && entity != null)
             {       
@@ -22,7 +22,7 @@ namespace Globe3DLight.Editor
             }            
         }
 
-        public static void AddEntities(this IProjectContainer project, IEnumerable<IEntity> entities)
+        public static void AddEntities(this ProjectContainer project, IEnumerable<BaseEntity> entities)
         {
             if (project?.Scenarios != null && entities != null)
             {
@@ -32,7 +32,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void AddScenario(this IProjectContainer project, IScenarioContainer scenario)
+        public static void AddScenario(this ProjectContainer project, ScenarioContainer scenario)
         {
             if (project?.Scenarios != null && scenario != null)
             {             
@@ -41,7 +41,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void AddChildFrame(this IProjectContainer project, ILogical node, ILogical child)
+        public static void AddChildFrame(this ProjectContainer project, Logical node, Logical child)
         {
             if (node != null && child != null)
             {
@@ -49,7 +49,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void RemoveScenario(this IProjectContainer project, IScenarioContainer scenario)
+        public static void RemoveScenario(this ProjectContainer project, ScenarioContainer scenario)
         {
             if (project?.Scenarios != null && scenario != null)
             {            
@@ -77,7 +77,7 @@ namespace Globe3DLight.Editor
         //    return;
         //}
 
-        public static void RemoveLogicalNode(this IProjectContainer project, ILogical node)
+        public static void RemoveLogicalNode(this ProjectContainer project, Logical node)
         {
             if (node != null)
             {

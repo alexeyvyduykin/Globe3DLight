@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Globe3DLight.Containers
 {
-    public class Library<T> : ObservableObject, ILibrary<T>
+    public class Library<T> : ObservableObject//, ILibrary<T>
     {
         private ImmutableArray<T> _items;
         private T _selected;
@@ -36,7 +36,7 @@ namespace Globe3DLight.Containers
 
             foreach (var item in Items)
             {
-                if (item is IObservableObject observableObject)
+                if (item is ObservableObject observableObject)
                 {
                     isDirty |= observableObject.IsDirty();
                 }
@@ -51,7 +51,7 @@ namespace Globe3DLight.Containers
 
             foreach (var item in Items)
             {
-                if (item is IObservableObject observableObject)
+                if (item is ObservableObject observableObject)
                 {
                     observableObject.Invalidate();
                 }

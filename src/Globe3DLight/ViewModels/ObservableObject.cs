@@ -3,20 +3,19 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-
 namespace Globe3DLight
 {
     /// <summary>
     /// Observable object.
     /// </summary>
-    public abstract class ObservableObject : IObservableObject
+    public abstract class ObservableObject : INotifyPropertyChanged, ICopyable
     {
         private bool _isDirty;
-        private IObservableObject _owner = null;
+        private ObservableObject _owner = null;
         private string _name = "";
 
         /// <inheritdoc/>
-        public virtual IObservableObject Owner
+        public virtual ObservableObject Owner
         {
             get => _owner;
             set => Update(ref _owner, value);
