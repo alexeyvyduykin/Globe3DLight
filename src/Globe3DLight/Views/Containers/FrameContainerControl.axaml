@@ -63,7 +63,7 @@
           DataContext="{Binding CurrentScenario.CurrentLogicalTreeNode}">
 
       <TextBlock Text="Owner" Grid.Row="0" Grid.Column="0"></TextBlock>
-      <TextBlock Text="{Binding Owner.Name}" Grid.Row="0" Grid.Column="1"></TextBlock>
+        <!--<TextBlock Text="{Binding Owner.Name}" Grid.Row="0" Grid.Column="1"></TextBlock>-->
 
       <TextBlock Text="Name" Grid.Row="1" Grid.Column="0"></TextBlock>
       <TextBlock Text="{Binding Name}" Grid.Row="1" Grid.Column="1"></TextBlock>
