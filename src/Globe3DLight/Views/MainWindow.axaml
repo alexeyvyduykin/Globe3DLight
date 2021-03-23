@@ -35,6 +35,17 @@
     </MultiBinding>
   </Window.Title> 
   -->
-  <views:MainControl x:Name="MainControl"/>
+
+    <Panel x:Name="ContentPanel">
+        <DockPanel>
+            <Panel x:Name="MainMenuPanel" DockPanel.Dock="Top">
+                <views:DashboardMenuControl IsVisible="{Binding Project, Converter={x:Static ObjectConverters.IsNull}}" />
+                <views:EditorMenuControl IsVisible="{Binding Project, Converter={x:Static ObjectConverters.IsNotNull}}" />
+            </Panel>
+            <Panel x:Name="MainViewPanel">
+                <views:MainView x:Name="MainView" />
+            </Panel>
+        </DockPanel>
+    </Panel>
 
 </Window>

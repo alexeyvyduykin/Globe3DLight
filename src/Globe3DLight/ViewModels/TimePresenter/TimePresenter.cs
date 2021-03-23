@@ -15,11 +15,13 @@ namespace Globe3DLight.Time
         private double _currentTime;
         private string _currentTimeString;
 
-        public TimePresenter(DateTime begin, TimeSpan duration)
-        {            
+        public TimePresenter(ITimer timer, DateTime begin, TimeSpan duration)
+        {
+            _timer = timer;
             _begin = begin;
             _duration = duration;
             _currentTime = 0.0;
+            _currentTimeString = string.Empty;
 
             // 1000 milliseconds = 1 sec
             _timerThread = new System.Timers.Timer(1000.0 / 60.0);
@@ -65,7 +67,7 @@ namespace Globe3DLight.Time
         public ITimer Timer
         {
             get => _timer;
-            set => Update(ref _timer, value);
+            protected set => Update(ref _timer, value);
         }
 
         public virtual void Update(double t) 
