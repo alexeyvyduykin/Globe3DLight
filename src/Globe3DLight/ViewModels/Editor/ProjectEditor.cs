@@ -95,11 +95,6 @@ namespace Globe3DLight.Editor
             CanvasPlatform?.InvalidateControl?.Invoke();
         }
 
-        public void OnDemoProject()
-        {
-            OnOpenProject(ContainerFactory.GetDemo(), "");
-        }
-
         public async void OnFromDatabaseProject()
         {
             var project = await ContainerFactory.GetFromDatabase();
