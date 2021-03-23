@@ -57,7 +57,7 @@ namespace Globe3DLight
        
         LogicalCollection CreateLogicalCollection(string name);
 
-        TimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan);
+        SliderTimePresenter CreateSliderTimePresenter(DateTime dateTime, TimeSpan timeSpan);
 
         IDataUpdater CreateDataUpdater();
 

@@ -20,39 +20,56 @@ namespace Globe3DLight.Designer
 
         public static ProjectContainer Project { get; set; }
 
-        public static TimePresenter TimePresenter { get; set; }
+        public static SliderTimePresenter SliderTimePresenter { get; set; }
 
         public static ICamera ArcballCamera { get; set; }
 
         public static Satellite Satellite { get; set; }
 
         public static SatelliteTask SatelliteTask { get; set; }
+
         public static Sensor Sensor { get; set; }
 
-
         public static Logical SatelliteNode { get; set; }
+
         public static Logical SensorNode { get; set; }
+
         public static Logical RotationNode { get; set; }
+
         public static Logical SunNode { get; set; }
+
         public static Logical J2000Node { get; set; }
 
         public static SatelliteData SatelliteData { get; set; }
+
         public static SensorData SensorData { get; set; }
+
         public static RotationData RotationData { get; set; }
+
         public static SunData SunData { get; set; }
+
         public static J2000Data J2000Data { get; set; }
+
         public static RetranslatorData RetranslatorData { get; set; }
+
         public static AntennaData AntennaData { get; set; }
+
         public static GroundStationData GroundStationData { get; set; }
 
-
         public static IState SatelliteAnimator { get; set; }
+
         public static IState SensorAnimator { get; set; }
+
         public static IState RotationAnimator { get; set; }
+
         public static IState SunAnimator { get; set; }
+
         public static IState J2000Animator { get; set; }
+
         public static IState RetranslatorAnimator { get; set; }
+
         public static IState AntennaAnimator { get; set; }
+
         public static IState GroundStationState { get; set; }
 
         public static void InitializeContext(IServiceProvider serviceProvider)
@@ -68,7 +85,7 @@ namespace Globe3DLight.Designer
 
             Editor = serviceProvider.GetService<ProjectEditor>();
 
-            TimePresenter = factory.CreateTimePresenter(begin, duration);// serviceProvider.GetService<ISceneTimer>();
+            SliderTimePresenter = factory.CreateSliderTimePresenter(begin, duration);// serviceProvider.GetService<ISceneTimer>();
 
             // New Project
 

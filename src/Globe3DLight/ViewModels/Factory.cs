@@ -381,7 +381,7 @@ namespace Globe3DLight
             return new AcceleratedTimer();
         }
 
-        public TimePresenter CreateTimePresenter(DateTime dateTime, TimeSpan timeSpan)
+        public SliderTimePresenter CreateSliderTimePresenter(DateTime dateTime, TimeSpan timeSpan)
         {
             var timer = CreateAcceleratedTimer();
 
