@@ -5,26 +5,26 @@ using System.Text;
 
 namespace Globe3DLight.Containers
 {
-    public partial class ProjectContainer : ObservableObject, IProjectContainer
+    public partial class ProjectContainer : ObservableObject
     {
-        private ImmutableArray<IScenarioContainer> _scenarios;
-        private IScenarioContainer _currentScenario;
-        private IObservableObject _selected;
+        private ImmutableArray<ScenarioContainer> _scenarios;
+        private ScenarioContainer _currentScenario;
+        private ObservableObject _selected;
 
-        public ImmutableArray<IScenarioContainer> Scenarios 
+        public ImmutableArray<ScenarioContainer> Scenarios 
         { 
             get => _scenarios; 
             set => Update(ref _scenarios, value); 
         }
 
-        public IScenarioContainer CurrentScenario
+        public ScenarioContainer CurrentScenario
         {
             get => _currentScenario; 
             set => Update(ref _currentScenario, value); 
         
         }
 
-        public IObservableObject Selected 
+        public ObservableObject Selected 
         {
             get => _selected;
             set 
@@ -34,20 +34,20 @@ namespace Globe3DLight.Containers
             }
         }
 
-        public void SetCurrentScenario(IScenarioContainer scenario)
+        public void SetCurrentScenario(ScenarioContainer scenario)
         {
             CurrentScenario = scenario;
             Selected = scenario;
         }
 
-        public void SetCurrentTemplate(IScenarioContainer template)
+        public void SetCurrentTemplate(ScenarioContainer template)
         {
             throw new NotImplementedException();
         }
 
-        public void SetSelected(IObservableObject value)
+        public void SetSelected(ObservableObject value)
         {
-            if(value is IScenarioContainer scenario)
+            if(value is ScenarioContainer scenario)
             {
                 this.CurrentScenario = scenario;
             }

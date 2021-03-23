@@ -1,0 +1,34 @@
+﻿<UserControl x:Class="Globe3DLight.Views.Data.Animators.OrbitAnimatorControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                    
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"             
+             xmlns:Data="clr-namespace:Globe3DLight.Data;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
+            
+             
+             mc:Ignorable="d"                          
+             d:DataContext="{x:Static Designer:DesignerContext.SatelliteAnimator}"
+             d:DesignWidth="250" d:DesignHeight="400"
+             x:DataType="Data:ISatelliteState" x:CompileBindings="True"
+             >
+
+
+  <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="X :"/>
+    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Position[0], StringFormat={}{0: 0.000 km;-0.000 km}}, Mode=TwoWay"/>
+
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="Y :"/>
+    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Position[1], StringFormat={}{0: 0.000 km;-0.000 km}}, Mode=TwoWay}"/>
+
+    <TextBlock Grid.Row="2" Grid.Column="0" Text="Z :"/>
+    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Position[2], StringFormat={}{0: 0.000 km;-0.000 km}}, Mode=TwoWay}"/>
+
+
+  </Grid>
+  
+  
+</UserControl>

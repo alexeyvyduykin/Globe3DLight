@@ -11,33 +11,37 @@ using System.ComponentModel;
 
 namespace Globe3DLight.Containers
 {
-    public class ScenarioContainer : ObservableObject, IScenarioContainer
+    public class InvalidateScenarioEventArgs : EventArgs { }
+
+    public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
+
+    public class ScenarioContainer : ObservableObject
     {
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
-        private ImmutableArray<ILogical> _logicalTreeNodeRoot;
+        private ImmutableArray<Logical> _logicalTreeNodeRoot;
         private IDataUpdater _updater;
         private bool _isExpanded = true;
-        private ImmutableArray<IEntity> _entities;
-        private IEntity _currentEntity;
-        private ImmutableArray<ISatelliteTask> _tasks;
-        private ISatelliteTask _currentTask;
+        private ImmutableArray<BaseEntity> _entities;
+        private BaseEntity _currentEntity;
+        private ImmutableArray<SatelliteTask> _tasks;
+        private SatelliteTask _currentTask;
 
-        private ILogical _currentLogicalTreeNode;
+        private Logical _currentLogicalTreeNode;
         private ISceneState _sceneState;
-        private ITimePresenter _timePresenter;
+        private TimePresenter _timePresenter;
 
         private double _width;
 
         private double _height;
 
-        public ImmutableArray<ILogical> LogicalTreeNodeRoot
+        public ImmutableArray<Logical> LogicalTreeNodeRoot
         {
             get => _logicalTreeNodeRoot;
             set => Update(ref _logicalTreeNodeRoot, value);
         }
 
-        public ILogical CurrentLogicalTreeNode
+        public Logical CurrentLogicalTreeNode
         {
             get => _currentLogicalTreeNode;
             set => Update(ref _currentLogicalTreeNode, value);
@@ -55,13 +59,13 @@ namespace Globe3DLight.Containers
             set => Update(ref _isExpanded, value);
         }
 
-        public ImmutableArray<IEntity> Entities
+        public ImmutableArray<BaseEntity> Entities
         {
             get => _entities;
             set => Update(ref _entities, value);
         }
 
-        public ImmutableArray<ISatelliteTask> Tasks
+        public ImmutableArray<SatelliteTask> Tasks
         {
             get => _tasks;
             set
@@ -73,7 +77,7 @@ namespace Globe3DLight.Containers
             }
         }
 
-        public ISatelliteTask CurrentTask
+        public SatelliteTask CurrentTask
         {
             get => _currentTask;
             set
@@ -85,7 +89,7 @@ namespace Globe3DLight.Containers
             }
         }
 
-        public IEntity CurrentEntity
+        public BaseEntity CurrentEntity
         {
             get => _currentEntity;
             set => Update(ref _currentEntity, value);
@@ -109,7 +113,7 @@ namespace Globe3DLight.Containers
             set => Update(ref _height, value);
         }
 
-        public ITimePresenter TimePresenter
+        public TimePresenter TimePresenter
         {
             get => _timePresenter;
             set => Update(ref _timePresenter, value);
@@ -140,12 +144,12 @@ namespace Globe3DLight.Containers
             }
         }
 
-        private void AddCurrentTask(ISatelliteTask currentTask)
+        private void AddCurrentTask(SatelliteTask currentTask)
         {
             SetCameraTo(currentTask.Satellite);
         }
 
-        private void AddTasks(ImmutableArray<ISatelliteTask> tasks)
+        private void AddTasks(ImmutableArray<SatelliteTask> tasks)
         {
             foreach (var task in tasks)
             {
@@ -154,9 +158,9 @@ namespace Globe3DLight.Containers
 
             void Task_PropertyChanged(object sender, PropertyChangedEventArgs e)
             {
-                if (e.PropertyName == nameof(ISatelliteTask.IsVisible))
+                if (e.PropertyName == nameof(SatelliteTask.IsVisible))
                 {
-                    var task = sender as ISatelliteTask;
+                    var task = sender as SatelliteTask;
                     if (task.IsVisible == true)
                     {
                         foreach (var item in Tasks)
@@ -171,9 +175,9 @@ namespace Globe3DLight.Containers
                     }
                 }
 
-                if (e.PropertyName == nameof(ISatelliteTask.SelectedEvent))
+                if (e.PropertyName == nameof(SatelliteTask.SelectedEvent))
                 {
-                    var task = sender as ISatelliteTask;
+                    var task = sender as SatelliteTask;
 
                     if(TimePresenter.Timer.IsRunning == true)
                     {

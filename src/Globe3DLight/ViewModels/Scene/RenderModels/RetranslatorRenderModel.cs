@@ -4,7 +4,7 @@ using Globe3DLight.Geometry;
 
 namespace Globe3DLight.Scene
 {
-    public class RetranslatorRenderModel : BaseRenderModel, IRetranslatorRenderModel
+    public class RetranslatorRenderModel : BaseRenderModel
     {
         public IAMesh Mesh { get; set; }
 

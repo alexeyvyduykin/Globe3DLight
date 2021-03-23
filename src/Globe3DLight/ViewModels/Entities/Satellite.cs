@@ -10,24 +10,24 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class Satellite : BaseEntity, ISatellite
+    public class Satellite : BaseEntity, IDrawable, ITargetable, IChildren
     {
-        private ISatelliteRenderModel _renderModel;
-        private IFrameRenderModel _frameRenderModel;
-        private ILogical _logical;
+        private SatelliteRenderModel _renderModel;
+        private FrameRenderModel _frameRenderModel;
+        private Logical _logical;
     
-        public ISatelliteRenderModel RenderModel 
+        public SatelliteRenderModel RenderModel 
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical; 
             set => Update(ref _logical, value);
         }
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel; 
             set => Update(ref _frameRenderModel, value); 
@@ -39,7 +39,7 @@ namespace Globe3DLight.Entities
         {
             get
             {
-                if(((ILogical)_logical?.Owner).State is IFrameable frameable)
+                if(((Logical)_logical?.Owner).State is IFrameable frameable)
                 {
                     return frameable.ModelMatrix.Inverse;
                 }
@@ -59,7 +59,7 @@ namespace Globe3DLight.Entities
             {
                 if (Logical.State is IRotationState rotationData)
                 {
-                    var parent = (ILogical)Logical.Owner;
+                    var parent = (Logical)Logical.Owner;
                     if (parent.State is ISatelliteState satelliteState)
                     {
                         //   double r = orbitData.Position.Length;

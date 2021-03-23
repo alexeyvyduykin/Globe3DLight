@@ -7,7 +7,7 @@ using System.Timers;
 
 namespace Globe3DLight.Time
 {
-    public class SliderTimePresenter : TimePresenter, ISliderTimePresenter
+    public class SliderTimePresenter : TimePresenter//, ISliderTimePresenter
     {
         private int _sliderMin;
         private int _sliderMax;

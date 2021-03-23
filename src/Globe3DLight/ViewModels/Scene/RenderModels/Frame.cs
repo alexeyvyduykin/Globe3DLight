@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Globe3DLight.Scene
 {
-    public class FrameRenderModel : BaseRenderModel, IFrameRenderModel
+    public class FrameRenderModel : BaseRenderModel
     {
         public float Scale { get; set; }
 

@@ -7,13 +7,13 @@ namespace Globe3DLight.Editor
 {
     public interface IContainerFactory
     {
-        IProjectContainer GetProject();
-        IProjectContainer GetProject(ScenarioData data);
-        IProjectContainer GetDemo();
-        Task<IProjectContainer> GetFromDatabase();
-        Task<IProjectContainer> GetFromJson();
+        ProjectContainer GetProject();
+        ProjectContainer GetProject(ScenarioData data);
+        ProjectContainer GetDemo();
+        Task<ProjectContainer> GetFromDatabase();
+        Task<ProjectContainer> GetFromJson();
         Task SaveFromDatabaseToJson();
-        IScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration);
-        IProjectContainer GetEmptyProject();
+        ScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration);
+        ProjectContainer GetEmptyProject();
     }
 }

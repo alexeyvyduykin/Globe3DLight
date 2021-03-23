@@ -1,0 +1,31 @@
+﻿<Application x:Class="Globe3DLight.App"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Globe3DLight">
+    <Application.DataTemplates>
+        <local:ViewLocator/>
+    </Application.DataTemplates>
+
+  <Application.Resources>
+    <FontFamily x:Key="UiFontFamily">Segoe UI, SF Pro Display, Noto Sans, Cantarel</FontFamily>
+    <FontFamily x:Key="CodeFontFamily">Consolas, Menlo, Monaco, Courier, Courier New, Andale Mono, DejaVu Sans Mono</FontFamily>
+    <StaticResource x:Key="ContentControlThemeFontFamily" ResourceKey="UiFontFamily" />
+  </Application.Resources>
+  
+    <Application.Styles>
+      <!--<StyleInclude Source="avares://Globe3DLight.AvaloniaUI/Themes/DefaultLight.xaml"/>-->
+      <!--<StyleInclude Source="avares://Globe3DLight.AvaloniaUI/Themes/DefaultDark.xaml"/>-->
+      <!--<StyleInclude Source="avares://Globe3DLight.AvaloniaUI/Themes/FluentLight.xaml"/>-->
+      <!--<StyleInclude Source="avares://Globe3DLight.AvaloniaUI/Themes/FluentDark.xaml"/>-->
+
+      <FluentTheme Mode="Dark"></FluentTheme>
+      <!-- <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>-->
+      <!-- <StyleInclude Source="avares://Avalonia.Themes.Fluent/Accents/FluentBaseDark.xaml"/>-->
+      <!-- <StyleInclude Source="avares://Avalonia.Themes.Fluent/Accents/FluentBaseDark.xaml"/>-->
+
+      <!-- <StyleInclude Source="avares://Avalonia.Themes.Default/DefaultTheme.xaml"/>-->
+      <!-- <StyleInclude Source="avares://Avalonia.Themes.Default/Accents/BaseLight.xaml"/>-->
+    </Application.Styles>
+</Application>

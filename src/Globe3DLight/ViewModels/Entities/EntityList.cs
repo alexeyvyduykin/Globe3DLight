@@ -11,10 +11,10 @@ using System.Collections.Immutable;
 
 namespace Globe3DLight.Entities
 {
-    public class EntityList : BaseEntity, IEntityList//IGroundStationList
+    public class EntityList : BaseEntity, ICollection<BaseEntity>// IEntityList//IGroundStationList
     {
         //private IGroundStationRenderModel _renderModel;
-        private ImmutableArray<IEntity> _values;
+        private ImmutableArray<BaseEntity> _values;
 
         //public IGroundStationRenderModel RenderModel
         //{
@@ -22,7 +22,7 @@ namespace Globe3DLight.Entities
         //    set => Update(ref _renderModel, value);
         //}
         
-        public ImmutableArray<IEntity> Values 
+        public ImmutableArray<BaseEntity> Values 
         {
             get => _values; 
             set => Update(ref _values, value); 
@@ -34,14 +34,14 @@ namespace Globe3DLight.Entities
             {
                 var proto = Values.FirstOrDefault();
 
-                if (proto is IGroundObject groundObject)
+                if (proto is GroundObject groundObject)
                 {
                     if (groundObject.IsVisible == true)
                     {
                         if (groundObject.Logical.State is IGroundObjectState groundObjectState)
                         {
-                            var collection = (ILogicalCollection)groundObject.Logical.Owner;
-                            var parent = (ILogical)collection.Owner;
+                            var collection = (LogicalCollection)groundObject.Logical.Owner;
+                            var parent = (Logical)collection.Owner;
                             if (parent.State is IJ2000State j2000Data)
                             {
                                 var m = j2000Data.ModelMatrix;
@@ -60,14 +60,14 @@ namespace Globe3DLight.Entities
                         }
                     }
                 }
-                else if(proto is IGroundStation groundStation)
+                else if(proto is GroundStation groundStation)
                 {
                     if (groundStation.IsVisible == true)
                     {
                         if (groundStation.Logical.State is IGroundStationState groundStationData)
                         {
-                            var collection = (ILogicalCollection)groundStation.Logical.Owner;
-                            var parent = (ILogical)collection.Owner;
+                            var collection = (LogicalCollection)groundStation.Logical.Owner;
+                            var parent = (Logical)collection.Owner;
                             if (parent.State is IJ2000State j2000Data)
                             {
                                 var m = j2000Data.ModelMatrix;
@@ -84,13 +84,13 @@ namespace Globe3DLight.Entities
                         }
                     }
                 }
-                else if (proto is IRetranslator retranslator)
+                else if (proto is Retranslator retranslator)
                 {
                     if (retranslator.IsVisible == true)
                     {
                         if (retranslator.Logical.State is IRetranslatorState retranslatorData)
                         {
-                            var collection = (ILogicalCollection)retranslator.Logical.Owner;
+                            var collection = (LogicalCollection)retranslator.Logical.Owner;
 
                             foreach (var item in collection.Values)
                             {

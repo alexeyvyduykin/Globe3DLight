@@ -6,21 +6,21 @@ using Globe3DLight.Containers;
 
 namespace Globe3DLight.Entities
 {
-    public abstract class BaseEntity : ObservableObject, IEntity
+    public abstract class BaseEntity : ObservableObject//, IEntity
     {
-        private ImmutableArray<IEntity> _children;
-        private ILogicalCollection _logicalCollection;
+        private ImmutableArray<BaseEntity> _children;
+        private LogicalCollection _logicalCollection;
         private bool _isVisible;
         private bool _isExpanded;
 
-        public ImmutableArray<IEntity> Children
+        public ImmutableArray<BaseEntity> Children
         {
             get => _children;
             set => Update(ref _children, value);
         }
        
 
-        public ILogicalCollection LogicalCollection
+        public LogicalCollection LogicalCollection
         {
             get => _logicalCollection;
             set => Update(ref _logicalCollection, value);

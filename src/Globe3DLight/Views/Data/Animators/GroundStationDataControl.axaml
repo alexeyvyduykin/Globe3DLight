@@ -1,0 +1,33 @@
+<UserControl x:Class="Globe3DLight.Views.Data.Animators.GroundStationDataControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"             
+             xmlns:Data="clr-namespace:Globe3DLight.Data;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
+             mc:Ignorable="d"                          
+             d:DataContext="{x:Static Designer:DesignerContext.GroundStationState}"
+             d:DesignWidth="250" d:DesignHeight="400"
+             x:DataType="Data:IGroundStationState" x:CompileBindings="True"
+             
+             
+             >
+
+  <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+
+    <TextBlock Grid.Row="0" Grid.Column="0" Text="Lon :"/>
+    <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Lon, StringFormat={}{0: 0.000 deg;-0.000 deg}}"/>
+
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="Lat :"/>
+    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Lat, StringFormat={}{0: 0.000 deg;-0.000 deg}}"/>
+
+    <TextBlock Grid.Row="2" Grid.Column="0" Text="Elevation :"/>
+    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Elevation, StringFormat={}{0: 0.000 km;-0.000 km}}"/>
+
+  </Grid>
+  
+  
+  
+</UserControl>

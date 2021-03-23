@@ -31,7 +31,7 @@ namespace Globe3DLight.Desktop
 
         // Avalonia configuration, don't remove; also used by visual designer.
         public static AppBuilder BuildAvaloniaApp()
-            => AppBuilder.Configure<Globe3DLight.AvaloniaUI.App>()
+            => AppBuilder.Configure<Globe3DLight.App>()
                 .UsePlatformDetect()
                 .LogToTrace();         
     }

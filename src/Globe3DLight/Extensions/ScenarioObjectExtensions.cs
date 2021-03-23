@@ -9,7 +9,7 @@ namespace Globe3DLight
 {
     public static class ScenarioObjectExtensions
     {
-        public static void AddChild(this IChildren obj, IEntity child)
+        public static void AddChild(this BaseEntity obj, BaseEntity child)
         {
             if (child != null)
             {
@@ -23,7 +23,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddChildren(this IChildren obj, IEnumerable<IEntity> children)
+        public static void AddChildren(this BaseEntity obj, IEnumerable<BaseEntity> children)
         {
             if (children != null)
             {
@@ -43,7 +43,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddAssets(this IAssetable assetable, IEnumerable<IEntity> objects)
+        public static void AddAssets(this IAssetable assetable, IEnumerable<BaseEntity> objects)
         {
             if (assetable.Assets != null && objects != null)
             {

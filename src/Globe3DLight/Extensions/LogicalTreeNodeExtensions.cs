@@ -9,7 +9,7 @@ namespace Globe3DLight
 {
     public static class LogicalTreeNodeExtensions
     {
-        public static void AddChild(this ILogical node, IObservableObject child) 
+        public static void AddChild(this Logical node, ObservableObject child) 
         {
             if (child != null)
             {
@@ -25,7 +25,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddValue(this ILogicalCollection collection, ILogical value)
+        public static void AddValue(this LogicalCollection collection, Logical value)
         {
             if (value != null)
             {
@@ -41,7 +41,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void RemoveChild(this ILogical node, ILogical child)
+        public static void RemoveChild(this Logical node, Logical child)
         {
             if (child != null)
             {
@@ -55,7 +55,7 @@ namespace Globe3DLight
                 }
                 else
                 {
-                    foreach (ILogical item in node.Children)
+                    foreach (Logical item in node.Children)
                     {
                         item.RemoveChild(child);
                     }
@@ -64,13 +64,13 @@ namespace Globe3DLight
 
         }
 
-        public static ILogical GetRoot(this ILogical node)
+        public static Logical GetRoot(this Logical node)
         {
             var root = node;
 
             while (root?.Owner != null)
             {
-                root = (ILogical)root.Owner;
+                root = (Logical)root.Owner;
             }
 
             return root;
@@ -82,12 +82,12 @@ namespace Globe3DLight
         //}
 
 
-        public static ILogical Find(this ILogical node, ILogical find) 
+        public static Logical Find(this Logical node, Logical find) 
         {
             if (node.Equals(find) == true)
                 return node;
 
-            foreach (ILogical item in node.Children)
+            foreach (Logical item in node.Children)
             {
                 var res = item.Find(find);
                 if (res != default)

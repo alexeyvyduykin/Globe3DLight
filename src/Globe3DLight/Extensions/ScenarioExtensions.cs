@@ -10,7 +10,7 @@ namespace Globe3DLight
 {
     public static class ScenarioExtensions
     {
-        public static void AddSatelliteTask(this IScenarioContainer scenario, ISatelliteTask task)
+        public static void AddSatelliteTask(this ScenarioContainer scenario, SatelliteTask task)
         {
             if (scenario?.Tasks != null && task != null)
             {

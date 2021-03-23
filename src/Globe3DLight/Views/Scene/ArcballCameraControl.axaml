@@ -1,0 +1,79 @@
+﻿<UserControl x:Class="Globe3DLight.Views.Scene.ArcballCameraControl"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+          
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"             
+             xmlns:Scene="clr-namespace:Globe3DLight.Scene;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
+             mc:Ignorable="d"                          
+             d:DataContext="{x:Static Designer:DesignerContext.ArcballCamera}"
+             d:DesignWidth="250" d:DesignHeight="400"
+             x:DataType="Scene:IArcballCamera" x:CompileBindings="True"
+  
+>
+ 
+
+  <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto,Auto">
+
+    
+    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Eye :"/>
+    
+    <TextBlock Grid.Row="1" Grid.Column="0" Text="X :"/>
+    <TextBlock Grid.Row="1" Grid.Column="1" Text="{Binding Eye.r, StringFormat={}{0: 0.000 km;-0.000 km}}"/>
+
+    <TextBlock Grid.Row="2" Grid.Column="0" Text="Y :"/>
+    <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Eye.g, StringFormat={}{0: 0.000 km;-0.000 km}}}"/>
+
+    <TextBlock Grid.Row="3" Grid.Column="0" Text="Z :"/>
+    <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Eye.b, StringFormat={}{0: 0.000 km;-0.000 km}}}"/>
+
+    <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Target :"/>
+    
+    <TextBlock Grid.Row="5" Grid.Column="0" Text="X :"/>
+    <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Target.r, StringFormat={}{0: 0.000 km;-0.000 km}}"/>
+
+    <TextBlock Grid.Row="6" Grid.Column="0" Text="Y :"/>
+    <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Target.g, StringFormat={}{0: 0.000 km;-0.000 km}}}"/>
+
+    <TextBlock Grid.Row="7" Grid.Column="0" Text="Z :"/>
+    <TextBlock Grid.Row="7" Grid.Column="1" Text="{Binding Target.b, StringFormat={}{0: 0.000 km;-0.000 km}}}"/>
+<!--
+    <TextBlock Grid.Row="8" Grid.ColumnSpan="2" Text="FOV" FontStyle="Oblique"/>
+  
+    <TextBlock Grid.Row="9" Grid.Column="0" Text="FieldOfViewX :"/> 
+    <TextBlock Grid.Row="9" Grid.Column="1" Text="{Binding FieldOfViewX, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="10" Grid.Column="0" Text="FieldOfViewY :"/> 
+    <TextBlock Grid.Row="10" Grid.Column="1" Text="{Binding FieldOfViewY, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="11" Grid.Column="0" Text="AspectRatio :"/> 
+    <TextBlock Grid.Row="11" Grid.Column="1" Text="{Binding AspectRatio, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="12" Grid.Column="0" Text="PerspNearPlane :"/> 
+    <TextBlock Grid.Row="12" Grid.Column="1" Text="{Binding PerspectiveNearPlaneDistance, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="13" Grid.Column="0" Text="PerspFarPlane :"/> 
+    <TextBlock Grid.Row="13" Grid.Column="1" Text="{Binding PerspectiveFarPlaneDistance, StringFormat={}{0: 0.000;-0.000}}}"/>
+-->
+    <TextBlock Grid.Row="14" Grid.Column="0" Text="AdjustWidth :"/> 
+    <TextBlock Grid.Row="14" Grid.Column="1" Text="{Binding AdjustWidth, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="15" Grid.Column="0" Text="AdjustHeight :"/> 
+    <TextBlock Grid.Row="15" Grid.Column="1" Text="{Binding AdjustHeight, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="16" Grid.Column="0" Text="Width :"/> 
+    <TextBlock Grid.Row="16" Grid.Column="1" Text="{Binding Width, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+    <TextBlock Grid.Row="17" Grid.Column="0" Text="Height :"/> 
+    <TextBlock Grid.Row="17" Grid.Column="1" Text="{Binding Height, StringFormat={}{0: 0.000;-0.000}}}"/>
+
+  
+  </Grid>
+
+  
+  
+
+
+</UserControl>

@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Globe3DLight.Time
 {
-    public class TimePresenter : ObservableObject, ITimePresenter
+    public class TimePresenter : ObservableObject
     {
         private ITimer _timer;  
         private DateTime _begin;

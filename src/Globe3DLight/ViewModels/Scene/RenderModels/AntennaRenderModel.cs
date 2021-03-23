@@ -4,7 +4,7 @@ using GlmSharp;
 
 namespace Globe3DLight.Scene
 {
-    public class AntennaRenderModel : BaseRenderModel, IAntennaRenderModel
+    public class AntennaRenderModel : BaseRenderModel
     {
         private dvec3 _targetPostion;
         private dvec3 _attachPosition;

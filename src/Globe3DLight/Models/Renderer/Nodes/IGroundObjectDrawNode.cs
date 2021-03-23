@@ -9,6 +9,6 @@ namespace Globe3DLight.Renderer
 {
     public interface IGroundObjectDrawNode : IDrawNode
     {
-        IGroundObjectRenderModel GroundObject { get; set; }
+        GroundObjectRenderModel GroundObject { get; set; }
     }
 }

@@ -12,34 +12,34 @@ namespace Globe3DLight.Renderer
 {
     public interface IRenderContext
     {
-        void DrawScenario(object dc, IScenarioContainer container);
+        void DrawScenario(object dc, ScenarioContainer container);
 
-        void DrawSun(object dc, ISunRenderModel sun, dmat4 modelMatrix, ISceneState scene);
+        void DrawSun(object dc, SunRenderModel sun, dmat4 modelMatrix, ISceneState scene);
         
-        void DrawEarth(object dc, IEarthRenderModel earth, dmat4 modelMatrix, ISceneState scene);
+        void DrawEarth(object dc, EarthRenderModel earth, dmat4 modelMatrix, ISceneState scene);
         
-        void DrawFrame(object dc, IFrameRenderModel frame, dmat4 modelMatrix, ISceneState scene);
+        void DrawFrame(object dc, FrameRenderModel frame, dmat4 modelMatrix, ISceneState scene);
 
-        void DrawFrameList(object dc, IFrameRenderModel frame, IEnumerable<dmat4> modelMatrices, ISceneState scene);
+        void DrawFrameList(object dc, FrameRenderModel frame, IEnumerable<dmat4> modelMatrices, ISceneState scene);
 
-        void DrawOrbit(object dc, IOrbitRenderModel orbit, dmat4 modelMatrix, ISceneState scene);
+        void DrawOrbit(object dc, OrbitRenderModel orbit, dmat4 modelMatrix, ISceneState scene);
         
-        void DrawGroundStation(object dc, IGroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene);
+        void DrawGroundStation(object dc, GroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene);
        
-        void DrawGroundStationList(object dc, IGroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene);
+        void DrawGroundStationList(object dc, GroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene);
 
-        void DrawGroundObject(object dc, IGroundObjectRenderModel groundobject, dmat4 modelMatrix, ISceneState scene);
+        void DrawGroundObject(object dc, GroundObjectRenderModel groundobject, dmat4 modelMatrix, ISceneState scene);
       
-        void DrawGroundObjectList(object dc, IGroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene);
+        void DrawGroundObjectList(object dc, GroundObjectRenderModel groundobject, IEnumerable<dmat4> modelMatrices, ISceneState scene);
 
-        void DrawRetranslator(object dc, IRetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene);
+        void DrawRetranslator(object dc, RetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene);
         
-        void DrawSatellite(object dc, ISatelliteRenderModel satellite, dmat4 modelMatrix, ISceneState scene);
+        void DrawSatellite(object dc, SatelliteRenderModel satellite, dmat4 modelMatrix, ISceneState scene);
         
-        void DrawSensor(object dc, ISensorRenderModel sensor, dmat4 modelMatrix, ISceneState scene);
+        void DrawSensor(object dc, SensorRenderModel sensor, dmat4 modelMatrix, ISceneState scene);
 
-        void DrawAntenna(object dc, IAntennaRenderModel antenna, dmat4 modelMatrix, ISceneState scene);
+        void DrawAntenna(object dc, AntennaRenderModel antenna, dmat4 modelMatrix, ISceneState scene);
 
-        void DrawSpacebox(object dc, ISpaceboxRenderModel spacebox, dmat4 modelMatrix, ISceneState scene);
+        void DrawSpacebox(object dc, SpaceboxRenderModel spacebox, dmat4 modelMatrix, ISceneState scene);
     }
 }

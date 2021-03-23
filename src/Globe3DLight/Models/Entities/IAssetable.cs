@@ -6,6 +6,6 @@ namespace Globe3DLight.Entities
 {
     public interface IAssetable 
     {
-        ImmutableArray<IEntity> Assets { get; set; }
+        ImmutableArray<BaseEntity> Assets { get; set; }
     }
 }

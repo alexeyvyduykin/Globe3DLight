@@ -5,7 +5,7 @@ using GlmSharp;
 
 namespace Globe3DLight.Scene
 {
-    public interface ISceneState : IObservableObject
+    public interface ISceneState
     {
         dmat4 ViewMatrix { get; }
 

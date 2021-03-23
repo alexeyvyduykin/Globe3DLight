@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Globe3DLight.Entities
 {
-    public class RotationEvent : BaseSatelliteEvent, IRotationEvent
+    public class RotationEvent : BaseSatelliteEvent
     {
         public override object Copy(IDictionary<object, object> shared)
         {

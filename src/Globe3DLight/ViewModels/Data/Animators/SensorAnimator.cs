@@ -15,7 +15,7 @@ namespace Globe3DLight.Data
         int Direction { get; }
     }
 
-    public interface IScan : IObservableObject
+    public interface IScan //: IObservableObject
     {
         dvec3 p0 { get; set; }
         dvec3 p1 { get; set; }
@@ -23,7 +23,7 @@ namespace Globe3DLight.Data
         dvec3 p3 { get; set; }
     }
 
-    public interface IShoot : IObservableObject
+    public interface IShoot //: IObservableObject
     {
         dvec3 p0 { get; set; }
         dvec3 p1 { get; set; }

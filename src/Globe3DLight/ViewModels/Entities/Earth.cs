@@ -10,25 +10,25 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class Earth : BaseEntity, IEarth
+    public class Earth : BaseEntity, IDrawable, ITargetable
     {   
-        private IEarthRenderModel _renderModel;
-        private IFrameRenderModel _frameRenderModel;
-        private ILogical _logical;
+        private EarthRenderModel _renderModel;
+        private FrameRenderModel _frameRenderModel;
+        private Logical _logical;
 
-        public IEarthRenderModel RenderModel 
+        public EarthRenderModel RenderModel 
         {
             get => _renderModel; 
             set => Update(ref _renderModel, value); 
         }
 
-        public IFrameRenderModel FrameRenderModel
+        public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
             set => Update(ref _frameRenderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical; 
             set => Update(ref _logical, value); 

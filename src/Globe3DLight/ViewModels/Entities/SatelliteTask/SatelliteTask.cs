@@ -5,9 +5,9 @@ using System.Linq;
 
 namespace Globe3DLight.Entities
 {
-    public class SatelliteTask : ObservableObject, ISatelliteTask
+    public class SatelliteTask : ObservableObject//, ISatelliteTask
     {
-        private readonly IList<ISatelliteEvent> _sourceEvents;
+        private readonly IList<BaseSatelliteEvent> _sourceEvents;
 
         private bool _isVisible;
         private bool _hasRotations;
@@ -15,11 +15,11 @@ namespace Globe3DLight.Entities
         private bool _hasTransmission;
         private string _searchString;
 
-        private IList<ISatelliteEvent> _events;
-        private ISatelliteEvent _selectedEvent;
-        private ISatellite _satellite;
+        private IList<BaseSatelliteEvent> _events;
+        private BaseSatelliteEvent _selectedEvent;
+        private Satellite _satellite;
 
-        public SatelliteTask(IList<ISatelliteEvent> events)
+        public SatelliteTask(IList<BaseSatelliteEvent> events)
         {
             var sortEvents = events.OrderBy(s => s.Begin).ToList();
 
@@ -28,15 +28,15 @@ namespace Globe3DLight.Entities
             _selectedEvent = sortEvents.FirstOrDefault();
         }
              
-        private IList<ISatelliteEvent> CreateFrom(IList<ISatelliteEvent> source)
+        private IList<BaseSatelliteEvent> CreateFrom(IList<BaseSatelliteEvent> source)
         {
-            Func<ISatelliteEvent, bool> rotationPredicate = (s => (HasRotations == true) ? s is IRotationEvent : false);
-            Func<ISatelliteEvent, bool> observationPredicate = (s => (HasObservations == true) ? s is IObservationEvent : false);
-            Func<ISatelliteEvent, bool> transmissionPredicate = (s => (HasTransmissions == true) ? s is ITransmissionEvent : false);
-            Func<ISatelliteEvent, bool> namePredicate =
+            Func<BaseSatelliteEvent, bool> rotationPredicate = (s => (HasRotations == true) ? s is RotationEvent : false);
+            Func<BaseSatelliteEvent, bool> observationPredicate = (s => (HasObservations == true) ? s is ObservationEvent : false);
+            Func<BaseSatelliteEvent, bool> transmissionPredicate = (s => (HasTransmissions == true) ? s is TransmissionEvent : false);
+            Func<BaseSatelliteEvent, bool> namePredicate =
                 (s => (string.IsNullOrEmpty(SearchString) == false) ? s.Name.Contains(SearchString) : true);
 
-            Func<ISatelliteEvent, bool> combined = s => rotationPredicate(s) || observationPredicate(s) || transmissionPredicate(s);
+            Func<BaseSatelliteEvent, bool> combined = s => rotationPredicate(s) || observationPredicate(s) || transmissionPredicate(s);
 
             return source.Where(combined).Where(namePredicate).ToList();
         }
@@ -93,19 +93,19 @@ namespace Globe3DLight.Entities
             }
         }
 
-        public ISatellite Satellite 
+        public Satellite Satellite 
         {
             get => _satellite; 
             set => Update(ref _satellite, value); 
         }
 
-        public IList<ISatelliteEvent> Events 
+        public IList<BaseSatelliteEvent> Events 
         {
             get => _events; 
             set => Update(ref _events, value); 
         }
        
-        public ISatelliteEvent SelectedEvent 
+        public BaseSatelliteEvent SelectedEvent 
         {
             get => _selectedEvent;
             set => Update(ref _selectedEvent, value); 

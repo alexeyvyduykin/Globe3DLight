@@ -13,13 +13,13 @@ namespace Globe3DLight.Editor
 {
     public class ProjectObserver : IDisposable
     {
-        private readonly IProjectEditor _editor;
+        private readonly ProjectEditor _editor;
         //private readonly Action _invalidateContainer;    
         private readonly Action _invalidateScenario;
         private readonly Action _invalidateShapes;
         private readonly Action _invalidateCamera;
 
-        public ProjectObserver(IProjectEditor editor)
+        public ProjectObserver(ProjectEditor editor)
         {
             if (editor?.Project != null)
             {
@@ -65,9 +65,9 @@ namespace Globe3DLight.Editor
 
         private void ObserveProject(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IProjectContainer.Scenarios))
+            if (e.PropertyName == nameof(ProjectContainer.Scenarios))
             {
-                var project = sender as IProjectContainer;
+                var project = sender as ProjectContainer;
                 Remove(project.Scenarios);
                 Add(project.Scenarios);
             }
@@ -82,16 +82,16 @@ namespace Globe3DLight.Editor
 
         private void ObserveScenario(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IScenarioContainer.Entities))
+            if (e.PropertyName == nameof(ScenarioContainer.Entities))
             {
-                var layer = sender as IScenarioContainer;
+                var layer = sender as ScenarioContainer;
                 Remove(layer.Entities);
                 Add(layer.Entities);
             }
 
-            if(e.PropertyName == nameof(IScenarioContainer.TimePresenter))
+            if(e.PropertyName == nameof(ScenarioContainer.TimePresenter))
             {
-                var timePresenter = sender as ITimePresenter;
+                var timePresenter = sender as TimePresenter;
                 Remove(timePresenter);
                 Add(timePresenter);
             }
@@ -116,7 +116,7 @@ namespace Globe3DLight.Editor
         //    }
         //}
 
-        private void Add(IProjectContainer project)
+        private void Add(ProjectContainer project)
         {
             if (project == null)
             {
@@ -153,7 +153,7 @@ namespace Globe3DLight.Editor
         //    }
         //}
 
-        private void Add(IScenarioContainer scenario)
+        private void Add(ScenarioContainer scenario)
         {
             if (scenario == null)
             {
@@ -178,7 +178,7 @@ namespace Globe3DLight.Editor
 
 
 
-        private void Remove(IScenarioContainer scenario)
+        private void Remove(ScenarioContainer scenario)
         {
             if (scenario == null)
             {
@@ -208,7 +208,7 @@ namespace Globe3DLight.Editor
                 return;
             }
 
-            sceneState.PropertyChanged += ObserveSceneState;
+            //sceneState.PropertyChanged += ObserveSceneState;
 
             //Add(sceneState.Camera);
 
@@ -221,13 +221,13 @@ namespace Globe3DLight.Editor
                 return;
             }
 
-            sceneState.PropertyChanged -= ObserveSceneState;
+            //sceneState.PropertyChanged -= ObserveSceneState;
 
             //Remove(sceneState.Camera);
 
         }
 
-        private void Add(ITimePresenter timePresenter)
+        private void Add(TimePresenter timePresenter)
         {
             if(timePresenter == null)
             {
@@ -239,7 +239,7 @@ namespace Globe3DLight.Editor
             timePresenter.PropertyChanged += ObserveTimePresenter;
         }
 
-        private void Remove(ITimePresenter timePresenter)
+        private void Remove(TimePresenter timePresenter)
         {
             if (timePresenter == null)
             {
@@ -251,7 +251,7 @@ namespace Globe3DLight.Editor
             timePresenter.PropertyChanged -= ObserveTimePresenter;
         }
 
-        private void Add(IEntity shape)
+        private void Add(BaseEntity shape)
         {
             if (shape == null)
             {
@@ -262,7 +262,7 @@ namespace Globe3DLight.Editor
 
         }
 
-        private void Remove(IEntity shape)
+        private void Remove(BaseEntity shape)
         {
             if (shape == null)
             {
@@ -278,7 +278,7 @@ namespace Globe3DLight.Editor
 
 
 
-        private void Add(IEnumerable<IScenarioContainer> scenarios)
+        private void Add(IEnumerable<ScenarioContainer> scenarios)
         {
             if (scenarios == null)
             {
@@ -291,7 +291,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Remove(IEnumerable<IScenarioContainer> scenarios)
+        private void Remove(IEnumerable<ScenarioContainer> scenarios)
         {
             if (scenarios == null)
             {
@@ -304,7 +304,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Add(IEnumerable<IEntity> shapes)
+        private void Add(IEnumerable<BaseEntity> shapes)
         {
             if (shapes == null)
             {
@@ -317,7 +317,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Remove(IEnumerable<IEntity> shapes)
+        private void Remove(IEnumerable<BaseEntity> shapes)
         {
             if (shapes == null)
             {
@@ -332,8 +332,8 @@ namespace Globe3DLight.Editor
 
         private void ObserveCamera(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(IScenarioContainer.Width)
-                || e.PropertyName == nameof(IScenarioContainer.Height))
+            if (e.PropertyName == nameof(ScenarioContainer.Width)
+                || e.PropertyName == nameof(ScenarioContainer.Height))
             {
                 _invalidateCamera();
                 MarkAsDirty();

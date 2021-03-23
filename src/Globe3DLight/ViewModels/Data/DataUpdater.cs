@@ -8,14 +8,14 @@ namespace Globe3DLight.Data
 {
     public interface IDataUpdater
     {
-        void Update(double t, IObservableObject obj);
+        void Update(double t, ObservableObject obj);
     }
 
     public class DataUpdater : IDataUpdater
     {
-        public void Update(double t, IObservableObject obj)
+        public void Update(double t, ObservableObject obj)
         {
-            if (obj is ILogical logical)
+            if (obj is Logical logical)
             {
                 if (logical.State is IAnimator animator)
                 {
@@ -27,7 +27,7 @@ namespace Globe3DLight.Data
                     Update(t, item);
                 }
             }
-            else if (obj is ILogicalCollection collection)
+            else if (obj is LogicalCollection collection)
             {
                 var first = collection.Values.FirstOrDefault();
 

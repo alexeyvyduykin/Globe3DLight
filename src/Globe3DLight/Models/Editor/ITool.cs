@@ -2,7 +2,7 @@
 
 namespace Globe3DLight.Editor
 {
-    public interface ITool : IObservableObject
+    public interface ITool
     {   
         // Handle mouse left button down events.
         void LeftDown(InputArgs args);

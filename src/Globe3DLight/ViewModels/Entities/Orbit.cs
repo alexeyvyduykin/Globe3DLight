@@ -11,18 +11,18 @@ using GlmSharp;
 
 namespace Globe3DLight.Entities
 {
-    public class Orbit : BaseEntity, IOrbit
+    public class Orbit : BaseEntity, IDrawable
     {
-        private IOrbitRenderModel _renderModel;    
-        private ILogical _logical;
+        private OrbitRenderModel _renderModel;    
+        private Logical _logical;
      
-        public IOrbitRenderModel RenderModel
+        public OrbitRenderModel RenderModel
         {
             get => _renderModel;
             set => Update(ref _renderModel, value);
         }
 
-        public ILogical Logical
+        public Logical Logical
         {
             get => _logical;
             set => Update(ref _logical, value);

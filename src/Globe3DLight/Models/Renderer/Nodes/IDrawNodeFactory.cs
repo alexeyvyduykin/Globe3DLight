@@ -8,21 +8,21 @@ namespace Globe3DLight.Renderer
 {
     public interface IDrawNodeFactory
     { 
-        ISunDrawNode CreateSunDrawNode(ISunRenderModel sun);
+        ISunDrawNode CreateSunDrawNode(SunRenderModel sun);
 
-        IEarthDrawNode CreateEarthDrawNode(IEarthRenderModel earth);
+        IEarthDrawNode CreateEarthDrawNode(EarthRenderModel earth);
     
-        IFrameDrawNode CreateFrameDrawNode(IFrameRenderModel frame);
-        IOrbitDrawNode CreateOrbitDrawNode(IOrbitRenderModel orbit);
-        IGroundStationDrawNode CreateGroundStationDrawNode(IGroundStationRenderModel groundStation);
-        IGroundObjectDrawNode CreateGroundObjectListDrawNode(IGroundObjectRenderModel groundStation);
-        IRetranslatorDrawNode CreateRetranslatorDrawNode(IRetranslatorRenderModel retranslator);
-        ISatelliteDrawNode CreateSatelliteDrawNode(ISatelliteRenderModel satellite, ICache<string, int> textureCache);
-        ISensorDrawNode CreateSensorDrawNode(ISensorRenderModel sensor);
+        IFrameDrawNode CreateFrameDrawNode(FrameRenderModel frame);
+        IOrbitDrawNode CreateOrbitDrawNode(OrbitRenderModel orbit);
+        IGroundStationDrawNode CreateGroundStationDrawNode(GroundStationRenderModel groundStation);
+        IGroundObjectDrawNode CreateGroundObjectListDrawNode(GroundObjectRenderModel groundStation);
+        IRetranslatorDrawNode CreateRetranslatorDrawNode(RetranslatorRenderModel retranslator);
+        ISatelliteDrawNode CreateSatelliteDrawNode(SatelliteRenderModel satellite, ICache<string, int> textureCache);
+        ISensorDrawNode CreateSensorDrawNode(SensorRenderModel sensor);
 
-        ISpaceboxDrawNode CreateSpaceboxDrawNode(ISpaceboxRenderModel spacebox);
+        ISpaceboxDrawNode CreateSpaceboxDrawNode(SpaceboxRenderModel spacebox);
 
 
-        IAntennaDrawNode CreateAntennaDrawNode(IAntennaRenderModel antenna);
+        IAntennaDrawNode CreateAntennaDrawNode(AntennaRenderModel antenna);
     }
 }

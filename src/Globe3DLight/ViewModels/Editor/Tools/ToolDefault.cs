@@ -27,7 +27,7 @@ namespace Globe3DLight.Editor.Tools
         /// <inheritdoc/>
         public void LeftDown(InputArgs args)
         {
-            var editor = _serviceProvider.GetService<IProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditor>();
 
             var camera = (IArcballCamera)editor.Project.CurrentScenario.SceneState.Camera;
 
@@ -61,7 +61,7 @@ namespace Globe3DLight.Editor.Tools
         /// <inheritdoc/>
         public void Move(InputArgs args)
         {
-            var editor = _serviceProvider.GetService<IProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditor>();
 
 
             if (_currentState == State.Rotate)

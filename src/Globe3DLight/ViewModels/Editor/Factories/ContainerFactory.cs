@@ -24,7 +24,7 @@ namespace Globe3DLight.Editor
             _serviceProvider = serviceProvider;
         }
 
-        public IProjectContainer GetProject()
+        public ProjectContainer GetProject()
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
@@ -49,7 +49,7 @@ namespace Globe3DLight.Editor
             return project;
         }
 
-        public IProjectContainer GetProject(ScenarioData data)
+        public ProjectContainer GetProject(ScenarioData data)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
@@ -130,7 +130,7 @@ namespace Globe3DLight.Editor
             return project;
         }
 
-        public IScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration)
+        public ScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration)
         {
             var factory = _serviceProvider.GetService<IFactory>();          
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -141,7 +141,7 @@ namespace Globe3DLight.Editor
               
             //        root.Owner = scenario; ????????????????????????????????
 
-            scenario.LogicalTreeNodeRoot = ImmutableArray.Create<ILogical>(root);
+            scenario.LogicalTreeNodeRoot = ImmutableArray.Create<Logical>(root);
             scenario.CurrentLogicalTreeNode = scenario.LogicalTreeNodeRoot.FirstOrDefault();
             scenario.SceneState = scenarioObjectFactory.CreateSceneState();  
             scenario.TimePresenter = factory.CreateTimePresenter(begin, duration);
@@ -151,7 +151,7 @@ namespace Globe3DLight.Editor
             return scenario;
         }
 
-        public IProjectContainer GetDemo()
+        public ProjectContainer GetDemo()
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;                   
@@ -220,7 +220,7 @@ namespace Globe3DLight.Editor
             var fr_retr3 = dataFactory.CreateRetranslatorNode(root, Path.Combine(path, @"data\fr_retranslator3.json"));
 
 
-            var objBuilder = ImmutableArray.CreateBuilder<IEntity>();
+            var objBuilder = ImmutableArray.CreateBuilder<BaseEntity>();
             objBuilder.Add(objFactory.CreateSpacebox("Spacebox", root));
             objBuilder.Add(objFactory.CreateSun("Sun", fr_sun));
             objBuilder.Add(objFactory.CreateEarth("Earth", fr_j2000));
@@ -234,7 +234,7 @@ namespace Globe3DLight.Editor
             objBuilder.Add(objFactory.CreateSensor("Sensor4", fr_sensor4));
 
 
-            var assetsBuilder = ImmutableArray.CreateBuilder<IEntity>();
+            var assetsBuilder = ImmutableArray.CreateBuilder<BaseEntity>();
 
             var gs1 = objFactory.CreateGroundStation("GroundStation01", fr_gs01/*, 0*/);
             var gs2 = objFactory.CreateGroundStation("GroundStation02", fr_gs02/*, 1*/);
@@ -251,8 +251,8 @@ namespace Globe3DLight.Editor
             var rtr3 = objFactory.CreateRetranslator("Retranslator3", fr_retr3/*, 2*/);
 
 
-            var gss = new IEntity[] { gs1, gs2, gs3, gs4, gs5, gs6, gs7, gs8, gs9 };
-            var rtrs = new IEntity[] { rtr1, rtr2, rtr3 };
+            var gss = new GroundStation[] { gs1, gs2, gs3, gs4, gs5, gs6, gs7, gs8, gs9 };
+            var rtrs = new Retranslator[] { rtr1, rtr2, rtr3 };
 
             objBuilder.AddRange(gss);
             objBuilder.AddRange(rtrs);
@@ -291,7 +291,7 @@ namespace Globe3DLight.Editor
             return project;
         }
 
-        public async Task<IProjectContainer> GetFromDatabase()
+        public async Task<ProjectContainer> GetFromDatabase()
         {    
             try
             {
@@ -303,7 +303,7 @@ namespace Globe3DLight.Editor
             }             
         }
 
-        public async Task<IProjectContainer> GetFromJson()
+        public async Task<ProjectContainer> GetFromJson()
         {
             try
             {
@@ -329,7 +329,7 @@ namespace Globe3DLight.Editor
 
         private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
         
-        public IProjectContainer GetEmptyProject()
+        public ProjectContainer GetEmptyProject()
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;                 
