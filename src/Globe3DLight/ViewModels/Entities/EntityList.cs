@@ -11,7 +11,7 @@ using System.Collections.Immutable;
 
 namespace Globe3DLight.Entities
 {
-    public class EntityList : BaseEntity, ICollection<BaseEntity>// IEntityList//IGroundStationList
+    public class EntityList : BaseEntity, IDrawable, ICollection<BaseEntity>// IEntityList//IGroundStationList
     {
         //private IGroundStationRenderModel _renderModel;
         private ImmutableArray<BaseEntity> _values;
