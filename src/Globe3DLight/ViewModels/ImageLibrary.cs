@@ -1,27 +1,23 @@
-﻿using Globe3DLight.Image;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight;
+using Globe3DLight.Models.Image;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using Globe3DLight.Renderer;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models;
 
-namespace Globe3DLight
+namespace Globe3DLight.ViewModels
 {
     public class ImageLibrary : IImageLibrary
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IImageLoader _imageLoader;
-
         private readonly IDictionary<string, string> _dictionary;
-
         private Thread _thread;
-
         private IDdsImage _currentImage;
-
         private string _targetKey;
 
         public ImageLibrary(IServiceProvider serviceProvider)
@@ -69,8 +65,6 @@ namespace Globe3DLight
             return _dictionary.ContainsKey(key);
         }
 
-
-
         public void Pass(IThreadLoadingNode node, ICache<string, int> textureCache)
         { 
             var key = node.WaitKey;
@@ -117,6 +111,5 @@ namespace Globe3DLight
 
             throw new Exception();
         }
-
     }
 }

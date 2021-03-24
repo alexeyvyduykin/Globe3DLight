@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics;
 using OpenTK.Graphics.OpenGL;
+using Globe3DLight.Models.Renderer;
 
 namespace Globe3DLight.Renderer.OpenTK
 {

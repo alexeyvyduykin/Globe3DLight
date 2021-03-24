@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Renderer;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
 
-namespace Globe3DLight
+namespace Globe3DLight.Models
 {
     public interface IDrawable
     {
@@ -44,11 +44,4 @@ namespace Globe3DLight
         /// <returns>Returns true if shape was invalidated; otherwise, returns false.</returns>
         bool Invalidate(IRenderContext renderer);
     }
-
-    //public interface IDrawableCollection
-    //{
-    //    void DrawShapeCollection(object dc, IRenderContext renderer, ISceneState scene);
-
-    //    bool Invalidate(IRenderContext renderer);
-    //}
 }

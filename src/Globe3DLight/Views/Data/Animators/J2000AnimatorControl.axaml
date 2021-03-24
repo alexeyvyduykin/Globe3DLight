@@ -4,15 +4,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"             
-             xmlns:Data="clr-namespace:Globe3DLight.Data;assembly=Globe3DLight"
+             xmlns:Data="clr-namespace:Globe3DLight.ViewModels.Data;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.J2000Animator}"
              d:DesignWidth="250" d:DesignHeight="400"
-             x:DataType="Data:IJ2000State" x:CompileBindings="True"
-             
+             x:DataType="Data:EarthAnimator" x:CompileBindings="True"             
              >
-
 
   <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
 

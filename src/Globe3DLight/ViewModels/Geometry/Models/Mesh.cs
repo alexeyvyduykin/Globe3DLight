@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Collections.Immutable;
 using GlmSharp;
 
-namespace Globe3DLight.Geometry.Models
+namespace Globe3DLight.ViewModels.Geometry.Models
 {
     public interface IMesh
     {

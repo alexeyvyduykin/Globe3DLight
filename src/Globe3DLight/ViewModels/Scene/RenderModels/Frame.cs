@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.ViewModels.Scene
 {
     public class FrameRenderModel : BaseRenderModel
     {
         public float Scale { get; set; }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

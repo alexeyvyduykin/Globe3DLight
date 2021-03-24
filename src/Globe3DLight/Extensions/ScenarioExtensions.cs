@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.Containers;
-using Globe3DLight.Entities;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Entities;
 
 namespace Globe3DLight
 {
     public static class ScenarioExtensions
     {
-        public static void AddSatelliteTask(this ScenarioContainer scenario, SatelliteTask task)
+        public static void AddSatelliteTask(this ScenarioContainerViewModel scenario, SatelliteTask task)
         {
             if (scenario?.Tasks != null && task != null)
             {

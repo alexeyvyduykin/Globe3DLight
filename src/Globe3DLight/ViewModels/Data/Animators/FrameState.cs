@@ -1,35 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.Models.Data;
 using GlmSharp;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IFrameState : IState, IFrameable
-    {   
-      //  dmat4 ModelMatrix { get; }
-    }
-
-
-    public class FrameState : ObservableObject, IFrameState
-    {
-  
+    public class FrameState : ViewModelBase, IState, IFrameable
+    {  
         private dmat4 _modelMatrix;
 
         public dmat4 ModelMatrix
         {
             get => _modelMatrix;
-            protected set => Update(ref _modelMatrix, value);
+            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public FrameState()
         {
-            this._modelMatrix = dmat4.Identity;
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
+            _modelMatrix = dmat4.Identity;
         }
     }
 }

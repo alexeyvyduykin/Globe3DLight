@@ -4,12 +4,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using Avalonia.Controls;
-using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Editor;
-using Globe3DLight.Renderer;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Editor;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.Models;
 using Globe3DLight.Views;
 using Microsoft.CodeAnalysis;
+
 
 namespace Globe3DLight.Editor
 {
@@ -44,7 +45,7 @@ namespace Globe3DLight.Editor
                     var item = result.FirstOrDefault();
                     if (item != null)
                     {
-                        var editor = _serviceProvider.GetService<ProjectEditor>();
+                        var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
                         editor.OnOpenProject(item);
                         editor.CanvasPlatform?.InvalidateControl?.Invoke();
                     }
@@ -54,14 +55,14 @@ namespace Globe3DLight.Editor
             {
                 if (_serviceProvider.GetService<IFileSystem>().Exists(path))
                 {
-                    _serviceProvider.GetService<ProjectEditor>().OnOpenProject(path);
+                    _serviceProvider.GetService<ProjectEditorViewModel>().OnOpenProject(path);
                 }
             }
         }
      
         public void OnSave()
         {
-            var editor = _serviceProvider.GetService<ProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
             if (!string.IsNullOrEmpty(editor.ProjectPath))
             {
                 editor.OnSaveProject(editor.ProjectPath);
@@ -74,7 +75,7 @@ namespace Globe3DLight.Editor
 
         public async void OnSaveAs()
         {
-            var editor = _serviceProvider.GetService<ProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
             var dlg = new SaveFileDialog() { Title = "Save" };
             dlg.Filters.Add(new FileDialogFilter() { Name = "Project", Extensions = { "globe3d.json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
@@ -106,7 +107,7 @@ namespace Globe3DLight.Editor
                     {
                         if (item != null)
                         {
-                            _serviceProvider.GetService<ProjectEditor>().OnImportJson(item);
+                            _serviceProvider.GetService<ProjectEditorViewModel>().OnImportJson(item);
                         }
                     }
                 }
@@ -115,7 +116,7 @@ namespace Globe3DLight.Editor
             {
                 if (_serviceProvider.GetService<IFileSystem>().Exists(path))
                 {
-                    _serviceProvider.GetService<ProjectEditor>().OnImportJson(path);
+                    _serviceProvider.GetService<ProjectEditorViewModel>().OnImportJson(path);
                 }
             }
         }
@@ -137,7 +138,7 @@ namespace Globe3DLight.Editor
                             string resultExtension = System.IO.Path.GetExtension(item);
                             if (string.Compare(resultExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
                             {
-                                _serviceProvider.GetService<ProjectEditor>().OnImportJson(item);
+                                _serviceProvider.GetService<ProjectEditorViewModel>().OnImportJson(item);
                             }
                         }
                     }
@@ -150,7 +151,7 @@ namespace Globe3DLight.Editor
                     string resultExtension = System.IO.Path.GetExtension(path);
                     if (string.Compare(resultExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        _serviceProvider.GetService<ProjectEditor>().OnImportJson(path);
+                        _serviceProvider.GetService<ProjectEditorViewModel>().OnImportJson(path);
                     }
                 }
             }
@@ -158,7 +159,7 @@ namespace Globe3DLight.Editor
 
         public async void OnExportJson(object item)
         {
-            var editor = _serviceProvider.GetService<ProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
             var dlg = new SaveFileDialog() { Title = "Save" };
             dlg.Filters.Add(new FileDialogFilter() { Name = "Json", Extensions = { "json" } });
             dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
@@ -173,7 +174,7 @@ namespace Globe3DLight.Editor
   
         public async void OnExportObject(object item)
         {
-            var editor = _serviceProvider.GetService<ProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
             if (item != null)
             {
                 var dlg = new SaveFileDialog() { Title = "Save" };

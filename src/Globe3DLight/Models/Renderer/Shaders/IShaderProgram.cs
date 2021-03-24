@@ -4,7 +4,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface IShaderProgram : IDisposable, ICleanableObserver
     {

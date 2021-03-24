@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Timers;
 using Globe3DLight.Timer;
 
-namespace Globe3DLight.Time
+namespace Globe3DLight.ViewModels.Time
 {
-    public class SliderTimePresenter : TimePresenter//, ISliderTimePresenter
+    public class SliderTimePresenter : TimePresenter
     {
         private int _sliderMin;
         private int _sliderMax;
@@ -23,13 +23,13 @@ namespace Globe3DLight.Time
         public int SliderMin 
         {
             get => _sliderMin;
-            protected set => Update(ref _sliderMin, value); 
+            protected set => RaiseAndSetIfChanged(ref _sliderMin, value); 
         }
 
         public int SliderMax 
         {
             get => _sliderMax;
-            protected set => Update(ref _sliderMax, value);
+            protected set => RaiseAndSetIfChanged(ref _sliderMax, value);
         }
 
         public int SliderValue
@@ -38,7 +38,7 @@ namespace Globe3DLight.Time
             set 
             {
                 FromSlider(value);
-                Update(ref _sliderValue, value); 
+                RaiseAndSetIfChanged(ref _sliderValue, value); 
             }
         }
         
@@ -48,7 +48,7 @@ namespace Globe3DLight.Time
 
             var sliderValue = (int)(CurrentTime * _sliderMax / Duration.TotalSeconds);
 
-            Update(ref _sliderValue, sliderValue, nameof(SliderValue));
+            RaiseAndSetIfChanged(ref _sliderValue, sliderValue, nameof(SliderValue));
         }
 
         private void FromSlider(int value)

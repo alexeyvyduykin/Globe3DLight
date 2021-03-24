@@ -1,7 +1,7 @@
 using System;
 using Avalonia.Controls;
 using Avalonia.Controls.Templates;
-//using Globe3D.AvaloniaUI.ViewModels;
+using Globe3DLight.ViewModels;
 
 namespace Globe3DLight
 {
@@ -51,7 +51,7 @@ namespace Globe3DLight
         }
         public bool Match(object data)
         {
-            return data is ObservableObject;
+            return data is ViewModelBase;
         }
     }
 }

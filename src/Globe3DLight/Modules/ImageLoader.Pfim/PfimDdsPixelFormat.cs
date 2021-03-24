@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 using A = Pfim;
-
-
+using Globe3DLight.ViewModels;
 
 namespace Globe3DLight.ImageLoader.Pfim
 {
-    internal class PfimDdsPixelFormat : ObservableObject, IDdsPixelFormat
+    internal class PfimDdsPixelFormat : ViewModelBase, IDdsPixelFormat
     {
         private readonly A.DdsPixelFormat _ddsPixelFormat;
         private readonly DdsPixelFormatFlags _flags;
@@ -29,13 +28,5 @@ namespace Globe3DLight.ImageLoader.Pfim
         public uint GBitMask => _ddsPixelFormat.GBitMask;
         public uint BBitMask => _ddsPixelFormat.BBitMask;
         public uint ABitMask => _ddsPixelFormat.ABitMask;
-
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
-
-
 }

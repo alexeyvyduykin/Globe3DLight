@@ -1,51 +1,49 @@
-﻿using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Renderer;
-using Globe3DLight.Scene;
+﻿using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
 using GlmSharp;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Data;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
     public class Earth : BaseEntity, IDrawable, ITargetable
     {   
         private EarthRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
-        private Logical _logical;
+        private LogicalViewModel _logical;
 
         public EarthRenderModel RenderModel 
         {
             get => _renderModel; 
-            set => Update(ref _renderModel, value); 
+            set => RaiseAndSetIfChanged(ref _renderModel, value); 
         }
 
         public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
-            set => Update(ref _frameRenderModel, value);
+            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
         }
 
-        public Logical Logical
+        public LogicalViewModel Logical
         {
             get => _logical; 
-            set => Update(ref _logical, value); 
+            set => RaiseAndSetIfChanged(ref _logical, value); 
         }
 
         public dmat4 InverseAbsoluteModel => dmat4.Identity.Inverse;
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (Logical.State is IJ2000State j2000Data)
+                if (Logical.State is EarthAnimator j2000Data)
                 {
                     renderer.DrawFrame(dc, FrameRenderModel, j2000Data.ModelMatrix, scene);
 

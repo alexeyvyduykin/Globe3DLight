@@ -12,12 +12,12 @@
              xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"             
              xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
-             xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
                          
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"
              d:DesignWidth="600" d:DesignHeight="600"
-             x:DataType="Editor:ProjectEditor" x:CompileBindings="True"
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True"
              >
     <i:Interaction.Behaviors>
         <behaviors:AttachEditorBehavior/>

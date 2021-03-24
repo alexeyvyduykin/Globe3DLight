@@ -1,68 +1,58 @@
-﻿using Globe3DLight.Scene;
+﻿using Globe3DLight.Models.Scene;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.Entities;
-using Globe3DLight.Time;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.ViewModels.Time;
 using GlmSharp;
-using Globe3DLight.Data;
+using Globe3DLight.Models;
 using System.ComponentModel;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Containers
+namespace Globe3DLight.ViewModels.Containers
 {
     public class InvalidateScenarioEventArgs : EventArgs { }
 
     public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
 
-    public class ScenarioContainer : ObservableObject
-    {
-        public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
-
-        private ImmutableArray<Logical> _logicalTreeNodeRoot;
+    public class ScenarioContainerViewModel : BaseContainerViewModel
+    {       
+        private ImmutableArray<LogicalViewModel> _logicalRoot;
         private IDataUpdater _updater;
-        private bool _isExpanded = true;
         private ImmutableArray<BaseEntity> _entities;
         private BaseEntity _currentEntity;
         private ImmutableArray<SatelliteTask> _tasks;
         private SatelliteTask _currentTask;
-
-        private Logical _currentLogicalTreeNode;
+        private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
         private TimePresenter _timePresenter;
-
         private double _width;
-
         private double _height;
-
-        public ImmutableArray<Logical> LogicalTreeNodeRoot
+        public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
+        
+        public ImmutableArray<LogicalViewModel> LogicalRoot
         {
-            get => _logicalTreeNodeRoot;
-            set => Update(ref _logicalTreeNodeRoot, value);
+            get => _logicalRoot;
+            set => RaiseAndSetIfChanged(ref _logicalRoot, value);
         }
 
-        public Logical CurrentLogicalTreeNode
+        public LogicalViewModel CurrentLogical
         {
-            get => _currentLogicalTreeNode;
-            set => Update(ref _currentLogicalTreeNode, value);
+            get => _currentLogical;
+            set => RaiseAndSetIfChanged(ref _currentLogical, value);
         }
 
         public IDataUpdater Updater
         {
             get => _updater;
-            set => Update(ref _updater, value);
-        }
-
-        public bool IsExpanded
-        {
-            get => _isExpanded;
-            set => Update(ref _isExpanded, value);
+            set => RaiseAndSetIfChanged(ref _updater, value);
         }
 
         public ImmutableArray<BaseEntity> Entities
         {
             get => _entities;
-            set => Update(ref _entities, value);
+            set => RaiseAndSetIfChanged(ref _entities, value);
         }
 
         public ImmutableArray<SatelliteTask> Tasks
@@ -92,31 +82,31 @@ namespace Globe3DLight.Containers
         public BaseEntity CurrentEntity
         {
             get => _currentEntity;
-            set => Update(ref _currentEntity, value);
+            set => RaiseAndSetIfChanged(ref _currentEntity, value);
         }
 
         public ISceneState SceneState
         {
             get => _sceneState;
-            set => Update(ref _sceneState, value);
+            set => RaiseAndSetIfChanged(ref _sceneState, value);
         }
 
         public double Width
         {
             get => _width;
-            set => Update(ref _width, value);
+            set => RaiseAndSetIfChanged(ref _width, value);
         }
 
         public double Height
         {
             get => _height;
-            set => Update(ref _height, value);
+            set => RaiseAndSetIfChanged(ref _height, value);
         }
 
         public TimePresenter TimePresenter
         {
             get => _timePresenter;
-            set => Update(ref _timePresenter, value);
+            set => RaiseAndSetIfChanged(ref _timePresenter, value);
         }
 
         public void SetCameraTo(ITargetable target)
@@ -140,7 +130,7 @@ namespace Globe3DLight.Containers
         {
             //if (TimePresenter.Timer.IsRunning == true)
             {
-                Updater.Update(TimePresenter.Timer.CurrentTime, LogicalTreeNodeRoot.SingleOrDefault());
+                Updater.Update(TimePresenter.Timer.CurrentTime, LogicalRoot.SingleOrDefault());
             }
         }
 
@@ -219,21 +209,5 @@ namespace Globe3DLight.Containers
                 scObj.Invalidate();
             }
         }
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-
-    
-        public virtual bool ShouldSerializeTimePresenter() => true;
-        public virtual bool ShouldSerializeSceneState() => true;
-        public virtual bool ShouldSerializeLogicalTreeNodeRoot() => true;
-        public virtual bool ShouldSerializeCurrentLogicalTreeNode() => _currentLogicalTreeNode != null;
-        public virtual bool ShouldSerializeEntities() => true;
-        public virtual bool ShouldSerializeSatelliteTasks() => true;
-        public virtual bool ShouldSerializeCurrentEntity() => _currentEntity != null;
-        public virtual bool ShouldSerializeWidth() => _width != default;
-        public virtual bool ShouldSerializeHeight() => _height != default;
-        public virtual bool ShouldSerializeIsExpanded() => _isExpanded != default;
     }
 }

@@ -1,19 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Containers;
-using Globe3DLight.Scene;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Scene;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.Entities;
+using Globe3DLight.ViewModels.Entities;
 using Globe3DLight.SceneTimer;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 using System.IO;
 using GlmSharp;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
     public class ContainerFactory : IContainerFactory
     {
@@ -24,7 +27,7 @@ namespace Globe3DLight.Editor
             _serviceProvider = serviceProvider;
         }
 
-        public ProjectContainer GetProject()
+        public ProjectContainerViewModel GetProject()
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
@@ -49,7 +52,7 @@ namespace Globe3DLight.Editor
             return project;
         }
 
-        public ProjectContainer GetProject(ScenarioData data)
+        public ProjectContainerViewModel GetProject(ScenarioData data)
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;
@@ -66,7 +69,7 @@ namespace Globe3DLight.Editor
             project.AddScenario(scenario);
             project.SetCurrentScenario(scenario);
 
-            var root = scenario.LogicalTreeNodeRoot.FirstOrDefault();
+            var root = scenario.LogicalRoot.FirstOrDefault();
 
             var fr_earth = (Name: data.Earth.Name, Node: dataFactory.CreateEarthNode(root, data.Earth));
             var fr_sun = (Name: data.Sun.Name, Node: dataFactory.CreateSunNode(root, data.Sun));
@@ -130,7 +133,7 @@ namespace Globe3DLight.Editor
             return project;
         }
 
-        public ScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration)
+        public ScenarioContainerViewModel GetScenario(string name, DateTime begin, TimeSpan duration)
         {
             var factory = _serviceProvider.GetService<IFactory>();          
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -141,8 +144,8 @@ namespace Globe3DLight.Editor
               
             //        root.Owner = scenario; ????????????????????????????????
 
-            scenario.LogicalTreeNodeRoot = ImmutableArray.Create<Logical>(root);
-            scenario.CurrentLogicalTreeNode = scenario.LogicalTreeNodeRoot.FirstOrDefault();
+            scenario.LogicalRoot = ImmutableArray.Create<LogicalViewModel>(root);
+            scenario.CurrentLogical = scenario.LogicalRoot.FirstOrDefault();
             scenario.SceneState = scenarioObjectFactory.CreateSceneState();  
             scenario.TimePresenter = factory.CreateSliderTimePresenter(begin, duration);
             //scenario.Tasks = ImmutableArray.Create<ISatelliteTask>();
@@ -151,7 +154,7 @@ namespace Globe3DLight.Editor
             return scenario;
         }
 
-        public async Task<ProjectContainer> GetFromDatabase()
+        public async Task<ProjectContainerViewModel> GetFromDatabase()
         {    
             try
             {
@@ -163,7 +166,7 @@ namespace Globe3DLight.Editor
             }             
         }
 
-        public async Task<ProjectContainer> GetFromJson()
+        public async Task<ProjectContainerViewModel> GetFromJson()
         {
             try
             {
@@ -189,7 +192,7 @@ namespace Globe3DLight.Editor
 
         private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
         
-        public ProjectContainer GetEmptyProject()
+        public ProjectContainerViewModel GetEmptyProject()
         {
             var factory = _serviceProvider.GetService<IFactory>();
             var containerFactory = this as IContainerFactory;                 

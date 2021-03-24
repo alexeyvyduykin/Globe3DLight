@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight.Image
+namespace Globe3DLight.Models.Image
 {
-    public interface IImage //: IObservableObject
+    public interface IImage
     {
 
     }

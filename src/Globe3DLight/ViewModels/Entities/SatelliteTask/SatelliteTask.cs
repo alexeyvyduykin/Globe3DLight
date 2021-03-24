@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
-    public class SatelliteTask : ObservableObject//, ISatelliteTask
+    public class SatelliteTask : ViewModelBase
     {
         private readonly IList<BaseSatelliteEvent> _sourceEvents;
 
@@ -50,7 +50,7 @@ namespace Globe3DLight.Entities
         public bool IsVisible 
         {
             get => _isVisible; 
-            set => Update(ref _isVisible, value); 
+            set => RaiseAndSetIfChanged(ref _isVisible, value); 
         }
 
         public bool HasRotations
@@ -58,7 +58,7 @@ namespace Globe3DLight.Entities
             get => _hasRotations;
             set 
             {
-                Update(ref _hasRotations, value);
+                RaiseAndSetIfChanged(ref _hasRotations, value);
                 Update();
             }
         }
@@ -68,7 +68,7 @@ namespace Globe3DLight.Entities
             get => _hasObservations;
             set 
             {
-                Update(ref _hasObservations, value);
+                RaiseAndSetIfChanged(ref _hasObservations, value);
                 Update();
             }
         }
@@ -78,7 +78,7 @@ namespace Globe3DLight.Entities
             get => _hasTransmission;
             set              
             {
-                Update(ref _hasTransmission, value);
+                RaiseAndSetIfChanged(ref _hasTransmission, value);
                 Update();
             }
         }
@@ -88,7 +88,7 @@ namespace Globe3DLight.Entities
             get => _searchString;
             set 
             {
-                Update(ref _searchString, value);
+                RaiseAndSetIfChanged(ref _searchString, value);
                 Update();
             }
         }
@@ -96,31 +96,19 @@ namespace Globe3DLight.Entities
         public Satellite Satellite 
         {
             get => _satellite; 
-            set => Update(ref _satellite, value); 
+            set => RaiseAndSetIfChanged(ref _satellite, value); 
         }
 
         public IList<BaseSatelliteEvent> Events 
         {
             get => _events; 
-            set => Update(ref _events, value); 
+            set => RaiseAndSetIfChanged(ref _events, value); 
         }
        
         public BaseSatelliteEvent SelectedEvent 
         {
             get => _selectedEvent;
-            set => Update(ref _selectedEvent, value); 
+            set => RaiseAndSetIfChanged(ref _selectedEvent, value); 
         }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-
-        public virtual bool ShouldSerializeHasObservations() => true;
-        public virtual bool ShouldSerializeHasRotations() => true;
-        public virtual bool ShouldSerializeHasTransmissions() => true;
-        public virtual bool ShouldSerializeSearchString() => true;
-        public virtual bool ShouldSerializeEvents() => true;
-        public virtual bool ShouldSerializeSelectedEvent() => _selectedEvent != null;
     }
 }

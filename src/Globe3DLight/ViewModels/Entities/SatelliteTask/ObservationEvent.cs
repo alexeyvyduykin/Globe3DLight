@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
 
     public class ObservationEvent : BaseSatelliteEvent
     {
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
+
     }
 }

@@ -7,12 +7,12 @@
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
              xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
-             xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
              xmlns:SceneObjects="clr-namespace:Globe3DLight.ScenarioObjects;assembly=Globe3DLight"
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Project}"
              d:DesignWidth="250" d:DesignHeight="500"
-             x:DataType="Containers:ProjectContainer" x:CompileBindings="True">
+             x:DataType="Containers:ProjectContainerViewModel" x:CompileBindings="True">
 
 
   <UserControl.Resources>
@@ -24,7 +24,7 @@
 
     <TreeView Grid.Column="0" 
               Grid.Row="0"
-              Items="{Binding CurrentScenario.LogicalTreeNodeRoot}"
+              Items="{Binding CurrentScenario.LogicalRoot}"
               SelectedItem="{Binding CurrentScenario.CurrentLogicalTreeNode}"
               x:CompileBindings="False">
       <TreeView.Styles>
@@ -33,7 +33,7 @@
         </Style>
       </TreeView.Styles>
       <TreeView.DataTemplates>
-        <TreeDataTemplate DataType="Containers:Logical"
+        <TreeDataTemplate DataType="Containers:LogicalViewModel"
                   ItemsSource="{Binding Children}" x:CompileBindings="False">
           <TextBlock Text="{Binding Name}" Background="Transparent">
             <TextBlock.ContextMenu>
@@ -60,7 +60,7 @@
     <Grid Grid.Column="0" Grid.Row="1"
           ColumnDefinitions="60,Auto"
           RowDefinitions="20,20,20"
-          DataContext="{Binding CurrentScenario.CurrentLogicalTreeNode}">
+          DataContext="{Binding CurrentScenario.CurrentLogical}">
 
       <TextBlock Text="Owner" Grid.Row="0" Grid.Column="0"></TextBlock>
         <!--<TextBlock Text="{Binding Owner.Name}" Grid.Row="0" Grid.Column="1"></TextBlock>-->

@@ -9,14 +9,14 @@
              xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
              xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"         
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
-             xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
              xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
-             xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"
              d:DesignWidth="1200" d:DesignHeight="580"
-             x:DataType="Editor:ProjectEditor" x:CompileBindings="True"
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True"
              >
 
     <Grid ShowGridLines="True" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,20">
@@ -44,7 +44,7 @@
         <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2">
             <TabItem Header="Properties" FontSize="20">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentLogicalTreeNode, Mode=TwoWay}"/>
+                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentLogical, Mode=TwoWay}"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Scene" FontSize="20">

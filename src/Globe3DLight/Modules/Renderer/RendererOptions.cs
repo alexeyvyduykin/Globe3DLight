@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Renderer;
+using Globe3DLight.Models.Renderer;
 using Avalonia;
 using Avalonia.Data;
 

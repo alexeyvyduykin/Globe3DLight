@@ -1,37 +1,40 @@
-﻿using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Scene;
+﻿using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.Renderer;
+using Globe3DLight.Models.Renderer;
 using GlmSharp;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Scene;
 
-namespace Globe3DLight.Entities
+
+namespace Globe3DLight.ViewModels.Entities
 {
     public class GroundStation : BaseEntity, IDrawable, ITargetable
     { 
         private GroundStationRenderModel _renderModel; 
         private FrameRenderModel _frameRenderModel;
-        private Logical _logical;
+        private LogicalViewModel _logical;
       
         public GroundStationRenderModel RenderModel
         {
             get => _renderModel;
-            set => Update(ref _renderModel, value);
+            set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
         public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
-            set => Update(ref _frameRenderModel, value);
+            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
         }
 
-        public Logical Logical
+        public LogicalViewModel Logical
         {
             get => _logical;
-            set => Update(ref _logical, value);
+            set => RaiseAndSetIfChanged(ref _logical, value);
         }
         public dmat4 InverseAbsoluteModel
         {
@@ -39,11 +42,11 @@ namespace Globe3DLight.Entities
             {
                 if (_logical?.State is IFrameable)
                 {
-                    if (Logical.State is IGroundStationState groundStationData)
+                    if (Logical.State is GroundStationState groundStationData)
                     {
                         var collection = Logical.Owner;
-                        var parent = (Logical)collection.Owner;
-                        if (parent.State is IJ2000State j2000Data)
+                        var parent = (LogicalViewModel)collection.Owner;
+                        if (parent.State is EarthAnimator j2000Data)
                         {                      
                             var modelMatrix = j2000Data.ModelMatrix * groundStationData.ModelMatrix;
                             return modelMatrix.Inverse;
@@ -59,11 +62,11 @@ namespace Globe3DLight.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is IGroundStationState groundStationData)
+                if (Logical.State is GroundStationState groundStationData)
                 {
                     var collection = Logical.Owner;
-                    var parent = (Logical)collection.Owner;
-                    if (parent.State is IJ2000State j2000Data)
+                    var parent = (LogicalViewModel)collection.Owner;
+                    if (parent.State is EarthAnimator j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 
@@ -75,13 +78,6 @@ namespace Globe3DLight.Entities
                     }
                 }
             }
-        }
-
-
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
 
         public bool Invalidate(IRenderContext renderer)

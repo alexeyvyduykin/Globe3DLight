@@ -1,21 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Geometry;
-using Globe3DLight.Containers;
-using Globe3DLight.Scene;
-using Globe3DLight.Renderer;
-using Globe3DLight.Data;
+using Globe3DLight.Models.Geometry;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.Models.Data;
 using System.IO;
-using Globe3DLight.Time;
+using Globe3DLight.ViewModels.Time;
 
-namespace Globe3DLight
+namespace Globe3DLight.Models
 {
     public interface IFactory
     {
-        Library<T> CreateLibrary<T>(string name);
+        LibraryViewModel<T> CreateLibrary<T>(string name);
 
-        Library<T> CreateLibrary<T>(string name, IEnumerable<T> items);
+        LibraryViewModel<T> CreateLibrary<T>(string name, IEnumerable<T> items);
 
         ICache<TKey, TValue> CreateCache<TKey, TValue>(Action<TValue> dispose = null);
 
@@ -49,24 +50,24 @@ namespace Globe3DLight
 
         IAMesh CreateSolidSphere(float radius, int rings, int sectors);
 
-        ProjectContainer CreateProjectContainer(string name = "Project");
+        ProjectContainerViewModel CreateProjectContainer(string name = "Project");
 
-        ScenarioContainer CreateScenarioContainer(string name = "Scenario");
+        ScenarioContainerViewModel CreateScenarioContainer(string name = "Scenario");
 
-        Logical CreateLogical(string name, IState state);
-       
-        LogicalCollection CreateLogicalCollection(string name);
+        LogicalViewModel CreateLogical(string name, IState state);
+
+        LogicalCollectionViewModel CreateLogicalCollection(string name);
 
         SliderTimePresenter CreateSliderTimePresenter(DateTime dateTime, TimeSpan timeSpan);
 
         IDataUpdater CreateDataUpdater();
 
-        void SaveProjectContainer(ProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer);
-     
-        ProjectContainer OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer);
+        void SaveProjectContainer(ProjectContainerViewModel project, string path, IFileSystem fileIO, IJsonSerializer serializer);
 
-        ProjectContainer OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
+        ProjectContainerViewModel OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer);
 
-        void SaveProjectContainer(ProjectContainer project/*, IImageCache imageCache*/, Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
+        ProjectContainerViewModel OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
+
+        void SaveProjectContainer(ProjectContainerViewModel project/*, IImageCache imageCache*/, Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
     }
 }

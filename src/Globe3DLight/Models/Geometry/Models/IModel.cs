@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.ViewModels.Geometry.Models;
 
-namespace Globe3DLight.Geometry.Models
+namespace Globe3DLight.Models.Geometry.Models
 {
     //public interface IModel
     //{

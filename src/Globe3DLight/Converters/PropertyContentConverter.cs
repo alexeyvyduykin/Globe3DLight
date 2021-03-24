@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Collections.Generic;
 using System.Text;
 using Avalonia.Data.Converters;
-using Globe3DLight;
+using Globe3DLight.Models;
 
 namespace Globe3DLight.Converters
 {

@@ -3,13 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                                   
-             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"             
-             xmlns:Containers="clr-namespace:Globe3DLight.Containers;assembly=Globe3DLight"
+             xmlns:converters="clr-namespace:Globe3DLight.ViewModels.Converters;assembly=Globe3DLight"             
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.OrbitNode}"
              d:DesignWidth="250" d:DesignHeight="400"
-             x:DataType="Containers:Logical" x:CompileBindings="True"
+             x:DataType="Containers:LogicalViewModel" x:CompileBindings="True"
              
              >
 

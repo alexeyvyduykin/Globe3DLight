@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight;
-using Globe3DLight.Image;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Image;
 using A=Pfim;
 using System.IO;
 using System.Threading;

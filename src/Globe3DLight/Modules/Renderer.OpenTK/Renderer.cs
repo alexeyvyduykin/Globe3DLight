@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-
-
+using Globe3DLight.ViewModels.Renderer;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    public class OpenTKRenderer : Globe3DLight.Renderer.NodeRenderer
+    public class OpenTKRenderer : NodeRenderer
     {
         /// <summary>
         /// Initializes a new instance of the <see cref="AvaloniaRenderer"/> class.
@@ -15,12 +14,6 @@ namespace Globe3DLight.Renderer.OpenTK
         public OpenTKRenderer(IServiceProvider serviceProvider)
             : base(serviceProvider, new OpenTKDrawNodeFactory())
         {
-        }
-
-        /// <inheritdoc/>
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

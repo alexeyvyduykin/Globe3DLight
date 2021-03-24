@@ -4,8 +4,7 @@ using System.Text;
 using A = OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 using System.IO;
-//using Pfim;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {

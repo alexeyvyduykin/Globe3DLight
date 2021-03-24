@@ -1,15 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Scene;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Scene;
 using GlmSharp;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using System.Collections.Immutable;
-using Globe3DLight.Entities;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models.Entities;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.ViewModels.Renderer
 {
-    public abstract class NodeRenderer : ObservableObject, IRenderContext
+    public abstract class NodeRenderer : ViewModelBase, IRenderContext
     {
         private readonly IServiceProvider _serviceProvider;
     //    private IShapeRendererState _state;
@@ -33,7 +37,7 @@ namespace Globe3DLight.Renderer
             _drawNodeFactory = drawNodeFactory;
         }
 
-        public void DrawScenario(object dc, ScenarioContainer container)
+        public void DrawScenario(object dc, ScenarioContainerViewModel container)
         {
             foreach (var obj in container.Entities)
             {

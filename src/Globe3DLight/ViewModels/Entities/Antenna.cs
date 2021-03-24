@@ -1,58 +1,56 @@
-﻿using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Renderer;
-using Globe3DLight.Scene;
+﻿using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Scene;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using System.Collections.Immutable;
 using System.Linq;
+using Globe3DLight.Models.Entities;
+using Globe3DLight.Models;
+using Globe3DLight.ViewModels.Data;
 
-
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
     public class Antenna : BaseEntity, IDrawable, IAssetable
     {
         private AntennaRenderModel _renderModel; 
         private FrameRenderModel _frameRenderModel;
 
-        private Logical _logical; 
+        private LogicalViewModel _logical; 
         private ImmutableArray<BaseEntity> _assets;
         
         public ImmutableArray<BaseEntity> Assets
         {
             get => _assets;
-            set => Update(ref _assets, value);
+            set => RaiseAndSetIfChanged(ref _assets, value);
         }
 
         public AntennaRenderModel RenderModel
         {
             get => _renderModel;
-            set => Update(ref _renderModel, value);
+            set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public Logical Logical
+        public LogicalViewModel Logical
         {
             get => _logical;
-            set => Update(ref _logical, value);
+            set => RaiseAndSetIfChanged(ref _logical, value);
         }
         public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;
-            set => Update(ref _frameRenderModel, value);
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
+            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (Logical.State is IAntennaState antennaData)
+                if (Logical.State is AntennaAnimator antennaData)
                 {
                     dvec3 targetPosition = default;
                     bool enable = antennaData.Enable;
@@ -67,11 +65,11 @@ namespace Globe3DLight.Entities
                             {
                                 if (groundStation.Name.Equals(target) == true)
                                 {
-                                    if (groundStation.Logical.State is IGroundStationState groundStationData)
+                                    if (groundStation.Logical.State is GroundStationState groundStationData)
                                     {
-                                        var collection = (LogicalCollection)groundStation.Logical.Owner;
-                                        var j2000Node = (Logical)collection.Owner;
-                                        if (j2000Node.State is IJ2000State j2000Data)
+                                        var collection = (LogicalCollectionViewModel)groundStation.Logical.Owner;
+                                        var j2000Node = (LogicalViewModel)collection.Owner;
+                                        if (j2000Node.State is EarthAnimator j2000Data)
                                         {
                                             targetPosition = new dvec3(j2000Data.ModelMatrix * new dvec4(groundStationData.Position, 1.0));
                                         }
@@ -86,7 +84,7 @@ namespace Globe3DLight.Entities
                             {
                                 if (retranslator.Name.Equals(target) == true)
                                 {
-                                    if (retranslator.Logical.State is IRetranslatorState retranslatorData)
+                                    if (retranslator.Logical.State is RetranslatorAnimator retranslatorData)
                                     {
                                         targetPosition = retranslatorData.Position;
                                     }
@@ -95,11 +93,11 @@ namespace Globe3DLight.Entities
                         }
                     }
 
-                    var rotationNode = (Logical)Logical.Owner;
-                    if (rotationNode.State is IRotationState rotationData)
+                    var rotationNode = (LogicalViewModel)Logical.Owner;
+                    if (rotationNode.State is RotationAnimator rotationData)
                     {
-                        var orbitNode = (Logical)rotationNode.Owner;
-                        if (orbitNode.State is ISatelliteState satelliteState)
+                        var orbitNode = (LogicalViewModel)rotationNode.Owner;
+                        if (orbitNode.State is SatelliteAnimator satelliteState)
                         {
                             var attach = RenderModel.AttachPosition;
 

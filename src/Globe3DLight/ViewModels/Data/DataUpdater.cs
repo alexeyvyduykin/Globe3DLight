@@ -1,21 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using System.Linq;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IDataUpdater
-    {
-        void Update(double t, ObservableObject obj);
-    }
-
     public class DataUpdater : IDataUpdater
     {
-        public void Update(double t, ObservableObject obj)
+        public void Update(double t, ViewModelBase obj)
         {
-            if (obj is Logical logical)
+            if (obj is LogicalViewModel logical)
             {
                 if (logical.State is IAnimator animator)
                 {
@@ -27,15 +23,18 @@ namespace Globe3DLight.Data
                     Update(t, item);
                 }
             }
-            else if (obj is LogicalCollection collection)
+            else if (obj is LogicalCollectionViewModel collection)
             {
                 var first = collection.Values.FirstOrDefault();
 
                 if (first.State is IAnimator animator)
                 {
-                    foreach (IAnimator item in collection.Values.Select(s => s.State))
+                    foreach (var item in collection.Values.Select(s => s.State))
                     {
-                        item.Animate(t);
+                        if (item is IAnimator a)
+                        {
+                            a.Animate(t);
+                        }
                     }
                 }
                 // collection states not is animate

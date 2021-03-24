@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.Containers;
-using Globe3DLight.Renderer;
-using Globe3DLight.Scene;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Data;
 using System.Collections.Immutable;
+using Globe3DLight.Models.Entities;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
-    public class EntityList : BaseEntity, IDrawable, ICollection<BaseEntity>// IEntityList//IGroundStationList
+    public class EntityList : BaseEntity, IDrawable, Globe3DLight.Models.Entities.ICollection<BaseEntity>
     {
         //private IGroundStationRenderModel _renderModel;
         private ImmutableArray<BaseEntity> _values;
@@ -25,7 +27,7 @@ namespace Globe3DLight.Entities
         public ImmutableArray<BaseEntity> Values 
         {
             get => _values; 
-            set => Update(ref _values, value); 
+            set => RaiseAndSetIfChanged(ref _values, value); 
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
@@ -38,11 +40,11 @@ namespace Globe3DLight.Entities
                 {
                     if (groundObject.IsVisible == true)
                     {
-                        if (groundObject.Logical.State is IGroundObjectState groundObjectState)
+                        if (groundObject.Logical.State is GroundObjectState groundObjectState)
                         {
-                            var collection = (LogicalCollection)groundObject.Logical.Owner;
-                            var parent = (Logical)collection.Owner;
-                            if (parent.State is IJ2000State j2000Data)
+                            var collection = (LogicalCollectionViewModel)groundObject.Logical.Owner;
+                            var parent = (LogicalViewModel)collection.Owner;
+                            if (parent.State is EarthAnimator j2000Data)
                             {
                                 var m = j2000Data.ModelMatrix;
 
@@ -53,7 +55,7 @@ namespace Globe3DLight.Entities
                                 //    renderer.DrawGroundObject(dc, groundObject.RenderModel, matrix, scene);
                                 //}
 
-                                var matrices = collection.Values.Select(s => m * ((IGroundObjectState)s.State).ModelMatrix);
+                                var matrices = collection.Values.Select(s => m * ((GroundObjectState)s.State).ModelMatrix);
                                 renderer.DrawFrameList(dc, groundObject.FrameRenderModel, matrices, scene);
                                 renderer.DrawGroundObjectList(dc, groundObject.RenderModel, matrices, scene);
                             }
@@ -64,17 +66,17 @@ namespace Globe3DLight.Entities
                 {
                     if (groundStation.IsVisible == true)
                     {
-                        if (groundStation.Logical.State is IGroundStationState groundStationData)
+                        if (groundStation.Logical.State is GroundStationState groundStationData)
                         {
-                            var collection = (LogicalCollection)groundStation.Logical.Owner;
-                            var parent = (Logical)collection.Owner;
-                            if (parent.State is IJ2000State j2000Data)
+                            var collection = (LogicalCollectionViewModel)groundStation.Logical.Owner;
+                            var parent = (LogicalViewModel)collection.Owner;
+                            if (parent.State is EarthAnimator j2000Data)
                             {
                                 var m = j2000Data.ModelMatrix;
 
                                 foreach (var item in collection.Values)
                                 {
-                                    var matrix = m * ((IGroundStationState)item.State).ModelMatrix;
+                                    var matrix = m * ((GroundStationState)item.State).ModelMatrix;
 
                                     renderer.DrawFrame(dc, groundStation.FrameRenderModel, matrix, scene);
 
@@ -88,13 +90,13 @@ namespace Globe3DLight.Entities
                 {
                     if (retranslator.IsVisible == true)
                     {
-                        if (retranslator.Logical.State is IRetranslatorState retranslatorData)
+                        if (retranslator.Logical.State is RetranslatorAnimator retranslatorData)
                         {
-                            var collection = (LogicalCollection)retranslator.Logical.Owner;
+                            var collection = (LogicalCollectionViewModel)retranslator.Logical.Owner;
 
                             foreach (var item in collection.Values)
                             {
-                                var matrix = ((IRetranslatorState)item.State).ModelMatrix;
+                                var matrix = ((RetranslatorAnimator)item.State).ModelMatrix;
 
                                 renderer.DrawRetranslator(dc, retranslator.RenderModel, matrix, scene);
                             }
@@ -107,10 +109,6 @@ namespace Globe3DLight.Entities
         public bool Invalidate(IRenderContext renderer)
         {
             return false;
-        }
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

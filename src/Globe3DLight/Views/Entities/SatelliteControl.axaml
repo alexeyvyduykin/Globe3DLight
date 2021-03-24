@@ -4,7 +4,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                     
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
-             xmlns:Entities="clr-namespace:Globe3DLight.Entities;assembly=Globe3DLight"
+             xmlns:Entities="clr-namespace:Globe3DLight.ViewModels.Entities;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.Satellite}"

@@ -3,10 +3,9 @@ using System.Collections.Immutable;
 using System.Text;
 using System.Collections.Generic;
 
-
-namespace Globe3DLight.Containers
+namespace Globe3DLight.ViewModels.Containers
 {
-    public class Library<T> : ObservableObject//, ILibrary<T>
+    public class LibraryViewModel<T> : ViewModelBase
     {
         private ImmutableArray<T> _items;
         private T _selected;
@@ -14,29 +13,24 @@ namespace Globe3DLight.Containers
         public ImmutableArray<T> Items
         {
             get => _items;
-            set => Update(ref _items, value);
+            set => RaiseAndSetIfChanged(ref _items, value);
         }
   
         public T Selected
         {
             get => _selected;
-            set => Update(ref _selected, value);
+            set => RaiseAndSetIfChanged(ref _selected, value);
         }
         
         public void SetSelected(T item) => Selected = item;
-       
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
- 
+        
         public override bool IsDirty()
         {
             var isDirty = base.IsDirty();
 
             foreach (var item in Items)
             {
-                if (item is ObservableObject observableObject)
+                if (item is ViewModelBase observableObject)
                 {
                     isDirty |= observableObject.IsDirty();
                 }
@@ -51,7 +45,7 @@ namespace Globe3DLight.Containers
 
             foreach (var item in Items)
             {
-                if (item is ObservableObject observableObject)
+                if (item is ViewModelBase observableObject)
                 {
                     observableObject.Invalidate();
                 }

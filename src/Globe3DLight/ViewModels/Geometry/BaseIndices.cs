@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Globe3DLight.Models.Geometry;
 
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.ViewModels.Geometry
 {
-
-
     public abstract class BaseIndices : IIndices
     {
         private readonly IndicesType _type;
@@ -17,7 +16,6 @@ namespace Globe3DLight.Geometry
             this._type = type;
         }
 
-        public IndicesType Datatype => _type; 
-             
+        public IndicesType Datatype => _type;              
     }
 }

@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Globe3DLight.Models.Geometry;
 
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.ViewModels.Geometry
 {
     public class IndicesUnsignedShort : BaseIndices, IIndices<ushort>
     {
@@ -28,7 +29,5 @@ namespace Globe3DLight.Geometry
             _values.Add(triangle.UI1);
             _values.Add(triangle.UI2);
         }
-
-
     }
 }

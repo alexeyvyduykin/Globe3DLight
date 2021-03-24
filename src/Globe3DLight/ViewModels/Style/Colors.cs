@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.Models.Style;
 
-namespace Globe3DLight.Style
+namespace Globe3DLight.ViewModels.Style
 {
     public class Colors
     {

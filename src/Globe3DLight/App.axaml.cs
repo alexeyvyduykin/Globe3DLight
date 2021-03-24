@@ -4,13 +4,13 @@ using Avalonia.Markup.Xaml;
 using Globe3DLight.Views;
 using Autofac;
 using System;
-using Globe3DLight.Designer;
+using Globe3DLight.ViewModels.Designer;
 using Avalonia.Controls;
 using System.Text;
 using Globe3DLight;
-using Globe3DLight.Editor;
+using Globe3DLight.ViewModels.Editor;
 using Globe3DLight.Modules;
-
+using Globe3DLight.Models.Editor;
 
 namespace Globe3DLight
 {
@@ -79,7 +79,7 @@ namespace Globe3DLight
 
             var serviceProvider = container.Resolve<IServiceProvider>();
             var containerFactory = serviceProvider.GetService<IContainerFactory>();
-            var editor = serviceProvider.GetService<ProjectEditor>();
+            var editor = serviceProvider.GetService<ProjectEditorViewModel>();
 
 
             //  editor.OnOpenProject(containerFactory.GetDemo(), "");

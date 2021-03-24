@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Geometry;
+using Globe3DLight.Models.Geometry;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
    
-    internal class RetranslatorDrawNode : DrawNode, Globe3DLight.Renderer.IRetranslatorDrawNode
+    internal class RetranslatorDrawNode : DrawNode, IRetranslatorDrawNode
     {
         private readonly B.Context _context;
         private B.Device _device;
@@ -86,7 +88,7 @@ color = u_color;
                 dirty = false;
             }
         }
-        public override void OnDraw(object dc, dmat4 modelMatrix, Scene.ISceneState scene)   
+        public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)   
         {         
             dmat4 model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
             dmat4 view = scene.ViewMatrix;

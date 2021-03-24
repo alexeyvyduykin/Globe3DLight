@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.ViewModels.Scene
 {
     public class SensorRenderModel : BaseRenderModel
     {
-        private IScan _scan;
-        private IShoot _shoot;
+        private Scan _scan;
+        private Shoot _shoot;
 
-        public IScan Scan
+        public Scan Scan
         {
             get => _scan;
-            set => Update(ref _scan, value);
+            set => RaiseAndSetIfChanged(ref _scan, value);
         }
 
-        public IShoot Shoot
+        public Shoot Shoot
         {
             get => _shoot;
-            set => Update(ref _shoot, value);
+            set => RaiseAndSetIfChanged(ref _shoot, value);
         }
 
         public override bool IsDirty()
@@ -36,11 +36,6 @@ namespace Globe3DLight.Scene
             base.Invalidate();
           //  Scan.Invalidate();
           //  Shoot.Invalidate();
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

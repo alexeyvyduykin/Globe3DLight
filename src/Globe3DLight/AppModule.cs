@@ -2,23 +2,28 @@
 using Autofac;
 using Globe3DLight.Editor;
 using Globe3DLight.Views;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 using Globe3DLight.DatabaseProvider.PostgreSQL;
 using Globe3DLight.DataProvider.Json;
-using Globe3DLight.Editor.Tools;
+using Globe3DLight.ViewModels.Editor.Tools;
 using Globe3DLight.FileSystem.DotNet;
 using Globe3DLight.ImageLoader.SOIL;
-//using Globe3DLight.DDSLoader.SOIL;
 using Globe3DLight.ModelLoader.Assimp;
 using Globe3DLight.Renderer;
-//using Globe3DLight.Renderer.OldOpenTK;
 using Globe3DLight.Renderer.OpenTK;
 using Globe3DLight.Serializer.Newtonsoft;
-//using Globe3DLight.Renderer.OpenTKNETCore;
 using Globe3DLight.ServiceProvider.Autofac;
 using System.Configuration;
 using System.IO;
 using Microsoft.Extensions.Configuration;
+using Globe3DLight.Models;
+using Globe3DLight.ViewModels;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Renderer;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.ViewModels.Editor;
+using Globe3DLight.Models.Data;
 
 namespace Globe3DLight
 {
@@ -42,7 +47,7 @@ namespace Globe3DLight
 
             // Core
 
-            builder.RegisterType<ProjectEditor>().As<ProjectEditor>().InstancePerLifetimeScope();
+            builder.RegisterType<ProjectEditorViewModel>().As<ProjectEditorViewModel>().InstancePerLifetimeScope();
             //    builder.RegisterType<StyleEditor>().As<IStyleEditor>().InstancePerLifetimeScope();
             builder.RegisterType<Factory>().As<IFactory>().InstancePerLifetimeScope();
             builder.RegisterType<ContainerFactory>().As<IContainerFactory>().InstancePerLifetimeScope();

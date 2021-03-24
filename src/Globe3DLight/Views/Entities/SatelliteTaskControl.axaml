@@ -7,7 +7,7 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
-             xmlns:Entities="clr-namespace:Globe3DLight.Entities;assembly=Globe3DLight"
+             xmlns:Entities="clr-namespace:Globe3DLight.ViewModels.Entities;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"             
              mc:Ignorable="d"                          
              d:DataContext="{x:Static Designer:DesignerContext.SatelliteTask}"

@@ -4,12 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GlmSharp;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
     internal class SensorInterval : BaseEventInterval, IAnimatableInterval<ISensorEventState>
     {
-        private readonly IShoot _shoot;
+        private readonly Shoot _shoot;
         private readonly int _direction;
 
         public SensorInterval(double t0, double t1, double gam1Deg, double gam2Deg, double range1, double range2) : base(t0, t1)

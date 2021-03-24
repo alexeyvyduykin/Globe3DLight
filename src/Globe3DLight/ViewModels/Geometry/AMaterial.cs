@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
+using Globe3DLight.Models.Geometry;
 
-
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.ViewModels.Geometry
 {
     public class AMaterial : IAMaterial
     {

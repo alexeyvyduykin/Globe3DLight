@@ -7,7 +7,7 @@ using System.Globalization;
 
 
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
 
     public interface ITextureDescription : IEquatable<ITextureDescription>

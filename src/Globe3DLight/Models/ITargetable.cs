@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 
-
-namespace Globe3DLight
+namespace Globe3DLight.Models
 {
     public interface ITargetable
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.Models.Scene
 {
     public interface ICamera
     {

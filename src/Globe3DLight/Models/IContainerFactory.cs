@@ -1,24 +1,24 @@
 ﻿using System.Threading.Tasks;
-using Globe3DLight.Containers;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
 using System;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.Models.Editor
 {
     public interface IContainerFactory
     {
-        ProjectContainer GetProject();
+        ProjectContainerViewModel GetProject();
 
-        ProjectContainer GetProject(ScenarioData data);
+        ProjectContainerViewModel GetProject(ScenarioData data);
 
-        Task<ProjectContainer> GetFromDatabase();
+        Task<ProjectContainerViewModel> GetFromDatabase();
 
-        Task<ProjectContainer> GetFromJson();
+        Task<ProjectContainerViewModel> GetFromJson();
 
         Task SaveFromDatabaseToJson();
 
-        ScenarioContainer GetScenario(string name, DateTime begin, TimeSpan duration);
+        ScenarioContainerViewModel GetScenario(string name, DateTime begin, TimeSpan duration);
 
-        ProjectContainer GetEmptyProject();
+        ProjectContainerViewModel GetEmptyProject();
     }
 }

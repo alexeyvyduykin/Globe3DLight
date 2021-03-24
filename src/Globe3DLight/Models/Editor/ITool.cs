@@ -1,6 +1,6 @@
 ﻿using Globe3DLight.Input;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.Models.Editor
 {
     public interface ITool
     {   

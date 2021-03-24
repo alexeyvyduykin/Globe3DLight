@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Renderer;
-using Globe3DLight.Containers;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Containers;
 
-namespace Globe3DLight.Renderer.Presenters
+namespace Globe3DLight.ViewModels.Renderer.Presenters
 {
     public class EditorPresenter : IContainerPresenter
     {
-        /// <inheritdoc/>
-        public void Render(object dc, IRenderContext renderer, ScenarioContainer container)
+        public void Render(object dc, IRenderContext renderer, ScenarioContainerViewModel container)
         {
             renderer.DrawScenario(dc, container);
 

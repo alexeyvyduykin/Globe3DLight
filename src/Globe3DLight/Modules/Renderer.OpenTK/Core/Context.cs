@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-//using System.Drawing;
-using OpenTK;
 using A = OpenTK.Graphics.OpenGL;
+using B = Globe3DLight.Models.Geometry;
 using GlmSharp;
 using System.Diagnostics;
 
@@ -122,15 +121,15 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         //    return va;
         //}
 
-        public VertexArray CreateVertexArray_NEW(Globe3DLight.Geometry.IAMesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
+        public VertexArray CreateVertexArray_NEW(Models.Geometry.IAMesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
         {
             var va = new VertexArray();
 
             if (mesh.Indices != null)
             {
-                if (mesh.Indices.Datatype == Globe3DLight.Geometry.IndicesType.UnsignedShort)
+                if (mesh.Indices.Datatype == B.IndicesType.UnsignedShort)
                 {
-                    var meshIndices = ((Globe3DLight.Geometry.IIndices<ushort>)mesh.Indices).Values;
+                    var meshIndices = ((Models.Geometry.IIndices<ushort>)mesh.Indices).Values;
 
                     ushort[] indices = new ushort[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
@@ -142,9 +141,9 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     indexBuffer.CopyFromSystemMemory(indices);
                     va.IndexBuffer = indexBuffer;
                 }
-                else if (mesh.Indices.Datatype == Globe3DLight.Geometry.IndicesType.UnsignedInt)
+                else if (mesh.Indices.Datatype == Models.Geometry.IndicesType.UnsignedInt)
                 {
-                    var meshIndices = ((Globe3DLight.Geometry.IIndices<uint>)mesh.Indices).Values;
+                    var meshIndices = ((Models.Geometry.IIndices<uint>)mesh.Indices).Values;
 
                     uint[] indices = new uint[meshIndices.Count];
                     for (int j = 0; j < meshIndices.Count; ++j)
@@ -175,7 +174,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
                     
                     var vertexBuffer =
-                        _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<float>)attribute).Values, usageHint);
+                        _device.CreateVertexBuffer(((B.IVertexAttribute<float>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] = 
                         new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 1);
@@ -187,7 +186,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
 
                     var vertexBuffer =
-                        _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<vec2>)attribute).Values, usageHint);
+                        _device.CreateVertexBuffer(((B.IVertexAttribute<vec2>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 2);
@@ -199,7 +198,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
 
                     var vertexBuffer =
-                        _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<vec3>)attribute).Values, usageHint);
+                        _device.CreateVertexBuffer(((B.IVertexAttribute<vec3>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 3);
@@ -211,7 +210,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
 
                     var vertexBuffer =
-                        _device.CreateVertexBuffer(((Globe3DLight.Geometry.IVertexAttribute<vec4>)attribute).Values, usageHint);
+                        _device.CreateVertexBuffer(((B.IVertexAttribute<vec4>)attribute).Values, usageHint);
 
                     va.Attributes[shaderAttribute.Location] =
                         new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 4);
@@ -225,7 +224,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             return va;
         }
 
-        public VertexArray CreateVertexArray_NEW(Globe3DLight.Geometry.Models.IMesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
+        public VertexArray CreateVertexArray_NEW(Globe3DLight.ViewModels.Geometry.Models.IMesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
         {
             var va = new VertexArray();
 
@@ -594,7 +593,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             vertexArray.Clean();
         }
 
-        private static void VerifyDraw(DrawState drawState, Globe3DLight.Scene.ISceneState sceneState)
+        private static void VerifyDraw(DrawState drawState, Globe3DLight.Models.Scene.ISceneState sceneState)
         {
             if (drawState == null)
             {
@@ -632,7 +631,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             //}
         }
 
-        private void ApplyBeforeDraw(DrawState drawState, Globe3DLight.Scene.ISceneState sceneState)
+        private void ApplyBeforeDraw(DrawState drawState, Globe3DLight.Models.Scene.ISceneState sceneState)
         {
             ApplyRenderState(drawState.RenderState);
             ApplyVertexArray(drawState.VertexArray);
@@ -642,7 +641,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
            // ApplyFramebuffer();
         }
 
-        public void ApplyShaderProgram(DrawState drawState, Globe3DLight.Scene.ISceneState _)
+        public void ApplyShaderProgram(DrawState drawState, Globe3DLight.Models.Scene.ISceneState _)
         {
             var shaderProgram = drawState.ShaderProgram;
 
@@ -706,7 +705,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
   //              renderState.ColorMask.Blue, renderState.ColorMask.Alpha);
         }
 
-        public void Draw(A.PrimitiveType primitiveType, DrawState drawState, Globe3DLight.Scene.ISceneState sceneState)
+        public void Draw(A.PrimitiveType primitiveType, DrawState drawState, Globe3DLight.Models.Scene.ISceneState sceneState)
         {
             VerifyDraw(drawState, sceneState);
             ApplyBeforeDraw(drawState, sceneState);

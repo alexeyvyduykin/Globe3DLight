@@ -4,24 +4,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GlmSharp;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IGroundObjectState : IState, IFrameable
-    {
-        dvec3 Position { get; }
-
-        double Lon { get; }
-
-        double Lat { get; }
-    }
-
-
-    public class GroundObjectState : ObservableObject, IGroundObjectState
+    public class GroundObjectState : ViewModelBase, IState, IFrameable
     {
         private dvec3 _position;
         private dmat4 _modelMatrix;
-
         private double _lon;
         private double _lat;
         private readonly double _earthRadius;
@@ -38,25 +29,25 @@ namespace Globe3DLight.Data
         public dvec3 Position
         {
             get => _position;
-            protected set => Update(ref _position, value);
+            protected set => RaiseAndSetIfChanged(ref _position, value);
         }
 
         public dmat4 ModelMatrix
         {
             get => _modelMatrix;
-            protected set => Update(ref _modelMatrix, value);
+            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public double Lon
         {
             get => _lon;
-            protected set => Update(ref _lon, value);
+            protected set => RaiseAndSetIfChanged(ref _lon, value);
         }
 
         public double Lat
         {
             get => _lat;
-            protected set => Update(ref _lat, value);
+            protected set => RaiseAndSetIfChanged(ref _lat, value);
         }
 
         private void Update()
@@ -78,11 +69,6 @@ namespace Globe3DLight.Data
 
             _modelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
             _position = new dvec3(ModelMatrix.Column3);
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

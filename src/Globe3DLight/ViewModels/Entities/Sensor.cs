@@ -1,51 +1,50 @@
-﻿using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Renderer;
-using Globe3DLight.Scene;
+﻿using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using System.Collections.Immutable;
+using Globe3DLight.Models.Entities;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
     public class Sensor : BaseEntity, IDrawable
     {
         private SensorRenderModel _renderModel;         
-        private Logical _logical;
+        private LogicalViewModel _logical;
+        private int _scanCounter = 0;
+        private dvec3 _pBegin0, _pBegin1;
 
         public SensorRenderModel RenderModel
         {
             get => _renderModel; 
-            set => Update(ref _renderModel, value); 
+            set => RaiseAndSetIfChanged(ref _renderModel, value); 
         }
 
-        public Logical Logical 
+        public LogicalViewModel Logical 
         {
             get => _logical; 
-            set => Update(ref _logical, value);
+            set => RaiseAndSetIfChanged(ref _logical, value);
         }
 
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-        private int _scanCounter = 0;
-        private dvec3 _pBegin0, _pBegin1;    
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (Logical.State is ISensorState sensorData)
+                if (Logical.State is SensorAnimator sensorData)
                 {
                     if (sensorData.Enable == true)
                     {
-                        var rotationNode = (Logical)Logical.Owner;
-                        if (rotationNode.State is IRotationState /*rotationData*/)
+                        var rotationNode = (LogicalViewModel)Logical.Owner;
+                        if (rotationNode.State is RotationAnimator /*rotationData*/)
                         {
-                            var orbitNode = (Logical)rotationNode.Owner;
-                            if (orbitNode.State is ISatelliteState satelliteState)
+                            var orbitNode = (LogicalViewModel)rotationNode.Owner;
+                            if (orbitNode.State is SatelliteAnimator satelliteState)
                             {
                                 //   double r = orbitData.Position.Length;
                                 //   var orbitRadius = r * scene.WorldScale;

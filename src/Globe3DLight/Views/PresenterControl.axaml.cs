@@ -6,13 +6,13 @@ using Avalonia.Media;
 using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.Visuals.Media.Imaging;
-using Globe3DLight.Renderer;
-using Globe3DLight.Containers;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.Modules.Renderer;
-using Globe3DLight.Renderer.Presenters;
+using Globe3DLight.ViewModels.Renderer.Presenters;
 using System.Diagnostics;
 using System.Linq;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.Views
 {
@@ -32,8 +32,8 @@ namespace Globe3DLight.Views
 
         private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
 
-        public static readonly StyledProperty<ScenarioContainer> ContainerProperty =
-            AvaloniaProperty.Register<PresenterControl, ScenarioContainer>(nameof(Container), null);
+        public static readonly StyledProperty<ScenarioContainerViewModel> ContainerProperty =
+            AvaloniaProperty.Register<PresenterControl, ScenarioContainerViewModel>(nameof(Container), null);
 
         public static readonly StyledProperty<IRenderContext> RendererProperty =
             AvaloniaProperty.Register<PresenterControl, IRenderContext>(nameof(Renderer), null);
@@ -41,7 +41,7 @@ namespace Globe3DLight.Views
         public static readonly StyledProperty<IPresenterContract> PresenterContractProperty =
             AvaloniaProperty.Register<PresenterControl, IPresenterContract>(nameof(PresenterContract), null);
 
-        public ScenarioContainer Container
+        public ScenarioContainerViewModel Container
         {
             get => GetValue(ContainerProperty);
             set => SetValue(ContainerProperty, value);
@@ -71,7 +71,7 @@ namespace Globe3DLight.Views
 
         internal struct CustomState
         {
-            public ScenarioContainer Container;
+            public ScenarioContainerViewModel Container;
             public IRenderContext Renderer;
         }
 

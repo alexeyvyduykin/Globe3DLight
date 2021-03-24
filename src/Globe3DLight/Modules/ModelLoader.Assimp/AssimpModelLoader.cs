@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using System.IO;
-using Globe3DLight.Geometry;
-using Globe3DLight.Geometry.Models;
+using Globe3DLight.Models.Geometry;
+using Globe3DLight.Models.Geometry.Models;
 using A = Assimp;
 using System.Linq;
+using Globe3DLight.ViewModels.Geometry;
+using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.Models;
 
 namespace Globe3DLight.ModelLoader.Assimp
 {

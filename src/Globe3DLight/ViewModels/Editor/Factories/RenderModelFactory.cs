@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Scene;
-using Globe3DLight.Renderer;
-using Globe3DLight.Geometry;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Geometry.Models;
 using System.Linq;
 using System.Collections.Immutable;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 using Microsoft.Extensions.Configuration;
 using System.IO;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
     public interface IRenderModelFactory
     {
@@ -47,7 +48,7 @@ namespace Globe3DLight.Editor
             _serviceProvider = serviceProvider;
         }
 
-        public Globe3DLight.Geometry.Models.IModel CreateCubeSphere()
+        public Globe3DLight.Models.Geometry.Models.IModel CreateCubeSphere()
         {
             var modelLoader = _serviceProvider.GetService<IModelLoader>();
 
@@ -359,7 +360,4 @@ namespace Globe3DLight.Editor
             return obj;
         }
     }
-
-
-
 }

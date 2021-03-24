@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 using A = OpenTK.Graphics.OpenGL;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-using Globe3DLight.Geometry;
+using Globe3DLight.Models.Geometry;
 using System.Collections.Immutable;
-using Globe3DLight.Image;
-using Globe3DLight.Geometry.Models;
+using Globe3DLight.Models.Image;
+using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
@@ -37,7 +39,7 @@ namespace Globe3DLight.Renderer.OpenTK
     //    }
     //}
 
-    internal class EarthDrawNode : DrawNode, Globe3DLight.Renderer.IEarthDrawNode, IDisposable
+    internal class EarthDrawNode : DrawNode, IEarthDrawNode, IDisposable
     {
         private readonly B.Context _context;
 
@@ -311,7 +313,7 @@ color = finalColor;
             u_lightPosition = ((B.Uniform<vec4>)sp.Uniforms["u_lightPosition"]);
             u_radius = ((B.Uniform<float>)sp.Uniforms["u_radius"]);
 
-            meshes = this.Earth.Meshes;
+            meshes = Earth.Meshes;
 
             if (meshes.Length != 6)
             {
@@ -600,7 +602,7 @@ color = finalColor;
             _currentLoadingTexture++;
         }
 
-        public override void OnDraw(object dc, dmat4 modelMatrix, Scene.ISceneState scene)
+        public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {                                
             if (ShowGlobe == true /*&& this.Earth.IsLoading == true*/)
             {
@@ -644,7 +646,7 @@ color = finalColor;
             }
         }
 
-        void SetUniforms(dmat4 modelMatrix, Scene.ISceneState sceneState)
+        void SetUniforms(dmat4 modelMatrix, ISceneState sceneState)
         {
             dmat4 model = modelMatrix;
             dmat4 view = sceneState.ViewMatrix;

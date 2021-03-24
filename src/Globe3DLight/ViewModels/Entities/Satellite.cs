@@ -1,45 +1,47 @@
-﻿using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Scene;
+﻿using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
-using Globe3DLight.Renderer;
+using Globe3DLight.Models.Renderer;
 using GlmSharp;
+using Globe3DLight.Models.Entities;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
     public class Satellite : BaseEntity, IDrawable, ITargetable, IChildren
     {
         private SatelliteRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
-        private Logical _logical;
+        private LogicalViewModel _logical;
     
         public SatelliteRenderModel RenderModel 
         {
             get => _renderModel; 
-            set => Update(ref _renderModel, value);
+            set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public Logical Logical
+        public LogicalViewModel Logical
         {
             get => _logical; 
-            set => Update(ref _logical, value);
+            set => RaiseAndSetIfChanged(ref _logical, value);
         }
+
         public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel; 
-            set => Update(ref _frameRenderModel, value); 
+            set => RaiseAndSetIfChanged(ref _frameRenderModel, value); 
         }
-
-
 
         public dmat4 InverseAbsoluteModel 
         {
             get
             {
-                if(((Logical)_logical?.Owner).State is IFrameable frameable)
+                if(((LogicalViewModel)_logical?.Owner).State is IFrameable frameable)
                 {
                     return frameable.ModelMatrix.Inverse;
                 }
@@ -48,19 +50,14 @@ namespace Globe3DLight.Entities
             }
         }
 
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (Logical.State is IRotationState rotationData)
+                if (Logical.State is RotationAnimator rotationData)
                 {
-                    var parent = (Logical)Logical.Owner;
-                    if (parent.State is ISatelliteState satelliteState)
+                    var parent = (LogicalViewModel)Logical.Owner;
+                    if (parent.State is SatelliteAnimator satelliteState)
                     {
                         //   double r = orbitData.Position.Length;
                         //    var orbitRadius = r * scene.WorldScale;

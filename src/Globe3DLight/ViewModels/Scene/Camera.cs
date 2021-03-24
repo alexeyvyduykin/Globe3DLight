@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
+using Globe3DLight.Models.Scene;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.ViewModels.Scene
 {
-    public abstract class BaseCamera : ObservableObject, ICamera
+    public abstract class BaseCamera : ViewModelBase, ICamera
     {
         private dvec3 _eye;
         private dvec3 _target;
@@ -18,19 +19,19 @@ namespace Globe3DLight.Scene
         public dvec3 Eye 
         {
             get => _eye; 
-            set => Update(ref _eye, value); 
+            set => RaiseAndSetIfChanged(ref _eye, value); 
         }
 
         public dvec3 Target 
         {
             get => _target; 
-            set => Update(ref _target, value); 
+            set => RaiseAndSetIfChanged(ref _target, value); 
         }
 
         public dvec3 Up
         {
             get => _up;
-            set => Update(ref _up, value); 
+            set => RaiseAndSetIfChanged(ref _up, value); 
         }
 
         public dvec3 Forward
@@ -44,11 +45,6 @@ namespace Globe3DLight.Scene
         }
 
         public abstract void LookAt(dvec3 eye, dvec3 target, dvec3 up);
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 
 }

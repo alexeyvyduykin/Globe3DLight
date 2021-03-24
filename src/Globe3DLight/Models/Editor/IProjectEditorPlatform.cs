@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.Models.Editor
 {
     public interface IProjectEditorPlatform
     {
         void OnExit();
+
         void OnOpen(string path);
 
         void OnSave();
@@ -20,6 +21,5 @@ namespace Globe3DLight.Editor
         void OnExportJson(object item);
 
         void OnExportObject(object item);
-
     }
 }

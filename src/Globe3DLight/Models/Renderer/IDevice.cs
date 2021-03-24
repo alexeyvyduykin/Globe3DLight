@@ -8,10 +8,9 @@ using GlmSharp;
 using Extensions;
 using System.Diagnostics;
 using System.Drawing;
-//using OpenTK.Graphics;
-using Globe3DLight.Geometry;
+using Globe3DLight.Models.Geometry;
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface IDevice
     {

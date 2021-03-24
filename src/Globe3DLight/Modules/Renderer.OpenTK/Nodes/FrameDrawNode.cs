@@ -1,10 +1,12 @@
 ﻿using GlmSharp;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using Globe3DLight.Renderer;
 using OpenTK.Graphics.OpenGL;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {

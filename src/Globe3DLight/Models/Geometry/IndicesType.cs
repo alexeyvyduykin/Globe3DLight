@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.Models.Geometry
 {
     public enum IndicesType
     {

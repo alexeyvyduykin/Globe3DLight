@@ -5,17 +5,19 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using GlmSharp;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Geometry;
-using Globe3DLight.Containers;
+using Globe3DLight.Models.Geometry;
+using Globe3DLight.ViewModels.Geometry;
+using Globe3DLight.ViewModels.Containers;
 using System.Collections.Immutable;
-using Globe3DLight.Scene;
-using Globe3DLight.Renderer;
-using Globe3DLight.Style;
-using Globe3DLight.Data;
-using Globe3DLight.Geometry.Models;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Style;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
@@ -42,8 +44,8 @@ namespace Globe3DLight.Renderer.OpenTK
             IndicesUnsignedShort indicesBase = new IndicesUnsignedShort();
             base.Indices = indicesBase;
 
-            base.PrimitiveType = Geometry.PrimitiveType.Triangles;
-            base.FrontFaceWindingOrder = Geometry.FrontFaceDirection.Cw;
+            base.PrimitiveType = Models.Geometry.PrimitiveType.Triangles;
+            base.FrontFaceWindingOrder = Models.Geometry.FrontFaceDirection.Cw;
 
             IList<vec2> positions = positionsAttribute.Values;
             IList<ushort> indices = indicesBase.Values;

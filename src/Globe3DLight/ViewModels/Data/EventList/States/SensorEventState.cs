@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
     public interface ISensorEventState : IEventState
     {
-        IShoot Shoot { get; }
+        Shoot Shoot { get; }
 
         int Direction { get; }
     }
 
     public class SensorEventState : ISensorEventState
     {
-        private readonly IShoot _shoot;
+        private readonly Shoot _shoot;
         private readonly int _direction;
         private readonly double _t;
 
-        public SensorEventState(double t, IShoot shoot, int direction)
+        public SensorEventState(double t, Shoot shoot, int direction)
         {
             _t = t;
             _shoot = shoot;
@@ -28,7 +29,7 @@ namespace Globe3DLight.Data
 
         public double Time => _t;
 
-        public IShoot Shoot => _shoot;
+        public Shoot Shoot => _shoot;
 
         public int Direction => _direction;
     }
