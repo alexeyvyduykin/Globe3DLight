@@ -9,6 +9,7 @@ using GlmSharp;
 using Globe3DLight.Models;
 using System.ComponentModel;
 using Globe3DLight.Models.Data;
+using System.Reactive.Disposables;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -31,6 +32,20 @@ namespace Globe3DLight.ViewModels.Containers
         private double _height;
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
         
+        public ScenarioContainerViewModel()
+        {
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(Width) || e.PropertyName == nameof(Height))
+                {
+                    if (SceneState.Camera is IArcballCamera arcballCamera)
+                    {
+                        arcballCamera.Resize((int)Width, (int)Height);
+                    }
+                }
+            };
+        }
+
         public ImmutableArray<LogicalViewModel> LogicalRoot
         {
             get => _logicalRoot;
@@ -208,6 +223,35 @@ namespace Globe3DLight.ViewModels.Containers
             {
                 scObj.Invalidate();
             }
+        }
+
+        public override IDisposable Subscribe(IObserver<(object sender, PropertyChangedEventArgs e)> observer)
+        {
+            var mainDisposable = new CompositeDisposable();
+            var disposablePropertyChanged = default(IDisposable);
+            var disposableTimePresenter = default(IDisposable);
+            var disposableShapes = default(CompositeDisposable);
+
+            ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);
+            ObserveObject(_timePresenter, ref disposableTimePresenter, mainDisposable, observer);
+            ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
+
+            void Handler(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(TimePresenter))
+                {
+                    ObserveObject(_timePresenter, ref disposableTimePresenter, mainDisposable, observer);
+                }
+
+                if (e.PropertyName == nameof(Entities))
+                {
+                    ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
+                }
+
+                observer.OnNext((sender, e));
+            }
+
+            return mainDisposable;
         }
     }
 }
