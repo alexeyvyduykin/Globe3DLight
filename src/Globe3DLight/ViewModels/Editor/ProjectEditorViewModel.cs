@@ -9,6 +9,9 @@ using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
 using Globe3DLight.Models;
 using Globe3DLight.Models.Editor;
+using System.Reactive.Disposables;
+using System.Reactive.Subjects;
+using System.ComponentModel;
 
 namespace Globe3DLight.ViewModels.Editor
 {
@@ -27,7 +30,7 @@ namespace Globe3DLight.ViewModels.Editor
         private ProjectContainerViewModel _project;
         private readonly Lazy<IEditorTool> _currentTool;
         private readonly Lazy<IEditorCanvasPlatform> _canvasPlatform;
-        private ProjectObserver _observer;
+        private IDisposable _observer;
         private readonly Lazy<IProjectEditorPlatform> _platform;
 
         public ProjectContainerViewModel Project
@@ -40,7 +43,7 @@ namespace Globe3DLight.ViewModels.Editor
             get => _projectPath;
             set => RaiseAndSetIfChanged(ref _projectPath, value);
         }
-        public ProjectObserver Observer
+        public IDisposable Observer
         {
             get => _observer;
             set => RaiseAndSetIfChanged(ref _observer, value);
@@ -352,44 +355,38 @@ namespace Globe3DLight.ViewModels.Editor
         {
             if (project != null)
             {
-                //Deselect();
-                //if (project is IImageCache imageCache)
-                //{
-                //    SetRenderersImageCache(imageCache);
-                //}
-                Project = project;
-        //        Project.History = new StackHistory();
+                Project = project;    
                 ProjectPath = path;
         //        IsProjectDirty = false;
-                Observer = new ProjectObserver(this);
+               
+                var propertyChangedSubject = new Subject<(object sender, PropertyChangedEventArgs e)>();
+                var propertyChangedDisposable = Project.Subscribe(propertyChangedSubject);
+                var observable = propertyChangedSubject.Subscribe(ProjectChanged);
+
+                Observer = new CompositeDisposable(propertyChangedDisposable, observable, propertyChangedSubject);
+
+                void ProjectChanged((object sender, PropertyChangedEventArgs e) arg)
+                {             
+                    // _project?.CurrentContainer?.InvalidateLayer();
+                    CanvasPlatform?.InvalidateControl?.Invoke();
+                    //IsProjectDirty = true;
+                }
             }
         }
 
         public void OnUnload()
         {
-            if (Observer != null)
+            if (Observer is { })
             {
                 Observer?.Dispose();
                 Observer = null;
             }
 
-            //if (Project?.History != null)
-            //{
-            //    Project.History.Reset();
-            //    Project.History = null;
-            //}
-
             if (Project != null)
             {
-           //     if (Project is IImageCache imageCache)
-           //     {
-           //         imageCache.PurgeUnusedImages(new HashSet<string>());
-           //     }
-           //     Deselect();
-           //     SetRenderersImageCache(null);
                 Project = null;
-           //     ProjectPath = string.Empty;
-           //     IsProjectDirty = false;
+                //     ProjectPath = string.Empty;
+                //     IsProjectDirty = false;
                 GC.Collect();
             }
         }

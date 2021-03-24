@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
+using System.ComponentModel;
+using System.Reactive.Disposables;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -10,6 +12,17 @@ namespace Globe3DLight.ViewModels.Containers
         private ImmutableArray<ScenarioContainerViewModel> _scenarios;
         private ScenarioContainerViewModel _currentScenario;
         private ViewModelBase _selected;
+
+        public ProjectContainerViewModel()
+        {
+            PropertyChanged += (s, e) => 
+            {
+                if (e.PropertyName == nameof(Selected))
+                {
+                    SetSelected(Selected);
+                }
+            };            
+        }
 
         public ImmutableArray<ScenarioContainerViewModel> Scenarios 
         { 
@@ -27,8 +40,7 @@ namespace Globe3DLight.ViewModels.Containers
         {
             get => _selected;
             set 
-            {                 
-                SetSelected(value);
+            {                             
                 RaiseAndSetIfChanged(ref _selected, value);
             }
         }
@@ -45,6 +57,28 @@ namespace Globe3DLight.ViewModels.Containers
             {
                 CurrentScenario = scenario;
             }
+        }
+
+        public override IDisposable Subscribe(IObserver<(object sender, PropertyChangedEventArgs e)> observer)
+        {
+            var mainDisposable = new CompositeDisposable();
+            var disposablePropertyChanged = default(IDisposable);
+            var disposableDocuments = default(CompositeDisposable);
+
+            ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);
+            ObserveList(_scenarios, ref disposableDocuments, mainDisposable, observer);
+
+            void Handler(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(Scenarios))
+                {
+                    ObserveList(_scenarios, ref disposableDocuments, mainDisposable, observer);
+                }
+
+                observer.OnNext((sender, e));
+            }
+
+            return mainDisposable;
         }
     }
 }
