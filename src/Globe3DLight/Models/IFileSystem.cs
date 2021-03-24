@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight
+namespace Globe3DLight.Models
 {
     public interface IFileSystem
     {

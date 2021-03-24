@@ -1,23 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Geometry.Models;
+using Globe3DLight.Models.Geometry.Models;
 using Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
 using GlmSharp;
 using System.Linq;
+using Globe3DLight.Models.Renderer;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-
     internal interface IModelRenderer
     {
         void Draw(ShaderProgram sp);
 
         void SetupTextures();
     }
-
-
 
     internal class ModelRenderer : IModelRenderer
     {

@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Globe3DLight.Models.Geometry;
 
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.ViewModels.Geometry
 {
-
-
-
     public abstract class VertexAttribute : IVertexAttribute
     {
         private readonly string _name;

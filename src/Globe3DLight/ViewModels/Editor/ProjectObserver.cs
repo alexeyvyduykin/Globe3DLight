@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using System.ComponentModel;
-using Globe3DLight.Entities;
+using Globe3DLight.ViewModels.Entities;
 using System.Linq;
-using Globe3DLight.Data;
-using Globe3DLight.Scene;
-using Globe3DLight.Time;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Time;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
     public class ProjectObserver : IDisposable
     {
-        private readonly ProjectEditor _editor;
+        private readonly ProjectEditorViewModel _editor;
         //private readonly Action _invalidateContainer;    
         private readonly Action _invalidateScenario;
         private readonly Action _invalidateShapes;
         private readonly Action _invalidateCamera;
 
-        public ProjectObserver(ProjectEditor editor)
+        public ProjectObserver(ProjectEditorViewModel editor)
         {
             if (editor?.Project != null)
             {
@@ -45,7 +45,7 @@ namespace Globe3DLight.Editor
         {
             if (_editor?.Project?.CurrentScenario != null)
             {
-                if (_editor.Project.CurrentScenario.SceneState.Camera is Scene.IArcballCamera arcballCamera)
+                if (_editor.Project.CurrentScenario.SceneState.Camera is IArcballCamera arcballCamera)
                 {
                     var w = _editor.Project.CurrentScenario.Width;
                     var h = _editor.Project.CurrentScenario.Height;
@@ -65,9 +65,9 @@ namespace Globe3DLight.Editor
 
         private void ObserveProject(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ProjectContainer.Scenarios))
+            if (e.PropertyName == nameof(ProjectContainerViewModel.Scenarios))
             {
-                var project = sender as ProjectContainer;
+                var project = sender as ProjectContainerViewModel;
                 Remove(project.Scenarios);
                 Add(project.Scenarios);
             }
@@ -82,14 +82,14 @@ namespace Globe3DLight.Editor
 
         private void ObserveScenario(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ScenarioContainer.Entities))
+            if (e.PropertyName == nameof(ScenarioContainerViewModel.Entities))
             {
-                var layer = sender as ScenarioContainer;
+                var layer = sender as ScenarioContainerViewModel;
                 Remove(layer.Entities);
                 Add(layer.Entities);
             }
 
-            if(e.PropertyName == nameof(ScenarioContainer.TimePresenter))
+            if(e.PropertyName == nameof(ScenarioContainerViewModel.TimePresenter))
             {
                 var timePresenter = sender as TimePresenter;
                 Remove(timePresenter);
@@ -116,7 +116,7 @@ namespace Globe3DLight.Editor
         //    }
         //}
 
-        private void Add(ProjectContainer project)
+        private void Add(ProjectContainerViewModel project)
         {
             if (project == null)
             {
@@ -153,7 +153,7 @@ namespace Globe3DLight.Editor
         //    }
         //}
 
-        private void Add(ScenarioContainer scenario)
+        private void Add(ScenarioContainerViewModel scenario)
         {
             if (scenario == null)
             {
@@ -178,7 +178,7 @@ namespace Globe3DLight.Editor
 
 
 
-        private void Remove(ScenarioContainer scenario)
+        private void Remove(ScenarioContainerViewModel scenario)
         {
             if (scenario == null)
             {
@@ -278,7 +278,7 @@ namespace Globe3DLight.Editor
 
 
 
-        private void Add(IEnumerable<ScenarioContainer> scenarios)
+        private void Add(IEnumerable<ScenarioContainerViewModel> scenarios)
         {
             if (scenarios == null)
             {
@@ -291,7 +291,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        private void Remove(IEnumerable<ScenarioContainer> scenarios)
+        private void Remove(IEnumerable<ScenarioContainerViewModel> scenarios)
         {
             if (scenarios == null)
             {
@@ -332,8 +332,8 @@ namespace Globe3DLight.Editor
 
         private void ObserveCamera(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ScenarioContainer.Width)
-                || e.PropertyName == nameof(ScenarioContainer.Height))
+            if (e.PropertyName == nameof(ScenarioContainerViewModel.Width)
+                || e.PropertyName == nameof(ScenarioContainerViewModel.Height))
             {
                 _invalidateCamera();
                 MarkAsDirty();

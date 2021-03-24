@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Geometry;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Renderer;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-
     internal class SunDrawNode : DrawNode, ISunDrawNode
     {
         private readonly B.Context _context;
@@ -325,7 +325,7 @@ vec3 color = temperatureColor * unColorMult;
         }
 
 
-        public override void OnDraw(object dc, dmat4 modelMatrix, Scene.ISceneState scene)
+        public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
             _sp.Bind();
 
@@ -357,7 +357,7 @@ vec3 color = temperatureColor * unColorMult;
 
                 _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Back;
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder =
-                    (mesh.FrontFaceWindingOrder == Globe3DLight.Geometry.FrontFaceDirection.Cw) ?
+                    (mesh.FrontFaceWindingOrder == Globe3DLight.Models.Geometry.FrontFaceDirection.Cw) ?
                     A.FrontFaceDirection.Cw : A.FrontFaceDirection.Ccw;
 
                 _drawState.RenderState.Blending.Enabled = true;
@@ -368,7 +368,7 @@ vec3 color = temperatureColor * unColorMult;
             }
         }
 
-        private void SetUniforms(dmat4 modelMatrix, Scene.ISceneState scene)
+        private void SetUniforms(dmat4 modelMatrix, ISceneState scene)
         {
             // modelMatrix = dmat4.Translate(sunData.Position)
 

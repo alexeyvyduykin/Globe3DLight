@@ -1,16 +1,16 @@
 ﻿using Globe3DLight.Input;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
     public class ProjectEditorInputTarget : IInputTarget
     {
-        private readonly ProjectEditor _editor;
+        private readonly ProjectEditorViewModel _editor;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjectEditorInputTarget"/> class.
         /// </summary>
         /// <param name="editor">The current <see cref="IProjectEditor"/> object.</param>
-        public ProjectEditorInputTarget(ProjectEditor editor)
+        public ProjectEditorInputTarget(ProjectEditorViewModel editor)
         {
             _editor = editor;
         }

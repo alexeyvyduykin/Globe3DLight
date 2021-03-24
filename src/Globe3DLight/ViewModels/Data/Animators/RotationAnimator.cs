@@ -3,38 +3,31 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using System.Diagnostics;
+using Globe3DLight.Models.Data;
 
-
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IRotationState : IState, IAnimator
-    {
-        dmat4 RotationMatrix { get; }
-
-        double GamDEG { get; }
-    }
-
-    public class RotationAnimator : ObservableObject, IRotationState
+    public class RotationAnimator : ViewModelBase, IState, IAnimator
     {      
         private readonly IEventList<RotationInterval> _rotationEvents;
         private dmat4 _rotationMatrix;
         private double _gamDEG;
 
+        public RotationAnimator(RotationData data)
+        {
+            _rotationEvents = Create(data.Rotations);
+        }
+
         public dmat4 RotationMatrix 
         {
             get => _rotationMatrix; 
-            protected set => Update(ref _rotationMatrix, value);
+            protected set => RaiseAndSetIfChanged(ref _rotationMatrix, value);
         }
 
         public double GamDEG
         {
             get => _gamDEG;
-            protected set => Update(ref _gamDEG, value);
-        }
-
-        public RotationAnimator(RotationData data)
-        {         
-            _rotationEvents = Create(data.Rotations);
+            protected set => RaiseAndSetIfChanged(ref _gamDEG, value);
         }
 
         private static IEventList<RotationInterval> Create(IList<RotationRecord> rotations)
@@ -61,12 +54,5 @@ namespace Globe3DLight.Data
             
             RotationMatrix = dmat4.Rotate(-glm.Radians(GamDEG), new dvec3(1.0f, 0.0f, 0.0f));
         }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
-
-
 }

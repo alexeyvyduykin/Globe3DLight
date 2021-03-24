@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.DatabaseProvider.PostgreSQL
 {
@@ -26,37 +26,17 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 s.TrueAnomaly
             }).ToList();
 
-            return new RetranslatorData()
-            {
-                Name = retranslator.Name,
-                Records = records,
-                TimeBegin = begin,
-                TimeEnd = begin + duration,
-                TimeStep = step,
-            };
+            return new RetranslatorData(retranslator.Name, records, begin, begin + duration, step);
         }
 
         public static GroundStationData ToData(this GroundStation groundStation)
         {
-            return new GroundStationData()
-            {
-                Name = groundStation.Name,
-                Lon = groundStation.Lon,
-                Lat = groundStation.Lat,
-                Elevation = 0.0,
-                EarthRadius = 6371.0,
-            };
+            return new GroundStationData(groundStation.Name, groundStation.Lon, groundStation.Lat, 0.0, 6371.0);
         }
 
         public static GroundObjectData ToData(this GroundObject groundObject)
         {
-            return new GroundObjectData()
-            {
-                Name = groundObject.Name,
-                Lon = groundObject.Lon,
-                Lat = groundObject.Lat,
-                EarthRadius = 6371.0,
-            };
+            return new GroundObjectData(groundObject.Name, groundObject.Lon, groundObject.Lat, 6371.0);
         }
 
         public static SatelliteData ToSatelliteData(this Satellite satellite)
@@ -79,14 +59,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 s.TrueAnomaly
             }).ToList();
 
-            return new SatelliteData()
-            {
-                Name = satellite.Name,
-                TimeBegin = begin,
-                TimeEnd = begin + duration,
-                TimeStep = step,
-                Records = records,
-            };
+            return new SatelliteData(satellite.Name, records, begin, begin + duration, step);
         }
         
         public static OrbitData ToOrbitData(this Satellite satellite)
@@ -100,12 +73,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
                 s.TrueAnomaly
             }).ToList();
 
-            return new OrbitData()
-            {
-                SatelliteName = satellite.Name,
-                Name = "Orbit",
-                Records = records,
-            };
+            return new OrbitData(satellite.Name, "Orbit", records);
         }
         
         public static RotationData ToRotationData(this Satellite satellite)
@@ -113,22 +81,10 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
             var begin = satellite.LifetimeBegin;
             var duration = satellite.LifetimeDuration;
          
-            var rots = satellite.SatelliteRotations.OrderBy(s => s.Begin).Select(s =>
-new RotationRecord()
-{
-    BeginTime = s.Begin,
-    EndTime = s.Begin + s.Duration,
-    Angle = s.ToAngle
-}).ToList();
+            var rots = satellite.SatelliteRotations.OrderBy(s => s.Begin).Select(s => 
+            new RotationRecord(s.Begin, s.Begin + s.Duration, s.ToAngle)).ToList();
 
-            return new RotationData()
-            {
-                SatelliteName = satellite.Name,
-                Name = "Rotation",
-                TimeBegin = begin,
-                TimeEnd = begin + duration,
-                Rotations = rots,
-            };
+            return new RotationData(satellite.Name, "Rotation", rots, begin, begin + duration);
         }
 
         public static SensorData ToSensorData(this Satellite satellite)
@@ -136,25 +92,10 @@ new RotationRecord()
             var begin = satellite.LifetimeBegin;
             var duration = satellite.LifetimeDuration;
 
-            var shoots = satellite.SatelliteShootings.OrderBy(s => s.Begin).Select(s => new ShootingRecord()
-            {
-                BeginTime = s.Begin,
-                EndTime = s.Begin + s.Duration,
-                Gam1 = s.Gam1,
-                Gam2 = s.Gam2,
-                Range1 = s.Range1,
-                Range2 = s.Range2,
-                TargetName = s.GroundObject.Name,
-            }).ToList();
+            var shoots = satellite.SatelliteShootings.OrderBy(s => s.Begin).Select(s => 
+            new ShootingRecord(s.Begin, s.Begin + s.Duration, s.Gam1, s.Gam2, s.Range1, s.Range2, s.GroundObject.Name)).ToList();
 
-            return new SensorData()
-            {
-                SatelliteName = satellite.Name,
-                Name = "SAR",
-                TimeBegin = begin,
-                TimeEnd = begin + duration,
-                Shootings = shoots,
-            };
+            return new SensorData(satellite.Name, "SAR", shoots, begin, begin + duration);
         }
 
         public static AntennaData ToAntennaData(this Satellite satellite)
@@ -162,30 +103,15 @@ new RotationRecord()
             var begin = satellite.LifetimeBegin;
             var duration = satellite.LifetimeDuration;
 
-            var arr1 = satellite.SatelliteToGroundStationTransfers.Select(s => new TranslationRecord()
-            {
-                BeginTime = s.Begin,
-                EndTime = s.Begin + s.Duration,
-                Target = s.GroundStation.Name,
-            }).ToList();
+            var arr1 = satellite.SatelliteToGroundStationTransfers.Select(s => 
+            new TranslationRecord(s.Begin, s.Begin + s.Duration, s.GroundStation.Name)).ToList();
 
-            var arr2 = satellite.SatelliteToRetranslatorTransfers.Select(s => new TranslationRecord()
-            {
-                BeginTime = s.Begin,
-                EndTime = s.Begin + s.Duration,
-                Target = s.Retranslator.Name,
-            }).ToList();
+            var arr2 = satellite.SatelliteToRetranslatorTransfers.Select(s => 
+            new TranslationRecord(s.Begin, s.Begin + s.Duration, s.Retranslator.Name)).ToList();
 
             var arr = arr1.Union(arr2).OrderBy(s => s.BeginTime).ToList();
 
-            return new AntennaData()
-            {
-                SatelliteName = satellite.Name,
-                Name = "TransmitAntenna",
-                TimeBegin = begin,
-                TimeEnd = begin + duration,
-                Translations = arr,
-            };
+            return new AntennaData(satellite.Name, "TransmitAntenna", arr, begin, begin + duration);
         }
 
         public static SunData ToSunData(this InitialCondition initialCondition)
@@ -203,24 +129,12 @@ new RotationRecord()
                 initialCondition.SunPositionYend,
                 initialCondition.SunPositionZend);
 
-            return new SunData()
-            {
-                Name = "Sun",
-                TimeBegin = begin,
-                TimeEnd = begin + duration,
-                Position0 = pos0,
-                Position1 = pos1,
-            };
+            return new SunData("Sun", pos0, pos1, begin, begin + duration);
         }
 
-        public static J2000Data ToJ2000Data(this InitialCondition initialCondition)
+        public static EarthData ToJ2000Data(this InitialCondition initialCondition)
         {
-            return new J2000Data()
-            {
-                Name = "Earth",
-                Epoch = DateTime.FromOADate(initialCondition.JulianDateOnTheDay - 2415018.5),
-                AngleDeg = initialCondition.EarthAngleBegin,
-            };
+            return new EarthData("Earth", DateTime.FromOADate(initialCondition.JulianDateOnTheDay - 2415018.5), initialCondition.EarthAngleBegin);
         }
     }
 }

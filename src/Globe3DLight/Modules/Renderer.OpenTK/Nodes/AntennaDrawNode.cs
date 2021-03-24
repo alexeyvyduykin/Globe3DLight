@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 using Globe3DLight.Renderer.OpenTK.Core;
 using OpenTK.Graphics.OpenGL;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-
-    internal class AntennaDrawNode : DrawNode, Globe3DLight.Renderer.IAntennaDrawNode
+    internal class AntennaDrawNode : DrawNode, IAntennaDrawNode
     {
 
        // private readonly ShaderProgram sp;

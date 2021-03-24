@@ -1,9 +1,10 @@
 ﻿using System;
 using Avalonia;
 using Avalonia.Controls;
-//using Avalonia.Controls.PanAndZoom;
-using Globe3DLight.Editor;
+using Globe3DLight.ViewModels.Editor;
 using Globe3DLight.Input;
+using Globe3DLight.Editor;
+using Globe3DLight.Models.Editor;
 
 namespace Globe3DLight.Behaviors
 {
@@ -22,7 +23,7 @@ namespace Globe3DLight.Behaviors
 
         public void InvalidateChild(double zoomX, double zoomY, double offsetX, double offsetY)
         {
-            if (!(_control.DataContext is ProjectEditor projectEditor))
+            if (!(_control.DataContext is ProjectEditorViewModel projectEditor))
             {
                 return;
             }
@@ -45,7 +46,7 @@ namespace Globe3DLight.Behaviors
 
         public void Attach()
         {
-            if (!(_control.DataContext is ProjectEditor projectEditor))
+            if (!(_control.DataContext is ProjectEditorViewModel projectEditor))
             {
                 return;
             }
@@ -83,7 +84,7 @@ namespace Globe3DLight.Behaviors
 
         public void Detach()
         {
-            if (!(_control.DataContext is ProjectEditor projectEditor))
+            if (!(_control.DataContext is ProjectEditorViewModel projectEditor))
             {
                 return;
             }

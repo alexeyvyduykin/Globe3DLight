@@ -2,36 +2,11 @@
 using System.Collections.Generic;
 using GlmSharp;
 using System.Linq;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-
-    public interface ISensorState : IState, IAnimator
-    {
-        bool Enable { get; }
-
-        IShoot Shoot { get; }
-
-        int Direction { get; }
-    }
-
-    public interface IScan //: IObservableObject
-    {
-        dvec3 p0 { get; set; }
-        dvec3 p1 { get; set; }
-        dvec3 p2 { get; set; }
-        dvec3 p3 { get; set; }
-    }
-
-    public interface IShoot //: IObservableObject
-    {
-        dvec3 p0 { get; set; }
-        dvec3 p1 { get; set; }
-        dvec3 p2 { get; set; }
-        dvec3 p3 { get; set; }
-    }
-
-    public class Scan : ObservableObject, IScan
+    public class Scan : ViewModelBase
     {
         private dvec3 _p0;
         private dvec3 _p1;
@@ -41,22 +16,25 @@ namespace Globe3DLight.Data
         public dvec3 p0
         {
             get => _p0;
-            set => Update(ref _p0, value);
+            set => RaiseAndSetIfChanged(ref _p0, value);
         }
+
         public dvec3 p1
         {
             get => _p1;
-            set => Update(ref _p1, value);
+            set => RaiseAndSetIfChanged(ref _p1, value);
         }
+
         public dvec3 p2
         {
             get => _p2;
-            set => Update(ref _p2, value);
+            set => RaiseAndSetIfChanged(ref _p2, value);
         }
+
         public dvec3 p3
         {
             get => _p3;
-            set => Update(ref _p3, value);
+            set => RaiseAndSetIfChanged(ref _p3, value);
         }
 
         public override bool IsDirty()
@@ -65,19 +43,13 @@ namespace Globe3DLight.Data
             return isDirty;
         }
 
-        /// <inheritdoc/>
         public override void Invalidate()
         {
             base.Invalidate();
         }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 
-    public class Shoot : ObservableObject, IShoot
+    public class Shoot : ViewModelBase
     {
         private dvec3 _p0;
         private dvec3 _p1;
@@ -87,22 +59,22 @@ namespace Globe3DLight.Data
         public dvec3 p0
         {
             get => _p0;
-            set => Update(ref _p0, value);
+            set => RaiseAndSetIfChanged(ref _p0, value);
         }
         public dvec3 p1
         {
             get => _p1;
-            set => Update(ref _p1, value);
+            set => RaiseAndSetIfChanged(ref _p1, value);
         }
         public dvec3 p2
         {
             get => _p2;
-            set => Update(ref _p2, value);
+            set => RaiseAndSetIfChanged(ref _p2, value);
         }
         public dvec3 p3
         {
             get => _p3;
-            set => Update(ref _p3, value);
+            set => RaiseAndSetIfChanged(ref _p3, value);
         }
 
         public override bool IsDirty()
@@ -110,48 +82,42 @@ namespace Globe3DLight.Data
             var isDirty = base.IsDirty();
             return isDirty;
         }
-
-        /// <inheritdoc/>
+    
         public override void Invalidate()
         {
             base.Invalidate();
         }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 
-    public class SensorAnimator : ObservableObject, ISensorState
+    public class SensorAnimator : ViewModelBase, IState, IAnimator
     {      
         private readonly IEventList<SensorInterval> _shootingEvents;
         private bool _enable;
-        private IShoot _shoot;
+        private Shoot _shoot;
         private int _direction;
+
+        public SensorAnimator(SensorData data)
+        {
+            _shootingEvents =
+                data.Shootings.Select(s => new SensorInterval(s.BeginTime, s.EndTime, s.Gam1, s.Gam2, s.Range1, s.Range2)).ToEventList();
+        }
 
         public bool Enable
         {
             get => _enable;
-            protected set => Update(ref _enable, value);
+            protected set => RaiseAndSetIfChanged(ref _enable, value);
         }
 
-        public IShoot Shoot
+        public Shoot Shoot
         {
             get => _shoot;
-            protected set => Update(ref _shoot, value);
+            protected set => RaiseAndSetIfChanged(ref _shoot, value);
         }
 
         public int Direction
         {
             get => _direction;
-            protected set => Update(ref _direction, value);
-        }
-
-        public SensorAnimator(SensorData data)
-        {                      
-            _shootingEvents = 
-                data.Shootings.Select(s => new SensorInterval(s.BeginTime, s.EndTime, s.Gam1, s.Gam2, s.Range1, s.Range2)).ToEventList();
+            protected set => RaiseAndSetIfChanged(ref _direction, value);
         }
 
         public void Animate(double t)
@@ -168,11 +134,6 @@ namespace Globe3DLight.Data
 
                 Direction = activeState.Direction;
             }
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.Immutable;
+using Globe3DLight.Models.Geometry;
 
-
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.ViewModels.Geometry
 {
-
     public class AMesh : IAMesh
     {
         // private readonly IVertexAttributeCollection _attributes;

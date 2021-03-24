@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Geometry;
-using Globe3DLight.Geometry.Models;
+using Globe3DLight.Models.Geometry;
+using Globe3DLight.Models.Geometry.Models;
 
-namespace Globe3DLight
+namespace Globe3DLight.Models
 {
     public interface IModelLoader
     {

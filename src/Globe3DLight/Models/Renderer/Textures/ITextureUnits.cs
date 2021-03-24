@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface ITextureUnits : ICleanableObserver, IEnumerable
     {

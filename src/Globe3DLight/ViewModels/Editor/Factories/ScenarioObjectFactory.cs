@@ -1,40 +1,41 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Entities;
-using Globe3DLight.Scene;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Scene;
 using System.Linq;
 using System.Collections.Immutable;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using GlmSharp;
 using System.Threading;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
     public interface IScenarioObjectFactory
     {
-        Spacebox CreateSpacebox(string name, Logical parent);
+        Spacebox CreateSpacebox(string name, LogicalViewModel parent);
 
-        Earth CreateEarth(string name, Logical parent);
+        Earth CreateEarth(string name, LogicalViewModel parent);
 
-        Satellite CreateSatellite(string name, Logical parent);
+        Satellite CreateSatellite(string name, LogicalViewModel parent);
 
-        Sun CreateSun(string name, Logical parent);
+        Sun CreateSun(string name, LogicalViewModel parent);
 
-        Sensor CreateSensor(string name, Logical parent);
+        Sensor CreateSensor(string name, LogicalViewModel parent);
 
-        GroundStation CreateGroundStation(string name, Logical parent);
+        GroundStation CreateGroundStation(string name, LogicalViewModel parent);
 
-        EntityList CreateEntityList(string name, LogicalCollection parent, IEnumerable<BaseEntity> values);
+        EntityList CreateEntityList(string name, LogicalCollectionViewModel parent, IEnumerable<BaseEntity> values);
 
-        GroundObject CreateGroundObject(string name, Logical parent);
+        GroundObject CreateGroundObject(string name, LogicalViewModel parent);
 
-        Retranslator CreateRetranslator(string name, Logical parent);
+        Retranslator CreateRetranslator(string name, LogicalViewModel parent);
 
-        Antenna CreateAntenna(string name, Logical parent);
+        Antenna CreateAntenna(string name, LogicalViewModel parent);
 
-        Orbit CreateOrbit(string name, Logical parent);
+        Orbit CreateOrbit(string name, LogicalViewModel parent);
 
         ISceneState CreateSceneState();
 
@@ -56,7 +57,7 @@ namespace Globe3DLight.Editor
             _serviceProvider = serviceProvider;
         }
 
-        public Spacebox CreateSpacebox(string name, Logical parent)
+        public Spacebox CreateSpacebox(string name, LogicalViewModel parent)
         {         
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -72,7 +73,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Earth CreateEarth(string name, Logical parent)
+        public Earth CreateEarth(string name, LogicalViewModel parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
          
@@ -89,7 +90,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Satellite CreateSatellite(string name, Logical parent)
+        public Satellite CreateSatellite(string name, LogicalViewModel parent)
         {       
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -106,7 +107,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Sun CreateSun(string name, Logical parent)
+        public Sun CreateSun(string name, LogicalViewModel parent)
         { 
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
                         
@@ -122,7 +123,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Sensor CreateSensor(string name, Logical parent)
+        public Sensor CreateSensor(string name, LogicalViewModel parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -138,7 +139,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Antenna CreateAntenna(string name, Logical parent)
+        public Antenna CreateAntenna(string name, LogicalViewModel parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -156,7 +157,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Orbit CreateOrbit(string name, Logical parent)
+        public Orbit CreateOrbit(string name, LogicalViewModel parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -172,7 +173,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public GroundStation CreateGroundStation(string name, Logical parent)
+        public GroundStation CreateGroundStation(string name, LogicalViewModel parent)
         {      
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -189,7 +190,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public EntityList CreateEntityList(string name, LogicalCollection parent, IEnumerable<BaseEntity> values)
+        public EntityList CreateEntityList(string name, LogicalCollectionViewModel parent, IEnumerable<BaseEntity> values)
         {           
             var builder = ImmutableArray.CreateBuilder<BaseEntity>();
             builder.AddRange(values);
@@ -206,7 +207,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public GroundObject CreateGroundObject(string name, Logical parent)
+        public GroundObject CreateGroundObject(string name, LogicalViewModel parent)
         {        
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -223,7 +224,7 @@ namespace Globe3DLight.Editor
             return obj;
         }
 
-        public Retranslator CreateRetranslator(string name, Logical parent)
+        public Retranslator CreateRetranslator(string name, LogicalViewModel parent)
         {         
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 

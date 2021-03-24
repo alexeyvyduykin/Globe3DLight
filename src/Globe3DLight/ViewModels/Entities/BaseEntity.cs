@@ -2,40 +2,26 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.Immutable;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Scene;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
-    public abstract class BaseEntity : ObservableObject//, IEntity
+    public abstract class BaseEntity : BaseContainerViewModel
     {
         private ImmutableArray<BaseEntity> _children;
-        private LogicalCollection _logicalCollection;
-        private bool _isVisible;
-        private bool _isExpanded;
+        private LogicalCollectionViewModel _logicalCollection;
 
         public ImmutableArray<BaseEntity> Children
         {
             get => _children;
-            set => Update(ref _children, value);
+            set => RaiseAndSetIfChanged(ref _children, value);
         }
        
-
-        public LogicalCollection LogicalCollection
+        public LogicalCollectionViewModel LogicalCollection
         {
             get => _logicalCollection;
-            set => Update(ref _logicalCollection, value);
-        }
-
-        public bool IsVisible
-        {
-            get => _isVisible;
-            set => Update(ref _isVisible, value);
-        }
-
-        public bool IsExpanded 
-        {
-            get => _isExpanded; 
-            set => Update(ref _isExpanded, value); 
+            set => RaiseAndSetIfChanged(ref _logicalCollection, value);
         }
 
         public override bool IsDirty()

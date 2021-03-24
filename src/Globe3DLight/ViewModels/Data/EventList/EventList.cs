@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 using System.Linq;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
     public class EventList<T> : IEventList<T> where T : IEventInterval
     {

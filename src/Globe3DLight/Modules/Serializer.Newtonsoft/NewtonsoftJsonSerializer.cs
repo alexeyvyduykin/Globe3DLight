@@ -1,5 +1,5 @@
 ﻿using System;
-using Globe3DLight;
+using Globe3DLight.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 

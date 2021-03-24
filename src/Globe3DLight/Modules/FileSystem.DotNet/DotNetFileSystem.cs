@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Globe3DLight;
+using Globe3DLight.Models;
 
 namespace Globe3DLight.FileSystem.DotNet
 {

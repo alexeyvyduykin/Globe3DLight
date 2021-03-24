@@ -2,23 +2,25 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.Containers;
-using Globe3DLight.Data;
-using Globe3DLight.Editor;
-using Globe3DLight.Entities;
-using Globe3DLight.Scene;
-using Globe3DLight.Time;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.Models.Data;
+using Globe3DLight.ViewModels.Editor;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Time;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Editor;
 
-
-namespace Globe3DLight.Designer
+namespace Globe3DLight.ViewModels.Designer
 {
     public class DesignerContext
     {
-        public static ProjectEditor Editor { get; set; }
+        public static ProjectEditorViewModel Editor { get; set; }
 
-        public static ScenarioContainer Scenario { get; set; }
+        public static ScenarioContainerViewModel Scenario { get; set; }
 
-        public static ProjectContainer Project { get; set; }
+        public static ProjectContainerViewModel Project { get; set; }
 
         public static SliderTimePresenter SliderTimePresenter { get; set; }
 
@@ -30,15 +32,15 @@ namespace Globe3DLight.Designer
 
         public static Sensor Sensor { get; set; }
 
-        public static Logical SatelliteNode { get; set; }
+        public static LogicalViewModel SatelliteNode { get; set; }
 
-        public static Logical SensorNode { get; set; }
+        public static LogicalViewModel SensorNode { get; set; }
 
-        public static Logical RotationNode { get; set; }
+        public static LogicalViewModel RotationNode { get; set; }
 
-        public static Logical SunNode { get; set; }
+        public static LogicalViewModel SunNode { get; set; }
 
-        public static Logical J2000Node { get; set; }
+        public static LogicalViewModel J2000Node { get; set; }
 
         public static SatelliteData SatelliteData { get; set; }
 
@@ -48,7 +50,7 @@ namespace Globe3DLight.Designer
 
         public static SunData SunData { get; set; }
 
-        public static J2000Data J2000Data { get; set; }
+        public static EarthData J2000Data { get; set; }
 
         public static RetranslatorData RetranslatorData { get; set; }
 
@@ -83,7 +85,7 @@ namespace Globe3DLight.Designer
 
             // Editor
 
-            Editor = serviceProvider.GetService<ProjectEditor>();
+            Editor = serviceProvider.GetService<ProjectEditorViewModel>();
 
             SliderTimePresenter = factory.CreateSliderTimePresenter(begin, duration);// serviceProvider.GetService<ISceneTimer>();
 
@@ -127,10 +129,10 @@ namespace Globe3DLight.Designer
             RotationData = DataDesigner.RotationData;
             SensorData = DataDesigner.SensorData;
             SunData = DataDesigner.SunData;
-            J2000Data = new J2000Data { Epoch = DateTime.Now, AngleDeg = 120.0 };
+            J2000Data = new EarthData("", DateTime.Now, 120.0);
             RetranslatorData = DataDesigner.RetranslatorData;
             AntennaData = DataDesigner.AntennaData;
-            GroundStationData = new GroundStationData { Lon = 36.0, Lat = 42.17, Elevation = 0.135, EarthRadius = 6371.0 };
+            GroundStationData = new GroundStationData("", 36.0, 42.17, 0.135, 6371.0);
 
             // Data
 
@@ -183,10 +185,8 @@ namespace Globe3DLight.Designer
 
             Sensor = objFactory.CreateSensor("Sensor1", null);
 
-            Project.AddChildFrame(Project.CurrentScenario.LogicalTreeNodeRoot.FirstOrDefault(),
+            Project.AddChildFrame(Project.CurrentScenario.LogicalRoot.FirstOrDefault(),
                 factory.CreateLogical("Frame1", dataFactory.CreateFrameState()));
-
-
 
             //   Template = factory.CreateTemplateContainer();
 
@@ -214,140 +214,57 @@ namespace Globe3DLight.Designer
         //public IList<(double x, double y, double z, double vx, double vy, double vz, double u)> Records { get; set; }
 
         public static SatelliteData SatelliteData =>
-                new SatelliteData()
-                {
-                    Records = new List<double[]>()
+            new SatelliteData("",
+                    new List<double[]>()
                     {
                         new double[] { 7000.0, -6800.0, 6750.0, 100.0, -150.0, 80.0, 0.0 },
                         new double[] { 7000.0, -6800.0, 6750.0, 100.0, -150.0, 80.0, 1.0 },
                     },
-                    TimeBegin = 0.0,
-                    TimeEnd = 86400.0,
-                    TimeStep = 60.0,
-                };
+                    0.0, 86400.0, 60.0);
 
         public static RetranslatorData RetranslatorData =>
-                new RetranslatorData()
-                {
-                    Records = new List<double[]>()
+                new RetranslatorData("",
+                    new List<double[]>()
                     {
                         new double[] { 12000.0, -11500.0, 11750.0, 0.0 },
                         new double[] { 13000.0, -12500.0, 12750.0, 3.0 },
                     },
-
-                    TimeBegin = 0.0,
-                    TimeEnd = 86400.0,
-                    TimeStep = 60.0,
-                };
+                    0.0, 86400.0, 60.0);
 
         public static SensorData SensorData =>
-        new SensorData()
-        {
-            Shootings = new List<ShootingRecord>()
+        new SensorData("", "",         
+            new List<ShootingRecord>()
             {
-                new ShootingRecord()
-                {
-                    BeginTime = 0.0,
-                    EndTime = 10.0,
-                    Gam1 = 0.12,
-                    Gam2 = 0.24,
-                    Range1 = 550,
-                    Range2 = 600,
-                    TargetName = "GroundObject0043"
-                } ,
-                new ShootingRecord()
-                {
-                    BeginTime = 26.0,
-                    EndTime = 35.0,
-                    Gam1 = 0.12,
-                    Gam2 = 0.24,
-                    Range1 = 534,
-                    Range2 = 567,
-                    TargetName = "GroundObject0634"
-                },
-                new ShootingRecord()
-                {
-                    BeginTime = 56.0,
-                    EndTime = 67.0,
-                    Gam1 = -0.22,
-                    Gam2 = -0.24,
-                    Range1 = 554,
-                    Range2 = 577,
-                    TargetName = "GroundObject0234"
-                },
+                new ShootingRecord(0.0, 10.0, 0.12, 0.24, 550, 600, "GroundObject0043"),
+                new ShootingRecord(26.0, 35.0, 0.12, 0.24, 534, 567, "GroundObject0634"),
+                new ShootingRecord(56.0, 67.0, -0.22, -0.24, 554, 577, "GroundObject0234"),
             },
-            TimeBegin = 0.0,
-            TimeEnd = 86400.0,
-        };
+            0.0, 86400.0);
 
-        public static AntennaData AntennaData =>
-        new AntennaData()
-        {
-            Translations = new List<TranslationRecord>()
-            {
-                new TranslationRecord()
-                {
-                    BeginTime = 0.0,
-                    EndTime = 10.0,
-                    Target = "RTR0000001",
-                },
-                new TranslationRecord()
-                {
-                    BeginTime = 17.0,
-                    EndTime = 23.0,
-                    Target = "RTR0000002",
-                },
-                new TranslationRecord()
-                {
-                    BeginTime = 56.0,
-                    EndTime = 60.0,
-                    Target = "GST0000002",
-                },
-            },
-
-            TimeBegin = 0.0,
-            TimeEnd = 86400.0,
-        };
+        public static AntennaData AntennaData =>      
+            new AntennaData("", "",                                   
+                new List<TranslationRecord>()            
+                {                                   
+                    new TranslationRecord(0.0, 10.0, "RTR0000001"),                                               
+                    new TranslationRecord(17.0, 23.0, "RTR0000002"),               
+                    new TranslationRecord(56.0, 60.0, "GST0000002")           
+                },           
+                0.0, 86400.0);
 
         public static RotationData RotationData =>
-            new RotationData()
-            {
-                Rotations = new List<RotationRecord>()
-            {
-                new RotationRecord()
-                {
-                    BeginTime = 0.0,
-                    EndTime = 10.0,
-                    Angle = 25.0
-                },
-                new RotationRecord()
-                {
-                    BeginTime = 12.0,
-                    EndTime = 15.0,
-                    Angle = -25.0
-                },
+            new RotationData("", "",               
+                new List<RotationRecord>()            
+                {               
+                    new RotationRecord(0.0, 10.0, 25.0),                
+                    new RotationRecord(12.0, 15.0, -25.0),                
+                    new RotationRecord(22.0, 30.0, 25.0)
+                },           
+                0.0, 86400.0);
 
-                new RotationRecord()
-                {
-                    BeginTime = 22.0,
-                    EndTime = 30.0,
-                    Angle = 25.0
-                },
-            },
-                TimeBegin = 0.0,
-                TimeEnd = 86400.0,
-            };
-
-        public static SunData SunData =>
-        new SunData()
-        {
-            Position0 = new GlmSharp.dvec3(40000.0, -42000.0, 41500.0),
-
-            Position1 = new GlmSharp.dvec3(38000.0, -44000.0, 37500.0),
-
-            TimeBegin = 0.0,
-
-            TimeEnd = 86400.0,
-        };
+        public static SunData SunData =>       
+            new SunData("",           
+                new GlmSharp.dvec3(40000.0, -42000.0, 41500.0),             
+                new GlmSharp.dvec3(38000.0, -44000.0, 37500.0),            
+                0.0, 86400.0);
     }
 }

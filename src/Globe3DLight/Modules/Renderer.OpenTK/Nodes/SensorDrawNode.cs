@@ -2,16 +2,18 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    internal class SensorDrawNode : DrawNode, Globe3DLight.Renderer.ISensorDrawNode
+    internal class SensorDrawNode : DrawNode, ISensorDrawNode
     {
-        private B.Device _device;
+        private readonly B.Device _device;
         private readonly B.ShaderProgram sp;
         private readonly SensorRenderModel _sensor;
 
@@ -113,7 +115,7 @@ void main()
 
         public SensorDrawNode(SensorRenderModel sensor)
         {
-            this._sensor = sensor;
+            _sensor = sensor;
 
             _device = new B.Device();
 
@@ -122,8 +124,8 @@ void main()
             A.GL.BindAttribLocation(sp.Handle, (int)0, "POSITION");
         }
 
-        private IScan _scan;
-        private IShoot _shoot;
+        private Scan _scan;
+        private Shoot _shoot;
         public override void UpdateGeometry()
         {
             _scan = Sensor.Scan;
@@ -139,7 +141,7 @@ void main()
             RenderShoot(_shoot, modelMatrix, scene);
             RenderScan(_scan, modelMatrix, scene);
         }
-        public void RenderShoot(IShoot shoot, dmat4 modelMatrix, ISceneState scene)
+        public void RenderShoot(Shoot shoot, dmat4 modelMatrix, ISceneState scene)
         {
 
             A.GL.Enable(A.EnableCap.CullFace);
@@ -169,7 +171,7 @@ void main()
             A.GL.Disable(A.EnableCap.CullFace);
         }
 
-        public void RenderScan(IScan scan, dmat4 modelMatrix, ISceneState scene)
+        public void RenderScan(Scan scan, dmat4 modelMatrix, ISceneState scene)
         {
             dmat4 mvp = scene.ViewMatrix;// Camera.ViewMatrix;// * modelMatrix;
 

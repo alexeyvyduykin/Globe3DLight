@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Geometry;
-using Globe3DLight.Scene;
+using Globe3DLight.ViewModels.Geometry;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Scene;
 using GlmSharp;
-using Globe3DLight.Style;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Style;
+using Globe3DLight.ViewModels.Containers;
 
-
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface IRenderContext
     {
-        void DrawScenario(object dc, ScenarioContainer container);
+        void DrawScenario(object dc, ScenarioContainerViewModel container);
 
         void DrawSun(object dc, SunRenderModel sun, dmat4 modelMatrix, ISceneState scene);
         

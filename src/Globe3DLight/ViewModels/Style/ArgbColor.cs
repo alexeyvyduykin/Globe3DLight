@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using Globe3DLight.Models.Style;
 
-namespace Globe3DLight.Style
+namespace Globe3DLight.ViewModels.Style
 {
-    public class ArgbColor : ObservableObject, IArgbColor
+    public class ArgbColor : ViewModelBase, IArgbColor
     {
         private byte _a;
         private byte _r;
@@ -17,28 +18,28 @@ namespace Globe3DLight.Style
         public byte A
         {
             get => _a;
-            set => Update(ref _a, value);
+            set => RaiseAndSetIfChanged(ref _a, value);
         }
 
         /// <inheritdoc/>
         public byte R
         {
             get => _r;
-            set => Update(ref _r, value);
+            set => RaiseAndSetIfChanged(ref _r, value);
         }
 
         /// <inheritdoc/>
         public byte G
         {
             get => _g;
-            set => Update(ref _g, value);
+            set => RaiseAndSetIfChanged(ref _g, value);
         }
 
         /// <inheritdoc/>
         public byte B
         {
             get => _b;
-            set => Update(ref _b, value);
+            set => RaiseAndSetIfChanged(ref _b, value);
         }
 
         /// <inheritdoc/>
@@ -67,12 +68,10 @@ namespace Globe3DLight.Style
         }
 
         /// <inheritdoc/>
-        public string ToXamlString()
-            => ToXamlHex(this);
+        public string ToXamlString() => ToXamlHex(this);
 
         /// <inheritdoc/>
-        public string ToSvgString()
-            => ToSvgHex(this);
+        public string ToSvgString() => ToSvgHex(this);
 
         /// <summary>
         /// Creates a <see cref="ArgbColor"/> from an integer.
@@ -100,8 +99,6 @@ namespace Globe3DLight.Style
                 B = b,
             };
         }
-
-
 
         /// <summary>
         /// Parses a color string.
@@ -159,29 +156,5 @@ namespace Globe3DLight.Style
         {
             return string.Concat('#', c.R.ToString("X2"), c.G.ToString("X2"), c.B.ToString("X2")); // NOTE: Not using c.A.ToString("X2")
         }
-
-        /// <summary>
-        /// Check whether the <see cref="A"/> property has changed from its default value.
-        /// </summary>
-        /// <returns>Returns true if the property has changed; otherwise, returns false.</returns>
-        public virtual bool ShouldSerializeA() => _a != default(byte);
-
-        /// <summary>
-        /// Check whether the <see cref="R"/> property has changed from its default value.
-        /// </summary>
-        /// <returns>Returns true if the property has changed; otherwise, returns false.</returns>
-        public virtual bool ShouldSerializeR() => _r != default(byte);
-
-        /// <summary>
-        /// Check whether the <see cref="G"/> property has changed from its default value.
-        /// </summary>
-        /// <returns>Returns true if the property has changed; otherwise, returns false.</returns>
-        public virtual bool ShouldSerializeG() => _g != default(byte);
-
-        /// <summary>
-        /// Check whether the <see cref="B"/> property has changed from its default value.
-        /// </summary>
-        /// <returns>Returns true if the property has changed; otherwise, returns false.</returns>
-        public virtual bool ShouldSerializeB() => _b != default(byte);
     }
 }

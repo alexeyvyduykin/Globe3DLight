@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Globe3DLight;
 
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface ITexture : IDisposable
     {

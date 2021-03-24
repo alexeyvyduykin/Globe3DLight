@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Scene;
-using Globe3DLight.Renderer;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.Models.Renderer;
 
 namespace Globe3DLight.Renderer.OpenTK
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.Models.Geometry
 {
     public interface IAMaterial
     {

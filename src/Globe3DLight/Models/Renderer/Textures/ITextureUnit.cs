@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface ITextureUnit : ICleanable
     {

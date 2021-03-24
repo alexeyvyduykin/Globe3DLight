@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.Entities;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models.Entities;
 
 namespace Globe3DLight
 {

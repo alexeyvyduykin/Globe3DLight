@@ -1,30 +1,32 @@
-﻿using Globe3DLight.Geometry;
+﻿using Globe3DLight.Models.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using System.Collections.Immutable;
-using Globe3DLight.Scene;
-using Globe3DLight.Renderer;
-using Globe3DLight.Style;
+using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.ViewModels.Renderer;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Style;
 using System.Linq;
-using Globe3DLight.Entities;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models.Data;
 using System.IO;
-using Globe3DLight.Editor;
+using Globe3DLight.ViewModels.Data;
 using Globe3DLight.SceneTimer;
-using Globe3DLight.Time;
+using Globe3DLight.ViewModels.Time;
 using Globe3DLight.Timer;
+using Globe3DLight.Models;
+using Globe3DLight.ViewModels.Geometry;
 
-
-namespace Globe3DLight
+namespace Globe3DLight.ViewModels
 {
     public class Factory : IFactory
     {
-        public Library<T> CreateLibrary<T>(string name)
+        public LibraryViewModel<T> CreateLibrary<T>(string name)
         {
-            return new Library<T>()
+            return new LibraryViewModel<T>()
             {
                 Name = name,
                 Items = ImmutableArray.Create<T>(),
@@ -32,9 +34,9 @@ namespace Globe3DLight
             };
         }
   
-        public Library<T> CreateLibrary<T>(string name, IEnumerable<T> items)
+        public LibraryViewModel<T> CreateLibrary<T>(string name, IEnumerable<T> items)
         {
-            return new Library<T>()
+            return new LibraryViewModel<T>()
             {
                 Name = name,
                 Items = ImmutableArray.CreateRange<T>(items),
@@ -92,7 +94,6 @@ namespace Globe3DLight
 
         //    return state;
         //}
-
 
         public IVertexAttribute CreateVertexAttributePosition()
         {
@@ -331,44 +332,41 @@ namespace Globe3DLight
             return sphere;
         }
 
-
-
-        public ProjectContainer CreateProjectContainer(string name = "Project")
+        public ProjectContainerViewModel CreateProjectContainer(string name = "Project")
         {
-            return new ProjectContainer()
+            return new ProjectContainerViewModel()
             {
                 Name = name,                       
-                Scenarios = ImmutableArray.Create<ScenarioContainer>()
+                Scenarios = ImmutableArray.Create<ScenarioContainerViewModel>()
             };
         }
 
-
-        public ScenarioContainer CreateScenarioContainer(string name = "Scenario")
+        public ScenarioContainerViewModel CreateScenarioContainer(string name = "Scenario")
         {
-            return new ScenarioContainer()
+            return new ScenarioContainerViewModel()
             {
                 Name = name,   
-                LogicalTreeNodeRoot = ImmutableArray.Create<Logical>(),
+                LogicalRoot = ImmutableArray.Create<LogicalViewModel>(),
                 Entities = ImmutableArray.Create<BaseEntity>(),
                 Tasks = ImmutableArray.Create<SatelliteTask>(),
             };
         }
 
-        public Logical CreateLogical(string name, IState state)
+        public LogicalViewModel CreateLogical(string name, IState state)
         {
-            return new Logical()
+            return new LogicalViewModel()
             {
                 Name = name,
-                Children = ImmutableArray.Create<ObservableObject>(),
+                Children = ImmutableArray.Create<ViewModelBase>(),
                 State = state,              
             };
         }
 
-        public LogicalCollection CreateLogicalCollection(string name)
+        public LogicalCollectionViewModel CreateLogicalCollection(string name)
         {          
-            var builder = ImmutableArray.CreateBuilder<Logical>();
+            var builder = ImmutableArray.CreateBuilder<LogicalViewModel>();
 
-            return new LogicalCollection()
+            return new LogicalCollectionViewModel()
             {
                 Name = name,             
                 //State = states,
@@ -393,7 +391,7 @@ namespace Globe3DLight
             return new DataUpdater();
         }
 
-        public void SaveProjectContainer(ProjectContainer project, string path, IFileSystem fileIO, IJsonSerializer serializer)
+        public void SaveProjectContainer(ProjectContainerViewModel project, string path, IFileSystem fileIO, IJsonSerializer serializer)
         {
             //if (project is IImageCache imageCache)
             {
@@ -402,19 +400,20 @@ namespace Globe3DLight
             }
         }
 
-        public ProjectContainer OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer)
+        public ProjectContainerViewModel OpenProjectContainer(string path, IFileSystem fileIO, IJsonSerializer serializer)
         {
             using var stream = fileIO.Open(path);
             return OpenProjectContainer(stream, fileIO, serializer);
         }
 
-        public ProjectContainer OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
+        public ProjectContainerViewModel OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
         {
             //using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
             //var projectEntry = archive.Entries.FirstOrDefault(e => e.FullName == "Project.json");
             var project = ReadProjectContainer(stream, fileIO, serializer);
             return project;
         }
+
         //public IProjectContainer OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
         //{
         //    using var archive = new ZipArchive(stream, ZipArchiveMode.Read);
@@ -423,7 +422,7 @@ namespace Globe3DLight
         //    return project;
         //}
 
-        public void SaveProjectContainer(ProjectContainer project, Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
+        public void SaveProjectContainer(ProjectContainerViewModel project, Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
         {
             //using var archive = new ZipArchive(stream, ZipArchiveMode.Create);
             //var projectEntry = archive.CreateEntry("Project.json");
@@ -435,9 +434,9 @@ namespace Globe3DLight
         //    var projectEntry = archive.CreateEntry("Project.json");
         //    WriteProjectContainer(project, projectEntry, fileIO, serializer);
         //}
-        private ProjectContainer ReadProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
+        private ProjectContainerViewModel ReadProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
         {    
-            return serializer.Deserialize<ProjectContainer>(fileIO.ReadUtf8Text(stream));
+            return serializer.Deserialize<ProjectContainerViewModel>(fileIO.ReadUtf8Text(stream));
         }
         //private IProjectContainer ReadProjectContainer(ZipArchiveEntry projectEntry, IFileSystem fileIO, IJsonSerializer serializer)
         //{
@@ -445,7 +444,7 @@ namespace Globe3DLight
         //    return serializer.Deserialize<ProjectContainer>(fileIO.ReadUtf8Text(entryStream));
         //}
 
-        private void WriteProjectContainer(ProjectContainer project, Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
+        private void WriteProjectContainer(ProjectContainerViewModel project, Stream stream, IFileSystem fileIO, IJsonSerializer serializer)
         {
             //using var jsonStream = projectEntry.Open();
             fileIO.WriteUtf8Text(stream, serializer.Serialize(project));

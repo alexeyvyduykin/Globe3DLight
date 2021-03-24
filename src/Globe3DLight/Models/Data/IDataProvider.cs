@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.Models.Data
 {
     public interface IDataProvider
     {
-        Task<ProjectContainer> LoadProject();
+        Task<ProjectContainerViewModel> LoadProject();
         Task<ScenarioData> LoadData();
     }
-
 }

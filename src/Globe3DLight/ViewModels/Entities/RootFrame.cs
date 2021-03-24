@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.Models.Entities;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.Models;
 
-
-namespace Globe3DLight.Entities
+namespace Globe3DLight.ViewModels.Entities
 {
-    public class RootFrame : ObservableObject, ITargetable
+    public class RootFrame : BaseEntity, ITargetable
     {
         public dmat4 InverseAbsoluteModel => dmat4.Identity.Inverse;
 
@@ -15,10 +17,5 @@ namespace Globe3DLight.Entities
         public dvec3 Target { get; set; } = dvec3.Zero;
 
         public dvec3 Up { get; set; } = dvec3.UnitY;
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

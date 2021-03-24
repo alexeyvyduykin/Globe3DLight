@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IOrbitState : IState
+    public class OrbitState : ViewModelBase, IState
     {
-        IList<(double x, double y, double z, double u)> Vertices { get; }
-    }
-
-
-    public class OrbitState : ObservableObject, IOrbitState
-    {
-        private IList<(double x, double y, double z, double u)> _vertices;
+        private readonly IList<(double x, double y, double z, double u)> _vertices;
 
         public OrbitState(OrbitData data)
         {
@@ -24,12 +19,7 @@ namespace Globe3DLight.Data
         public IList<(double x, double y, double z, double u)> Vertices 
         { 
             get => _vertices;
-            protected set => Update(ref value, _vertices);
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
+            protected set => RaiseAndSetIfChanged(ref value, _vertices);
         }
     }
 }

@@ -1,16 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Containers;
-using Globe3DLight.Scene;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Scene;
 using System.Linq;
-using Globe3DLight.Renderer;
-using Globe3DLight.Data;
-using Globe3DLight.Entities;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Editor;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
-    public class ProjectEditor : ObservableObject
+    public class ProjectEditorViewModel : ViewModelBase
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly Lazy<IFactory> _factory;
@@ -22,26 +24,26 @@ namespace Globe3DLight.Editor
         private readonly Lazy<IFileSystem> _fileIO;
         private readonly Lazy<IRenderContext> _renderer;
         private readonly Lazy<IPresenterContract> _presenter;    
-        private ProjectContainer _project;
+        private ProjectContainerViewModel _project;
         private readonly Lazy<IEditorTool> _currentTool;
         private readonly Lazy<IEditorCanvasPlatform> _canvasPlatform;
         private ProjectObserver _observer;
         private readonly Lazy<IProjectEditorPlatform> _platform;
 
-        public ProjectContainer Project
+        public ProjectContainerViewModel Project
         {
             get => _project;
-            set => Update(ref _project, value);
+            set => RaiseAndSetIfChanged(ref _project, value);
         }
         public string ProjectPath
         {
             get => _projectPath;
-            set => Update(ref _projectPath, value);
+            set => RaiseAndSetIfChanged(ref _projectPath, value);
         }
         public ProjectObserver Observer
         {
             get => _observer;
-            set => Update(ref _observer, value);
+            set => RaiseAndSetIfChanged(ref _observer, value);
         }
         public IEditorTool CurrentTool => _currentTool.Value;
 
@@ -60,7 +62,7 @@ namespace Globe3DLight.Editor
         public IFileSystem FileIO => _fileIO.Value;
         public IProjectEditorPlatform Platform => _platform.Value;
 
-        public ProjectEditor(IServiceProvider serviceProvider)
+        public ProjectEditorViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
 
@@ -114,7 +116,7 @@ namespace Globe3DLight.Editor
             await ContainerFactory.SaveFromDatabaseToJson();
         }
 
-        public void OnOpenProject(ProjectContainer project, string path)
+        public void OnOpenProject(ProjectContainerViewModel project, string path)
         {
             try
             {
@@ -230,7 +232,7 @@ namespace Globe3DLight.Editor
             {
                 Project.AddEntity(entity);
             }
-            else if (item is ProjectContainer project)
+            else if (item is ProjectContainerViewModel project)
             {
                 OnUnload();
                 OnLoad(project, string.Empty);
@@ -255,13 +257,13 @@ namespace Globe3DLight.Editor
         //void OnRemoveScenario(IScenarioContainer scenario);
         public void OnRemove(object item)
         {
-            if (item is ScenarioContainer scenario)
+            if (item is ScenarioContainerViewModel scenario)
             {
                 Project?.RemoveScenario(scenario);               
                 var selected = Project?.Scenarios.FirstOrDefault();
                 Project?.SetCurrentScenario(selected);
             }
-            if (item is Logical node)
+            if (item is LogicalViewModel node)
             {
                 Project?.RemoveLogicalNode(node);
               //  var selected = Project?.CurrentScenario?.LogicalTreeNodeRoot.SingleOrDefault();
@@ -272,7 +274,7 @@ namespace Globe3DLight.Editor
                 //var selected = Project?.CurrentDocument?.Pages.FirstOrDefault();
                 //Project?.SetCurrentContainer(selected);
             }
-            else if (item is ProjectEditor || item == null)
+            else if (item is ProjectEditorViewModel || item == null)
             {
               //  OnDeleteSelected();
             }
@@ -281,7 +283,7 @@ namespace Globe3DLight.Editor
         //void OnAddChildFrame(ITreeNode<IFrame> node);
         public void OnAddFrame(object item)
         {
-            if (item is Logical node)
+            if (item is LogicalViewModel node)
             {
                 if (Project?.CurrentScenario != null)
                 {
@@ -346,7 +348,7 @@ namespace Globe3DLight.Editor
         //    }
         //}
 
-        public void OnLoad(ProjectContainer project, string path = null)
+        public void OnLoad(ProjectContainerViewModel project, string path = null)
         {
             if (project != null)
             {
@@ -363,7 +365,6 @@ namespace Globe3DLight.Editor
             }
         }
 
-        /// <inheritdoc/>
         public void OnUnload()
         {
             if (Observer != null)
@@ -397,7 +398,7 @@ namespace Globe3DLight.Editor
         {
             if (item != null)
             {
-                if (item is ObservableObject observable)
+                if (item is ViewModelBase observable)
                 {
                     return observable.Name;
                 }
@@ -405,10 +406,9 @@ namespace Globe3DLight.Editor
             return string.Empty;
         }
 
-
         public void OnNew(object item)
         {
-            if (item is ProjectEditor)
+            if (item is ProjectEditorViewModel)
             {
                 OnNewProject();
             }
@@ -425,17 +425,10 @@ namespace Globe3DLight.Editor
             }
         }
 
-
         public void OnCloseProject()
         {
             //Project?.History?.Reset();
             OnUnload();
-        }
-
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

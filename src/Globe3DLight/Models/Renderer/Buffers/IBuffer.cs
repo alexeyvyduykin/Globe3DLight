@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.Models.Renderer
 {
     public interface IBuffer : IDisposable
     {
@@ -49,5 +48,4 @@ namespace Globe3DLight.Renderer
     //    геометрия, которая будет использована единожды, а затем измениться 
     //    Важно, чтобы такие данные были помещены туда, где их можно быстро обновить,
     //    даже если это условие выполниться за счёт быстрой визуализации
-
 }

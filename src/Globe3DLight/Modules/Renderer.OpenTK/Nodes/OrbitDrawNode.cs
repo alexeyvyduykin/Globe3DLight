@@ -3,13 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 using GlmSharp;
 using OpenTK.Graphics.OpenGL;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    internal class OrbitDrawNode : DrawNode, Globe3DLight.Renderer.IOrbitDrawNode
+    internal class OrbitDrawNode : DrawNode, IOrbitDrawNode
     {
       
         private readonly OrbitRenderModel _orbit;

@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 using A = Pfim;
-
-
 
 namespace Globe3DLight.ImageLoader.Pfim
 {
@@ -67,5 +65,4 @@ namespace Globe3DLight.ImageLoader.Pfim
             }
         }
     }
-
 }

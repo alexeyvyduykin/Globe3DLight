@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
     public interface IRotationEventState : IEventState
     {

@@ -2,26 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IGroundStationState : IState, IFrameable
-    {    
-        dvec3 Position { get; }
-
-        double Lon { get; }
-
-        double Lat { get; }
-
-        double Elevation { get; }
-    }
-
-
-    public class GroundStationState : ObservableObject, IGroundStationState
+    public class GroundStationState : ViewModelBase, IState, IFrameable
     {        
         private dvec3 _position;
         private dmat4 _modelMatrix;
-
         private double _lon;
         private double _lat;
         private double _elevation;
@@ -40,52 +29,46 @@ namespace Globe3DLight.Data
         public dvec3 Position
         {
             get => _position;
-            protected set => Update(ref _position, value);
+            protected set => RaiseAndSetIfChanged(ref _position, value);
         }
 
         public dmat4 ModelMatrix
         {
             get => _modelMatrix;
-            protected set => Update(ref _modelMatrix, value);
+            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public double Lon
         {
             get => _lon;
-            protected set => Update(ref _lon, value);
+            protected set => RaiseAndSetIfChanged(ref _lon, value);
         }
 
         public double Lat
         {
             get => _lat;
-            protected set => Update(ref _lat, value);
+            protected set => RaiseAndSetIfChanged(ref _lat, value);
         }
 
         public double Elevation
         {
             get => _elevation;
-            protected set => Update(ref _elevation, value);
+            protected set => RaiseAndSetIfChanged(ref _elevation, value);
         }
 
         private void Update()
         {
-
             double lon = glm.Radians(_lon);
             double lat = glm.Radians(_lat);
             double r = _elevation + _earthRadius;
 
-            dmat3 model3x3 = new dmat3();
+            var model3x3 = new dmat3();
             model3x3.m02 = -Math.Cos(lon) * Math.Sin(lat); model3x3.m12 = Math.Cos(lon) * Math.Cos(lat); model3x3.m22 = -Math.Sin(lon);
             model3x3.m00 = -Math.Sin(lon) * Math.Sin(lat); model3x3.m10 = Math.Sin(lon) * Math.Cos(lat); model3x3.m20 = Math.Cos(lon);
             model3x3.m01 = Math.Cos(lat); model3x3.m11 = Math.Sin(lat); model3x3.m21 = 0.0;
 
-            this.ModelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
-            this.Position = new dvec3(ModelMatrix.Column3);
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
+            ModelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
+            Position = new dvec3(ModelMatrix.Column3);
         }
     }
 }

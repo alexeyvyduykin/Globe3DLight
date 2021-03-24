@@ -3,22 +3,16 @@ using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
 using System.Linq;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IRetranslatorState : IState, IAnimator
-    {
-        dvec3 Position { get; }
-        dmat4 ModelMatrix { get; }
-    }
-
-    public class RetranslatorAnimator : ObservableObject, IRetranslatorState
+    public class RetranslatorAnimator : ViewModelBase, IState, IAnimator
     {     
         private readonly IList<(double x, double y, double z, double u)> _records;
         private readonly double _timeBegin;
         private readonly double _timeEnd;
-        private readonly double _timeStep;
-     
+        private readonly double _timeStep;     
         private dvec3 _position;
         private dmat4 _modelMatrix;
         private dmat4 _translate;
@@ -35,27 +29,26 @@ namespace Globe3DLight.Data
         public dmat4 Translate
         {
             get => _translate;
-            protected set => Update(ref _translate, value);
+            protected set => RaiseAndSetIfChanged(ref _translate, value);
         }
 
         public dmat4 Rotation
         {
             get => _rotation;
-            protected set => Update(ref _rotation, value);
+            protected set => RaiseAndSetIfChanged(ref _rotation, value);
         }
 
         public dmat4 ModelMatrix
         {
             get => _modelMatrix;
-            protected set => Update(ref _modelMatrix, value);
+            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public dvec3 Position
         {
             get => _position;
-            protected set => Update(ref _position, value);
+            protected set => RaiseAndSetIfChanged(ref _position, value);
         }
-
 
         private dvec3 GetPosition(double t)
         {
@@ -100,12 +93,6 @@ namespace Globe3DLight.Data
             dmat4 translate = dmat4.Translate(pos);
             ModelMatrix = translate;
             Position = new dvec3(translate.Column3);
-        }
-
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

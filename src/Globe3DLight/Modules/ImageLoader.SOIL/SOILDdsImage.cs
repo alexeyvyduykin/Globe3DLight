@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
+using Globe3DLight.ViewModels;
 
 namespace Globe3DLight.ImageLoader.SOIL
 {
-    internal class SOILDdsImage : ObservableObject, IDdsImage
+    internal class SOILDdsImage : ViewModelBase, IDdsImage
     {
         //private readonly A.Dds _ddsImage;
         private readonly int _width;
@@ -35,10 +36,5 @@ namespace Globe3DLight.ImageLoader.SOIL
         public bool Compressed => _compressed;
 
         public IDdsImageHeader Header => new SOILDdsImageHeader(_header);
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

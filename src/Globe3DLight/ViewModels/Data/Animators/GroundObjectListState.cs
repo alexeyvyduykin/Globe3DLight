@@ -4,33 +4,23 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GlmSharp;
+using Globe3DLight.Models.Data;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
-    public interface IGroundObjectListState : IState
+    public class GroundObjectListState : ViewModelBase, IState
     {
-        IDictionary<string, IGroundObjectState> States { get; }
-    }
+        private IDictionary<string, GroundObjectState> _states;
 
-
-    public class GroundObjectListState : ObservableObject, IGroundObjectListState
-    {
-        private IDictionary<string, IGroundObjectState> _states;
-
-        public GroundObjectListState(IDictionary<string, IGroundObjectState> states)
+        public GroundObjectListState(IDictionary<string, GroundObjectState> states)
         {
             _states = states;
         }
 
-        public IDictionary<string, IGroundObjectState> States
+        public IDictionary<string, GroundObjectState> States
         {
             get => _states;
-            protected set => Update(ref _states, value);
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
+            protected set => RaiseAndSetIfChanged(ref _states, value);
         }
     }
 }

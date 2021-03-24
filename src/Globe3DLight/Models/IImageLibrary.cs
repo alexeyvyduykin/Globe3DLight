@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Image;
-using Globe3DLight.Renderer;
+using Globe3DLight.Models.Image;
+using Globe3DLight.Models.Renderer;
 
-namespace Globe3DLight
+namespace Globe3DLight.Models
 {
     public interface IImageLibrary
     {

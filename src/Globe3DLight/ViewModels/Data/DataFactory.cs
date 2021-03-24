@@ -4,81 +4,94 @@ using System.Text;
 using System.Collections.Immutable;
 using GlmSharp;
 using System.Linq;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using System.IO;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models;
 
-namespace Globe3DLight.Data
+namespace Globe3DLight.ViewModels.Data
 {
     public interface IDataFactory
     {
-        IFrameState CreateFrameState();
+        FrameState CreateFrameState();
 
-        ISunState CreateSunAnimator(SunData data);
-        ISunState CreateSunAnimator(dvec3 pos0, dvec3 pos1, double t0, double t1);
+        SunAnimator CreateSunAnimator(SunData data);
 
-        IJ2000State CreateJ2000Animator(J2000Data data); 
-        IJ2000State CreateJ2000Animator(DateTime epoch, double angleDeg);
+        SunAnimator CreateSunAnimator(dvec3 pos0, dvec3 pos1, double t0, double t1);
 
-        ISatelliteState CreateSatelliteAnimator(SatelliteData data);
-        ISatelliteState CreateSatelliteAnimator(IList<double[]> records, double t0, double t1, double tStep);
+        EarthAnimator CreateJ2000Animator(EarthData data);
 
-        IRotationState CreateRotationAnimator(RotationData data);
-        IRotationState CreateRotationAnimator(IList<RotationRecord> rotations, double t0, double t1);
+        EarthAnimator CreateJ2000Animator(DateTime epoch, double angleDeg);
 
-        ISensorState CreateSensorAnimator(SensorData data);
-        ISensorState CreateSensorAnimator(IList<ShootingRecord> shootings, double t0, double t1);
+        SatelliteAnimator CreateSatelliteAnimator(SatelliteData data);
 
-        IAntennaState CreateAntennaAnimator(AntennaData data); 
-        IAntennaState CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1);
+        SatelliteAnimator CreateSatelliteAnimator(IList<double[]> records, double t0, double t1, double tStep);
 
-        IOrbitState CreateOrbitState(OrbitData data);
-        IOrbitState CreateOrbitState(IList<double[]> records);
-      
-        IGroundStationState CreateGroundStationState(GroundStationData data); 
-        IGroundStationState CreateGroundStationState(double lon, double lat, double elevation, double earthRadius);
+        RotationAnimator CreateRotationAnimator(RotationData data);
 
-        IGroundObjectListState CreateGroundObjectListState(IDictionary<string, GroundObjectData> data);
-        IGroundObjectListState CreateGroundObjectListState(IDictionary<string, (double lon, double lat, double earthRadius)> groundObjects);
+        RotationAnimator CreateRotationAnimator(IList<RotationRecord> rotations, double t0, double t1);
 
-        IGroundObjectState CreateGroundObjectState(GroundObjectData data); 
-        IGroundObjectState CreateGroundObjectState(double lon, double lat, double earthRadius);
-
-        IRetranslatorState CreateRetranslatorAnimator(RetranslatorData data); 
-        IRetranslatorState CreateRetranslatorAnimator(IList<double[]> records, double t0, double t1, double tStep);
-
-        Logical CreateSatelliteNode(Logical parent, string path);
-
-        Logical CreateSatelliteNode(Logical parent, SatelliteData data);
-
-        Logical CreateRotationNode(Logical parent, string path);
-
-        Logical CreateRotationNode(Logical parent, RotationData data);
-
-        Logical CreateSunNode(Logical parent, string path);
-
-        Logical CreateSunNode(Logical parent, SunData data);
-
-        Logical CreateSensorNode(Logical parent, string path);
-
-        Logical CreateSensorNode(Logical parent, SensorData data);
-
-        Logical CreateRetranslatorNode(Logical parent, string path);
-
-        Logical CreateRetranslatorNode(ObservableObject parent, RetranslatorData data);
-
-        Logical CreateAntennaNode(Logical parent, string path);
-
-        Logical CreateAntennaNode(Logical parent, AntennaData data);
-
-        Logical CreateOrbitNode(Logical parent, OrbitData data);
-
-        Logical CreateGroundStationNode(ObservableObject parent, GroundStationData data);
+        SensorAnimator CreateSensorAnimator(SensorData data);
         
-        Logical CreateGroundObjectNode(ObservableObject parent, GroundObjectData data);
+        SensorAnimator CreateSensorAnimator(IList<ShootingRecord> shootings, double t0, double t1);
 
-        Logical CreateEarthNode(Logical parent, J2000Data data);
+        AntennaAnimator CreateAntennaAnimator(AntennaData data);
+       
+        AntennaAnimator CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1);
 
-        LogicalCollection CreateCollectionNode(string name, Logical parent);
+        OrbitState CreateOrbitState(OrbitData data);
+        
+        OrbitState CreateOrbitState(IList<double[]> records);
+      
+        GroundStationState CreateGroundStationState(GroundStationData data); 
+        
+        GroundStationState CreateGroundStationState(double lon, double lat, double elevation, double earthRadius);
+
+        GroundObjectListState CreateGroundObjectListState(IDictionary<string, GroundObjectData> data);
+        
+        GroundObjectListState CreateGroundObjectListState(IDictionary<string, (double lon, double lat, double earthRadius)> groundObjects);
+
+        GroundObjectState CreateGroundObjectState(GroundObjectData data); 
+        
+        GroundObjectState CreateGroundObjectState(double lon, double lat, double earthRadius);
+
+        RetranslatorAnimator CreateRetranslatorAnimator(RetranslatorData data);
+        
+        RetranslatorAnimator CreateRetranslatorAnimator(IList<double[]> records, double t0, double t1, double tStep);
+
+        LogicalViewModel CreateSatelliteNode(LogicalViewModel parent, string path);
+
+        LogicalViewModel CreateSatelliteNode(LogicalViewModel parent, SatelliteData data);
+
+        LogicalViewModel CreateRotationNode(LogicalViewModel parent, string path);
+
+        LogicalViewModel CreateRotationNode(LogicalViewModel parent, RotationData data);
+
+        LogicalViewModel CreateSunNode(LogicalViewModel parent, string path);
+
+        LogicalViewModel CreateSunNode(LogicalViewModel parent, SunData data);
+
+        LogicalViewModel CreateSensorNode(LogicalViewModel parent, string path);
+
+        LogicalViewModel CreateSensorNode(LogicalViewModel parent, SensorData data);
+
+        LogicalViewModel CreateRetranslatorNode(LogicalViewModel parent, string path);
+
+        LogicalViewModel CreateRetranslatorNode(ViewModelBase parent, RetranslatorData data);
+
+        LogicalViewModel CreateAntennaNode(LogicalViewModel parent, string path);
+
+        LogicalViewModel CreateAntennaNode(LogicalViewModel parent, AntennaData data);
+
+        LogicalViewModel CreateOrbitNode(LogicalViewModel parent, OrbitData data);
+
+        LogicalViewModel CreateGroundStationNode(ViewModelBase parent, GroundStationData data);
+        
+        LogicalViewModel CreateGroundObjectNode(ViewModelBase parent, GroundObjectData data);
+
+        LogicalViewModel CreateEarthNode(LogicalViewModel parent, EarthData data);
+
+        LogicalCollectionViewModel CreateCollectionNode(string name, LogicalViewModel parent);
     }
 
 
@@ -91,175 +104,65 @@ namespace Globe3DLight.Data
             _serviceProvider = serviceProvider;
         }
 
-        public IFrameState CreateFrameState()
-        {
-            return new FrameState();
-        }
+        public FrameState CreateFrameState() => new FrameState();
+        
+        public SunAnimator CreateSunAnimator(SunData data) => new SunAnimator(data);
+                
+        public SunAnimator CreateSunAnimator(dvec3 pos0, dvec3 pos1, double t0, double t1) => new SunAnimator(new SunData(nameof(SunData), pos0, pos1, t0, t1));
+        
+        public EarthAnimator CreateJ2000Animator(EarthData data) => new EarthAnimator(data);
 
-        public ISunState CreateSunAnimator(SunData data)
-        {
-            return new SunAnimator(data);
-        }
+        public EarthAnimator CreateJ2000Animator(DateTime epoch, double angleDeg) => 
+            new EarthAnimator(new EarthData(nameof(EarthData), epoch, angleDeg));
         
-        public ISunState CreateSunAnimator(dvec3 pos0, dvec3 pos1, double t0, double t1)
-        {
-            return new SunAnimator(new SunData()
-            {
-                Position0 = pos0,
-                Position1 = pos1,
-                TimeBegin = t0,
-                TimeEnd = t1,
-            });
-        }
-
-        public IJ2000State CreateJ2000Animator(J2000Data data)
-        {
-            return new J2000Animator(data);
-        }
+        public SatelliteAnimator CreateSatelliteAnimator(SatelliteData data) => new SatelliteAnimator(data);
+                
+        public SatelliteAnimator CreateSatelliteAnimator(IList<double[]> records, double t0, double t1, double tStep) => 
+            new SatelliteAnimator(new SatelliteData(nameof(SatelliteData), records, t0, t1, tStep));
         
-        public IJ2000State CreateJ2000Animator(DateTime epoch, double angleDeg)
-        {
-            return new J2000Animator(new J2000Data()
-            {
-                Epoch = epoch,
-                AngleDeg = angleDeg,
-            });
-        }
-
-        public ISatelliteState CreateSatelliteAnimator(SatelliteData data)
-        {
-            return new SatelliteAnimator(data);
-        }
+        public RotationAnimator CreateRotationAnimator(RotationData data) => new RotationAnimator(data);
+                
+        public RotationAnimator CreateRotationAnimator(IList<RotationRecord> rotations, double t0, double t1) => 
+            new RotationAnimator(new RotationData("", nameof(RotationData), rotations, t0, t1));
         
-        public ISatelliteState CreateSatelliteAnimator(IList<double[]> records, double t0, double t1, double tStep)
-        {
-            return new SatelliteAnimator(new SatelliteData()
-            {
-                Records = records,
-                TimeBegin = t0,
-                TimeEnd = t1,
-                TimeStep = tStep,
-            });
-        }
-
-        public IRotationState CreateRotationAnimator(RotationData data)
-        {
-            return new RotationAnimator(data);
-        }
+        public SensorAnimator CreateSensorAnimator(SensorData data) => new SensorAnimator(data);
+                
+        public SensorAnimator CreateSensorAnimator(IList<ShootingRecord> shootings, double t0, double t1) => 
+            new SensorAnimator(new SensorData("", nameof(SensorData), shootings, t0, t1));
         
-        public IRotationState CreateRotationAnimator(IList<RotationRecord> rotations, double t0, double t1)
-        {
-            return new RotationAnimator(new RotationData()
-            {
-                Rotations = rotations,
-                TimeBegin = t0,
-                TimeEnd = t1,
-            });
-        }
-
-        public ISensorState CreateSensorAnimator(SensorData data)
-        {
-            return new SensorAnimator(data);
-        }
+        public AntennaAnimator CreateAntennaAnimator(AntennaData data) => new AntennaAnimator(data);
+                
+        public AntennaAnimator CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1) => 
+            new AntennaAnimator(new AntennaData("", nameof(AntennaData), translations, t0, t1));
         
-        public ISensorState CreateSensorAnimator(IList<ShootingRecord> shootings, double t0, double t1)
-        {
-            return new SensorAnimator(new SensorData()
-            {
-                Shootings = shootings,
-                TimeBegin = t0,
-                TimeEnd = t1,
-            });
-        }
-
-        public IAntennaState CreateAntennaAnimator(AntennaData data)
-        {
-            return new AntennaAnimator(data);
-        }
+        public OrbitState CreateOrbitState(OrbitData data) => new OrbitState(data);
+                
+        public OrbitState CreateOrbitState(IList<double[]> records) => new OrbitState(new OrbitData("", nameof(OrbitData), records));
+                
+        public GroundStationState CreateGroundStationState(GroundStationData data) => new GroundStationState(data);
+                
+        public GroundStationState CreateGroundStationState(double lon, double lat, double elevation, double earthRadius) => 
+            new GroundStationState(new GroundStationData(nameof(GroundStationData), lon, lat, elevation, earthRadius));
         
-        public IAntennaState CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1)
-        {
-            return new AntennaAnimator(new AntennaData()
-            {
-                Translations = translations,
-                TimeBegin = t0,
-                TimeEnd = t1,
-            });
-        }
-
-        public IOrbitState CreateOrbitState(OrbitData data)
-        {
-            return new OrbitState(data);
-        }
-        
-        public IOrbitState CreateOrbitState(IList<double[]> records)
-        {
-            return new OrbitState(new OrbitData()
-            {
-                Records = records,
-            });
-        }
-        
-        public IGroundStationState CreateGroundStationState(GroundStationData data)
-        {
-            return new GroundStationState(data);
-        }
-        
-        public IGroundStationState CreateGroundStationState(double lon, double lat, double elevation, double earthRadius)
-        {
-            return new GroundStationState(new GroundStationData()
-            {
-                Lon = lon,
-                Lat = lat,
-                Elevation = elevation,
-                EarthRadius = earthRadius,
-            });
-        }
-
-        public IGroundObjectListState CreateGroundObjectListState(IDictionary<string, GroundObjectData> data)
-        {
-            return new GroundObjectListState(
-                new Dictionary<string, IGroundObjectState>(data.Select(s => KeyValuePair.Create(s.Key, CreateGroundObjectState(s.Value)))));
-        }
-        
-        public IGroundObjectListState CreateGroundObjectListState(IDictionary<string, (double lon, double lat, double earthRadius)> groundObjects)
-        {
-            return new GroundObjectListState(
+        public GroundObjectListState CreateGroundObjectListState(IDictionary<string, GroundObjectData> data) => 
+            new GroundObjectListState(
+                new Dictionary<string, GroundObjectState>(data.Select(s => KeyValuePair.Create(s.Key, CreateGroundObjectState(s.Value)))));
+                
+        public GroundObjectListState CreateGroundObjectListState(IDictionary<string, (double lon, double lat, double earthRadius)> groundObjects) => 
+            new GroundObjectListState(
                 groundObjects.ToDictionary(s => s.Key, s => CreateGroundObjectState(s.Value.lon, s.Value.lat, s.Value.earthRadius)));
-        }
-
-        public IGroundObjectState CreateGroundObjectState(GroundObjectData data)
-        {
-            return new GroundObjectState(data);
-        }
         
-        public IGroundObjectState CreateGroundObjectState(double lon, double lat, double earthRadius)
-        {
-            return new GroundObjectState(new GroundObjectData()
-            {
-                Lon = lon,
-                Lat = lat,
-                EarthRadius = earthRadius,
-            });
-        }
-
-        public IRetranslatorState CreateRetranslatorAnimator(RetranslatorData data)
-        {
-            return new RetranslatorAnimator(data);
-        }
+        public GroundObjectState CreateGroundObjectState(GroundObjectData data) => new GroundObjectState(data);
+                
+        public GroundObjectState CreateGroundObjectState(double lon, double lat, double earthRadius) => 
+            new GroundObjectState(new GroundObjectData(nameof(GroundObjectData), lon, lat, earthRadius));
         
-        public IRetranslatorState CreateRetranslatorAnimator(IList<double[]> records, double t0, double t1, double tStep)
-        {
-            return new RetranslatorAnimator(new RetranslatorData()
-            {
-                Records = records,
-                TimeBegin = t0,
-                TimeEnd = t1,
-                TimeStep = tStep,
-            });
-        }
+        public RetranslatorAnimator CreateRetranslatorAnimator(RetranslatorData data) => new RetranslatorAnimator(data);
+                
+        public RetranslatorAnimator CreateRetranslatorAnimator(IList<double[]> records, double t0, double t1, double tStep) => 
+            new RetranslatorAnimator(new RetranslatorData(nameof(RetranslatorData), records, t0, t1, tStep));
 
-        public Logical CreateSatelliteNode(Logical parent, string path)
+        public LogicalViewModel CreateSatelliteNode(LogicalViewModel parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -274,7 +177,7 @@ namespace Globe3DLight.Data
             return fr_satellite;
         }
         
-        public Logical CreateSatelliteNode(Logical parent, SatelliteData data)
+        public LogicalViewModel CreateSatelliteNode(LogicalViewModel parent, SatelliteData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -288,7 +191,7 @@ namespace Globe3DLight.Data
             return fr_satellite;
         }
 
-        public Logical CreateRotationNode(Logical parent, string path)
+        public LogicalViewModel CreateRotationNode(LogicalViewModel parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -306,7 +209,7 @@ namespace Globe3DLight.Data
 
         }
         
-        public Logical CreateRotationNode(Logical parent, RotationData data)
+        public LogicalViewModel CreateRotationNode(LogicalViewModel parent, RotationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -321,7 +224,7 @@ namespace Globe3DLight.Data
             return fr_rotation;
         }
 
-        public Logical CreateSunNode(Logical parent, string path)
+        public LogicalViewModel CreateSunNode(LogicalViewModel parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -337,7 +240,7 @@ namespace Globe3DLight.Data
             //  return objFactory.CreateSun(name, fr_sun);
         }
         
-        public Logical CreateSunNode(Logical parent, SunData data)
+        public LogicalViewModel CreateSunNode(LogicalViewModel parent, SunData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -350,7 +253,7 @@ namespace Globe3DLight.Data
             return fr_sun;
         }
         
-        public Logical CreateSensorNode(Logical parent, string path)
+        public LogicalViewModel CreateSensorNode(LogicalViewModel parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -367,7 +270,7 @@ namespace Globe3DLight.Data
             // return objFactory.CreateSensor(name, fr_sensor);
         }
         
-        public Logical CreateSensorNode(Logical parent, SensorData data)
+        public LogicalViewModel CreateSensorNode(LogicalViewModel parent, SensorData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -381,7 +284,7 @@ namespace Globe3DLight.Data
             return fr_sensor;
         }
         
-        public Logical CreateRetranslatorNode(Logical parent, string path)
+        public LogicalViewModel CreateRetranslatorNode(LogicalViewModel parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -396,7 +299,7 @@ namespace Globe3DLight.Data
             return fr_retranslator;
         }
         
-        public Logical CreateRetranslatorNode(ObservableObject parent, RetranslatorData data)
+        public LogicalViewModel CreateRetranslatorNode(ViewModelBase parent, RetranslatorData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -406,11 +309,11 @@ namespace Globe3DLight.Data
             var retranslatorData = dataFactory.CreateRetranslatorAnimator(data);
             var fr_retranslator = factory.CreateLogical(name, retranslatorData);
           
-            if (parent is Logical logical)
+            if (parent is LogicalViewModel logical)
             {
                 logical.AddChild(fr_retranslator);
             }
-            else if (parent is LogicalCollection collection)
+            else if (parent is LogicalCollectionViewModel collection)
             {
                 collection.AddValue(fr_retranslator);
             }
@@ -418,7 +321,7 @@ namespace Globe3DLight.Data
             return fr_retranslator;
         }
 
-        public Logical CreateAntennaNode(Logical parent, string path)
+        public LogicalViewModel CreateAntennaNode(LogicalViewModel parent, string path)
         {
             var jsonDataProvider = _serviceProvider.GetService<IJsonDataProvider>();
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
@@ -437,7 +340,7 @@ namespace Globe3DLight.Data
             return fr_antenna;
         }
         
-        public Logical CreateAntennaNode(Logical parent, AntennaData data)
+        public LogicalViewModel CreateAntennaNode(LogicalViewModel parent, AntennaData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -451,7 +354,7 @@ namespace Globe3DLight.Data
             return fr_antenna;
         }
         
-        public Logical CreateOrbitNode(Logical parent, OrbitData data)
+        public LogicalViewModel CreateOrbitNode(LogicalViewModel parent, OrbitData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -465,7 +368,7 @@ namespace Globe3DLight.Data
             return fr_orbit;
         }
         
-        public Logical CreateGroundStationNode(ObservableObject parent, GroundStationData data)
+        public LogicalViewModel CreateGroundStationNode(ViewModelBase parent, GroundStationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -475,11 +378,11 @@ namespace Globe3DLight.Data
             var groundStationData = dataFactory.CreateGroundStationState(data);
             var fr_groundStation = factory.CreateLogical(name, groundStationData);
         
-            if (parent is Logical logical)
+            if (parent is LogicalViewModel logical)
             {
                 logical.AddChild(fr_groundStation);
             }
-            else if (parent is LogicalCollection collection)
+            else if (parent is LogicalCollectionViewModel collection)
             {
                 collection.AddValue(fr_groundStation);
             }
@@ -487,7 +390,7 @@ namespace Globe3DLight.Data
             return fr_groundStation;
         }
 
-        public Logical CreateGroundObjectNode(ObservableObject parent, GroundObjectData data)
+        public LogicalViewModel CreateGroundObjectNode(ViewModelBase parent, GroundObjectData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -497,11 +400,11 @@ namespace Globe3DLight.Data
             var groundObjectState = dataFactory.CreateGroundObjectState(data);
             var fr_groundObject = factory.CreateLogical(name, groundObjectState);
 
-            if (parent is Logical logical)
+            if (parent is LogicalViewModel logical)
             {
                 logical.AddChild(fr_groundObject);
             }
-            else if(parent is LogicalCollection collection)
+            else if(parent is LogicalCollectionViewModel collection)
             {
                 collection.AddValue(fr_groundObject);
             }
@@ -509,7 +412,7 @@ namespace Globe3DLight.Data
             return fr_groundObject;
         }
 
-        public Logical CreateEarthNode(Logical parent, J2000Data data)
+        public LogicalViewModel CreateEarthNode(LogicalViewModel parent, EarthData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
             var factory = _serviceProvider.GetService<IFactory>();
@@ -522,7 +425,7 @@ namespace Globe3DLight.Data
             return fr_earth;
         }
 
-        public LogicalCollection CreateCollectionNode(string name, Logical parent)
+        public LogicalCollectionViewModel CreateCollectionNode(string name, LogicalViewModel parent)
         {
             var factory = _serviceProvider.GetService<IFactory>();
 

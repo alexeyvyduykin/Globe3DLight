@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using GlmSharp;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.ViewModels.Scene
 {
     public class OrbitRenderModel : BaseRenderModel
     {
@@ -11,7 +11,7 @@ namespace Globe3DLight.Scene
         public IList<dvec3> Vertices
         {
             get => _vertices;
-            set => Update(ref _vertices, value);
+            set => RaiseAndSetIfChanged(ref _vertices, value);
         }
 
         public override bool IsDirty()
@@ -24,11 +24,6 @@ namespace Globe3DLight.Scene
         public override void Invalidate()
         {
             base.Invalidate();
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

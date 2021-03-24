@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Containers;
+using Globe3DLight.ViewModels.Containers;
 using System.Collections.Immutable;
 using System.Linq;
+using Globe3DLight.ViewModels;
 
 namespace Globe3DLight
 {
     public static class LogicalTreeNodeExtensions
     {
-        public static void AddChild(this Logical node, ObservableObject child) 
+        public static void AddChild(this LogicalViewModel node, ViewModelBase child) 
         {
             if (child != null)
             {
@@ -25,7 +26,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddValue(this LogicalCollection collection, Logical value)
+        public static void AddValue(this LogicalCollectionViewModel collection, LogicalViewModel value)
         {
             if (value != null)
             {
@@ -41,7 +42,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void RemoveChild(this Logical node, Logical child)
+        public static void RemoveChild(this LogicalViewModel node, LogicalViewModel child)
         {
             if (child != null)
             {
@@ -55,7 +56,7 @@ namespace Globe3DLight
                 }
                 else
                 {
-                    foreach (Logical item in node.Children)
+                    foreach (LogicalViewModel item in node.Children)
                     {
                         item.RemoveChild(child);
                     }
@@ -64,13 +65,13 @@ namespace Globe3DLight
 
         }
 
-        public static Logical GetRoot(this Logical node)
+        public static LogicalViewModel GetRoot(this LogicalViewModel node)
         {
             var root = node;
 
             while (root?.Owner != null)
             {
-                root = (Logical)root.Owner;
+                root = (LogicalViewModel)root.Owner;
             }
 
             return root;
@@ -82,12 +83,12 @@ namespace Globe3DLight
         //}
 
 
-        public static Logical Find(this Logical node, Logical find) 
+        public static LogicalViewModel Find(this LogicalViewModel node, LogicalViewModel find) 
         {
             if (node.Equals(find) == true)
                 return node;
 
-            foreach (Logical item in node.Children)
+            foreach (LogicalViewModel item in node.Children)
             {
                 var res = item.Find(find);
                 if (res != default)

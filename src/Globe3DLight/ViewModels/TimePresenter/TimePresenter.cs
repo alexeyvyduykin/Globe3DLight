@@ -4,9 +4,9 @@ using System.Text;
 using Globe3DLight.Timer;
 using System.Diagnostics;
 
-namespace Globe3DLight.Time
+namespace Globe3DLight.ViewModels.Time
 {
-    public class TimePresenter : ObservableObject
+    public class TimePresenter : ViewModelBase
     {
         private ITimer _timer;  
         private DateTime _begin;
@@ -35,25 +35,25 @@ namespace Globe3DLight.Time
         public DateTime Begin 
         {
             get => _begin; 
-            protected set => Update(ref _begin, value); 
+            protected set => RaiseAndSetIfChanged(ref _begin, value); 
         }
 
         public TimeSpan Duration 
         {
             get => _duration; 
-            protected set => Update(ref _duration, value); 
+            protected set => RaiseAndSetIfChanged(ref _duration, value); 
         }
 
         public string CurrentTimeString
         {
             get => _currentTimeString;
-            protected set => Update(ref _currentTimeString, value);
+            protected set => RaiseAndSetIfChanged(ref _currentTimeString, value);
         }
 
         public double CurrentTime 
         { 
             get => _currentTime; 
-            protected set => Update(ref _currentTime, value); 
+            protected set => RaiseAndSetIfChanged(ref _currentTime, value); 
         }
 
         protected virtual void TimerThreadElapsed(object sender, System.Timers.ElapsedEventArgs e)
@@ -67,7 +67,7 @@ namespace Globe3DLight.Time
         public ITimer Timer
         {
             get => _timer;
-            protected set => Update(ref _timer, value);
+            protected set => RaiseAndSetIfChanged(ref _timer, value);
         }
 
         public virtual void Update(double t) 
@@ -104,11 +104,6 @@ namespace Globe3DLight.Time
             {
                 acceleratedTimer.Faster();
             }        
-        }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
         }
     }
 }

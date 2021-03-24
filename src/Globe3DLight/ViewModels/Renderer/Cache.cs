@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.Models.Renderer;
 
-namespace Globe3DLight.Renderer
+namespace Globe3DLight.ViewModels.Renderer
 {
     public class Cache<TKey, TValue> : ICache<TKey, TValue>
     {

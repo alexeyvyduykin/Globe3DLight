@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.Models.Scene
 {
     public interface IArcballCamera : ICamera
     {

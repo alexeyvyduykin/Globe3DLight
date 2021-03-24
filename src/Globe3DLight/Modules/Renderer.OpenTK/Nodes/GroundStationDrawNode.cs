@@ -4,11 +4,13 @@ using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    internal class GroundStationDrawNode : DrawNode, Globe3DLight.Renderer.IGroundStationDrawNode
+    internal class GroundStationDrawNode : DrawNode, IGroundStationDrawNode
     {
         private B.Device _device;
         private B.Context _context;
@@ -80,12 +82,12 @@ color = u_color;
                 _drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
                 _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Front;
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = 
-                    (mesh.FrontFaceWindingOrder == Geometry.FrontFaceDirection.Cw) ? A.FrontFaceDirection.Cw : A.FrontFaceDirection.Ccw;
+                    (mesh.FrontFaceWindingOrder == Models.Geometry.FrontFaceDirection.Cw) ? A.FrontFaceDirection.Cw : A.FrontFaceDirection.Ccw;
                 _dirty = false;
             }
         }
 
-        public override void OnDraw(object dc, dmat4 modelMatrix, Scene.ISceneState scene)
+        public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
           //  sp.Bind();
                 

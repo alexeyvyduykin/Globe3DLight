@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Globe3DLight.Entities
+namespace Globe3DLight.Models.Entities
 {
     public interface ICollection<T> where T : class
     {

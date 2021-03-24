@@ -2,17 +2,17 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Text;
-using Globe3DLight.Containers;
-using Globe3DLight.Scene;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Scene;
 using System.Linq;
-using Globe3DLight.Entities;
+using Globe3DLight.ViewModels.Entities;
 
-namespace Globe3DLight.Editor
+namespace Globe3DLight.ViewModels.Editor
 {
     public static class ProjectExtensions
     {
 
-        public static void AddEntity(this ProjectContainer project, BaseEntity entity)
+        public static void AddEntity(this ProjectContainerViewModel project, BaseEntity entity)
         {
             if (project?.Scenarios != null && entity != null)
             {       
@@ -22,7 +22,7 @@ namespace Globe3DLight.Editor
             }            
         }
 
-        public static void AddEntities(this ProjectContainer project, IEnumerable<BaseEntity> entities)
+        public static void AddEntities(this ProjectContainerViewModel project, IEnumerable<BaseEntity> entities)
         {
             if (project?.Scenarios != null && entities != null)
             {
@@ -32,7 +32,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void AddScenario(this ProjectContainer project, ScenarioContainer scenario)
+        public static void AddScenario(this ProjectContainerViewModel project, ScenarioContainerViewModel scenario)
         {
             if (project?.Scenarios != null && scenario != null)
             {             
@@ -41,7 +41,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void AddChildFrame(this ProjectContainer project, Logical node, Logical child)
+        public static void AddChildFrame(this ProjectContainerViewModel project, LogicalViewModel node, LogicalViewModel child)
         {
             if (node != null && child != null)
             {
@@ -49,7 +49,7 @@ namespace Globe3DLight.Editor
             }
         }
 
-        public static void RemoveScenario(this ProjectContainer project, ScenarioContainer scenario)
+        public static void RemoveScenario(this ProjectContainerViewModel project, ScenarioContainerViewModel scenario)
         {
             if (project?.Scenarios != null && scenario != null)
             {            
@@ -77,7 +77,7 @@ namespace Globe3DLight.Editor
         //    return;
         //}
 
-        public static void RemoveLogicalNode(this ProjectContainer project, Logical node)
+        public static void RemoveLogicalNode(this ProjectContainerViewModel project, LogicalViewModel node)
         {
             if (node != null)
             {
@@ -87,13 +87,11 @@ namespace Globe3DLight.Editor
                 {
                     root.RemoveChild(node);
 
-                    project.CurrentScenario.LogicalTreeNodeRoot = ImmutableArray.Create(root);         
+                    project.CurrentScenario.LogicalRoot = ImmutableArray.Create(root);         
                 }
             }
 
             return;
         }
-
-
     }
 }

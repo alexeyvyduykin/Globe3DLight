@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight;
-using Globe3DLight.Image;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Image;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-//using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
-
 
 namespace Globe3DLight.ImageLoader.SOIL
 {

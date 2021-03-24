@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Globe3DLight.Geometry.Models;
+using Globe3DLight.Models.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry.Models;
 
-namespace Globe3DLight.Scene
+namespace Globe3DLight.ViewModels.Scene
 {
     public class EarthRenderModel : BaseRenderModel
     {
@@ -17,10 +18,5 @@ namespace Globe3DLight.Scene
         public IEnumerable<string> NormalKeys { get; set; }
 
         public IEnumerable<string> NightKeys { get; set; }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

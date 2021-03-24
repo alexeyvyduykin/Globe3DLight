@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Globe3DLight;
+using Globe3DLight.Models.Editor;
 using Globe3DLight.Input;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Scene;
 
-namespace Globe3DLight.Editor.Tools
+namespace Globe3DLight.ViewModels.Editor.Tools
 {
-    public class ToolDefault : ObservableObject, IEditorTool
+    public class ToolDefault : ViewModelBase, IEditorTool
     {
         public enum State { None, Zoom, Rotate }
         private readonly IServiceProvider _serviceProvider;
@@ -19,15 +19,9 @@ namespace Globe3DLight.Editor.Tools
             _serviceProvider = serviceProvider;         
         }
 
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
-
-        /// <inheritdoc/>
         public void LeftDown(InputArgs args)
         {
-            var editor = _serviceProvider.GetService<ProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
 
             var camera = (IArcballCamera)editor.Project.CurrentScenario.SceneState.Camera;
 
@@ -38,13 +32,11 @@ namespace Globe3DLight.Editor.Tools
             _lastPoint = (args.X, args.Y);       
         }
 
-        /// <inheritdoc/>
         public void LeftUp(InputArgs args)
         {       
             _currentState = State.None;
         }
 
-        /// <inheritdoc/>
         public void RightDown(InputArgs args)
         {
             _currentState = State.Zoom;
@@ -52,16 +44,14 @@ namespace Globe3DLight.Editor.Tools
             _lastPoint = (args.X, args.Y);
         }
 
-        /// <inheritdoc/>
         public void RightUp(InputArgs args)
         {
             _currentState = State.None;
         }
 
-        /// <inheritdoc/>
         public void Move(InputArgs args)
         {
-            var editor = _serviceProvider.GetService<ProjectEditor>();
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
 
 
             if (_currentState == State.Rotate)

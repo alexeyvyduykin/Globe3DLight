@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Image;
+using Globe3DLight.Models.Image;
 using System.Runtime.InteropServices;
 using System.IO;
-
+using Globe3DLight.ViewModels;
 
 namespace Globe3DLight.ImageLoader.SOIL
 {
-    internal class SOILDdsImageHeader : ObservableObject, IDdsImageHeader
+    internal class SOILDdsImageHeader : ViewModelBase, IDdsImageHeader
     {
         private readonly DDS_header _ddsImageHeader;
         private readonly IDdsPixelFormat _ddsPixelFormat;
@@ -19,8 +19,6 @@ namespace Globe3DLight.ImageLoader.SOIL
 
             _ddsPixelFormat = new SOILDdsPixelFormat(ddsImageHeader.PixelFormat);
         }
-
-
 
         public uint Size => _ddsImageHeader.Size;
         public uint Height => _ddsImageHeader.Height;
@@ -54,13 +52,6 @@ namespace Globe3DLight.ImageLoader.SOIL
         public uint Caps4 => _ddsImageHeader.Caps4; // dwReserved
 
         public IDdsPixelFormat PixelFormat => _ddsPixelFormat;
-
-
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
 
     [StructLayout(LayoutKind.Sequential, Pack = 1)]

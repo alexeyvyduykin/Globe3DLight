@@ -2,15 +2,17 @@
 using System.Collections.Generic;
 using System.Text;
 using GlmSharp;
-using Globe3DLight.Image;
-using Globe3DLight.Scene;
+using Globe3DLight.Models.Image;
+using Globe3DLight.Models.Scene;
 using A = OpenTK.Graphics.OpenGL;
-using Globe3DLight.Geometry;
+using Globe3DLight.Models.Geometry;
 using B = Globe3DLight.Renderer.OpenTK.Core;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    internal class SpaceboxDrawNode : DrawNode, Globe3DLight.Renderer.ISpaceboxDrawNode
+    internal class SpaceboxDrawNode : DrawNode, ISpaceboxDrawNode
     {
         private B.Context _context;
         // private float width = 150000.0f;// 25000.0f;//200000.0f;
@@ -95,7 +97,7 @@ void main(void)
             }
         }
 
-        public override void OnDraw(object dc, dmat4 modelMatrix, Scene.ISceneState scene)
+        public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
             if (dirty == false && _isComplete == true)
             {

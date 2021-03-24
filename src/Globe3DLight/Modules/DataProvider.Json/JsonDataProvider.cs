@@ -2,14 +2,17 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
-using Globe3DLight.Data;
+using Globe3DLight.ViewModels.Data;
 using Microsoft.Extensions.Configuration;
-using Globe3DLight.Containers;
-using Globe3DLight.Editor;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.ViewModels;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models;
 
 namespace Globe3DLight.DataProvider.Json
 {
-    public class JsonDataProvider : ObservableObject, IJsonDataProvider
+    public class JsonDataProvider : ViewModelBase, IJsonDataProvider
     {
         private readonly IServiceProvider _serviceProvider;
         private readonly IJsonSerializer _jsonSerializer;
@@ -56,7 +59,7 @@ namespace Globe3DLight.DataProvider.Json
             fileIO.WriteUtf8Text(Path.Combine(path, projectFilename), json);
         }
 
-        public async Task<ProjectContainer> LoadProject()
+        public async Task<ProjectContainerViewModel> LoadProject()
         {         
             var data = await LoadData();
 
@@ -73,11 +76,5 @@ namespace Globe3DLight.DataProvider.Json
 
             return await Task.Run(() => CreateDataFromPath<ScenarioData>(Path.Combine(path, projectFilename)));
         }
-
-        public override object Copy(IDictionary<object, object> shared)
-        {
-            throw new NotImplementedException();
-        }
     }
-
 }

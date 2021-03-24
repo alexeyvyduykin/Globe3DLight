@@ -4,14 +4,15 @@ using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
-using C = Globe3DLight.Geometry.Models;
-using Globe3DLight.Scene;
-
+using C = Globe3DLight.Models.Geometry.Models;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
     
-    internal class SatelliteDrawNode : DrawNode, Globe3DLight.Renderer.ISatelliteDrawNode
+    internal class SatelliteDrawNode : DrawNode, ISatelliteDrawNode
     {
         public SatelliteRenderModel Satellite { get; set; }
 
@@ -164,7 +165,7 @@ color = finalColor;
             A.GL.BindAttribLocation(sp.Handle, (int)1, "NORMAL");
             A.GL.BindAttribLocation(sp.Handle, (int)2, "TEXCOORD");
         }
-        private void SetUniforms(dmat4 modelMatrix, Scene.ISceneState scene)
+        private void SetUniforms(dmat4 modelMatrix, ISceneState scene)
         {
 
             dmat4 model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
@@ -184,7 +185,6 @@ color = finalColor;
             sp.SetUniform("light.diffuse", new vec4(1.0f, 1.0f, 1.0f, 1.0f));
             sp.SetUniform("light.specular", new vec4(0.7f, 0.7f, 0.7f, 1.0f));      
         }
-
        
         public override void UpdateGeometry()
         {
@@ -198,7 +198,8 @@ color = finalColor;
             }
         }
 
-        public override void OnDraw(object dc, dmat4 modelMatrix, Scene.ISceneState scene)
+        public override void OnDraw(object dc, dmat4 modelMatrix, 
+            ISceneState scene)
         {
             if (dirty == false)
             {

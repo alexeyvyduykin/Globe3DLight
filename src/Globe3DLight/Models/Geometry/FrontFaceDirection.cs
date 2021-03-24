@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Globe3DLight.Geometry
+namespace Globe3DLight.Models.Geometry
 {
     public enum FrontFaceDirection
     {

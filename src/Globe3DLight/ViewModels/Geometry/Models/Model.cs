@@ -5,9 +5,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 //using System.Drawing.Imaging;
+using Globe3DLight.Models.Geometry.Models;
 
-
-namespace Globe3DLight.Geometry.Models
+namespace Globe3DLight.ViewModels.Geometry.Models
 {
     //public struct DirectionalLight
     //{
