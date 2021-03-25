@@ -17,15 +17,29 @@ namespace Globe3DLight.ViewModels.Entities
     public class Orbit : BaseEntity, IDrawable
     {
         private OrbitRenderModel _renderModel;    
-        private LogicalViewModel _logical;
+        private BaseState _logical;
      
+        public Orbit()
+        {
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(RenderModel) || e.PropertyName == nameof(Logical))
+                {
+                    if (RenderModel is not null && Logical is not null && Logical is OrbitState state)
+                    {
+                        RenderModel.Vertices = state.Vertices.Select(s => new dvec3(s.x, s.y, s.z)).ToList();
+                    }
+                }
+            };
+        }
+
         public OrbitRenderModel RenderModel
         {
             get => _renderModel;
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
@@ -34,13 +48,8 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {
-                if (Logical is OrbitState orbitState)
-                {                    
-                    RenderModel.Vertices = orbitState.Vertices.Select(s => new dvec3(s.x, s.y, s.z)).ToList();
-
-                    renderer.DrawOrbit(dc, RenderModel, dmat4.Identity, scene);
-                }
+            {                   
+                renderer.DrawOrbit(dc, RenderModel, Logical.ModelMatrix, scene);                
             }               
         }
 
