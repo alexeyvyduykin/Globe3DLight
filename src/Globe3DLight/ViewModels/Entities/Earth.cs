@@ -17,7 +17,7 @@ namespace Globe3DLight.ViewModels.Entities
     {   
         private EarthRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
-        private LogicalViewModel _logical;
+        private BaseState _logical;
 
         public EarthRenderModel RenderModel 
         {
@@ -31,7 +31,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical; 
             set => RaiseAndSetIfChanged(ref _logical, value); 
@@ -43,12 +43,9 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical is EarthAnimator j2000Data)
-                {
-                    renderer.DrawFrame(dc, FrameRenderModel, j2000Data.ModelMatrix, scene);
+                renderer.DrawFrame(dc, FrameRenderModel, Logical.ModelMatrix, scene);
 
-                    renderer.DrawEarth(dc, RenderModel, j2000Data.ModelMatrix, scene);
-                }
+                renderer.DrawEarth(dc, RenderModel, Logical.ModelMatrix, scene);
             }
         }
 

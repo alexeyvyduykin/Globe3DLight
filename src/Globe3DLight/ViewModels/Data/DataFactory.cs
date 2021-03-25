@@ -19,9 +19,9 @@ namespace Globe3DLight.ViewModels.Data
 
         SunAnimator CreateSunAnimator(dvec3 pos0, dvec3 pos1, double t0, double t1);
 
-        EarthAnimator CreateJ2000Animator(string name, EarthData data);
+        EarthAnimator CreateEarthAnimator(string name, EarthData data);
 
-        EarthAnimator CreateJ2000Animator(DateTime epoch, double angleDeg);
+        EarthAnimator CreateEarthAnimator(DateTime epoch, double angleDeg);
 
         SatelliteAnimator CreateSatelliteAnimator(string name, SatelliteData data);
 
@@ -89,7 +89,7 @@ namespace Globe3DLight.ViewModels.Data
         
         LogicalViewModel CreateGroundObjectNode(ViewModelBase parent, GroundObjectData data);
 
-        LogicalViewModel CreateEarthNode(LogicalViewModel parent, EarthData data);
+        BaseState CreateEarthNode(LogicalViewModel parent, EarthData data);
 
         LogicalCollectionViewModel CreateCollectionNode(string name, LogicalViewModel parent);
     }
@@ -121,14 +121,14 @@ namespace Globe3DLight.ViewModels.Data
         public SunAnimator CreateSunAnimator(dvec3 pos0, dvec3 pos1, double t0, double t1) => 
             new SunAnimator(new SunData(nameof(SunData), pos0, pos1, t0, t1));
         
-        public EarthAnimator CreateJ2000Animator(string name, EarthData data) => 
+        public EarthAnimator CreateEarthAnimator(string name, EarthData data) => 
             new EarthAnimator(data) 
             {
                 Name = name,
-                Children = ImmutableArray.Create<ViewModelBase>(),
+                Children = ImmutableArray.Create<ViewModelBase>(),               
             };
 
-        public EarthAnimator CreateJ2000Animator(DateTime epoch, double angleDeg) => 
+        public EarthAnimator CreateEarthAnimator(DateTime epoch, double angleDeg) => 
             new EarthAnimator(new EarthData(nameof(EarthData), epoch, angleDeg));
         
         public SatelliteAnimator CreateSatelliteAnimator(string name, SatelliteData data) => 
@@ -441,13 +441,13 @@ namespace Globe3DLight.ViewModels.Data
             return fr_groundObject;
         }
 
-        public LogicalViewModel CreateEarthNode(LogicalViewModel parent, EarthData data)
+        public BaseState CreateEarthNode(LogicalViewModel parent, EarthData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();         
 
             var name = string.Format("fr_{0}", data.Name.ToLower());
 
-            var fr_earth = dataFactory.CreateJ2000Animator(name, data);
+            var fr_earth = dataFactory.CreateEarthAnimator(name, data);
             
             parent.AddChild(fr_earth);
 

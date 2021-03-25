@@ -17,7 +17,7 @@ namespace Globe3DLight.ViewModels.Editor
     {
         Spacebox CreateSpacebox(string name, LogicalViewModel parent);
 
-        Earth CreateEarth(string name, LogicalViewModel parent);
+        Earth CreateEarth(string name, BaseState parent);
 
         Satellite CreateSatellite(string name, LogicalViewModel parent);
 
@@ -73,7 +73,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public Earth CreateEarth(string name, LogicalViewModel parent)
+        public Earth CreateEarth(string name, BaseState parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
          
