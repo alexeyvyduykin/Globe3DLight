@@ -43,13 +43,13 @@ namespace Globe3DLight.ViewModels.Entities
         {
             get
             {
-                if (_logical?.State is IFrameable)
+                if (_logical is IFrameable)
                 {
-                    if (Logical.State is GroundObjectState groundObjectState)
+                    if (Logical is GroundObjectState groundObjectState)
                     {
                         var collection = Logical.Owner;
                         var parent = (LogicalViewModel)collection.Owner;
-                        if (parent.State is EarthAnimator j2000Data)
+                        if (parent is EarthAnimator j2000Data)
                         {
                             var modelMatrix = j2000Data.ModelMatrix * groundObjectState.ModelMatrix;
                             return modelMatrix.Inverse;
@@ -65,11 +65,11 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is GroundObjectState groundObjectState)
+                if (Logical is GroundObjectState groundObjectState)
                 {
                     var collection = Logical.Owner;
                     var parent = (LogicalViewModel)collection.Owner;
-                    if (parent.State is EarthAnimator j2000Data)
+                    if (parent is EarthAnimator j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 

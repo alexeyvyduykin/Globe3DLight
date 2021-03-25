@@ -290,7 +290,7 @@ namespace Globe3DLight.ViewModels.Editor
             {
                 if (Project?.CurrentScenario != null)
                 {
-                    var child = Factory.CreateLogical("Frame", DataFactory.CreateFrameState());
+                    var child = DataFactory.CreateFrameState("Frame");
 
                     Project.AddChildFrame(node, child);
                 }

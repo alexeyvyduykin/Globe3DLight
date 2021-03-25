@@ -7,7 +7,7 @@ using GlmSharp;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class BaseState : ViewModelBase
+    public class BaseState : LogicalViewModel
     {
         private dmat4 _modelMatrix;
 

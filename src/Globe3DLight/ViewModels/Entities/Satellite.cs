@@ -41,7 +41,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             get
             {
-                if(((LogicalViewModel)_logical?.Owner).State is IFrameable frameable)
+                if(_logical?.Owner is IFrameable frameable)
                 {
                     return frameable.ModelMatrix.Inverse;
                 }
@@ -54,10 +54,10 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is RotationAnimator rotationData)
+                if (Logical is RotationAnimator rotationData)
                 {
                     var parent = (LogicalViewModel)Logical.Owner;
-                    if (parent.State is SatelliteAnimator satelliteState)
+                    if (parent is SatelliteAnimator satelliteState)
                     {
                         //   double r = orbitData.Position.Length;
                         //    var orbitRadius = r * scene.WorldScale;

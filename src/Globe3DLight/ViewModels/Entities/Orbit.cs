@@ -35,7 +35,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is OrbitState orbitState)
+                if (Logical is OrbitState orbitState)
                 {                    
                     RenderModel.Vertices = orbitState.Vertices.Select(s => new dvec3(s.x, s.y, s.z)).ToList();
 

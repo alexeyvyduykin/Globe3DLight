@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Immutable;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.ViewModels.Containers
 {

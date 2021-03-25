@@ -8,6 +8,7 @@
              xmlns:Editor="clr-namespace:Globe3DLight.Editor;assembly=Globe3DLight"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
              xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
+             xmlns:Data="clr-namespace:Globe3DLight.ViewModels.Data;assembly=Globe3DLight"
              xmlns:SceneObjects="clr-namespace:Globe3DLight.ScenarioObjects;assembly=Globe3DLight"
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Project}"
@@ -33,7 +34,7 @@
         </Style>
       </TreeView.Styles>
       <TreeView.DataTemplates>
-        <TreeDataTemplate DataType="Containers:LogicalViewModel"
+        <TreeDataTemplate DataType="Data:LogicalViewModel"
                   ItemsSource="{Binding Children}" x:CompileBindings="False">
           <TextBlock Text="{Binding Name}" Background="Transparent">
             <TextBlock.ContextMenu>
