@@ -58,21 +58,21 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static GroundStationData GroundStationData { get; set; }
 
-        public static IState SatelliteAnimator { get; set; }
+        public static BaseState SatelliteAnimator { get; set; }
 
-        public static IState SensorAnimator { get; set; }
+        public static BaseState SensorAnimator { get; set; }
 
-        public static IState RotationAnimator { get; set; }
+        public static BaseState RotationAnimator { get; set; }
 
-        public static IState SunAnimator { get; set; }
+        public static BaseState SunAnimator { get; set; }
 
-        public static IState J2000Animator { get; set; }
+        public static BaseState J2000Animator { get; set; }
 
-        public static IState RetranslatorAnimator { get; set; }
+        public static BaseState RetranslatorAnimator { get; set; }
 
-        public static IState AntennaAnimator { get; set; }
+        public static BaseState AntennaAnimator { get; set; }
 
-        public static IState GroundStationState { get; set; }
+        public static BaseState GroundStationState { get; set; }
 
         public static void InitializeContext(IServiceProvider serviceProvider)
         {

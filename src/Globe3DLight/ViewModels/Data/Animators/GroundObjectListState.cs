@@ -8,7 +8,7 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class GroundObjectListState : ViewModelBase, IState
+    public class GroundObjectListState : BaseState
     {
         private IDictionary<string, GroundObjectState> _states;
 

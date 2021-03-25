@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Collections.Immutable;
 using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.Models.Data;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.ViewModels.Containers
 {
     public class LogicalViewModel : BaseContainerViewModel
     {
         private ImmutableArray<ViewModelBase> _children;       
-        private IState _state;
+        private BaseState _state;
 
         public ImmutableArray<ViewModelBase> Children
         {
@@ -18,7 +18,7 @@ namespace Globe3DLight.ViewModels.Containers
             set => RaiseAndSetIfChanged(ref _children, value);
         }
 
-        public IState State
+        public BaseState State
         {
             get => _state;
             set => RaiseAndSetIfChanged(ref _state, value);

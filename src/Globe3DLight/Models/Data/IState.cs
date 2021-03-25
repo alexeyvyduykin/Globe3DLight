@@ -5,8 +5,8 @@ using GlmSharp;
 
 namespace Globe3DLight.Models.Data
 {
-    public interface IState
-    {
+    //public interface IState
+    //{
 
-    }
+    //}
 }

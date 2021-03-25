@@ -9,10 +9,9 @@ using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class GroundObjectState : ViewModelBase, IState, IFrameable
+    public class GroundObjectState : BaseState, IFrameable
     {
-        private dvec3 _position;
-        private dmat4 _modelMatrix;
+        private dvec3 _position;       
         private double _lon;
         private double _lat;
         private readonly double _earthRadius;
@@ -30,12 +29,6 @@ namespace Globe3DLight.ViewModels.Data
         {
             get => _position;
             protected set => RaiseAndSetIfChanged(ref _position, value);
-        }
-
-        public dmat4 ModelMatrix
-        {
-            get => _modelMatrix;
-            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public double Lon
@@ -67,7 +60,7 @@ namespace Globe3DLight.ViewModels.Data
             model3x3.m11 = Math.Sin(lat);
             model3x3.m21 = 0.0;
 
-            _modelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
+            ModelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
             _position = new dvec3(ModelMatrix.Column3);
         }
     }

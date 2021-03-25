@@ -352,7 +352,7 @@ namespace Globe3DLight.ViewModels
             };
         }
 
-        public LogicalViewModel CreateLogical(string name, IState state)
+        public LogicalViewModel CreateLogical(string name, BaseState state)
         {
             return new LogicalViewModel()
             {

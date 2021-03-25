@@ -7,7 +7,7 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class OrbitState : ViewModelBase, IState
+    public class OrbitState : BaseState
     {
         private readonly IList<(double x, double y, double z, double u)> _vertices;
 

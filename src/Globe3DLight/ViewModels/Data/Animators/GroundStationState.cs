@@ -7,10 +7,9 @@ using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class GroundStationState : ViewModelBase, IState, IFrameable
+    public class GroundStationState : BaseState, IFrameable
     {        
-        private dvec3 _position;
-        private dmat4 _modelMatrix;
+        private dvec3 _position; 
         private double _lon;
         private double _lat;
         private double _elevation;
@@ -30,12 +29,6 @@ namespace Globe3DLight.ViewModels.Data
         {
             get => _position;
             protected set => RaiseAndSetIfChanged(ref _position, value);
-        }
-
-        public dmat4 ModelMatrix
-        {
-            get => _modelMatrix;
-            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public double Lon
