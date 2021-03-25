@@ -31,7 +31,7 @@ namespace Globe3DLight.ViewModels.Editor
 
         GroundObject CreateGroundObject(string name, LogicalViewModel parent);
 
-        Retranslator CreateRetranslator(string name, LogicalViewModel parent);
+        Retranslator CreateRetranslator(string name, BaseState parent);
 
         Antenna CreateAntenna(string name, LogicalViewModel parent);
 
@@ -224,7 +224,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public Retranslator CreateRetranslator(string name, LogicalViewModel parent)
+        public Retranslator CreateRetranslator(string name, BaseState parent)
         {         
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 

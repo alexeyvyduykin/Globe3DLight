@@ -16,7 +16,7 @@ namespace Globe3DLight.ViewModels.Entities
     public class Retranslator : BaseEntity, IDrawable
     {       
         private RetranslatorRenderModel _renderModel;
-        private LogicalViewModel _logical;
+        private BaseState _logical;
 
         public RetranslatorRenderModel RenderModel
         {
@@ -24,7 +24,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
@@ -33,13 +33,8 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {
-                if (Logical is RetranslatorAnimator retranslatorData)
-                {
-                    //var m = retranslatorData.ModelMatrix;
-
-                    renderer.DrawRetranslator(dc, RenderModel, retranslatorData.ModelMatrix, scene);
-                }
+            {                    
+                renderer.DrawRetranslator(dc, RenderModel, Logical.ModelMatrix, scene);                
             }
         }
 
