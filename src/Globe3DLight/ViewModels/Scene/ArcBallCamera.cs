@@ -20,6 +20,7 @@ namespace Globe3DLight.ViewModels.Scene
         private dmat4 _view;
         private dquat _orientation;
         private dquat _orientationSaved;
+        private double _radius = 1.0;
 
         public double AdjustWidth
         {
@@ -89,6 +90,11 @@ namespace Globe3DLight.ViewModels.Scene
 
             dvec3 zAxis = new dvec3(_view.m02, _view.m12, _view.m22);
             Eye = -zAxis * _translation.m32;
+
+            double range = (Eye - Target).Length;// 36.0;// glm::length(position);
+            _radius = 1.0 / (0.38 * (range - 1.0)) + 1.4;
+            //radius = 1.0 / (0.38*(range-10.0)) + 1.4;
+            //radius = 6371.0;
         }
 
         public void RotateBegin(int x, int y)
@@ -151,41 +157,29 @@ namespace Globe3DLight.ViewModels.Scene
         }
 
         private dvec3 MapToSphere(int x, int y)
-        {
-            dvec3 NewVec;
-            double range = 36.0;// glm::length(position);
-            double radiusSphere;// = 1.0;
-            radiusSphere = 1.0 / (0.38 * (range - 1.0)) + 1.4;
-            //radiusSphere = 1.0/(0.38*(range-10.0)) + 1.4;
-
+        {        
             //Adjust point coords and scale down to range of [-1 ... 1]
             double newX = (x * AdjustWidth) - 1.0;
             double newY = 1.0 - (y * AdjustHeight);
 
             //Compute the square of the length of the vector to the point from the center
-            double length = (newX * newX) + (newY * newY);
+            var length2 = (newX * newX) + (newY * newY);
+            var radius2 = _radius * _radius;
 
             // Если точка отображена за пределами сферы (length > radius squared)
-            if (length > (radiusSphere * radiusSphere))
-            {
-                double norm;
-
+            if (length2 > radius2)
+            {              
                 //Вычисление коэфф. нормализации(radius / sqrt(length))
-                norm = radiusSphere / Math.Sqrt(length);
+                var norm = _radius / Math.Sqrt(length2);
 
                 //Return the "normalized" vector, a point on the sphere
-                NewVec.x = newX * norm;
-                NewVec.y = newY * norm;
-                NewVec.z = 0.0;
+                return new(newX * norm, newY * norm, 0.0);
             }
             else    //Else it's on the inside
             {
                 //Return a vector to a point mapped inside the sphere sqrt(radius squared - length)
-                NewVec.x = newX;
-                NewVec.y = newY;
-                NewVec.z = Math.Sqrt(radiusSphere * radiusSphere - length);
-            }
-            return NewVec;
+                return new(newX, newY, Math.Sqrt(radius2 - length2));
+            }  
         }
 
         private dquat Drag(int x, int y)
