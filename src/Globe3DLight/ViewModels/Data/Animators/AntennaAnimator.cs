@@ -7,7 +7,7 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class AntennaAnimator : ViewModelBase, IState, IAnimator
+    public class AntennaAnimator : BaseState, IAnimator
     {      
         private readonly IEventList<AntennaInterval> _translationEvents;
         private bool _enable;

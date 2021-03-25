@@ -8,14 +8,13 @@ using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class SatelliteAnimator : ViewModelBase, IState, IAnimator, IFrameable
+    public class SatelliteAnimator : BaseState, IAnimator, IFrameable
     {
         private readonly IList<(double x, double y, double z, double vx, double vy, double vz, double u)> _records;
         private readonly double _timeBegin;
         private readonly double _timeEnd;
         private readonly double _timeStep;
-        private dvec3 _position;
-        private dmat4 _modelMatrix;
+        private dvec3 _position;   
         private dmat4 _translate;
         private dmat4 _rotation;
 
@@ -37,12 +36,6 @@ namespace Globe3DLight.ViewModels.Data
         { 
             get => _rotation; 
             protected set => RaiseAndSetIfChanged(ref _rotation, value); 
-        }
-
-        public dmat4 ModelMatrix
-        {
-            get => _modelMatrix;
-            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public dvec3 Position

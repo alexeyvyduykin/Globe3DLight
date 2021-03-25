@@ -7,7 +7,7 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class RotationAnimator : ViewModelBase, IState, IAnimator
+    public class RotationAnimator : BaseState, IAnimator
     {      
         private readonly IEventList<RotationInterval> _rotationEvents;
         private dmat4 _rotationMatrix;

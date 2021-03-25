@@ -89,7 +89,7 @@ namespace Globe3DLight.ViewModels.Data
         }
     }
 
-    public class SensorAnimator : ViewModelBase, IState, IAnimator
+    public class SensorAnimator : BaseState, IAnimator
     {      
         private readonly IEventList<SensorInterval> _shootingEvents;
         private bool _enable;

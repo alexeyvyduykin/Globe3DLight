@@ -6,23 +6,16 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class EarthAnimator : ViewModelBase, IState, IAnimator
+    public class EarthAnimator : BaseState, IAnimator
     {        
         private readonly double _angleDeg0;
-        private double _angleDeg;
-        private dmat4 _modelMatrix;
+        private double _angleDeg;   
         private readonly DateTime _epoch;
 
         public EarthAnimator(EarthData data)
         {
             _angleDeg0 = data.AngleDeg;
             _epoch = data.Epoch;
-        }
-
-        public dmat4 ModelMatrix 
-        {
-            get => _modelMatrix; 
-            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         public double AngleDEG 

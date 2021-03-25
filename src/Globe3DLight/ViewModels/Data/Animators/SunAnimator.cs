@@ -6,14 +6,13 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class SunAnimator : ViewModelBase, IState, IAnimator
+    public class SunAnimator : BaseState, IAnimator
     {     
         private readonly dvec3 _position0;
         private readonly dvec3 _position1;
         private readonly double _timeBegin;
         private readonly double _timeEnd;
         private dvec3 _position;
-        private dmat4 _modelMatrix;
 
         public SunAnimator(SunData data)
         {
@@ -27,12 +26,6 @@ namespace Globe3DLight.ViewModels.Data
         {
             get => _position; 
             protected set => RaiseAndSetIfChanged(ref _position, value); 
-        }
-
-        public dmat4 ModelMatrix
-        {
-            get => _modelMatrix;
-            protected set => RaiseAndSetIfChanged(ref _modelMatrix, value);
         }
 
         private dvec3 GetPosition(double t)
