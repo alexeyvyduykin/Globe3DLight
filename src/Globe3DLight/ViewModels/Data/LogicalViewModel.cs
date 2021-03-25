@@ -2,36 +2,24 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections.Immutable;
-using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels;
 
-namespace Globe3DLight.ViewModels.Containers
+namespace Globe3DLight.ViewModels.Data
 {
     public class LogicalViewModel : BaseContainerViewModel
     {
         private ImmutableArray<ViewModelBase> _children;       
-        private BaseState _state;
-
+       
         public ImmutableArray<ViewModelBase> Children
         {
             get => _children;
             set => RaiseAndSetIfChanged(ref _children, value);
         }
 
-        public BaseState State
-        {
-            get => _state;
-            set => RaiseAndSetIfChanged(ref _state, value);
-        }
-
         public override bool IsDirty()
         {
             var isDirty = base.IsDirty();
-
-            //if (State != null)
-            //{
-            //    isDirty |= State.IsDirty();
-            //}
 
             foreach (var child in Children)
             {
@@ -44,8 +32,6 @@ namespace Globe3DLight.ViewModels.Containers
         public override void Invalidate()
         {
             base.Invalidate();
-
-            //State?.Invalidate();
 
             foreach (var child in Children)
             {

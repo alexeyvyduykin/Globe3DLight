@@ -5,10 +5,11 @@ using Globe3DLight.ViewModels.Containers;
 using System.Collections.Immutable;
 using System.Linq;
 using Globe3DLight.ViewModels;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight
 {
-    public static class LogicalTreeNodeExtensions
+    public static class LogicalExtensions
     {
         public static void AddChild(this LogicalViewModel node, ViewModelBase child) 
         {

@@ -34,7 +34,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is RetranslatorAnimator retranslatorData)
+                if (Logical is RetranslatorAnimator retranslatorData)
                 {
                     //var m = retranslatorData.ModelMatrix;
 

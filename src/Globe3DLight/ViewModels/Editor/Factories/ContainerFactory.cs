@@ -140,7 +140,7 @@ namespace Globe3DLight.ViewModels.Editor
             var scenarioObjectFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
 
             var scenario = factory.CreateScenarioContainer(name);
-            var root = factory.CreateLogical("Root", dataFactory.CreateFrameState());
+            var root = dataFactory.CreateFrameState("Root");
               
             //        root.Owner = scenario; ????????????????????????????????
 

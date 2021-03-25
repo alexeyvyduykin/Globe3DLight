@@ -43,7 +43,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is EarthAnimator j2000Data)
+                if (Logical is EarthAnimator j2000Data)
                 {
                     renderer.DrawFrame(dc, FrameRenderModel, j2000Data.ModelMatrix, scene);
 

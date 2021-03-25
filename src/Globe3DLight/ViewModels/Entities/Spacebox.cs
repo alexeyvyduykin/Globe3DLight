@@ -33,7 +33,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is FrameState frameData)
+                if (Logical is FrameState frameData)
                 {
                     renderer.DrawSpacebox(dc, RenderModel, frameData.ModelMatrix, scene);
                 }

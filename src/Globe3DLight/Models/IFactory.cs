@@ -54,7 +54,8 @@ namespace Globe3DLight.Models
 
         ScenarioContainerViewModel CreateScenarioContainer(string name = "Scenario");
 
-        LogicalViewModel CreateLogical(string name, BaseState state);
+        //LogicalViewModel CreateLogical(string name, BaseState state);
+        //LogicalViewModel CreateBaseState(string name, BaseState state);
 
         LogicalCollectionViewModel CreateLogicalCollection(string name);
 

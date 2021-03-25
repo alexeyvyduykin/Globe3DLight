@@ -34,7 +34,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is SunAnimator sunData)
+                if (Logical is SunAnimator sunData)
                 {
                     double r = sunData.Position.Length;
                     var orbitRadius = r;// * scene.WorldScale;

@@ -352,15 +352,24 @@ namespace Globe3DLight.ViewModels
             };
         }
 
-        public LogicalViewModel CreateLogical(string name, BaseState state)
-        {
-            return new LogicalViewModel()
-            {
-                Name = name,
-                Children = ImmutableArray.Create<ViewModelBase>(),
-                State = state,              
-            };
-        }
+        //public LogicalViewModel CreateLogical(string name)
+        //{
+        //    return new LogicalViewModel()
+        //    {
+        //        Name = name,
+        //        Children = ImmutableArray.Create<ViewModelBase>(),                     
+        //    };
+        //}
+
+        //public LogicalViewModel CreateBaseState(string name, BaseState state)
+        //{
+        //    return new BaseState()
+        //    {
+        //        Name = name,
+        //        Children = ImmutableArray.Create<ViewModelBase>(),
+        //        State = state,
+        //    };
+        //}
 
         public LogicalCollectionViewModel CreateLogicalCollection(string name)
         {          

@@ -50,7 +50,7 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is AntennaAnimator antennaData)
+                if (Logical is AntennaAnimator antennaData)
                 {
                     dvec3 targetPosition = default;
                     bool enable = antennaData.Enable;
@@ -65,11 +65,11 @@ namespace Globe3DLight.ViewModels.Entities
                             {
                                 if (groundStation.Name.Equals(target) == true)
                                 {
-                                    if (groundStation.Logical.State is GroundStationState groundStationData)
+                                    if (groundStation.Logical is GroundStationState groundStationData)
                                     {
                                         var collection = (LogicalCollectionViewModel)groundStation.Logical.Owner;
                                         var j2000Node = (LogicalViewModel)collection.Owner;
-                                        if (j2000Node.State is EarthAnimator j2000Data)
+                                        if (j2000Node is EarthAnimator j2000Data)
                                         {
                                             targetPosition = new dvec3(j2000Data.ModelMatrix * new dvec4(groundStationData.Position, 1.0));
                                         }
@@ -84,7 +84,7 @@ namespace Globe3DLight.ViewModels.Entities
                             {
                                 if (retranslator.Name.Equals(target) == true)
                                 {
-                                    if (retranslator.Logical.State is RetranslatorAnimator retranslatorData)
+                                    if (retranslator.Logical is RetranslatorAnimator retranslatorData)
                                     {
                                         targetPosition = retranslatorData.Position;
                                     }
@@ -94,10 +94,10 @@ namespace Globe3DLight.ViewModels.Entities
                     }
 
                     var rotationNode = (LogicalViewModel)Logical.Owner;
-                    if (rotationNode.State is RotationAnimator rotationData)
+                    if (rotationNode is RotationAnimator rotationData)
                     {
                         var orbitNode = (LogicalViewModel)rotationNode.Owner;
-                        if (orbitNode.State is SatelliteAnimator satelliteState)
+                        if (orbitNode is SatelliteAnimator satelliteState)
                         {
                             var attach = RenderModel.AttachPosition;
 

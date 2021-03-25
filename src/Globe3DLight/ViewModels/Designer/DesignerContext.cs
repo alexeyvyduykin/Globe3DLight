@@ -50,29 +50,13 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static SunData SunData { get; set; }
 
-        public static EarthData J2000Data { get; set; }
+        public static EarthData EarthData { get; set; }
 
         public static RetranslatorData RetranslatorData { get; set; }
 
         public static AntennaData AntennaData { get; set; }
 
         public static GroundStationData GroundStationData { get; set; }
-
-        public static BaseState SatelliteAnimator { get; set; }
-
-        public static BaseState SensorAnimator { get; set; }
-
-        public static BaseState RotationAnimator { get; set; }
-
-        public static BaseState SunAnimator { get; set; }
-
-        public static BaseState J2000Animator { get; set; }
-
-        public static BaseState RetranslatorAnimator { get; set; }
-
-        public static BaseState AntennaAnimator { get; set; }
-
-        public static BaseState GroundStationState { get; set; }
 
         public static void InitializeContext(IServiceProvider serviceProvider)
         {
@@ -129,55 +113,46 @@ namespace Globe3DLight.ViewModels.Designer
             RotationData = DataDesigner.RotationData;
             SensorData = DataDesigner.SensorData;
             SunData = DataDesigner.SunData;
-            J2000Data = new EarthData("", DateTime.Now, 120.0);
+            EarthData = new EarthData("", DateTime.Now, 120.0);
             RetranslatorData = DataDesigner.RetranslatorData;
             AntennaData = DataDesigner.AntennaData;
             GroundStationData = new GroundStationData("", 36.0, 42.17, 0.135, 6371.0);
 
-            // Data
+            // Frames and Data
 
-            var satelliteAnimator = dataFactory.CreateSatelliteAnimator(SatelliteData);
+            var satelliteAnimator = dataFactory.CreateSatelliteAnimator("fr_orbit_satellite1", SatelliteData);
             satelliteAnimator.Animate(0.0);
-            SatelliteAnimator = satelliteAnimator;
+            SatelliteNode = satelliteAnimator;
 
-            var rotationAnimator = dataFactory.CreateRotationAnimator(RotationData);
+            var rotationAnimator = dataFactory.CreateRotationAnimator("fr_rotation_satellite1", RotationData);
             rotationAnimator.Animate(1.0);
-            RotationAnimator = rotationAnimator;
-
-            var sensorAnimator = dataFactory.CreateSensorAnimator(SensorData);
-            sensorAnimator.Animate(0.0);
-            SensorAnimator = sensorAnimator;
-
-            var sunAnimator = dataFactory.CreateSunAnimator(SunData);
-            sunAnimator.Animate(0.0);
-            SunAnimator = sunAnimator;
-
-            var j2000Animator = dataFactory.CreateJ2000Animator(J2000Data);
-            j2000Animator.Animate(0.0);
-            J2000Animator = j2000Animator;
-
-            var retranslatorAnimator = dataFactory.CreateRetranslatorAnimator(RetranslatorData);
-            retranslatorAnimator.Animate(0.0);
-            RetranslatorAnimator = retranslatorAnimator;
-
-            var antennaAnimator = dataFactory.CreateAntennaAnimator(AntennaData);
-            antennaAnimator.Animate(0.0);
-            AntennaAnimator = antennaAnimator;
-
-            var groundStationData = dataFactory.CreateGroundStationState(GroundStationData);
-            GroundStationState = groundStationData;
-
-
-            // Frames
-
-            SatelliteNode = factory.CreateLogical("fr_orbit_satellite1", SatelliteAnimator);
-            RotationNode = factory.CreateLogical("fr_rotation_satellite1", RotationAnimator);
+            RotationNode = rotationAnimator;
 
             SatelliteNode.AddChild(RotationNode);
 
-            SensorNode = factory.CreateLogical("fr_sensor1", SensorAnimator);
+            var sensorAnimator = dataFactory.CreateSensorAnimator("fr_sensor1", SensorData);
+            sensorAnimator.Animate(0.0);
+            SensorNode = sensorAnimator;
 
-            SunNode = factory.CreateLogical("fr_sun", SunAnimator);
+            var sunAnimator = dataFactory.CreateSunAnimator("fr_sun", SunData);
+            sunAnimator.Animate(0.0);
+            SunNode = sunAnimator;
+
+            //var j2000Animator = dataFactory.CreateJ2000Animator("fr_earth", J2000Data);
+            //j2000Animator.Animate(0.0);
+            //EarthNode = j2000Animator;
+
+            //var retranslatorAnimator = dataFactory.CreateRetranslatorAnimator(RetranslatorData);
+            //retranslatorAnimator.Animate(0.0);
+            //RetranslatorAnimator = retranslatorAnimator;
+
+            //var antennaAnimator = dataFactory.CreateAntennaAnimator(AntennaData);
+            //antennaAnimator.Animate(0.0);
+            //AntennaAnimator = antennaAnimator;
+
+            //var groundStationData = dataFactory.CreateGroundStationState(GroundStationData);
+            //GroundStationState = groundStationData;
+
 
             // Scenario objects
 
@@ -185,8 +160,7 @@ namespace Globe3DLight.ViewModels.Designer
 
             Sensor = objFactory.CreateSensor("Sensor1", null);
 
-            Project.AddChildFrame(Project.CurrentScenario.LogicalRoot.FirstOrDefault(),
-                factory.CreateLogical("Frame1", dataFactory.CreateFrameState()));
+            Project.AddChildFrame(Project.CurrentScenario.LogicalRoot.FirstOrDefault(), dataFactory.CreateFrameState("Frame1"));
 
             //   Template = factory.CreateTemplateContainer();
 

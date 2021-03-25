@@ -10,6 +10,7 @@ using Globe3DLight.Models;
 using System.ComponentModel;
 using Globe3DLight.Models.Data;
 using System.Reactive.Disposables;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.ViewModels.Containers
 {

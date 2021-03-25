@@ -6,6 +6,7 @@ using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Scene;
 using System.Linq;
 using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.ViewModels.Editor
 {

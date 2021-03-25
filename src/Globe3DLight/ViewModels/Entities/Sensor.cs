@@ -36,15 +36,15 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical.State is SensorAnimator sensorData)
+                if (Logical is SensorAnimator sensorData)
                 {
                     if (sensorData.Enable == true)
                     {
                         var rotationNode = (LogicalViewModel)Logical.Owner;
-                        if (rotationNode.State is RotationAnimator /*rotationData*/)
+                        if (rotationNode is RotationAnimator /*rotationData*/)
                         {
                             var orbitNode = (LogicalViewModel)rotationNode.Owner;
-                            if (orbitNode.State is SatelliteAnimator satelliteState)
+                            if (orbitNode is SatelliteAnimator satelliteState)
                             {
                                 //   double r = orbitData.Position.Length;
                                 //   var orbitRadius = r * scene.WorldScale;

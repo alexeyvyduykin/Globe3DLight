@@ -13,7 +13,7 @@ namespace Globe3DLight.ViewModels.Data
         {
             if (obj is LogicalViewModel logical)
             {
-                if (logical.State is IAnimator animator)
+                if (logical is IAnimator animator)
                 {
                     animator.Animate(t);
                 }
@@ -27,9 +27,9 @@ namespace Globe3DLight.ViewModels.Data
             {
                 var first = collection.Values.FirstOrDefault();
 
-                if (first.State is IAnimator animator)
+                if (first is IAnimator animator)
                 {
-                    foreach (var item in collection.Values.Select(s => s.State))
+                    foreach (var item in collection.Values)
                     {
                         if (item is IAnimator a)
                         {
