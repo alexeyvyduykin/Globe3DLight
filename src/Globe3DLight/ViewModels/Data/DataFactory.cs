@@ -83,7 +83,7 @@ namespace Globe3DLight.ViewModels.Data
 
         LogicalViewModel CreateAntennaNode(LogicalViewModel parent, AntennaData data);
 
-        LogicalViewModel CreateOrbitNode(LogicalViewModel parent, OrbitData data);
+        BaseState CreateOrbitNode(LogicalViewModel parent, OrbitData data);
 
         LogicalViewModel CreateGroundStationNode(ViewModelBase parent, GroundStationData data);
         
@@ -388,7 +388,7 @@ namespace Globe3DLight.ViewModels.Data
             return fr_antenna;
         }
         
-        public LogicalViewModel CreateOrbitNode(LogicalViewModel parent, OrbitData data)
+        public BaseState CreateOrbitNode(LogicalViewModel parent, OrbitData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
 

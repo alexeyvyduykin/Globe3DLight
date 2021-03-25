@@ -35,7 +35,7 @@ namespace Globe3DLight.ViewModels.Editor
 
         Antenna CreateAntenna(string name, LogicalViewModel parent);
 
-        Orbit CreateOrbit(string name, LogicalViewModel parent);
+        Orbit CreateOrbit(string name, BaseState parent);
 
         ISceneState CreateSceneState();
 
@@ -157,7 +157,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public Orbit CreateOrbit(string name, LogicalViewModel parent)
+        public Orbit CreateOrbit(string name, BaseState parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
