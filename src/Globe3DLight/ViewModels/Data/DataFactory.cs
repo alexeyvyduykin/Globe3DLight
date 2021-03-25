@@ -77,7 +77,7 @@ namespace Globe3DLight.ViewModels.Data
 
         LogicalViewModel CreateRetranslatorNode(LogicalViewModel parent, string path);
 
-        LogicalViewModel CreateRetranslatorNode(ViewModelBase parent, RetranslatorData data);
+        BaseState CreateRetranslatorNode(ViewModelBase parent, RetranslatorData data);
 
         LogicalViewModel CreateAntennaNode(LogicalViewModel parent, string path);
 
@@ -338,7 +338,7 @@ namespace Globe3DLight.ViewModels.Data
             return fr_retranslator;
         }
         
-        public LogicalViewModel CreateRetranslatorNode(ViewModelBase parent, RetranslatorData data)
+        public BaseState CreateRetranslatorNode(ViewModelBase parent, RetranslatorData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();           
 
