@@ -17,8 +17,6 @@ namespace Globe3DLight.ViewModels.Entities
     {
         private SensorRenderModel _renderModel;         
         private LogicalViewModel _logical;
-        private int _scanCounter = 0;
-        private dvec3 _pBegin0, _pBegin1;
 
         public SensorRenderModel RenderModel
         {
@@ -40,56 +38,20 @@ namespace Globe3DLight.ViewModels.Entities
                 {
                     if (sensorData.Enable == true)
                     {
-                        var rotationNode = (LogicalViewModel)Logical.Owner;
-                        if (rotationNode is RotationAnimator /*rotationData*/)
+                        var rotationNode = Logical.Owner;
+                        if (rotationNode is RotationAnimator rotationData)
                         {
-                            var orbitNode = (LogicalViewModel)rotationNode.Owner;
+                            var orbitNode = rotationNode.Owner;
                             if (orbitNode is SatelliteAnimator satelliteState)
-                            {
-                                //   double r = orbitData.Position.Length;
-                                //   var orbitRadius = r * scene.WorldScale;
+                            {                                
+                                RenderModel.Shoot = sensorData.Shoot;
+                                RenderModel.Scan = sensorData.Scan;
 
-                                //   dmat4 translate = dmat4.Translate(glm.Normalized(orbitData.Position) * orbitRadius);
-
-                                var orbitModelMatrix = satelliteState.ModelMatrix /** scene.WorldScale*/;// translate * orbitData.mtxRot;//.Inverse;     
-
-                                var satelliteModelMatrix = orbitModelMatrix;// * rotationData.RotationMatrix;
-                                          
-                                RenderModel.Shoot = new Shoot() 
-                                {                                  
-                                    p0 = sensorData.Shoot.p0,
-                                    p1 = sensorData.Shoot.p1,
-                                    p2 = sensorData.Shoot.p2,
-                                    p3 = sensorData.Shoot.p3,
-                                };
-     
-                                dvec3 pEnd0 = new dvec3(satelliteModelMatrix * new dvec4(RenderModel.Shoot.p0, 1.0));
-                                dvec3 pEnd1 = new dvec3(satelliteModelMatrix * new dvec4(RenderModel.Shoot.p1, 1.0));
-
-                                if (_scanCounter == 0)
-                                {
-                                    _pBegin0 = pEnd0;
-                                    _pBegin1 = pEnd1;                                   
-                                }
-
-                                _scanCounter++;
-
-                                RenderModel.Scan = new Scan() { p0 = _pBegin1, p1 = _pBegin0, p2 = pEnd0, p3 = pEnd1 };
-
-
-                                renderer.DrawSensor(dc, RenderModel, satelliteModelMatrix, scene);
+                                renderer.DrawSensor(dc, RenderModel, satelliteState.AbsoluteModelMatrix, scene);
                             }
                         }
                     }
-                    else
-                    {
-                        _scanCounter = 0;
-                    }
                 }
-            }
-            else
-            {
-                _scanCounter = 0;
             }
         }
 
