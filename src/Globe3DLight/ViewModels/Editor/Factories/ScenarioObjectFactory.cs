@@ -19,7 +19,7 @@ namespace Globe3DLight.ViewModels.Editor
 
         Earth CreateEarth(string name, BaseState parent);
 
-        Satellite CreateSatellite(string name, LogicalViewModel parent);
+        Satellite CreateSatellite(string name, BaseState parent);
 
         Sun CreateSun(string name, LogicalViewModel parent);
 
@@ -90,7 +90,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public Satellite CreateSatellite(string name, LogicalViewModel parent)
+        public Satellite CreateSatellite(string name, BaseState parent)
         {       
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 

@@ -17,7 +17,7 @@ namespace Globe3DLight.ViewModels.Entities
     {
         private SatelliteRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
-        private LogicalViewModel _logical;
+        private BaseState _logical;
     
         public SatelliteRenderModel RenderModel 
         {
@@ -25,7 +25,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical; 
             set => RaiseAndSetIfChanged(ref _logical, value);
@@ -54,25 +54,8 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical is RotationAnimator rotationData)
-                {
-                    var parent = (LogicalViewModel)Logical.Owner;
-                    if (parent is SatelliteAnimator satelliteState)
-                    {
-                        //   double r = orbitData.Position.Length;
-                        //    var orbitRadius = r * scene.WorldScale;
-
-                        //   dmat4 translate = dmat4.Translate(glm.Normalized(orbitData.Position) * orbitRadius);
-
-                        var orbitmodelMatrix = satelliteState.Translate * satelliteState.Rotation;//.Inverse;     
-
-                        var satelliteModelMatrix = orbitmodelMatrix * rotationData.RotationMatrix;
-
-                        renderer.DrawFrame(dc, FrameRenderModel, satelliteModelMatrix, scene);
-
-                        renderer.DrawSatellite(dc, RenderModel, satelliteModelMatrix, scene);
-                    }
-                }
+                renderer.DrawFrame(dc, FrameRenderModel, Logical.AbsoluteModelMatrix, scene);
+                renderer.DrawSatellite(dc, RenderModel, Logical.AbsoluteModelMatrix, scene);
             }
         }
 

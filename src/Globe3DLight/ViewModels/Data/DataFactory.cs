@@ -65,7 +65,7 @@ namespace Globe3DLight.ViewModels.Data
 
         LogicalViewModel CreateRotationNode(LogicalViewModel parent, string path);
 
-        LogicalViewModel CreateRotationNode(LogicalViewModel parent, RotationData data);
+        BaseState CreateRotationNode(LogicalViewModel parent, RotationData data);
 
         LogicalViewModel CreateSunNode(LogicalViewModel parent, string path);
 
@@ -259,7 +259,7 @@ namespace Globe3DLight.ViewModels.Data
 
         }
         
-        public LogicalViewModel CreateRotationNode(LogicalViewModel parent, RotationData data)
+        public BaseState CreateRotationNode(LogicalViewModel parent, RotationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();         
 

@@ -108,7 +108,7 @@ namespace Globe3DLight.ViewModels.Entities
 
                             var orbitModelMatrix = satelliteState.ModelMatrix;// translate * orbitData.mtxRot;//.Inverse;     
 
-                            var satelliteModelMatrix = orbitModelMatrix * rotationData.RotationMatrix;
+                            var satelliteModelMatrix = orbitModelMatrix * rotationData.ModelMatrix;// RotationMatrix;
 
                             var antennaModelMatrix = satelliteModelMatrix * dmat4.Translate(attach);
 

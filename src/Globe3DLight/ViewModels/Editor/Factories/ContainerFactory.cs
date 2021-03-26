@@ -78,7 +78,7 @@ namespace Globe3DLight.ViewModels.Editor
             var fr_rtr_collection = dataFactory.CreateCollectionNode("fr_rtr_collection1", root);
             var fr_gss = data.GroundStations.ToDictionary(s => s.Name, s => dataFactory.CreateGroundStationNode(fr_gs_collection, s));
             var fr_gos = data.GroundObjects.ToDictionary(s => s.Name, s => dataFactory.CreateGroundObjectNode(fr_go_collection, s));
-            var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(fr_earth.Node, s));
+            var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(root, s));
             var fr_rotations = data.SatelliteRotations.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateRotationNode(fr_sats[s.SatelliteName], s));
             var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateSensorNode(fr_rotations[s.SatelliteName], s));
             var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateAntennaNode(fr_rotations[s.SatelliteName], s));            

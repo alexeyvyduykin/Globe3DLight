@@ -15,8 +15,6 @@ namespace Globe3DLight.ViewModels.Data
         private readonly double _timeEnd;
         private readonly double _timeStep;
         private dvec3 _position;   
-        private dmat4 _translate;
-        private dmat4 _rotation;
 
         public SatelliteAnimator(SatelliteData data)
         {
@@ -24,18 +22,6 @@ namespace Globe3DLight.ViewModels.Data
             _timeBegin = data.TimeBegin;
             _timeEnd = data.TimeEnd;
             _timeStep = data.TimeStep;
-        }
-
-        public dmat4 Translate
-        {
-            get => _translate; 
-            protected set => RaiseAndSetIfChanged(ref _translate, value); 
-        }
-
-        public dmat4 Rotation 
-        { 
-            get => _rotation; 
-            protected set => RaiseAndSetIfChanged(ref _rotation, value); 
         }
 
         public dvec3 Position
@@ -133,11 +119,11 @@ namespace Globe3DLight.ViewModels.Data
         {
             Position = GetPosition(t);
             
-            Translate = dmat4.Translate(Position);
+            var translate = dmat4.Translate(Position);
 
-            Rotation = OrbitalMatrix(t);
+            var rotation = OrbitalMatrix(t);
 
-            ModelMatrix = Translate * Rotation;//.Inverse;           
+            ModelMatrix = translate * rotation;        
         }
     }
 }
