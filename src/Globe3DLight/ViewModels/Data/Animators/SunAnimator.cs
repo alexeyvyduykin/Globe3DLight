@@ -29,16 +29,10 @@ namespace Globe3DLight.ViewModels.Data
         }
 
         private dvec3 GetPosition(double t)
-        {
-            double tCur = t;// base.LocalTime;
-    
-            double coef = tCur / (_timeEnd - _timeBegin);
+        {                
+            double coef = t / (_timeEnd - _timeBegin);
 
-            dvec3 p = _position0 + (_position1 - _position0) * coef;
-
-          //  p = glm.Normalized(p);
-
-          //  p *= 60.0f;//range;
+            var p = _position0 + (_position1 - _position0) * coef;
 
             return p;
         }

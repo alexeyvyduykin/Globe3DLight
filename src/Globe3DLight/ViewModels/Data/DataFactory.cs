@@ -69,7 +69,7 @@ namespace Globe3DLight.ViewModels.Data
 
         LogicalViewModel CreateSunNode(LogicalViewModel parent, string path);
 
-        LogicalViewModel CreateSunNode(LogicalViewModel parent, SunData data);
+        BaseState CreateSunNode(LogicalViewModel parent, SunData data);
 
         LogicalViewModel CreateSensorNode(LogicalViewModel parent, string path);
 
@@ -286,7 +286,7 @@ namespace Globe3DLight.ViewModels.Data
             return fr_sun;        
         }
         
-        public LogicalViewModel CreateSunNode(LogicalViewModel parent, SunData data)
+        public BaseState CreateSunNode(LogicalViewModel parent, SunData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();
 
