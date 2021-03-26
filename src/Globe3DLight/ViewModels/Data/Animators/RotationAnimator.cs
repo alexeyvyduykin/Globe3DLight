@@ -10,18 +10,11 @@ namespace Globe3DLight.ViewModels.Data
     public class RotationAnimator : BaseState, IAnimator
     {      
         private readonly IEventList<RotationInterval> _rotationEvents;
-        private dmat4 _rotationMatrix;
         private double _gamDEG;
 
         public RotationAnimator(RotationData data)
         {
             _rotationEvents = Create(data.Rotations);
-        }
-
-        public dmat4 RotationMatrix 
-        {
-            get => _rotationMatrix; 
-            protected set => RaiseAndSetIfChanged(ref _rotationMatrix, value);
         }
 
         public double GamDEG
@@ -52,7 +45,7 @@ namespace Globe3DLight.ViewModels.Data
 
             GamDEG = (activeInterval != default) ? activeInterval.Animate(t).Angle : 0.0;
             
-            RotationMatrix = dmat4.Rotate(-glm.Radians(GamDEG), new dvec3(1.0f, 0.0f, 0.0f));
+            ModelMatrix = dmat4.Rotate(-glm.Radians(GamDEG), dvec3.UnitX);
         }
     }
 }

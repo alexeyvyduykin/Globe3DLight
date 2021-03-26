@@ -36,7 +36,7 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static LogicalViewModel SensorNode { get; set; }
 
-        public static LogicalViewModel RotationNode { get; set; }
+        public static BaseState RotationNode { get; set; }
 
         public static LogicalViewModel SunNode { get; set; }
 
