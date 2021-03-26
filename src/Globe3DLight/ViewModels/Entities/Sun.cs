@@ -16,7 +16,7 @@ namespace Globe3DLight.ViewModels.Entities
     public class Sun : BaseEntity, IDrawable
     {
         private SunRenderModel _renderModel;
-        private LogicalViewModel _logical;
+        private BaseState _logical;
 
         public SunRenderModel RenderModel 
         {
@@ -24,7 +24,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
    
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical; 
             set => RaiseAndSetIfChanged(ref _logical, value); 
@@ -34,18 +34,9 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical is SunAnimator sunData)
-                {
-                    double r = sunData.Position.Length;
-                    var orbitRadius = r;// * scene.WorldScale;
-                    
-                    scene.LightPosition = new dvec4(glm.Normalized(sunData.Position) * /*50000000.0*/orbitRadius/1000.0, 1.0);
+                scene.LightPosition = new dvec4(Logical.ModelMatrix.Column3.ToDvec3() / 1000.0, 1.0);
 
-                    //var sunPos = glm.Normalized(sunData.Position) * 160000.0;
-                    var modelMatrix = dmat4.Translate(/*sunPos*/sunData.Position);
-
-                    renderer.DrawSun(dc, RenderModel, modelMatrix, scene);
-                }
+                renderer.DrawSun(dc, RenderModel, Logical.ModelMatrix, scene);
             }
         }
 
