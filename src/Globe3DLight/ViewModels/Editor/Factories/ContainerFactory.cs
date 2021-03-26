@@ -85,7 +85,7 @@ namespace Globe3DLight.ViewModels.Editor
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
             var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(fr_rtr_collection, s));
         
-            project.AddEntity(objFactory.CreateSpacebox("Spacebox", root));
+            project.AddEntity(objFactory.CreateSpacebox("Spacebox", (BaseState)root));
             project.AddEntity(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
             project.AddEntity(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
             
