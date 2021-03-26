@@ -40,20 +40,20 @@ namespace Globe3DLight.ViewModels.Data
             //  dvec3 pk = positions[n + 1];
 
             dvec3 p;
-            double OrbitRadius;
+            double orbitRadius;
 
             if (n == _records.Count - 1) // для времени t равного Tend
             {
                 p = new dvec3(_records[n].y, _records[n].z, _records[n].x);
 
-                OrbitRadius = p.Length;              
+                orbitRadius = p.Length;              
             }
             else
             {
                 dvec3 pn = new dvec3(_records[n].y, _records[n].z, _records[n].x);
                 dvec3 pk = new dvec3(_records[n + 1].y, _records[n + 1].z, _records[n + 1].x);
               
-                OrbitRadius = pn.Length;
+                orbitRadius = pn.Length;
 
                 double coef = (tCur - _timeStep * n) / _timeStep;
 
@@ -62,16 +62,14 @@ namespace Globe3DLight.ViewModels.Data
 
             p = glm.Normalized(p);
 
-            p *= OrbitRadius;
+            p *= orbitRadius;
 
             return p;
         }
 
         private dmat4 OrbitalMatrix(double t)
-        {
-            double tCur = t;// base.LocalTime;
-
-            int n = (int)Math.Floor(tCur / _timeStep);
+        {        
+            int n = (int)Math.Floor(t / _timeStep);
 
             var arr1 = _records[n];
             // double[] arr2 = Array[n + 1];
@@ -93,12 +91,12 @@ namespace Globe3DLight.ViewModels.Data
                 un = _records[n].u;
                 double uk = _records[n + 1].u;
 
-                double coef = (tCur - _timeStep * n) / _timeStep;
+                double coef = (t - _timeStep * n) / _timeStep;
 
                 u = un + (uk - un) * coef;
             }
 
-            m = m * dmat4.Rotate(-(u - un), new dvec3(0.0f, 0.0f, 1.0f));
+            m = m * dmat4.Rotate(-(u - un), dvec3.UnitZ);
 
             //m.m00 = -v2.x; m.m10 = v2.y; m.m20 = -v3.y; m.m30 = 0.0;
             //m.m01 = v1.x; m.m11 = v1.y; m.m21 = v1.z; m.m31 = 0.0;

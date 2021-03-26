@@ -36,13 +36,11 @@
     
     
     <TextBlock Grid.Row="4" Grid.Column="0" Text="p2 :"/>
-    <TextBlock Grid.Row="4" Grid.Column="1" Text= 
-               "{Binding Shoot.p2, Converter={StaticResource GlmDvec3Converter}}"/>
+    <!-- <TextBlock Grid.Row="4" Grid.Column="1" Text= "{Binding Shoot.p2, Converter={StaticResource GlmDvec3Converter}}"/> -->
     
   
     <TextBlock Grid.Row="5" Grid.Column="0" Text="p3 :"/>
-    <TextBlock Grid.Row="5" Grid.Column="1" Text= 
-               "{Binding Shoot.p3, Converter={StaticResource GlmDvec3Converter}}"/>
+    <!-- <TextBlock Grid.Row="5" Grid.Column="1" Text= "{Binding Shoot.p3, Converter={StaticResource GlmDvec3Converter}}"/> -->
     
     <TextBlock Grid.Row="6" Grid.Column="0" Text="Direction :"/>
     <TextBlock Grid.Row="6" Grid.Column="1" Text="{Binding Direction}"/>
