@@ -15,7 +15,7 @@ namespace Globe3DLight.ViewModels.Editor
 {
     public interface IScenarioObjectFactory
     {
-        Spacebox CreateSpacebox(string name, LogicalViewModel parent);
+        Spacebox CreateSpacebox(string name, BaseState parent);
 
         Earth CreateEarth(string name, BaseState parent);
 
@@ -57,7 +57,7 @@ namespace Globe3DLight.ViewModels.Editor
             _serviceProvider = serviceProvider;
         }
 
-        public Spacebox CreateSpacebox(string name, LogicalViewModel parent)
+        public Spacebox CreateSpacebox(string name, BaseState parent)
         {         
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 

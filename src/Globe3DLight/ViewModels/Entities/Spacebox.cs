@@ -15,7 +15,7 @@ namespace Globe3DLight.ViewModels.Entities
     public class Spacebox : BaseEntity, IDrawable
     {
         private SpaceboxRenderModel _renderModel;
-        private LogicalViewModel _logical;
+        private BaseState _logical;
 
         public SpaceboxRenderModel RenderModel
         {
@@ -23,7 +23,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
@@ -32,11 +32,8 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {
-                if (Logical is FrameState frameData)
-                {
-                    renderer.DrawSpacebox(dc, RenderModel, frameData.ModelMatrix, scene);
-                }
+            {                    
+                renderer.DrawSpacebox(dc, RenderModel, Logical.ModelMatrix, scene);                
             }
         }
 
