@@ -37,6 +37,18 @@ namespace Globe3DLight.ViewModels.Data
             set => RaiseAndSetIfChanged(ref _p3, value);
         }
 
+
+        public (dvec3 p0, dvec3 p1) Slice(double d)
+        {
+            var dp = Math.Max(Math.Min(d, 1.0), 0.0);
+
+            var v0 = p1 - p0;
+            var v1 = p2 - p3;
+
+            return (p0 + v0 * dp, p3 + v1 * dp);
+        }
+
+
         public override bool IsDirty()
         {
             var isDirty = base.IsDirty();
@@ -53,6 +65,7 @@ namespace Globe3DLight.ViewModels.Data
     {
         private dvec3 _p0;
         private dvec3 _p1;
+        private dvec3 _pos;
 
         public dvec3 p0
         {
@@ -63,6 +76,11 @@ namespace Globe3DLight.ViewModels.Data
         {
             get => _p1;
             set => RaiseAndSetIfChanged(ref _p1, value);
+        }
+        public dvec3 Pos
+        {
+            get => _pos;
+            set => RaiseAndSetIfChanged(ref _pos, value);
         }
 
         public override bool IsDirty()
@@ -121,32 +139,55 @@ namespace Globe3DLight.ViewModels.Data
         private void Init(double t)
         {
             _shootingEvents = new EventList<SensorInterval>();
-               
-            var rotationNode = Owner;
-            if (rotationNode is RotationAnimator)
+     
+            if (Owner is SatelliteAnimator satAnimator)
             {
-                var satelliteNode = rotationNode.Owner;
-                if (satelliteNode is SatelliteAnimator satAnimator)
+                foreach (var item in _data.Shootings)
                 {
-                    foreach (var item in _data.Shootings)
+                    var begin = (item.BeginTime <= 86400.0) ? item.BeginTime : 86400.0;
+                    var end = (item.EndTime <= 86400.0) ? item.EndTime : 86400.0;
+                    var center = (end - begin) / 2.0;
+
+                    satAnimator.Animate(begin);
+                    var mat0 = satAnimator.ModelMatrix;
+
+                    satAnimator.Animate(end);
+                    var mat1 = satAnimator.ModelMatrix;
+
+                    satAnimator.Animate(center);
+                    var mat = satAnimator.ModelMatrix;
+
+                    var direction = (item.Gam1 >= 0.0 && item.Gam2 >= 0.0) ? 1 : -1;
+                    double yScale1 = -item.Range1;
+                    double yScale2 = -item.Range2;
+                    double angRot1 = -Math.Abs(glm.Radians(item.Gam1)) * direction;
+                    double angRot2 = -Math.Abs(glm.Radians(item.Gam2)) * direction;
+
+                    var p0 = new dvec3(0.0, Math.Cos(angRot1) * yScale1, Math.Sin(angRot1) * yScale1);
+                    var p1 = new dvec3(0.0, Math.Cos(angRot2) * yScale2, Math.Sin(angRot2) * yScale2);
+
+                    var ap0 = (mat0 * p0.ToDvec4()).ToDvec3();
+                    var ap1 = (mat1 * p0.ToDvec4()).ToDvec3();
+                    var ap2 = (mat1 * p1.ToDvec4()).ToDvec3();
+                    var ap3 = (mat0 * p1.ToDvec4()).ToDvec3();
+                    var cp0 = (mat * p0.ToDvec4()).ToDvec3();
+                    var cp1 = (mat * p1.ToDvec4()).ToDvec3();
+
+                    var scan = new Scan()
                     {
-                        var begin = (item.BeginTime <= 86400.0) ? item.BeginTime : 86400.0;
-                        var end = (item.EndTime <= 86400.0) ? item.EndTime : 86400.0;
+                        p0 = cp0 - (ap1 - ap0) / 2.0,
+                        p1 = cp0 + (ap1 - ap0) / 2.0,
+                        p2 = cp1 + (ap2 - ap3) / 2.0,
+                        p3 = cp1 - (ap2 - ap3) / 2.0,
+                    };
 
-                        satAnimator.Animate(begin);
-                        var mat0 = satAnimator.ModelMatrix;
+                    var ival = new SensorInterval(begin, end, direction, scan);
 
-                        satAnimator.Animate(end);
-                        var mat1 = satAnimator.ModelMatrix;
-
-                        var ival = new SensorInterval(begin, end, item.Gam1, item.Gam2, item.Range1, item.Range2, mat0, mat1);
-
-                        _shootingEvents.Add(ival);
-                    }
-
-                    // return true modelView
-                    satAnimator.Animate(t);
+                    _shootingEvents.Add(ival);
                 }
+
+                // return true modelView
+                satAnimator.Animate(t);
             }
 
             _first = false;
@@ -165,13 +206,25 @@ namespace Globe3DLight.ViewModels.Data
 
             if (Enable == true)
             {
-                var activeState = activeInterval.Animate(t);
+                if (Owner is SatelliteAnimator satAnimator)
+                {
+                    var activeState = activeInterval.Animate(t);
 
-                Shoot = activeState.Shoot;
+                    var begin = activeInterval.BeginTime;
+                    var end = activeInterval.EndTime;
 
-                Scan = activeState.Scan;
+                    var dt = (t - begin) / (end - begin);
 
-                Direction = activeState.Direction;
+                    var (p0, p1) = activeState.Scan.Slice(dt);
+
+                    var pos = satAnimator.Position;
+
+                    Shoot = new Shoot() { p0 = p0, p1 = p1, Pos = pos };
+
+                    Scan = activeState.Scan;
+
+                    Direction = activeState.Direction;
+                }
             }
         }
     }

@@ -30,9 +30,9 @@ namespace Globe3DLight
             return new vec3((float)dvec.x, (float)dvec.y, (float)dvec.z);
         }
 
-        public static vec4 ToVec4(this dvec3 dvec)
+        public static dvec4 ToDvec4(this dvec3 dvec)
         {
-            return new vec4((float)dvec.x, (float)dvec.y, (float)dvec.z, 1.0f);
+            return new dvec4(dvec.x, dvec.y, dvec.z, 1.0);
         }
 
         public static vec4 ToVec4(this dvec4 dvec)
