@@ -115,11 +115,13 @@ namespace Globe3DLight.ViewModels.Data
 
         public void Animate(double t)
         {
-            Position = GetPosition(t);
+            var position = GetPosition(t);
             
-            var translate = dmat4.Translate(Position);
+            var translate = dmat4.Translate(position);
 
             var rotation = OrbitalMatrix(t);
+
+            Position = position;
 
             ModelMatrix = translate * rotation;        
         }

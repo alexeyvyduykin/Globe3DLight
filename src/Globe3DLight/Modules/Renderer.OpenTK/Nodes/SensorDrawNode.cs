@@ -272,7 +272,7 @@ namespace Globe3DLight.Renderer.OpenTK
             A.GL.Begin(A.PrimitiveType.Triangles);
 
             A.GL.Vertex3(shoot.p0.Values);
-            A.GL.Vertex3(0.0, 0.0, 0.0);            
+            A.GL.Vertex3(shoot.Pos.Values);            
             A.GL.Vertex3(shoot.p1.Values);
 
             A.GL.End();
@@ -299,19 +299,19 @@ namespace Globe3DLight.Renderer.OpenTK
             A.GL.Vertex3(scan.p3.Values);
             A.GL.End();
 
-            //A.GL.Enable(A.EnableCap.Blend);
-            //A.GL.BlendFunc(A.BlendingFactorSrc.SrcAlpha, A.BlendingFactorDest.OneMinusSrcAlpha);
-            
-            //A.GL.Color4(0.0f, 1.0f, 1.0f, 0.2f);
+            A.GL.Enable(A.EnableCap.Blend);
+            A.GL.BlendFunc(A.BlendingFactorSrc.SrcAlpha, A.BlendingFactorDest.OneMinusSrcAlpha);
 
-            //A.GL.Begin(A.PrimitiveType.LineLoop);
-            //A.GL.Vertex3(scan.p0.Values);
-            //A.GL.Vertex3(shoot.p0.Values);
-            //A.GL.Vertex3(shoot.p1.Values);
-            //A.GL.Vertex3(scan.p3.Values);
-            //A.GL.End();
+            A.GL.Color4(0.0f, 1.0f, 1.0f, 0.1f);
 
-            //A.GL.Disable(A.EnableCap.Blend);
+            A.GL.Begin(A.PrimitiveType.Quads);
+            A.GL.Vertex3(scan.p0.Values);
+            A.GL.Vertex3(shoot.p0.Values);
+            A.GL.Vertex3(shoot.p1.Values);
+            A.GL.Vertex3(scan.p3.Values);
+            A.GL.End();
+
+            A.GL.Disable(A.EnableCap.Blend);
         }
     }
 }

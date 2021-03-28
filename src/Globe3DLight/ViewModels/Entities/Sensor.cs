@@ -38,17 +38,13 @@ namespace Globe3DLight.ViewModels.Entities
                 {
                     if (sensorData.Enable == true)
                     {
-                        var rotationNode = Logical.Owner;
-                        if (rotationNode is RotationAnimator rotationData)
+                        var orbitNode = Logical.Owner;
+                        if (orbitNode is SatelliteAnimator satelliteState)
                         {
-                            var orbitNode = rotationNode.Owner;
-                            if (orbitNode is SatelliteAnimator satelliteState)
-                            {                                
-                                RenderModel.Shoot = sensorData.Shoot;
-                                RenderModel.Scan = sensorData.Scan;
+                            RenderModel.Shoot = sensorData.Shoot;
+                            RenderModel.Scan = sensorData.Scan;
 
-                                renderer.DrawSensor(dc, RenderModel, satelliteState.AbsoluteModelMatrix, scene);
-                            }
+                            renderer.DrawSensor(dc, RenderModel, dmat4.Identity/* satelliteState.*//*Absolute*//*ModelMatrix*/, scene);
                         }
                     }
                 }
