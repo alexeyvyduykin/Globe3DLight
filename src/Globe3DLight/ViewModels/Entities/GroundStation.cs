@@ -17,7 +17,7 @@ namespace Globe3DLight.ViewModels.Entities
     { 
         private GroundStationRenderModel _renderModel; 
         private FrameRenderModel _frameRenderModel;
-        private LogicalViewModel _logical;
+        private BaseState _logical;
       
         public GroundStationRenderModel RenderModel
         {
@@ -31,7 +31,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);

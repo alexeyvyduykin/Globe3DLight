@@ -25,7 +25,7 @@ namespace Globe3DLight.ViewModels.Editor
 
         Sensor CreateSensor(string name, BaseState parent);
 
-        GroundStation CreateGroundStation(string name, LogicalViewModel parent);
+        GroundStation CreateGroundStation(string name, BaseState parent);
 
         EntityList CreateEntityList(string name, LogicalCollectionViewModel parent, IEnumerable<BaseEntity> values);
 
@@ -33,7 +33,7 @@ namespace Globe3DLight.ViewModels.Editor
 
         Retranslator CreateRetranslator(string name, BaseState parent);
 
-        Antenna CreateAntenna(string name, LogicalViewModel parent);
+        Antenna CreateAntenna(string name, BaseState parent);
 
         Orbit CreateOrbit(string name, BaseState parent);
 
@@ -139,7 +139,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public Antenna CreateAntenna(string name, LogicalViewModel parent)
+        public Antenna CreateAntenna(string name, BaseState parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
@@ -150,7 +150,7 @@ namespace Globe3DLight.ViewModels.Editor
                 RenderModel = renderModelFactory.CreateAntenna(),//libRenderModel.Items.FirstOrDefault(),
                 Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
-                Assets = ImmutableArray.Create<BaseEntity>(),
+                //Assets = ImmutableArray.Create<BaseEntity>(),
                 FrameRenderModel = renderModelFactory.CreateFrame(50.0f),
             };
 
@@ -173,7 +173,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public GroundStation CreateGroundStation(string name, LogicalViewModel parent)
+        public GroundStation CreateGroundStation(string name, BaseState parent)
         {      
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 

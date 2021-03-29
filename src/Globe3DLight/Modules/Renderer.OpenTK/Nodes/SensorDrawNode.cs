@@ -226,8 +226,8 @@ namespace Globe3DLight.Renderer.OpenTK
 
             A.GL.LineWidth(2.0f);
 
-            RenderShoot(_shoot);
             RenderScan(_scan, _shoot);
+            RenderShoot(_shoot);            
 
             A.GL.LineWidth(1.0f);
         }

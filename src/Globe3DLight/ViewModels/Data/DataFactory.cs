@@ -8,6 +8,7 @@ using Globe3DLight.ViewModels.Containers;
 using System.IO;
 using Globe3DLight.Models.Data;
 using Globe3DLight.Models;
+using Globe3DLight.ViewModels.Entities;
 
 namespace Globe3DLight.ViewModels.Data
 {
@@ -81,11 +82,11 @@ namespace Globe3DLight.ViewModels.Data
 
         LogicalViewModel CreateAntennaNode(LogicalViewModel parent, string path);
 
-        LogicalViewModel CreateAntennaNode(LogicalViewModel parent, AntennaData data);
+        BaseState CreateAntennaNode(LogicalViewModel parent, AntennaData data);
 
         BaseState CreateOrbitNode(LogicalViewModel parent, OrbitData data);
 
-        LogicalViewModel CreateGroundStationNode(ViewModelBase parent, GroundStationData data);
+        BaseState CreateGroundStationNode(ViewModelBase parent, GroundStationData data);
         
         LogicalViewModel CreateGroundObjectNode(ViewModelBase parent, GroundObjectData data);
 
@@ -166,10 +167,14 @@ namespace Globe3DLight.ViewModels.Data
             {
                 Name = name,
                 Children = ImmutableArray.Create<ViewModelBase>(),
+                Assets = ImmutableArray.Create<BaseEntity>(),
             };
                 
         public AntennaAnimator CreateAntennaAnimator(IList<TranslationRecord> translations, double t0, double t1) => 
-            new AntennaAnimator(new AntennaData("", nameof(AntennaData), translations, t0, t1));
+            new AntennaAnimator(new AntennaData("", nameof(AntennaData), translations, t0, t1))
+            {             
+                Assets = ImmutableArray.Create<BaseEntity>(),
+            };
         
         public OrbitState CreateOrbitState(string name, OrbitData data) => 
             new OrbitState(data)
@@ -375,7 +380,7 @@ namespace Globe3DLight.ViewModels.Data
             return fr_antenna;
         }
         
-        public LogicalViewModel CreateAntennaNode(LogicalViewModel parent, AntennaData data)
+        public BaseState CreateAntennaNode(LogicalViewModel parent, AntennaData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();           
 
@@ -401,7 +406,7 @@ namespace Globe3DLight.ViewModels.Data
             return fr_orbit;
         }
         
-        public LogicalViewModel CreateGroundStationNode(ViewModelBase parent, GroundStationData data)
+        public BaseState CreateGroundStationNode(ViewModelBase parent, GroundStationData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();       
 
