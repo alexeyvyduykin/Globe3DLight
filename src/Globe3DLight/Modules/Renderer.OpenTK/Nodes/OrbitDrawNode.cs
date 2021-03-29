@@ -33,8 +33,8 @@ namespace Globe3DLight.Renderer.OpenTK
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(scene.ViewMatrix.Values1D);
 
-            GL.Color3(1.0, 0.0, 0.0);
-            GL.LineWidth(3.0f);
+            GL.Color3(0.565, 0.537, 0.518); // #908984
+            GL.LineWidth(2.0f);
 
             GL.Begin(PrimitiveType.LineLoop);
 
@@ -42,10 +42,10 @@ namespace Globe3DLight.Renderer.OpenTK
             {
                 GL.Vertex3(pos.x, pos.y, pos.z);
             }
+           
+            GL.End();
 
             GL.LineWidth(1.0f);
-            GL.End();
         }
-
     }
 }

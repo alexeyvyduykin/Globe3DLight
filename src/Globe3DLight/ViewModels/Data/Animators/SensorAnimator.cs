@@ -97,12 +97,12 @@ namespace Globe3DLight.ViewModels.Data
                     var cp0 = (mat * p0.ToDvec4()).ToDvec3();
                     var cp1 = (mat * p1.ToDvec4()).ToDvec3();
 
-                    ap0 = ap0.Normalized * (6371.0 + 10.0);
-                    ap1 = ap1.Normalized * (6371.0 + 10.0);
-                    ap2 = ap2.Normalized * (6371.0 + 10.0);
-                    ap3 = ap3.Normalized * (6371.0 + 10.0);
-                    cp0 = cp0.Normalized * (6371.0 + 10.0);
-                    cp1 = cp1.Normalized * (6371.0 + 10.0);
+                    ap0 = ap0.Normalized * (6371.0 + 5.0);
+                    ap1 = ap1.Normalized * (6371.0 + 5.0);
+                    ap2 = ap2.Normalized * (6371.0 + 5.0);
+                    ap3 = ap3.Normalized * (6371.0 + 5.0);
+                    cp0 = cp0.Normalized * (6371.0 + 5.0);
+                    cp1 = cp1.Normalized * (6371.0 + 5.0);
 
                     var scan = new Scan(
                         cp0 - (ap1 - ap0) / 2.0,
