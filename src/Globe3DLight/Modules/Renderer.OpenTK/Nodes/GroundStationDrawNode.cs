@@ -49,7 +49,7 @@ color = u_color;
 
         public GroundStationDrawNode(GroundStationRenderModel groundStation)
         {
-            this.GroundStation = groundStation;
+            GroundStation = groundStation;
 
             _context = new B.Context();
 
@@ -64,8 +64,7 @@ color = u_color;
             u_mvp = ((B.Uniform<mat4>)_sp.Uniforms["u_mvp"]);
             u_color = ((B.Uniform<vec4>)_sp.Uniforms["u_color"]);
 
-            u_color.Value = new vec4(0.0f, 0.7f, 0.0f, 1.0f);
-
+            u_color.Value = new vec4(0.094f, 0.647f, 0.345f, 1.0f); // #18A558
 
             A.GL.BindAttribLocation(_sp.Handle, (int)0, "POSITION");
 
@@ -77,7 +76,7 @@ color = u_color;
         {
             if (_dirty)
             {
-                var mesh = GroundStation.Mesh;// new SolidSphere(1.0f, 16, 16);// 32, 32);
+                var mesh = GroundStation.Mesh;
 
                 _drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
                 _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Front;
@@ -88,9 +87,7 @@ color = u_color;
         }
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
-        {
-          //  sp.Bind();
-                
+        {                        
             var model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
             var view = scene.ViewMatrix;
             var mvp = scene.ProjectionMatrix * view * model;
