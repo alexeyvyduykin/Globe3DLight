@@ -73,7 +73,7 @@ namespace Globe3DLight.ViewModels.Data
 
         LogicalViewModel CreateSensorNode(LogicalViewModel parent, string path);
 
-        LogicalViewModel CreateSensorNode(LogicalViewModel parent, SensorData data);
+        BaseState CreateSensorNode(LogicalViewModel parent, SensorData data);
 
         LogicalViewModel CreateRetranslatorNode(LogicalViewModel parent, string path);
 
@@ -312,7 +312,7 @@ namespace Globe3DLight.ViewModels.Data
             return fr_sensor;      
         }
         
-        public LogicalViewModel CreateSensorNode(LogicalViewModel parent, SensorData data)
+        public BaseState CreateSensorNode(LogicalViewModel parent, SensorData data)
         {
             var dataFactory = _serviceProvider.GetService<IDataFactory>();       
 

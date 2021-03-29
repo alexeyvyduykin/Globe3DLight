@@ -335,7 +335,7 @@ namespace Globe3DLight.ViewModels.Editor
         {
             var obj = new SensorRenderModel()
             {
-
+                
             };
 
             return obj;

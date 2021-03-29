@@ -195,16 +195,16 @@ namespace Globe3DLight.Renderer.OpenTK
     internal class SensorDrawNode : DrawNode, ISensorDrawNode
     {
         private readonly SensorRenderModel _sensor;
-
-        public SensorRenderModel Sensor => _sensor;
+        private Scan _scan;
+        private Shoot _shoot;
 
         public SensorDrawNode(SensorRenderModel sensor)
         {
             _sensor = sensor;
         }
+       
+        public SensorRenderModel Sensor => _sensor;
 
-        private Scan _scan;
-        private Shoot _shoot;
         public override void UpdateGeometry()
         {
             _scan = Sensor.Scan;
@@ -217,101 +217,73 @@ namespace Globe3DLight.Renderer.OpenTK
             _scan = Sensor.Scan;
             _shoot = Sensor.Shoot;
 
-
-
-
-
-
-
-            RenderShoot(_shoot, modelMatrix, scene);
-            RenderScan(_scan, _shoot, modelMatrix, scene);
-        }
-        //public void RenderShoot1(Shoot shoot, dmat4 modelMatrix, ISceneState scene)
-        //{
-
-        //    A.GL.Enable(A.EnableCap.CullFace);
-        //    A.GL.CullFace(A.CullFaceMode.Front);
-        //    A.GL.FrontFace(A.FrontFaceDirection.Cw);
-
-        //    A.GL.Enable(A.EnableCap.Blend);
-        //    A.GL.BlendFunc(A.BlendingFactorSrc.SrcAlpha, A.BlendingFactorDest.OneMinusSrcAlpha);
-
-        //    sp.Bind();
-        //    //ShaderSetup.CameraSetup(sp, scene, obj.ModelMatrix);
-
-        //    dmat4 mvp = scene.ProjectionMatrix * scene.ViewMatrix * modelMatrix;
-        //    sp.SetUniform("u_mvp", mvp.ToMat4());
-
-        //    sp.SetUniform("u_P1", shoot.p0.ToVec4());
-        //    sp.SetUniform("u_P2", shoot.p1.ToVec4());
-        //    sp.SetUniform("u_P3", shoot.p2.ToVec4());
-        //    sp.SetUniform("u_P4", shoot.p3.ToVec4());
-
-        //    A.GL.Begin(A.PrimitiveType.Points);
-        //    A.GL.Vertex3(0.0f, 0.0f, 0.0f);
-        //    A.GL.End();
-        //    B.ShaderProgram.UnBind();
-
-        //    A.GL.Disable(A.EnableCap.Blend);
-        //    A.GL.Disable(A.EnableCap.CullFace);
-        //}
-
-        public void RenderShoot(Shoot shoot, dmat4 modelMatrix, ISceneState scene)
-        {
-            dmat4 mvp = scene.ViewMatrix * modelMatrix;// scene.ProjectionMatrix * scene.ViewMatrix * modelMatrix;
-
+            var mvp = scene.ViewMatrix * modelMatrix;
+           
             A.GL.MatrixMode(A.MatrixMode.Projection);
             A.GL.LoadMatrix(scene.ProjectionMatrix.Values1D);
             A.GL.MatrixMode(A.MatrixMode.Modelview);
             A.GL.LoadMatrix(mvp.Values1D);
-               
+
+            A.GL.LineWidth(2.0f);
+
+            RenderShoot(_shoot);
+            RenderScan(_scan, _shoot);
+
+            A.GL.LineWidth(1.0f);
+        }
+
+        private void RenderShoot(Shoot shoot)
+        {
+            A.GL.Color4(0.459, 0.902, 0.855, 0.1); // #75E6DA
+
             A.GL.Enable(A.EnableCap.Blend);              
             A.GL.BlendFunc(A.BlendingFactorSrc.SrcAlpha, A.BlendingFactorDest.OneMinusSrcAlpha);
-
-            A.GL.Color4(0.0f, 1.0f, 1.0f, 0.2f);
+                        
             A.GL.Begin(A.PrimitiveType.Triangles);
 
-            A.GL.Vertex3(shoot.p0.Values);
+            A.GL.Vertex3(shoot.P0.Values);
             A.GL.Vertex3(shoot.Pos.Values);            
-            A.GL.Vertex3(shoot.p1.Values);
+            A.GL.Vertex3(shoot.P1.Values);
 
             A.GL.End();
         
-            A.GL.Disable(A.EnableCap.Blend);         
+            A.GL.Disable(A.EnableCap.Blend);
+
+            A.GL.Color3(0.094, 0.604, 0.706); // #189AB4
+
+            A.GL.Begin(A.PrimitiveType.LineLoop);
+
+            A.GL.Vertex3(shoot.P0.Values);
+            A.GL.Vertex3(shoot.Pos.Values);
+            A.GL.Vertex3(shoot.P1.Values);
+
+            A.GL.End();
         }
 
-
-        public void RenderScan(Scan scan, Shoot shoot, dmat4 modelMatrix, ISceneState scene)
+        private void RenderScan(Scan scan, Shoot shoot)
         {
-            var mvp = scene.ViewMatrix * modelMatrix;
-
-            A.GL.MatrixMode(A.MatrixMode.Projection);
-            A.GL.LoadMatrix(scene.ProjectionMatrix.Values1D);
-            A.GL.MatrixMode(A.MatrixMode.Modelview);
-            A.GL.LoadMatrix(mvp.Values1D);
-
-            A.GL.Color3(0.0f, 1.0f, 1.0f);
-        
-            A.GL.Begin(A.PrimitiveType.LineLoop);
-            A.GL.Vertex3(scan.p0.Values);
-            A.GL.Vertex3(scan.p1.Values);
-            A.GL.Vertex3(scan.p2.Values);
-            A.GL.Vertex3(scan.p3.Values);
-            A.GL.End();
-
             A.GL.Enable(A.EnableCap.Blend);
             A.GL.BlendFunc(A.BlendingFactorSrc.SrcAlpha, A.BlendingFactorDest.OneMinusSrcAlpha);
 
-            A.GL.Color4(0.0f, 1.0f, 1.0f, 0.1f);
+            A.GL.Color4(0.831, 0.945, 0.957, 0.1); // #D4F1F4
 
             A.GL.Begin(A.PrimitiveType.Quads);
-            A.GL.Vertex3(scan.p0.Values);
-            A.GL.Vertex3(shoot.p0.Values);
-            A.GL.Vertex3(shoot.p1.Values);
-            A.GL.Vertex3(scan.p3.Values);
+            A.GL.Vertex3(scan.P0.Values);
+            A.GL.Vertex3(shoot.P0.Values);
+            A.GL.Vertex3(shoot.P1.Values);
+            A.GL.Vertex3(scan.P3.Values);
             A.GL.End();
 
             A.GL.Disable(A.EnableCap.Blend);
+
+            A.GL.Color3(0.831, 0.945, 0.957); // #D4F1F4
+
+            A.GL.Begin(A.PrimitiveType.LineLoop); 
+            A.GL.Vertex3(scan.P0.Values);
+            A.GL.Vertex3(scan.P1.Values);
+            A.GL.Vertex3(scan.P2.Values);
+            A.GL.Vertex3(scan.P3.Values);
+            A.GL.End();
         }
     }
 }

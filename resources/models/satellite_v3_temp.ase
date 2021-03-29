@@ -111,7 +111,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 1
 			*MAP_AMOUNT 1.0000
-			*BITMAP "X:\SPEC\Work\Projects\Globe3DLight\src\Globe3DLight.Desktop\bin\Debug\net5.0\..\..\..\..\..\resources\models\Locator.bmp"
+			*BITMAP "C:\Users\User\AlexeyVyduykin\CSharpProjects\Globe3DLight (NET.Core)\Globe3DLight\src\Globe3DLight.Desktop\bin\Debug\net5.0\..\..\..\..\..\resources\models\Locator.bmp"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
@@ -147,7 +147,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 1
 			*MAP_AMOUNT 1.0000
-			*BITMAP "X:\SPEC\Work\Projects\Globe3DLight\src\Globe3DLight.Desktop\bin\Debug\net5.0\..\..\..\..\..\resources\models\MiniSolarPanel.bmp"
+			*BITMAP "C:\Users\User\AlexeyVyduykin\CSharpProjects\Globe3DLight (NET.Core)\Globe3DLight\src\Globe3DLight.Desktop\bin\Debug\net5.0\..\..\..\..\..\resources\models\MiniSolarPanel.bmp"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
@@ -183,7 +183,7 @@
 			*MAP_CLASS "Bitmap"
 			*MAP_SUBNO 1
 			*MAP_AMOUNT 1.0000
-			*BITMAP "X:\SPEC\Work\Projects\Globe3DLight\src\Globe3DLight.Desktop\bin\Debug\net5.0\..\..\..\..\..\resources\models\SolarPanel.bmp"
+			*BITMAP "C:\Users\User\AlexeyVyduykin\CSharpProjects\Globe3DLight (NET.Core)\Globe3DLight\src\Globe3DLight.Desktop\bin\Debug\net5.0\..\..\..\..\..\resources\models\SolarPanel.bmp"
 			*MAP_TYPE Screen
 			*UVW_U_OFFSET 0.0000
 			*UVW_V_OFFSET 0.0000
