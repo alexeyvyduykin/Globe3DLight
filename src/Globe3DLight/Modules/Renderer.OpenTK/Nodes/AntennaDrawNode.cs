@@ -11,46 +11,39 @@ using Globe3DLight.ViewModels.Scene;
 namespace Globe3DLight.Renderer.OpenTK
 {
     internal class AntennaDrawNode : DrawNode, IAntennaDrawNode
-    {
-
-       // private readonly ShaderProgram sp;
+    {       
         private readonly AntennaRenderModel _antenna;
-
-        public AntennaRenderModel Antenna => _antenna;
-
         public AntennaDrawNode(AntennaRenderModel antenna)
         {
-            this._antenna = antenna;
+            _antenna = antenna;
         }
+
+        public AntennaRenderModel Antenna => _antenna;
   
         public override void UpdateGeometry()
         {
-            //_scan = Sensor.Scan;
-           // _shoot = Sensor.Shoot;
+
         }
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
-
-            dmat4 modelView = scene.ViewMatrix;// * modelMatrix;
+            var modelView = scene.ViewMatrix;
 
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(scene.ProjectionMatrix.Values1D);
-
             GL.MatrixMode(MatrixMode.Modelview);
             GL.LoadMatrix(modelView.Values1D);
 
-            dvec4 source = modelMatrix.Column3;
-            dvec3 target = Antenna.TargetPostion;
+            var source = modelMatrix.Column3;
+            var target = Antenna.AbsoluteTargetPostion;
 
-            GL.Color3(1.0, 0.0, 0.0);
-            
+            GL.Color3(0.094, 0.647, 0.345); // #18A558
+
             GL.PushAttrib(AttribMask.EnableBit);
             
-            GL.LineWidth(3.0f);
+            GL.LineWidth(2.0f);
             GL.LineStipple(1, 0xFF00);        
             GL.Enable(EnableCap.LineStipple);
-
 
             GL.Begin(PrimitiveType.Lines);
             GL.Vertex3(source.x, source.y, source.z);
@@ -58,8 +51,6 @@ namespace Globe3DLight.Renderer.OpenTK
             GL.End();
           
             GL.LineWidth(1.0f);
-
-          //  GL.Disable(EnableCap.LineStipple);
 
             GL.PopAttrib();
         }

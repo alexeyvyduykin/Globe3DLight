@@ -80,11 +80,11 @@ namespace Globe3DLight.ViewModels.Editor
             var fr_gos = data.GroundObjects.ToDictionary(s => s.Name, s => dataFactory.CreateGroundObjectNode(fr_go_collection, s));
             var fr_sats = data.SatellitePositions.ToDictionary(s => s.Name, s => dataFactory.CreateSatelliteNode(root, s));
             var fr_rotations = data.SatelliteRotations.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateRotationNode(fr_sats[s.SatelliteName], s));
-            var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateSensorNode(fr_sats/*fr_rotations*/[s.SatelliteName], s));
+            var fr_sensors = data.SatelliteShootings.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateSensorNode(fr_sats[s.SatelliteName], s));
             var fr_antennas = data.SatelliteTransfers.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateAntennaNode(fr_rotations[s.SatelliteName], s));            
             var fr_orbits = data.SatelliteOrbits.ToDictionary(s => s.SatelliteName, s => dataFactory.CreateOrbitNode(fr_rotations[s.SatelliteName], s));            
             var fr_retrs = data.RetranslatorPositions.ToDictionary(s => s.Name, s => dataFactory.CreateRetranslatorNode(fr_rtr_collection, s));
-        
+
             project.AddEntity(objFactory.CreateSpacebox("Spacebox", (BaseState)root));
             project.AddEntity(objFactory.CreateSun(fr_sun.Name, fr_sun.Node));
             project.AddEntity(objFactory.CreateEarth(fr_earth.Name, fr_earth.Node));
@@ -111,12 +111,14 @@ namespace Globe3DLight.ViewModels.Editor
             var rtrs = fr_retrs.Select(s => objFactory.CreateRetranslator(s.Key, s.Value));
 
             for (int i = 0; i < fr_antennas.Count; i++)
-            {
-                var antenna = objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[satellites[i].Name]);
-                antenna.AddAssets(gss);
-                antenna.AddAssets(rtrs);
+            {          
+                satellites[i].AddChild(objFactory.CreateAntenna(string.Format("Antenna{0}", i + 1), fr_antennas[satellites[i].Name]));
+            }
 
-                satellites[i].AddChild(antenna);
+            foreach (AntennaAnimator item in fr_antennas.Values)
+            {
+                item.AddAssets(gss);
+                item.AddAssets(rtrs);
             }
 
             for (int i = 0; i < fr_orbits.Count; i++)

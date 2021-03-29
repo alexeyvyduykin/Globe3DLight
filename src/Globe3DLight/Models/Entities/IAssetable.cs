@@ -5,8 +5,8 @@ using Globe3DLight.ViewModels.Entities;
 
 namespace Globe3DLight.Models.Entities
 {
-    public interface IAssetable 
+    public interface IAssetable<T> 
     {
-        ImmutableArray<BaseEntity> Assets { get; set; }
+        ImmutableArray<T> Assets { get; set; }
     }
 }

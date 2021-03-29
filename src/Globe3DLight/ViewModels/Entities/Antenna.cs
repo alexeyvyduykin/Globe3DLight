@@ -15,19 +15,11 @@ using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.ViewModels.Entities
 {
-    public class Antenna : BaseEntity, IDrawable, IAssetable
+    public class Antenna : BaseEntity, IDrawable
     {
         private AntennaRenderModel _renderModel; 
         private FrameRenderModel _frameRenderModel;
-
-        private LogicalViewModel _logical; 
-        private ImmutableArray<BaseEntity> _assets;
-        
-        public ImmutableArray<BaseEntity> Assets
-        {
-            get => _assets;
-            set => RaiseAndSetIfChanged(ref _assets, value);
-        }
+        private BaseState _logical; 
 
         public AntennaRenderModel RenderModel
         {
@@ -35,7 +27,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public LogicalViewModel Logical
+        public BaseState Logical
         {
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
@@ -50,76 +42,22 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical is AntennaAnimator antennaData)
+                if (Logical is AntennaAnimator antennaAnimator)
                 {
-                    dvec3 targetPosition = default;
-                    bool enable = antennaData.Enable;
-
-                    if (enable == true)
+                    var rotationState = antennaAnimator.Owner;
+                    if (rotationState is RotationAnimator rotationAnimator)
                     {
-                        var target = antennaData.Target;
+                        var attach = RenderModel.AttachPosition;
 
-                        foreach (var item in Assets)
+                        var antennaModelMatrix = rotationAnimator.AbsoluteModelMatrix * dmat4.Translate(attach);
+
+                        renderer.DrawFrame(dc, FrameRenderModel, antennaModelMatrix, scene);
+
+                        if (antennaAnimator.Enable == true)
                         {
-                            if (item is GroundStation groundStation)
-                            {
-                                if (groundStation.Name.Equals(target) == true)
-                                {
-                                    if (groundStation.Logical is GroundStationState groundStationData)
-                                    {
-                                        var collection = (LogicalCollectionViewModel)groundStation.Logical.Owner;
-                                        var j2000Node = (LogicalViewModel)collection.Owner;
-                                        if (j2000Node is EarthAnimator j2000Data)
-                                        {
-                                            targetPosition = new dvec3(j2000Data.ModelMatrix * new dvec4(groundStationData.Position, 1.0));
-                                        }
-                                    }
-                                }
-                            }
-                        }
+                            RenderModel.AbsoluteTargetPostion = antennaAnimator.TargetPosition;
 
-                        foreach (var item in Assets)
-                        {
-                            if (item is Retranslator retranslator)
-                            {
-                                if (retranslator.Name.Equals(target) == true)
-                                {
-                                    if (retranslator.Logical is RetranslatorAnimator retranslatorData)
-                                    {
-                                        targetPosition = retranslatorData.Position;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    var rotationNode = (LogicalViewModel)Logical.Owner;
-                    if (rotationNode is RotationAnimator rotationData)
-                    {
-                        var orbitNode = (LogicalViewModel)rotationNode.Owner;
-                        if (orbitNode is SatelliteAnimator satelliteState)
-                        {
-                            var attach = RenderModel.AttachPosition;
-
-                            //   double r = orbitData.Position.Length;
-                            //   var orbitRadius = r * scene.WorldScale;
-
-                            //   dmat4 translate = dmat4.Translate(glm.Normalized(orbitData.Position) * orbitRadius);
-
-                            var orbitModelMatrix = satelliteState.ModelMatrix;// translate * orbitData.mtxRot;//.Inverse;     
-
-                            var satelliteModelMatrix = orbitModelMatrix * rotationData.ModelMatrix;// RotationMatrix;
-
-                            var antennaModelMatrix = satelliteModelMatrix * dmat4.Translate(attach);
-
-                            renderer.DrawFrame(dc, FrameRenderModel, antennaModelMatrix, scene);
-
-                            if (enable == true)
-                            {
-                                RenderModel.TargetPostion = targetPosition;
-
-                                renderer.DrawAntenna(dc, RenderModel, antennaModelMatrix, scene);
-                            }
+                            renderer.DrawAntenna(dc, RenderModel, antennaModelMatrix, scene);
                         }
                     }
                 }

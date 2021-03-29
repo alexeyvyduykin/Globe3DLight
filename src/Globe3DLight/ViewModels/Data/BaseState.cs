@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GlmSharp;
+using Globe3DLight.ViewModels.Containers;
 
 namespace Globe3DLight.ViewModels.Data
 {
@@ -26,6 +27,12 @@ namespace Globe3DLight.ViewModels.Data
 
             while (parent is not null)
             {
+                if(parent is LogicalCollectionViewModel)
+                {
+                    parent = parent.Owner;
+                    continue;
+                }
+
                 modelMatrix = ((BaseState)parent).ModelMatrix * modelMatrix;
 
                 parent = parent.Owner;

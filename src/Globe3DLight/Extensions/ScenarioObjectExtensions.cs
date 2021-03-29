@@ -44,7 +44,7 @@ namespace Globe3DLight
             }
         }
 
-        public static void AddAssets(this IAssetable assetable, IEnumerable<BaseEntity> objects)
+        public static void AddAssets<T>(this IAssetable<T> assetable, IEnumerable<T> objects)
         {
             if (assetable.Assets != null && objects != null)
             {
