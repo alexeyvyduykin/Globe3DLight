@@ -16,7 +16,7 @@ namespace Globe3DLight.ViewModels.Entities
     public class Sensor : BaseEntity, IDrawable
     {
         private SensorRenderModel _renderModel;         
-        private LogicalViewModel _logical;
+        private BaseState _logical;
 
         public SensorRenderModel RenderModel
         {
@@ -24,7 +24,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value); 
         }
 
-        public LogicalViewModel Logical 
+        public BaseState Logical 
         {
             get => _logical; 
             set => RaiseAndSetIfChanged(ref _logical, value);
@@ -38,14 +38,10 @@ namespace Globe3DLight.ViewModels.Entities
                 {
                     if (sensorData.Enable == true)
                     {
-                        var orbitNode = Logical.Owner;
-                        if (orbitNode is SatelliteAnimator satelliteState)
-                        {
-                            RenderModel.Shoot = sensorData.Shoot;
-                            RenderModel.Scan = sensorData.Scan;
+                        RenderModel.Shoot = sensorData.Shoot;
+                        RenderModel.Scan = sensorData.Scan;
 
-                            renderer.DrawSensor(dc, RenderModel, dmat4.Identity/* satelliteState.*//*Absolute*//*ModelMatrix*/, scene);
-                        }
+                        renderer.DrawSensor(dc, RenderModel, dmat4.Identity, scene);
                     }
                 }
             }

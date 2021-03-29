@@ -23,7 +23,7 @@ namespace Globe3DLight.ViewModels.Editor
 
         Sun CreateSun(string name, BaseState parent);
 
-        Sensor CreateSensor(string name, LogicalViewModel parent);
+        Sensor CreateSensor(string name, BaseState parent);
 
         GroundStation CreateGroundStation(string name, LogicalViewModel parent);
 
@@ -123,7 +123,7 @@ namespace Globe3DLight.ViewModels.Editor
             return obj;
         }
 
-        public Sensor CreateSensor(string name, LogicalViewModel parent)
+        public Sensor CreateSensor(string name, BaseState parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 

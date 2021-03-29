@@ -6,94 +6,20 @@ using Globe3DLight.Models.Data;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class Scan : ViewModelBase
-    {
-        private dvec3 _p0;
-        private dvec3 _p1;
-        private dvec3 _p2;
-        private dvec3 _p3;
-
-        public dvec3 p0
-        {
-            get => _p0;
-            set => RaiseAndSetIfChanged(ref _p0, value);
-        }
-
-        public dvec3 p1
-        {
-            get => _p1;
-            set => RaiseAndSetIfChanged(ref _p1, value);
-        }
-
-        public dvec3 p2
-        {
-            get => _p2;
-            set => RaiseAndSetIfChanged(ref _p2, value);
-        }
-
-        public dvec3 p3
-        {
-            get => _p3;
-            set => RaiseAndSetIfChanged(ref _p3, value);
-        }
-
-
+    public record Scan(dvec3 P0, dvec3 P1, dvec3 P2, dvec3 P3) 
+    { 
         public (dvec3 p0, dvec3 p1) Slice(double d)
         {
             var dp = Math.Max(Math.Min(d, 1.0), 0.0);
 
-            var v0 = p1 - p0;
-            var v1 = p2 - p3;
+            var v0 = P1 - P0;
+            var v1 = P2 - P3;
 
-            return (p0 + v0 * dp, p3 + v1 * dp);
-        }
-
-
-        public override bool IsDirty()
-        {
-            var isDirty = base.IsDirty();
-            return isDirty;
-        }
-
-        public override void Invalidate()
-        {
-            base.Invalidate();
+            return (P0 + v0 * dp, P3 + v1 * dp);
         }
     }
 
-    public class Shoot : ViewModelBase
-    {
-        private dvec3 _p0;
-        private dvec3 _p1;
-        private dvec3 _pos;
-
-        public dvec3 p0
-        {
-            get => _p0;
-            set => RaiseAndSetIfChanged(ref _p0, value);
-        }
-        public dvec3 p1
-        {
-            get => _p1;
-            set => RaiseAndSetIfChanged(ref _p1, value);
-        }
-        public dvec3 Pos
-        {
-            get => _pos;
-            set => RaiseAndSetIfChanged(ref _pos, value);
-        }
-
-        public override bool IsDirty()
-        {
-            var isDirty = base.IsDirty();
-            return isDirty;
-        }
-    
-        public override void Invalidate()
-        {
-            base.Invalidate();
-        }
-    }
+    public record Shoot(dvec3 Pos, dvec3 P0, dvec3 P1);
 
     public class SensorAnimator : BaseState, IAnimator
     {
@@ -108,8 +34,6 @@ namespace Globe3DLight.ViewModels.Data
         public SensorAnimator(SensorData data)
         {
             _data = data;
-            //   _shootingEvents =
-            //    data.Shootings.Select(s => new SensorInterval(s.BeginTime, s.EndTime, s.Gam1, s.Gam2, s.Range1, s.Range2)).ToEventList();
         }
 
         public bool Enable
@@ -146,7 +70,7 @@ namespace Globe3DLight.ViewModels.Data
                 {
                     var begin = (item.BeginTime <= 86400.0) ? item.BeginTime : 86400.0;
                     var end = (item.EndTime <= 86400.0) ? item.EndTime : 86400.0;
-                    var center = (end - begin) / 2.0;
+                    var center = begin + (end - begin) / 2.0;
 
                     satAnimator.Animate(begin);
                     var mat0 = satAnimator.ModelMatrix;
@@ -173,13 +97,18 @@ namespace Globe3DLight.ViewModels.Data
                     var cp0 = (mat * p0.ToDvec4()).ToDvec3();
                     var cp1 = (mat * p1.ToDvec4()).ToDvec3();
 
-                    var scan = new Scan()
-                    {
-                        p0 = cp0 - (ap1 - ap0) / 2.0,
-                        p1 = cp0 + (ap1 - ap0) / 2.0,
-                        p2 = cp1 + (ap2 - ap3) / 2.0,
-                        p3 = cp1 - (ap2 - ap3) / 2.0,
-                    };
+                    ap0 = ap0.Normalized * (6371.0 + 10.0);
+                    ap1 = ap1.Normalized * (6371.0 + 10.0);
+                    ap2 = ap2.Normalized * (6371.0 + 10.0);
+                    ap3 = ap3.Normalized * (6371.0 + 10.0);
+                    cp0 = cp0.Normalized * (6371.0 + 10.0);
+                    cp1 = cp1.Normalized * (6371.0 + 10.0);
+
+                    var scan = new Scan(
+                        cp0 - (ap1 - ap0) / 2.0,
+                        cp0 + (ap1 - ap0) / 2.0,
+                        cp1 + (ap2 - ap3) / 2.0,
+                        cp1 - (ap2 - ap3) / 2.0);
 
                     var ival = new SensorInterval(begin, end, direction, scan);
 
@@ -219,7 +148,7 @@ namespace Globe3DLight.ViewModels.Data
 
                     var pos = satAnimator.Position;
 
-                    Shoot = new Shoot() { p0 = p0, p1 = p1, Pos = pos };
+                    Shoot = new Shoot(pos, p0, p1);
 
                     Scan = activeState.Scan;
 
