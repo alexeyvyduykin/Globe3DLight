@@ -9,11 +9,36 @@ using Globe3DLight.ViewModels.Data;
 using Globe3DLight.Models.Data;
 using System.IO;
 using Globe3DLight.ViewModels.Time;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.Models.Scene;
+using System.Linq;
+using System.Collections.Immutable;
+using GlmSharp;
+using System.Threading;
+using Globe3DLight.Models;
 
 namespace Globe3DLight.Models
 {
     public interface IFactory
     {
+        FrameState CreateFrameState(string name);
+
+        Spacebox CreateSpacebox(BaseState parent);
+
+        Sun CreateSun(SunData data, BaseState parent);
+
+        Earth CreateEarth(EarthData data, BaseState parent);
+
+        EntityList CreateGroundObjects(ScenarioData data, BaseState parent);
+
+        EntityList CreateGroundStations(ScenarioData data, BaseState parent);
+
+        EntityList CreateRetranslators(ScenarioData data, BaseState parent);
+
+        IList<Satellite> CreateSatellites(ScenarioData data, BaseState parent, EntityList gss, EntityList rtrs);
+        
+        IList<SatelliteTask> CreateSatelliteTasks(IList<Satellite> satellites, ScenarioData data);
+        
         LibraryViewModel<T> CreateLibrary<T>(string name);
 
         LibraryViewModel<T> CreateLibrary<T>(string name, IEnumerable<T> items);
@@ -49,6 +74,10 @@ namespace Globe3DLight.Models
         IAMesh CreateCube(float width);
 
         IAMesh CreateSolidSphere(float radius, int rings, int sectors);
+
+        ISceneState CreateSceneState();
+
+        ICamera CreateArcballCamera(dvec3 eye);
 
         ProjectContainerViewModel CreateProjectContainer(string name = "Project");
 

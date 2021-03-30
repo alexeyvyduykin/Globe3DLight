@@ -13,17 +13,19 @@ namespace Globe3DLight.ViewModels.Editor
     public static class ProjectExtensions
     {
 
-        public static void AddEntity(this ProjectContainerViewModel project, BaseEntity entity)
+        public static BaseEntity AddEntity(this ProjectContainerViewModel project, BaseEntity entity)
         {
             if (project?.Scenarios != null && entity != null)
             {       
                 var builder = project.CurrentScenario.Entities.ToBuilder();
                 builder.Add(entity);
                 project.CurrentScenario.Entities = builder.ToImmutable();
-            }            
+            }
+
+            return entity;
         }
 
-        public static void AddEntities(this ProjectContainerViewModel project, IEnumerable<BaseEntity> entities)
+        public static IList<T> AddEntities<T>(this ProjectContainerViewModel project, IList<T> entities) where T : BaseEntity
         {
             if (project?.Scenarios != null && entities != null)
             {
@@ -31,6 +33,8 @@ namespace Globe3DLight.ViewModels.Editor
                 builder.AddRange(entities);
                 project.CurrentScenario.Entities = builder.ToImmutable();
             }
+
+            return entities;
         }
 
         public static void AddScenario(this ProjectContainerViewModel project, ScenarioContainerViewModel scenario)
