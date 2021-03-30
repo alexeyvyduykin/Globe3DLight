@@ -20,9 +20,7 @@ namespace Globe3DLight.ViewModels.Editor
         private readonly IServiceProvider _serviceProvider;
         private readonly Lazy<IFactory> _factory;
         private string _projectPath;
-        private readonly Lazy<IDataFactory> _dataFactory;
-        private readonly Lazy<IContainerFactory> _containerFactory;
-        private readonly Lazy<IScenarioObjectFactory> _sceneFactory;
+        private readonly Lazy<IContainerFactory> _containerFactory;    
         private readonly Lazy<IJsonSerializer> _jsonSerializer;
         private readonly Lazy<IFileSystem> _fileIO;
         private readonly Lazy<IRenderContext> _renderer;
@@ -38,16 +36,19 @@ namespace Globe3DLight.ViewModels.Editor
             get => _project;
             set => RaiseAndSetIfChanged(ref _project, value);
         }
+
         public string ProjectPath
         {
             get => _projectPath;
             set => RaiseAndSetIfChanged(ref _projectPath, value);
         }
+
         public IDisposable Observer
         {
             get => _observer;
             set => RaiseAndSetIfChanged(ref _observer, value);
         }
+
         public IEditorTool CurrentTool => _currentTool.Value;
 
         public IRenderContext Renderer => _renderer.Value;
@@ -55,24 +56,23 @@ namespace Globe3DLight.ViewModels.Editor
         public IPresenterContract Presenter => _presenter.Value;
 
         public IContainerFactory ContainerFactory => _containerFactory.Value;
+
         public IFactory Factory => _factory.Value;
-        public IDataFactory DataFactory => _dataFactory.Value;
-        public IScenarioObjectFactory SceneFactory => _sceneFactory.Value;
+
         public IEditorCanvasPlatform CanvasPlatform => _canvasPlatform.Value;
 
         public IJsonSerializer JsonSerializer => _jsonSerializer.Value;
 
         public IFileSystem FileIO => _fileIO.Value;
+
         public IProjectEditorPlatform Platform => _platform.Value;
 
         public ProjectEditorViewModel(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
 
-            _factory = _serviceProvider.GetServiceLazily<IFactory>();
-            _dataFactory = _serviceProvider.GetServiceLazily<IDataFactory>();
-            _containerFactory = _serviceProvider.GetServiceLazily<IContainerFactory>();
-            _sceneFactory = _serviceProvider.GetServiceLazily<IScenarioObjectFactory>();
+            _factory = _serviceProvider.GetServiceLazily<IFactory>();       
+            _containerFactory = _serviceProvider.GetServiceLazily<IContainerFactory>();   
             _renderer = _serviceProvider.GetServiceLazily<IRenderContext>();
             _presenter = _serviceProvider.GetServiceLazily<IPresenterContract>();   
             _currentTool = _serviceProvider.GetServiceLazily<IEditorTool>();
@@ -290,7 +290,7 @@ namespace Globe3DLight.ViewModels.Editor
             {
                 if (Project?.CurrentScenario != null)
                 {
-                    var child = DataFactory.CreateFrameState("Frame");
+                    var child = Factory.CreateFrameState("Frame");
 
                     Project.AddChildFrame(node, child);
                 }

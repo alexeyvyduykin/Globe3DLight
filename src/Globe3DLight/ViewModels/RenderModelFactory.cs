@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using GlmSharp;
-using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.Models.Geometry.Models;
-using System.Linq;
 using System.Collections.Immutable;
-using Globe3DLight.Models.Image;
-using Microsoft.Extensions.Configuration;
 using System.IO;
+using System.Linq;
+using GlmSharp;
 using Globe3DLight.Models;
+using Globe3DLight.ViewModels.Scene;
+using Microsoft.Extensions.Configuration;
 
-namespace Globe3DLight.ViewModels.Editor
+namespace Globe3DLight.ViewModels
 {
     public interface IRenderModelFactory
     {
@@ -58,7 +53,7 @@ namespace Globe3DLight.ViewModels.Editor
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"models\TrueCubeSphere.obj");
 
-            return modelLoader.LoadModel(path, false);       
+            return modelLoader.LoadModel(path, false);
         }
 
         public EarthRenderModel CreateEarthDefault()
@@ -66,24 +61,24 @@ namespace Globe3DLight.ViewModels.Editor
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
 
             var pairs = ImmutableArray.Create<(string, string)>(
-                ("PosX", "pos_x.dds"), 
-                ("NegZ", "neg_z.dds"), 
-                ("NegX", "neg_x.dds"), 
-                ("PosZ", "pos_z.dds"), 
-                ("PosY", "pos_y.dds"), 
+                ("PosX", "pos_x.dds"),
+                ("NegZ", "neg_z.dds"),
+                ("NegX", "neg_x.dds"),
+                ("PosZ", "pos_z.dds"),
+                ("PosY", "pos_y.dds"),
                 ("NegY", "neg_y.dds"));
 
             var keys = ImmutableArray.Create<string>("EarthDiffuse", "EarthSpecular", "EarthNormal", "EarthNight");
 
             var model = CreateCubeSphere();
 
-            var obj = new EarthRenderModel() 
-            {             
-                Meshes = model.Meshes.ToImmutableArray(),       
+            var obj = new EarthRenderModel()
+            {
+                Meshes = model.Meshes.ToImmutableArray(),
                 DiffuseKeys = pairs.Select(s => keys[0] + s.Item1),
                 SpecularKeys = pairs.Select(s => keys[1] + s.Item1),
                 NormalKeys = pairs.Select(s => keys[2] + s.Item1),
-                NightKeys = pairs.Select(s => keys[3] + s.Item1),                
+                NightKeys = pairs.Select(s => keys[3] + s.Item1),
             };
 
             imageLibrary.AddKeys(pairs.Select(s => (keys[0] + s.Item1, @"resources\textures\earth\diffuseQubeMap\" + s.Item2)).ToArray());
@@ -101,12 +96,12 @@ namespace Globe3DLight.ViewModels.Editor
 
             var resourcePath = configuration["ResourcePath"];
 
-            var pairs = ImmutableArray.Create<(string, string)>(   
-                ("PosX", "pos_x.dds"),    
-                ("NegZ", "neg_z.dds"),   
-                ("NegX", "neg_x.dds"),   
-                ("PosZ", "pos_z.dds"),      
-                ("PosY", "pos_y.dds"),     
+            var pairs = ImmutableArray.Create<(string, string)>(
+                ("PosX", "pos_x.dds"),
+                ("NegZ", "neg_z.dds"),
+                ("NegX", "neg_x.dds"),
+                ("PosZ", "pos_z.dds"),
+                ("PosY", "pos_y.dds"),
                 ("NegY", "neg_y.dds"));
 
             var keys = ImmutableArray.Create<string>("EarthDiffuse", "EarthSpecular", "EarthNormal", "EarthNight");
@@ -115,11 +110,11 @@ namespace Globe3DLight.ViewModels.Editor
 
             var obj = new EarthRenderModel()
             {
-                Meshes = model.Meshes.ToImmutableArray(),   
+                Meshes = model.Meshes.ToImmutableArray(),
                 DiffuseKeys = pairs.Select(s => keys[0] + s.Item1),
                 SpecularKeys = pairs.Select(s => keys[1] + s.Item1),
                 NormalKeys = pairs.Select(s => keys[2] + s.Item1),
-                NightKeys = pairs.Select(s => keys[3] + s.Item1),                      
+                NightKeys = pairs.Select(s => keys[3] + s.Item1),
             };
 
             var path1 = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"textures\EarthQubeMap\EarthDiffuseFake\");
@@ -137,8 +132,8 @@ namespace Globe3DLight.ViewModels.Editor
 
         public EarthRenderModel CreateEarthSimple()
         {
-          //  var ddsLoader = _serviceProvider.GetService<IDDSLoader>();
-          //  var d1evice = _serviceProvider.GetService<IDevice>();
+            //  var ddsLoader = _serviceProvider.GetService<IDDSLoader>();
+            //  var d1evice = _serviceProvider.GetService<IDevice>();
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
 
             var keys = ImmutableArray.Create<string>("EarthDiffuse", "EarthSpecular", "EarthNormal", "EarthNight");
@@ -146,10 +141,10 @@ namespace Globe3DLight.ViewModels.Editor
 
             var obj = new EarthRenderModel()
             {
-              //  DiffuseImages = ImmutableArray.Create<IDdsImage>(),
-              //  SpecularImages = ImmutableArray.Create<IDdsImage>(),
-              //  NormalImages = ImmutableArray.Create<IDdsImage>(),
-              //  NightImages = ImmutableArray.Create<IDdsImage>(),
+                //  DiffuseImages = ImmutableArray.Create<IDdsImage>(),
+                //  SpecularImages = ImmutableArray.Create<IDdsImage>(),
+                //  NormalImages = ImmutableArray.Create<IDdsImage>(),
+                //  NightImages = ImmutableArray.Create<IDdsImage>(),
                 Meshes = model.Meshes.ToImmutableArray(),    //CreateCubeSphere().ToImmutableArray(),
                 //   ImageLoader = imageLoader,
 
@@ -169,7 +164,7 @@ namespace Globe3DLight.ViewModels.Editor
         }
 
         public SunRenderModel CreateSun()
-        {            
+        {
             var factory = _serviceProvider.GetService<IFactory>();
             var imageLibrary = _serviceProvider.GetService<IImageLibrary>();
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
@@ -179,9 +174,9 @@ namespace Globe3DLight.ViewModels.Editor
             var resourcePath = configuration["ResourcePath"];
 
             var obj = new SunRenderModel()
-            {                       
-                Billboard = factory.CreateBillboard(),  
-                SunGlowKey = key,             
+            {
+                Billboard = factory.CreateBillboard(),
+                SunGlowKey = key,
             };
 
             imageLibrary.AddKey(key, Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"textures\Sun\starSpectrum.dds"));
@@ -200,7 +195,7 @@ namespace Globe3DLight.ViewModels.Editor
             var resourcePath = configuration["ResourcePath"];
 
             var obj = new SpaceboxRenderModel()
-            {                      
+            {
                 Mesh = factory.CreateCube((float)scale), //factory.CreateCube(25000.0f),
                 SpaceboxCubemapKey = key,
                 Scale = scale,
@@ -218,7 +213,7 @@ namespace Globe3DLight.ViewModels.Editor
             var mesh = factory.CreateSolidSphere(1.0f, 16, 16);
 
             var obj = new GroundStationRenderModel()
-            {                
+            {
                 Mesh = mesh,//factory.CreateSolidSphere(0.06f, 16, 16),
                 Scale = scale,
             };
@@ -235,7 +230,7 @@ namespace Globe3DLight.ViewModels.Editor
 
             return obj;
         }
-        
+
         public RetranslatorRenderModel CreateRetranslator(double scale)
         {
             var factory = _serviceProvider.GetService<IFactory>();
@@ -256,7 +251,7 @@ namespace Globe3DLight.ViewModels.Editor
 
             var obj = new SensorRenderModel()
             {
-               
+
             };
 
             return obj;
@@ -311,9 +306,9 @@ namespace Globe3DLight.ViewModels.Editor
             var resourcePath = configuration["ResourcePath"];
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"models");
-        
+
             var tempFile = Path.Combine(path, @"satellite_v3_temp.ase");
-           
+
             string text = File.ReadAllText(Path.Combine(path, @"satellite_v3.ase"));
             text = text.Replace("\"Locator.bmp\"", "\"" + Path.Combine(path, "Locator.bmp") + "\"");
             text = text.Replace("\"MiniSolarPanel.bmp\"", "\"" + Path.Combine(path, "MiniSolarPanel.bmp") + "\"");
@@ -323,9 +318,9 @@ namespace Globe3DLight.ViewModels.Editor
             var model = modelLoader.LoadModel(tempFile, true);
 
             var obj = new SatelliteRenderModel()
-            {             
+            {
                 Scale = scale,// 0.002,        
-                Model = model,     
+                Model = model,
             };
 
             return obj;
@@ -335,13 +330,13 @@ namespace Globe3DLight.ViewModels.Editor
         {
             var obj = new SensorRenderModel()
             {
-                
+
             };
 
             return obj;
         }
         public AntennaRenderModel CreateAntenna()
-        {                                
+        {
             var obj = new AntennaRenderModel()
             {
                 AttachPosition = new dvec3(67.74, -12.22, -23.5),
@@ -353,8 +348,8 @@ namespace Globe3DLight.ViewModels.Editor
         public OrbitRenderModel CreateOrbit()
         {
             var obj = new OrbitRenderModel()
-            { 
-            
+            {
+
             };
 
             return obj;

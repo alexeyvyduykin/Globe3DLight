@@ -61,9 +61,7 @@ namespace Globe3DLight.ViewModels.Designer
         public static void InitializeContext(IServiceProvider serviceProvider)
         {
             var factory = serviceProvider.GetService<IFactory>();
-            var objFactory = serviceProvider.GetService<IScenarioObjectFactory>();
-            //var databaseFactory = serviceProvider.GetService<IDatabaseFactory>();
-
+            
             var begin = DateTime.Now;
             var duration = TimeSpan.FromDays(1);
 
@@ -77,11 +75,9 @@ namespace Globe3DLight.ViewModels.Designer
 
             Editor.OnNewProject();
 
-
             // Project
 
-            var containerFactory = serviceProvider.GetService<IContainerFactory>();
-            var dataFactory = serviceProvider.GetService<IDataFactory>();
+            var containerFactory = serviceProvider.GetService<IContainerFactory>();        
 
             Project = containerFactory.GetProject();
 
@@ -90,53 +86,53 @@ namespace Globe3DLight.ViewModels.Designer
             Project.AddScenario(containerFactory.GetScenario("Scenario3", begin, duration));
             Project.CurrentScenario = Project.Scenarios.FirstOrDefault();
 
-
-            var objBuilder = ImmutableArray.CreateBuilder<BaseEntity>();
-            objBuilder.Add(objFactory.CreateSpacebox("Spacebox", null));
-            objBuilder.Add(objFactory.CreateSun("Sun", null));
-            objBuilder.Add(objFactory.CreateEarth("Earth", null));
-            objBuilder.Add(objFactory.CreateSatellite("Satellite1", null));
-            objBuilder.Add(objFactory.CreateSatellite("Satellite2", null));
-            objBuilder.Add(objFactory.CreateSatellite("Satellite3", null));
-            objBuilder.Add(objFactory.CreateSatellite("Satellite4", null));
-            objBuilder.Add(objFactory.CreateSensor("Sensor1", null));
-            objBuilder.Add(objFactory.CreateSensor("Sensor2", null));
-            objBuilder.Add(objFactory.CreateSensor("Sensor3", null));
-            objBuilder.Add(objFactory.CreateSensor("Sensor4", null));
-
-            Project.CurrentScenario.Entities = objBuilder.ToImmutable();
-
-
             // Database
 
             SatelliteData = DataDesigner.SatelliteData;
             RotationData = DataDesigner.RotationData;
             SensorData = DataDesigner.SensorData;
             SunData = DataDesigner.SunData;
-            EarthData = new EarthData("", DateTime.Now, 120.0);
+            EarthData = new EarthData("Earth", DateTime.Now, 120.0);
             RetranslatorData = DataDesigner.RetranslatorData;
             AntennaData = DataDesigner.AntennaData;
             GroundStationData = new GroundStationData("", 36.0, 42.17, 0.135, 6371.0);
 
+            // Entities
+
+            var objBuilder = ImmutableArray.CreateBuilder<BaseEntity>();
+            objBuilder.Add(factory.CreateSpacebox(null));
+            objBuilder.Add(factory.CreateSun(SunData, null));
+            objBuilder.Add(factory.CreateEarth(EarthData, null));
+            //objBuilder.Add(objFactory.CreateSatellite("Satellite1", null));
+            //objBuilder.Add(objFactory.CreateSatellite("Satellite2", null));
+            //objBuilder.Add(objFactory.CreateSatellite("Satellite3", null));
+            //objBuilder.Add(objFactory.CreateSatellite("Satellite4", null));
+            //objBuilder.Add(objFactory.CreateSensor("Sensor1", null));
+            //objBuilder.Add(objFactory.CreateSensor("Sensor2", null));
+            //objBuilder.Add(objFactory.CreateSensor("Sensor3", null));
+            //objBuilder.Add(objFactory.CreateSensor("Sensor4", null));
+
+            Project.CurrentScenario.Entities = objBuilder.ToImmutable();
+
             // Frames and Data
 
-            var satelliteAnimator = dataFactory.CreateSatelliteAnimator("fr_orbit_satellite1", SatelliteData);
-            satelliteAnimator.Animate(0.0);
-            SatelliteNode = satelliteAnimator;
+            //var satelliteAnimator = dataFactory.CreateSatelliteAnimator("fr_orbit_satellite1", SatelliteData);
+            //satelliteAnimator.Animate(0.0);
+            //SatelliteNode = satelliteAnimator;
 
-            var rotationAnimator = dataFactory.CreateRotationAnimator("fr_rotation_satellite1", RotationData);
-            rotationAnimator.Animate(1.0);
-            RotationNode = rotationAnimator;
+            //var rotationAnimator = dataFactory.CreateRotationAnimator("fr_rotation_satellite1", RotationData);
+            //rotationAnimator.Animate(1.0);
+            //RotationNode = rotationAnimator;
 
-            SatelliteNode.AddChild(RotationNode);
+            //SatelliteNode.AddChild(RotationNode);
 
-            var sensorAnimator = dataFactory.CreateSensorAnimator("fr_sensor1", SensorData);
-            sensorAnimator.Animate(0.0);
-            SensorNode = sensorAnimator;
+            //var sensorAnimator = dataFactory.CreateSensorAnimator("fr_sensor1", SensorData);
+            //sensorAnimator.Animate(0.0);
+            //SensorNode = sensorAnimator;
 
-            var sunAnimator = dataFactory.CreateSunAnimator("fr_sun", SunData);
-            sunAnimator.Animate(0.0);
-            SunNode = sunAnimator;
+            //var sunAnimator = dataFactory.CreateSunAnimator("fr_sun", SunData);
+            //sunAnimator.Animate(0.0);
+            //SunNode = sunAnimator;
 
             //var j2000Animator = dataFactory.CreateJ2000Animator("fr_earth", J2000Data);
             //j2000Animator.Animate(0.0);
@@ -156,29 +152,29 @@ namespace Globe3DLight.ViewModels.Designer
 
             // Scenario objects
 
-            Satellite = objFactory.CreateSatellite("Satellite1", RotationNode);
+            //Satellite = objFactory.CreateSatellite("Satellite1", RotationNode);
 
-            Sensor = objFactory.CreateSensor("Sensor1", null);
+            //Sensor = objFactory.CreateSensor("Sensor1", null);
 
-            Project.AddChildFrame(Project.CurrentScenario.LogicalRoot.FirstOrDefault(), dataFactory.CreateFrameState("Frame1"));
+            Project.AddChildFrame(Project.CurrentScenario.LogicalRoot.FirstOrDefault(), factory.CreateFrameState("Frame1"));
 
             //   Template = factory.CreateTemplateContainer();
 
             Scenario = factory.CreateScenarioContainer();
 
-            var dt = DateTime.Now;
-            var events = new List<BaseSatelliteEvent>();
-            events.AddRange(objFactory.CreateRotationEvents(RotationData, dt));
-            events.AddRange(objFactory.CreateObservationEvents(SensorData, dt));
-            events.AddRange(objFactory.CreateTransmissionEvents(AntennaData, dt));
-            SatelliteTask = objFactory.CreateSatelliteTask(Satellite, RotationData, SensorData, AntennaData, DateTime.Now);
+            //var dt = DateTime.Now;
+            //var events = new List<BaseSatelliteEvent>();
+            //events.AddRange(objFactory.CreateRotationEvents(RotationData, dt));
+            //events.AddRange(objFactory.CreateObservationEvents(SensorData, dt));
+            //events.AddRange(objFactory.CreateTransmissionEvents(AntennaData, dt));
+            //SatelliteTask = objFactory.CreateSatelliteTask(Satellite, RotationData, SensorData, AntennaData, DateTime.Now);
             //SatelliteTask.Events = events.OrderBy(s => s.Begin).ToList();
 
-            Scenario.AddSatelliteTask(SatelliteTask);
+            //Scenario.AddSatelliteTask(SatelliteTask);
 
             // Scene
 
-            ArcballCamera = objFactory.CreateArcballCamera(GlmSharp.dvec3.UnitZ);
+            ArcballCamera = factory.CreateArcballCamera(GlmSharp.dvec3.UnitZ);
         }
     }
 
@@ -236,7 +232,7 @@ namespace Globe3DLight.ViewModels.Designer
                 0.0, 86400.0);
 
         public static SunData SunData =>       
-            new SunData("",           
+            new SunData("Sun",           
                 new GlmSharp.dvec3(40000.0, -42000.0, 41500.0),             
                 new GlmSharp.dvec3(38000.0, -44000.0, 37500.0),            
                 0.0, 86400.0);

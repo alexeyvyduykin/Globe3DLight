@@ -19,5 +19,15 @@ namespace Globe3DLight
                 scenario.Tasks = builder.ToImmutable();
             }
         }
+
+        public static void AddSatelliteTasks(this ScenarioContainerViewModel scenario, IList<SatelliteTask> tasks)
+        {
+            if (scenario?.Tasks != null && tasks != null)
+            {
+                var builder = scenario.Tasks.ToBuilder();
+                builder.AddRange(tasks);
+                scenario.Tasks = builder.ToImmutable();
+            }
+        }
     }
 }
