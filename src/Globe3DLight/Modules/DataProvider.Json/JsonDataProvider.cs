@@ -50,9 +50,9 @@ namespace Globe3DLight.DataProvider.Json
 
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
 
-            var resourcePath = configuration["ResourcePath"];
+            var dataPath = configuration["DataPath"];
             var projectFilename = configuration["ProjectFilename"];
-            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), dataPath);
 
             var json = _jsonSerializer.Serialize<ScenarioData>(data);
          
@@ -70,9 +70,9 @@ namespace Globe3DLight.DataProvider.Json
         {
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
 
-            var resourcePath = configuration["ResourcePath"];
+            var dataPath = configuration["DataPath"];
             var projectFilename = configuration["ProjectFilename"];
-            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath);
+            var path = Path.Combine(Directory.GetCurrentDirectory(), dataPath);
 
             return await Task.Run(() => CreateDataFromPath<ScenarioData>(Path.Combine(path, projectFilename)));
         }
