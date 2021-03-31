@@ -46,12 +46,23 @@ namespace Globe3DLight.ViewModels
         public Globe3DLight.Models.Geometry.Models.IModel CreateCubeSphere()
         {
             var modelLoader = _serviceProvider.GetService<IModelLoader>();
-
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
 
             var resourcePath = configuration["ResourcePath"];
 
             var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"models\TrueCubeSphere.obj");
+
+            return modelLoader.LoadModel(path, false);
+        }
+
+        private Globe3DLight.Models.Geometry.Models.IModel CreateGroundStation()
+        {
+            var modelLoader = _serviceProvider.GetService<IModelLoader>();
+            var configuration = _serviceProvider.GetService<IConfigurationRoot>();
+
+            var resourcePath = configuration["ResourcePath"];
+
+            var path = Path.Combine(Directory.GetCurrentDirectory(), resourcePath, @"models\tall_dish.obj");
 
             return modelLoader.LoadModel(path, false);
         }
@@ -208,14 +219,16 @@ namespace Globe3DLight.ViewModels
 
         public GroundStationRenderModel CreateGroundStation(double scale)
         {
-            var factory = _serviceProvider.GetService<IFactory>();
+            //var factory = _serviceProvider.GetService<IFactory>();
 
-            var mesh = factory.CreateSolidSphere(1.0f, 16, 16);
+            //var mesh = factory.CreateSolidSphere(1.0f, 16, 16);
+
+            var model = CreateGroundStation();
 
             var obj = new GroundStationRenderModel()
             {
-                Mesh = mesh,//factory.CreateSolidSphere(0.06f, 16, 16),
-                Scale = scale,
+                Mesh = model.Meshes.SingleOrDefault(),// mesh,
+                Scale = 180,//scale,
             };
 
             return obj;
