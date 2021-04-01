@@ -346,7 +346,7 @@ vec3 color = temperatureColor * unColorMult;
             {
                 var mesh = Sun.Billboard;
 
-                _drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
+                _drawState.VertexArray = _context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
 
                 _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Back;
                 _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;

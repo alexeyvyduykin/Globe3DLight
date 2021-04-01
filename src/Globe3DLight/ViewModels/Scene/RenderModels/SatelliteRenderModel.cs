@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry;
 
 namespace Globe3DLight.ViewModels.Scene
 {

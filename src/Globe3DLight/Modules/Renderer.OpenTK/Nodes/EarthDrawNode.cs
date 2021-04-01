@@ -5,10 +5,9 @@ using GlmSharp;
 using Globe3DLight.Models.Scene;
 using A = OpenTK.Graphics.OpenGL;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-using Globe3DLight.Models.Geometry;
 using System.Collections.Immutable;
 using Globe3DLight.Models.Image;
-using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.ViewModels.Scene;
 
@@ -566,7 +565,7 @@ color = finalColor;
             {
                 for (int i = 0; i < 6; i++)
                 {
-                    drawStates[i].VertexArray = _context.CreateVertexArray_NEW(meshes[i], drawStates[i].ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
+                    drawStates[i].VertexArray = _context.CreateVertexArray(meshes[i], drawStates[i].ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
                     drawStates[i].RenderState.FacetCulling.Face = A.CullFaceMode.Back;
                     drawStates[i].RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw; // default
                 }

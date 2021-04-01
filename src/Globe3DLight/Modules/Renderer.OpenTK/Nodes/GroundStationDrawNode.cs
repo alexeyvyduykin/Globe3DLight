@@ -4,7 +4,7 @@ using GlmSharp;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.Renderer.OpenTK.Core;
-using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry;
 using Globe3DLight.ViewModels.Scene;
 using A = OpenTK.Graphics.OpenGL;
 

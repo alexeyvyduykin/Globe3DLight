@@ -6,7 +6,6 @@ using System.Linq;
 using GlmSharp;
 using Globe3DLight.Models;
 using Globe3DLight.Models.Data;
-using Globe3DLight.Models.Geometry;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.Timer;
@@ -17,7 +16,6 @@ using Globe3DLight.ViewModels.Geometry;
 using Globe3DLight.ViewModels.Renderer;
 using Globe3DLight.ViewModels.Scene;
 using Globe3DLight.ViewModels.Time;
-using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.ViewModels
 {
@@ -55,241 +53,11 @@ namespace Globe3DLight.ViewModels
             return new Cache<TKey, TValue>(dispose);
         }
 
-        //public IShapeRendererState CreateShapeRendererState()
-        //{
-        //    var state = new ShapeRendererState()
-        //    {
-        //        PanX = 0.0,
-        //        PanY = 0.0,
-        //        ZoomX = 1.0,
-        //        ZoomY = 1.0,
-        //        DrawShapeState = CreateShapeState(ShapeStateFlags.Visible),
-        //        SelectedShapes = default
-        //    };
-
-        //    state.SelectionStyle =
-        //        CreateShapeStyle(
-        //            "Selection",
-        //            0x7F, 0x33, 0x33, 0xFF,
-        //            0x4F, 0x33, 0x33, 0xFF,
-        //            1.0);
-
-        //    state.HelperStyle =
-        //        CreateShapeStyle(
-        //            "Helper",
-        //            0xFF, 0x00, 0xBF, 0xFF,
-        //            0xFF, 0x00, 0xBF, 0xFF,
-        //            1.0);
-
-        //    state.DrawDecorators = true;
-        //    state.DrawPoints = true;
-
-        //    state.PointStyle =
-        //        CreateShapeStyle(
-        //            "Point",
-        //            0xFF, 0x00, 0xBF, 0xFF,
-        //            0xFF, 0xFF, 0xFF, 0xFF,
-        //            2.0);
-        //    state.SelectedPointStyle =
-        //        CreateShapeStyle(
-        //            "SelectionPoint",
-        //            0xFF, 0x00, 0xBF, 0xFF,
-        //            0xFF, 0x00, 0xBF, 0xFF,
-        //            2.0);
-        //    state.PointSize = 4.0;
-
-        //    return state;
-        //}
-
-        public IVertexAttribute CreateVertexAttributePosition()
-        {
-            return new VertexAttribute<vec3>("POSITION", VertexAttributeType.FloatVector3);
-        }
-
-        public IVertexAttribute CreateVertexAttributeNormal()
-        {
-            return new VertexAttribute<vec3>("NORMAL", VertexAttributeType.FloatVector3);
-        }
-
-        public IVertexAttribute CreateVertexAttributeTextCoord()
-        {
-            return new VertexAttribute<vec2>("TEXCOORD", VertexAttributeType.FloatVector2);
-        }
-
-        public IVertexAttribute CreateVertexAttributeTangent()
-        {
-            return new VertexAttribute<vec3>("TANGENT", VertexAttributeType.FloatVector3);
-        }
-
-        public IVertexAttribute CreateVertexAttributeColor()
-        {
-            return new VertexAttribute<vec4>("COLOR", VertexAttributeType.FloatVector4);
-        }
-
-        public IVertexAttribute<T> CreateVertexAttributePosition<T>(VertexAttributeType type)
-        {
-            return new VertexAttribute<T>("POSITION", type/*VertexAttributeType.FloatVector3*/);
-        }
-
-        public IVertexAttribute<T> CreateVertexAttributeNormal<T>(VertexAttributeType type)
-        {
-            return new VertexAttribute<T>("NORMAL", type/*VertexAttributeType.FloatVector3*/);
-        }
-
-        public IVertexAttribute<T> CreateVertexAttributeTextCoord<T>(VertexAttributeType type)
-        {
-            return new VertexAttribute<T>("TEXCOORD", type/*VertexAttributeType.FloatVector2*/);
-        }
-        public IVertexAttribute<T> CreateVertexAttributeTangent<T>(VertexAttributeType type)
-        {
-            return new VertexAttribute<T>("TANGENT", type/*VertexAttributeType.FloatVector3*/);
-        }
-
-        public IIndices<ushort> CreateIndicesUnsignedShort()
-        {
-            return new IndicesUnsignedShort();
-        }
-
-        public IIndices<uint> CreateIndicesUnsignedInt()
-        {
-            return new IndicesUnsignedInt();
-        }
-
         public FrameState CreateFrameState(string name) => new FrameState()
         {
             Name = name,
             Children = ImmutableArray.Create<ViewModelBase>(),
         };
-
-        public IAMesh CreateMesh()
-        {
-            //     IVertexAttribute positionsAttribute = CreateVertexAttributePosition();
-            //     IVertexAttribute normalsAttribute = CreateVertexAttributeNormal();
-            //     IVertexAttribute texCoordsAttribute = CreateVertexAttributeTextCoord();
-            //     IVertexAttribute tangentsAttribute = CreateVertexAttributeTangent();
-
-            //      IndicesUnsignedShort indicesBase = new IndicesUnsignedShort();
-
-            //      mesh.Attributes.Add(positionsAttribute);
-            //     mesh.Attributes.Add(normalsAttribute);
-            //      mesh.Attributes.Add(texCoordsAttribute);
-            //      mesh.Attributes.Add(tangentsAttribute);
-
-            //      mesh.Indices = indicesBase;
-
-            return new AMesh()
-            {
-                PrimitiveType = PrimitiveType.Triangles,
-                FrontFaceWindingOrder = FrontFaceDirection.Cw,
-                Attributes = ImmutableArray.Create<IVertexAttribute>()
-            };
-        }
-
-        public Mesh CreateBillboard()
-        {        
-            return new Mesh() 
-            {
-                Vertices = new vec3[4]           
-                {               
-                    new vec3(-1.0f, -1.0f, 0.0f),                
-                    new vec3(-1.0f, 1.0f, 0.0f),                
-                    new vec3(1.0f, 1.0f, 0.0f),               
-                    new vec3(1.0f, -1.0f, 0.0f)           
-                },
-                Normals = new List<vec3>(),
-                TexCoords = new List<vec2>(),
-                Tangents = new List<vec3>(),
-                Indices = new ushort[6] { 0, 1, 2, 0, 2, 3 },
-                MaterialIndex = -1,
-            };
-        }
-
-        public Mesh CreateCube(double scale)
-        {          
-            return new Mesh()
-            {
-                Vertices = new vec3[8]
-                {
-                    new vec3(1.0f, -1.0f, -1.0f) * (float)scale,
-                    new vec3(1.0f, -1.0f, 1.0f) * (float)scale,
-                    new vec3(1.0f, 1.0f, 1.0f) * (float)scale,
-                    new vec3(1.0f, 1.0f, -1.0f) * (float)scale,
-                    new vec3(-1.0f, -1.0f, 1.0f) * (float)scale,
-                    new vec3(-1.0f, -1.0f, -1.0f) * (float)scale,
-                    new vec3(-1.0f, 1.0f, -1.0f) * (float)scale,
-                    new vec3(-1.0f, 1.0f, 1.0f) * (float)scale
-                },
-                Normals = new List<vec3>(),
-                TexCoords = new List<vec2>(),
-                Tangents = new List<vec3>(),
-                Indices = new ushort[36]
-                {
-                    0, 1, 2,  // x_pos
-                    2, 3, 0,  //
-                    4, 5, 6,  // x_neg
-                    6, 7, 4,  //
-                    6, 3, 2,  // y_pos
-                    2, 7, 6,  //
-                    0, 5, 4,  // y_neg
-                    4, 1, 0,  //
-                    1, 4, 7,  // z_pos
-                    7, 2, 1,  //
-                    5, 0, 3,  // z_neg
-                    3, 6, 5   //
-                },
-                MaterialIndex = -1,
-            };
-        }
-
-        public Mesh CreateSolidSphere(double radius, int rings, int sectors)
-        {
-            // FrontFaceDirection.Ccw
-            var indices = new List<ushort>();
-            var vertices = new List<vec3>();
-            var texcoords = new List<vec2>();
-            var normals = new List<vec3>();         
-
-            double R = 1.0 / (double)(rings - 1);
-            double S = 1.0 / (double)(sectors - 1);
-       
-            for (int r = 0; r < rings; r++)
-            {
-                for (int s = 0; s < sectors; s++)
-                {
-                    double y = Math.Sin((-Math.PI / 2.0 + Math.PI * r * R));
-                    double x = Math.Cos(2.0 * Math.PI * s * S) * Math.Sin(Math.PI * r * R);
-                    double z = Math.Sin(2.0 * Math.PI * s * S) * Math.Sin(Math.PI * r * R);
-
-                    vertices.Add(new vec3((float)x * (float)radius, (float)y * (float)radius, (float)z * (float)radius));
-                    texcoords.Add(new vec2((float)(s * S), (float)(r * R)));
-                    normals.Add(new vec3((float)x, (float)y, (float)z));
-                }
-            }
-
-            for (int r = 0; r < rings - 1; r++)
-            {
-                for (int s = 0; s < sectors - 1; s++)
-                {
-                    indices.Add((ushort)(r * sectors + s));
-                    indices.Add((ushort)(r * sectors + (s + 1)));
-                    indices.Add((ushort)((r + 1) * sectors + (s + 1)));
-
-                    indices.Add((ushort)((r + 1) * sectors + (s + 1)));
-                    indices.Add((ushort)((r + 1) * sectors + s));
-                    indices.Add((ushort)(r * sectors + s));
-                }
-            }
-
-            return new Mesh()
-            {
-                Vertices = vertices,
-                Normals = normals,
-                TexCoords = texcoords,
-                Tangents = new List<vec3>(),
-                Indices = indices,
-                MaterialIndex = -1,
-            };
-        }
 
         public ProjectContainerViewModel CreateProjectContainer(string name = "Project")
         {

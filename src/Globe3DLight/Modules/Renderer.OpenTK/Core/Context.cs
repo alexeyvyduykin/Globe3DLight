@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Globe3DLight.ViewModels.Geometry;
 using A = OpenTK.Graphics.OpenGL;
-using B = Globe3DLight.Models.Geometry;
-using GlmSharp;
-using System.Diagnostics;
-using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
-
     internal class Context
     {
         private readonly Device _device;
+        private readonly RenderState _renderState;
+        private ShaderProgram _boundShaderProgram;
+        private readonly TextureUnits _textureUnits;
 
-        public Context(/*GraphicsWindow window, int width, int height*/)
+        public Context()
         {
             _renderState = new RenderState();
             _textureUnits = new TextureUnits();
@@ -24,208 +20,11 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             ForceApplyRenderState(_renderState);
 
             _device = new Device();
-
-        //    Viewport = new Rectangle(0, 0, width, height);
-        //    this.window = window;
         }
 
-     //   public void MakeCurrent()
-      //  {
-       //     window.MakeCurrent();
-     //   }
+        public TextureUnits TextureUnits => _textureUnits;
 
-        //public VertexArray CreateVertexArray(Globe3DCore.Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferUsageHint usageHint)
-        //{
-        //    return CreateVertexArray(Device.CreateMeshBuffers(mesh, shaderAttributes, usageHint));
-        //}
-
-        //public VertexArray CreateVertexArray_NEW(Globe3DCore.Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, BufferUsageHint usageHint)
-        //{
-        //    VertexArray va = new VertexArray();
-
-        //    if (mesh.Indices != null)
-        //    {
-        //        if (mesh.Indices.Datatype == IndicesType.UnsignedShort)
-        //        {
-        //            IList<ushort> meshIndices = ((IndicesUnsignedShort)mesh.Indices).Values;
-
-        //            ushort[] indices = new ushort[meshIndices.Count];
-        //            for (int j = 0; j < meshIndices.Count; ++j)
-        //            {
-        //                indices[j] = meshIndices[j];
-        //            }
-
-        //            IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(ushort));
-        //            indexBuffer.CopyFromSystemMemory(indices);
-        //            va.IndexBuffer = indexBuffer;
-        //        }
-        //        else if (mesh.Indices.Datatype == IndicesType.UnsignedInt)
-        //        {
-        //            IList<uint> meshIndices = ((IndicesUnsignedInt)mesh.Indices).Values;
-
-        //            uint[] indices = new uint[meshIndices.Count];
-        //            for (int j = 0; j < meshIndices.Count; ++j)
-        //            {
-        //                indices[j] = meshIndices[j];
-        //            }
-
-        //            IndexBuffer indexBuffer = Device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));
-        //            indexBuffer.CopyFromSystemMemory(indices);
-        //            va.IndexBuffer = indexBuffer;
-        //        }
-        //        else
-        //        {
-        //            throw new NotSupportedException("mesh.Indices.Datatype " +
-        //                mesh.Indices.Datatype.ToString() + " is not supported.");
-        //        }
-        //    }
-
-        //    // TODO:  Not tested exhaustively
-        //    foreach (ShaderVertexAttribute shaderAttribute in shaderAttributes)
-        //    {
-        //        VertexAttribute attribute = mesh.Attributes[shaderAttribute.Name];
-
-        //        if (attribute.Datatype == VertexAttributeType.Float)
-        //        {
-        //            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(((VertexAttribute<float>)attribute).Values, usageHint);
-
-        //            va.Attributes[shaderAttribute.Location] = 
-        //                new VertexBufferAttribute(vertexBuffer, VertexAttribPointerType.Float, 1);
-        //        }
-        //        else if (attribute.Datatype == VertexAttributeType.FloatVector2)
-        //        {
-        //            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(((VertexAttribute<vec2>)attribute).Values, usageHint);
-
-        //            va.Attributes[shaderAttribute.Location] =
-        //                new VertexBufferAttribute(vertexBuffer, VertexAttribPointerType.Float, 2);
-        //        }
-        //        else if (attribute.Datatype == VertexAttributeType.FloatVector3)
-        //        {
-        //            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(((VertexAttribute<vec3>)attribute).Values, usageHint);
-
-        //            va.Attributes[shaderAttribute.Location] =
-        //                new VertexBufferAttribute(vertexBuffer, VertexAttribPointerType.Float, 3);
-        //        }
-        //        else if (attribute.Datatype == VertexAttributeType.FloatVector4)
-        //        {
-        //            VertexBuffer vertexBuffer = Device.CreateVertexBuffer(((VertexAttribute<vec4>)attribute).Values, usageHint);
-
-        //            va.Attributes[shaderAttribute.Location] =
-        //                new VertexBufferAttribute(vertexBuffer, VertexAttribPointerType.Float, 4);
-        //        }
-        //        else
-        //        {
-        //            Debug.Fail("attribute.Datatype");
-        //        }
-        //    }
-
-        //    return va;
-        //}
-
-        public VertexArray CreateVertexArray_NEW(Models.Geometry.IAMesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
-        {
-            var va = new VertexArray();
-
-            if (mesh.Indices != null)
-            {
-                if (mesh.Indices.Datatype == B.IndicesType.UnsignedShort)
-                {
-                    var meshIndices = ((Models.Geometry.IIndices<ushort>)mesh.Indices).Values;
-
-                    ushort[] indices = new ushort[meshIndices.Count];
-                    for (int j = 0; j < meshIndices.Count; ++j)
-                    {
-                        indices[j] = meshIndices[j];
-                    }
-
-                    var indexBuffer = _device.CreateIndexBuffer(usageHint, indices.Length * sizeof(ushort));
-                    indexBuffer.CopyFromSystemMemory(indices);
-                    va.IndexBuffer = indexBuffer;
-                }
-                else if (mesh.Indices.Datatype == Models.Geometry.IndicesType.UnsignedInt)
-                {
-                    var meshIndices = ((Models.Geometry.IIndices<uint>)mesh.Indices).Values;
-
-                    uint[] indices = new uint[meshIndices.Count];
-                    for (int j = 0; j < meshIndices.Count; ++j)
-                    {
-                        indices[j] = meshIndices[j];
-                    }
-
-                    var indexBuffer = _device.CreateIndexBuffer(usageHint, indices.Length * sizeof(uint));
-                    indexBuffer.CopyFromSystemMemory(indices);
-                    va.IndexBuffer = indexBuffer;
-                }
-                else
-                {
-                    throw new NotSupportedException("mesh.Indices.Datatype " +
-                        mesh.Indices.Datatype.ToString() + " is not supported.");
-                }
-            }
-
-            // TODO:  Not tested exhaustively
-            foreach (var shaderAttribute in shaderAttributes)
-            {
-                //var attribute = mesh.Attributes[shaderAttribute.Name];
-
-                if (shaderAttribute.Datatype == A.ActiveAttribType.Float)
-                {
-                    var list = mesh.Attributes.ToList();
-
-                    var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
-                    
-                    var vertexBuffer =
-                        _device.CreateVertexBuffer(((B.IVertexAttribute<float>)attribute).Values, usageHint);
-
-                    va.Attributes[shaderAttribute.Location] = 
-                        new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 1);
-                }
-                else if (shaderAttribute.Datatype == A.ActiveAttribType.FloatVec2)
-                {
-                    var list = mesh.Attributes.ToList();
-
-                    var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
-
-                    var vertexBuffer =
-                        _device.CreateVertexBuffer(((B.IVertexAttribute<vec2>)attribute).Values, usageHint);
-
-                    va.Attributes[shaderAttribute.Location] =
-                        new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 2);
-                }
-                else if (shaderAttribute.Datatype == A.ActiveAttribType.FloatVec3)
-                {
-                    var list = mesh.Attributes.ToList();
-
-                    var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
-
-                    var vertexBuffer =
-                        _device.CreateVertexBuffer(((B.IVertexAttribute<vec3>)attribute).Values, usageHint);
-
-                    va.Attributes[shaderAttribute.Location] =
-                        new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 3);
-                }
-                else if (shaderAttribute.Datatype == A.ActiveAttribType.FloatVec4)
-                {
-                    var list = mesh.Attributes.ToList();
-
-                    var attribute = list.Where(s => s.Name == shaderAttribute.Name).SingleOrDefault();
-
-                    var vertexBuffer =
-                        _device.CreateVertexBuffer(((B.IVertexAttribute<vec4>)attribute).Values, usageHint);
-
-                    va.Attributes[shaderAttribute.Location] =
-                        new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 4);
-                }
-                else
-                {
-                    Debug.Fail("attribute.Datatype");
-                }
-            }
-
-            return va;
-        }
-
-        public VertexArray CreateVertexArray_NEW(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
+        public VertexArray CreateVertexArray(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
         {
             var va = new VertexArray();
 
@@ -240,7 +39,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             foreach (var shaderAttribute in shaderAttributes)
             {
 
-                if(mesh.Vertices.Count != 0 && shaderAttribute.Name == "POSITION")
+                if (mesh.Vertices.Count != 0 && shaderAttribute.Name == "POSITION")
                 {
                     var vertexBuffer = _device.CreateVertexBuffer(mesh.Vertices, usageHint);
                     va.Attributes[shaderAttribute.Location] = new VertexBufferAttribute(vertexBuffer, A.VertexAttribPointerType.Float, 3);
@@ -263,56 +62,15 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                 else if (shaderAttribute.Name == "COLOR")
                 {
                     throw new Exception();
-                }                
+                }
                 else
                 {
-                    throw new Exception();             
+                    throw new Exception();
                 }
             }
 
             return va;
         }
-
-
-        //public VertexArray CreateVertexArray(MeshBuffers meshBuffers)
-        //{
-        //    VertexArray va = CreateVertexArray();
-
-        //    va.DisposeBuffers = true;
-        //    va.IndexBuffer = meshBuffers.IndexBuffer;
-        //    for (int i = 0; i < meshBuffers.Attributes.MaximumCount; ++i)
-        //    {
-        //        va.Attributes[i] = meshBuffers.Attributes[i];
-        //    }
-
-        //    return va;
-        //}
-
-        //public VertexArray CreateVertexArray()
-        //{
-        //    return new VertexArray();
-        //}
-
-        //public Rectangle Viewport
-        //{
-        //    get
-        //    {
-        //        return viewport;
-        //    }
-        //    set
-        //    {
-        //        if (value.Width < 0 || value.Height < 0)
-        //        {
-        //            throw new ArgumentOutOfRangeException("Viewport", "The viewport width and height must be greater than or equal to zero.");
-        //        }
-
-        //        if (viewport != value)
-        //        {
-        //            viewport = value;
-        //            GL.Viewport(value);
-        //        }
-        //    }
-        //}
 
         private void ApplyPrimitiveRestart(PrimitiveRestart primitiveRestart)
         {
@@ -538,7 +296,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     A.GL.BlendColor(blending.Color);
                     _renderState.Blending.Color = blending.Color;
                 }
-               
+
             }
         }
 
@@ -575,12 +333,12 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         public void ApplyRenderState(RenderState renderState)
         {
             ApplyPrimitiveRestart(renderState.PrimitiveRestart);
-                         
+
             ApplyFacetCulling(renderState.FacetCulling);
             ApplyProgramPointSize(renderState.ProgramPointSize);
             ApplyRasterizationMode(renderState.RasterizationMode);
             ApplyScissorTest(renderState.ScissorTest);
-   //         ApplyStencilTest(renderState.StencilTest);
+            //         ApplyStencilTest(renderState.StencilTest);
             ApplyDepthTest(renderState.DepthTest);
             ApplyDepthRange(renderState.DepthRange);
             ApplyBlending(renderState.Blending);
@@ -603,7 +361,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
             if (drawState.RenderState == null)
             {
-                throw new ArgumentNullException(nameof(drawState.RenderState), "");             
+                throw new ArgumentNullException(nameof(drawState.RenderState), "");
             }
 
             if (drawState.ShaderProgram == null)
@@ -613,7 +371,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
             if (drawState.VertexArray == null)
             {
-                throw new ArgumentNullException(nameof(drawState.VertexArray), "");   
+                throw new ArgumentNullException(nameof(drawState.VertexArray), "");
             }
 
             if (sceneState == null)
@@ -639,7 +397,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             ApplyShaderProgram(drawState, sceneState);
 
             _textureUnits.Clean();
-           // ApplyFramebuffer();
+            // ApplyFramebuffer();
         }
 
         public void ApplyShaderProgram(DrawState drawState, Globe3DLight.Models.Scene.ISceneState _)
@@ -647,8 +405,8 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             var shaderProgram = drawState.ShaderProgram;
 
             if (shaderProgram != _boundShaderProgram)
-            {                
-                _boundShaderProgram = shaderProgram;               
+            {
+                _boundShaderProgram = shaderProgram;
             }
 
             _boundShaderProgram.Bind();
@@ -667,19 +425,19 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         private static void ForceApplyRenderState(RenderState renderState)
         {
-  //          Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
-  //          GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
+            //          Enable(EnableCap.PrimitiveRestart, renderState.PrimitiveRestart.Enabled);
+            //          GL.PrimitiveRestartIndex(renderState.PrimitiveRestart.Index);
 
- //           Enable(EnableCap.CullFace, renderState.FacetCulling.Enabled);
-  //          GL.CullFace(renderState.FacetCulling.Face);
-  //          GL.FrontFace(renderState.FacetCulling.FrontFaceWindingOrder);
+            //           Enable(EnableCap.CullFace, renderState.FacetCulling.Enabled);
+            //          GL.CullFace(renderState.FacetCulling.Face);
+            //          GL.FrontFace(renderState.FacetCulling.FrontFaceWindingOrder);
 
- //           Enable(EnableCap.ProgramPointSize, renderState.ProgramPointSize == ProgramPointSize.Enabled);
-  //          GL.PolygonMode(MaterialFace.FrontAndBack, renderState.RasterizationMode);
+            //           Enable(EnableCap.ProgramPointSize, renderState.ProgramPointSize == ProgramPointSize.Enabled);
+            //          GL.PolygonMode(MaterialFace.FrontAndBack, renderState.RasterizationMode);
 
- //           Enable(EnableCap.ScissorTest, renderState.ScissorTest.Enabled);
- //           Rectangle rectangle = renderState.ScissorTest.Rectangle;
- //           GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
+            //           Enable(EnableCap.ScissorTest, renderState.ScissorTest.Enabled);
+            //           Rectangle rectangle = renderState.ScissorTest.Rectangle;
+            //           GL.Scissor(rectangle.Left, rectangle.Bottom, rectangle.Width, rectangle.Height);
 
             //Enable(EnableCap.StencilTest, renderState.StencilTest.Enabled);
             //ForceApplyRenderStateStencil(StencilFace.Front, renderState.StencilTest.FrontFace);
@@ -688,22 +446,22 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             Enable(A.EnableCap.DepthTest, renderState.DepthTest.Enabled);
             A.GL.DepthFunc(renderState.DepthTest.Function);
 
- //           GL.DepthRange(renderState.DepthRange.Near, renderState.DepthRange.Far);
+            //           GL.DepthRange(renderState.DepthRange.Near, renderState.DepthRange.Far);
 
- //           Enable(EnableCap.Blend, renderState.Blending.Enabled);
-  //          GL.BlendFuncSeparate(
-  //              renderState.Blending.SourceRGBFactor,
-  //              renderState.Blending.DestinationRGBFactor,
-  //              renderState.Blending.SourceAlphaFactor,
-  //              renderState.Blending.DestinationAlphaFactor);
-  //          GL.BlendEquationSeparate(
-  //              renderState.Blending.RGBEquation,
- //               renderState.Blending.AlphaEquation);
- //           GL.BlendColor(renderState.Blending.Color);
+            //           Enable(EnableCap.Blend, renderState.Blending.Enabled);
+            //          GL.BlendFuncSeparate(
+            //              renderState.Blending.SourceRGBFactor,
+            //              renderState.Blending.DestinationRGBFactor,
+            //              renderState.Blending.SourceAlphaFactor,
+            //              renderState.Blending.DestinationAlphaFactor);
+            //          GL.BlendEquationSeparate(
+            //              renderState.Blending.RGBEquation,
+            //               renderState.Blending.AlphaEquation);
+            //           GL.BlendColor(renderState.Blending.Color);
 
- //           GL.DepthMask(renderState.DepthMask);
- //           GL.ColorMask(renderState.ColorMask.Red, renderState.ColorMask.Green,
-  //              renderState.ColorMask.Blue, renderState.ColorMask.Alpha);
+            //           GL.DepthMask(renderState.DepthMask);
+            //           GL.ColorMask(renderState.ColorMask.Red, renderState.ColorMask.Green,
+            //              renderState.ColorMask.Blue, renderState.ColorMask.Alpha);
         }
 
         public void Draw(A.PrimitiveType primitiveType, DrawState drawState, Globe3DLight.Models.Scene.ISceneState sceneState)
@@ -720,33 +478,13 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     0, vertexArray.MaximumArrayIndex(), indexBuffer.Count,
                     TypeConverter.To(indexBuffer.Datatype), new IntPtr());
 
-               // GL.DrawElements(primitiveType, indexBuffer.Count, TypeConverter.To(indexBuffer.Datatype), 0);
+                // GL.DrawElements(primitiveType, indexBuffer.Count, TypeConverter.To(indexBuffer.Datatype), 0);
             }
             else
             {
-                A.GL.DrawArrays(primitiveType, 0, vertexArray.MaximumArrayIndex() + 1);                
+                A.GL.DrawArrays(primitiveType, 0, vertexArray.MaximumArrayIndex() + 1);
             }
-        }
-
-        public TextureUnits TextureUnits
-        {
-            get { return _textureUnits; }
-        }
-
-        //private Color clearColor;
-        //private float clearDepth;
-        //private int clearStencil;
-       // private Rectangle viewport;
-
-        private readonly RenderState _renderState;
-        private ShaderProgram _boundShaderProgram;
-      //  private Framebuffer boundFramebuffer;
-      //  private Framebuffer setFramebuffer;
-
-        private readonly TextureUnits _textureUnits;
-
-        //private GameWindow gameWindow;
-       // private GraphicsWindow window;
+        }       
     }
 
 }

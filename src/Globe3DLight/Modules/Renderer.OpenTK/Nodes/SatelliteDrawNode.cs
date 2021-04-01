@@ -7,7 +7,7 @@ using A = OpenTK.Graphics.OpenGL;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry;
 
 namespace Globe3DLight.Renderer.OpenTK
 {

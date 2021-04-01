@@ -66,7 +66,7 @@ void main(void)
             {
                 var mesh = Spacebox.Mesh;
 
-                drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
+                drawState.VertexArray = _context.CreateVertexArray(mesh, drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
                 drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Front;
                 drawState.RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;
                 

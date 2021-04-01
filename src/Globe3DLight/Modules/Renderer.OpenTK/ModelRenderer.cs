@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry;
 using Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
 using GlmSharp;

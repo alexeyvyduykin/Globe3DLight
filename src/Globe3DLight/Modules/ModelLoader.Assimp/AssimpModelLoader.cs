@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using GlmSharp;
 using Globe3DLight.Models;
-using Globe3DLight.ViewModels.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry;
 using A = Assimp;
 
 namespace Globe3DLight.ModelLoader.Assimp
