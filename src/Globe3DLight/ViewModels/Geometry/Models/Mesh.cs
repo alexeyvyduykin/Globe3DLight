@@ -8,25 +8,20 @@ using GlmSharp;
 
 namespace Globe3DLight.ViewModels.Geometry.Models
 {
-    public interface IMesh
+    public record Mesh
     {
-        IList<vec3> Vertices { get; set; }
-        IList<vec3> Normals { get; set; }
-        IList<vec2> TexCoords { get; set; }
-        IList<vec3> Tangents { get; set; }
-        IList<ushort> Indices { get; set; }
-        //  IMaterial Material { get;set; }
-        int MaterialIndex { get; set; }
-    }
+        public IList<vec3> Vertices { get; init; }
+        
+        public IList<vec3> Normals { get; init; }
+        
+        public IList<vec2> TexCoords { get; init; }
+        
+        public IList<vec3> Tangents { get; init; }
+        
+        public IList<ushort> Indices { get; init; }
 
-    public class Mesh : IMesh
-    {
-        public IList<vec3> Vertices { get; set; }
-        public IList<vec3> Normals { get; set; }
-        public IList<vec2> TexCoords { get; set; }
-        public IList<vec3> Tangents { get; set; }
-        public IList<ushort> Indices { get; set; }
-        // public IMaterial Material { get; set; }
-        public int MaterialIndex { get; set; }
+        // public Material Material { get; init; }
+
+        public int MaterialIndex { get; init; }
     }
 }

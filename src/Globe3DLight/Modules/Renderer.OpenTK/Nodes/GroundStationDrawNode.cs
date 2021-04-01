@@ -105,7 +105,7 @@ color = finalColor;
         private readonly ShaderProgram _sp;
         //private readonly B.DrawState _drawState;
         private readonly double _scale;
-        private readonly IMesh _mesh;
+        private readonly Mesh _mesh;
         private ModelRenderer__ _modelRenderer;
         //private readonly B.Uniform<mat4> u_mvp;
         //private readonly B.Uniform<vec4> u_color;
@@ -186,10 +186,10 @@ color = finalColor;
 
     internal class ModelRenderer__
     {
-        private readonly IMesh _mesh;
+        private readonly Mesh _mesh;
         private int _vao, _vbo, _ebo;
 
-        public ModelRenderer__(IMesh mesh)
+        public ModelRenderer__(Mesh mesh)
         {
             _mesh = mesh;
             SetupMeshes();

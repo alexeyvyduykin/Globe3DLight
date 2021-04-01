@@ -7,6 +7,7 @@ using A = OpenTK.Graphics.OpenGL;
 using B = Globe3DLight.Models.Geometry;
 using GlmSharp;
 using System.Diagnostics;
+using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
@@ -224,7 +225,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             return va;
         }
 
-        public VertexArray CreateVertexArray_NEW(Globe3DLight.ViewModels.Geometry.Models.IMesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
+        public VertexArray CreateVertexArray_NEW(Mesh mesh, ShaderVertexAttributeCollection shaderAttributes, A.BufferUsageHint usageHint)
         {
             var va = new VertexArray();
 

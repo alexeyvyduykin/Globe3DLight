@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using GlmSharp;
 using Globe3DLight.Models;
-using Globe3DLight.Models.Geometry.Models;
 using Globe3DLight.ViewModels.Geometry.Models;
 using A = Assimp;
 
@@ -13,14 +12,14 @@ namespace Globe3DLight.ModelLoader.Assimp
     public class AssimpModelLoader : IModelLoader
     {
         private readonly IServiceProvider _serviceProvider;
-        private IList<IMesh> _meshes;
+        private IList<Mesh> _meshes;
 
         public AssimpModelLoader(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
         }
 
-        public IModel LoadModel(string path)
+        public Model LoadModel(string path)
         {
             A.Scene scene;
 
@@ -42,7 +41,7 @@ namespace Globe3DLight.ModelLoader.Assimp
                 return null;
             }
 
-            _meshes = new List<IMesh>();
+            _meshes = new List<Mesh>();
 
             processNode(scene.RootNode, scene);
 
@@ -51,7 +50,11 @@ namespace Globe3DLight.ModelLoader.Assimp
 
             var materials = CreateMaterials(modelPath, scene.Materials);
 
-            return new Model(_meshes, materials);
+            return new Model()
+            { 
+                Meshes =_meshes,                
+                Materials = materials
+            };
         }
 
         private void processNode(A.Node node, A.Scene scene)
@@ -72,9 +75,9 @@ namespace Globe3DLight.ModelLoader.Assimp
             }
         }
 
-        private IList<IMaterial> CreateMaterials(string modelPath, IEnumerable<A.Material> materials)
+        private IList<Material> CreateMaterials(string modelPath, IEnumerable<A.Material> materials)
         {
-            var list = new List<IMaterial>();
+            var list = new List<Material>();
 
             foreach (var item in materials)
             {
@@ -94,7 +97,7 @@ namespace Globe3DLight.ModelLoader.Assimp
             return list;
         }
 
-        private IMesh CreateMesh(A.Mesh mesh)
+        private Mesh CreateMesh(A.Mesh mesh)
         {
             var vertices = mesh.Vertices.Select(s => new vec3(s.X, s.Y, s.Z)).ToList();
             var normals = mesh.Normals.Select(s => new vec3(s.X, s.Y, s.Z)).ToList();

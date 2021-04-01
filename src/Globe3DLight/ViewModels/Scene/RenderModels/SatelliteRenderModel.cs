@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Globe3DLight.Models.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.ViewModels.Scene
 {
@@ -8,6 +8,6 @@ namespace Globe3DLight.ViewModels.Scene
     {
         public double Scale { get; set; }
 
-        public IModel Model { get; set; }
+        public Model Model { get; set; }
     }
 }

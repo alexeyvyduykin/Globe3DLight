@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Globe3DLight.Models.Geometry.Models;
+using Globe3DLight.ViewModels.Geometry.Models;
 using Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
 using GlmSharp;
@@ -19,7 +19,7 @@ namespace Globe3DLight.Renderer.OpenTK
 
     internal class ModelRenderer : IModelRenderer
     {
-        private readonly IModel _model;
+        private readonly Model _model;
 
         private int[] _vaos, _vbos, _ebos;
 
@@ -28,7 +28,7 @@ namespace Globe3DLight.Renderer.OpenTK
 
         private readonly ICache<string, int> _textureCache;
 
-        public ModelRenderer(IModel model, ICache<string, int> textureCache)
+        public ModelRenderer(Model model, ICache<string, int> textureCache)
         {
             _model = model;
 

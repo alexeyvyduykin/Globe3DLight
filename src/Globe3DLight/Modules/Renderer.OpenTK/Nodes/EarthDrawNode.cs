@@ -64,7 +64,7 @@ namespace Globe3DLight.Renderer.OpenTK
 
         private bool dirty;
 
-        private readonly ImmutableArray<IMesh> meshes;
+        private readonly ImmutableArray<Mesh> meshes;
         private readonly B.ShaderProgram sp;
 
         private readonly B.DrawState[] drawStates;

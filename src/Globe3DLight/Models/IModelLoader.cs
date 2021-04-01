@@ -1,9 +1,9 @@
-﻿using Globe3DLight.Models.Geometry.Models;
+﻿using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.Models
 {
     public interface IModelLoader
     {
-        IModel LoadModel(string path);
+        Model LoadModel(string path);
     }
 }

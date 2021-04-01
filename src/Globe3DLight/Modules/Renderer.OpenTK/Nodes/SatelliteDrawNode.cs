@@ -4,10 +4,10 @@ using System.Text;
 using GlmSharp;
 using B = Globe3DLight.Renderer.OpenTK.Core;
 using A = OpenTK.Graphics.OpenGL;
-using C = Globe3DLight.Models.Geometry.Models;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.ViewModels.Scene;
+using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
@@ -132,7 +132,7 @@ color = finalColor;
 }";
        
         private readonly B.ShaderProgram sp;
-        private readonly C.IModel _model;
+        private readonly Model _model;
   
         private readonly double _scale;// = 0.009;// 0.002;
 
@@ -165,6 +165,7 @@ color = finalColor;
             A.GL.BindAttribLocation(sp.Handle, (int)1, "NORMAL");
             A.GL.BindAttribLocation(sp.Handle, (int)2, "TEXCOORD");
         }
+
         private void SetUniforms(dmat4 modelMatrix, ISceneState scene)
         {
 
