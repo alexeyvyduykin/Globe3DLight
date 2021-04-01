@@ -71,7 +71,7 @@ namespace Globe3DLight.Models
 
         Mesh CreateBillboard();
 
-        IAMesh CreateCube(float width);
+        Mesh CreateCube(double scale);
 
         IAMesh CreateSolidSphere(float radius, int rings, int sectors);
 

@@ -204,22 +204,26 @@ namespace Globe3DLight.ViewModels
             };
         }
 
-        public IAMesh CreateCube(float width)
-        {
-            var cube = CreateMesh();
-
-            vec3[] cubeVertices = {
-                new vec3( 1.0f, -1.0f, -1.0f) * width,
-                new vec3( 1.0f, -1.0f,  1.0f) * width,
-                new vec3( 1.0f,  1.0f,  1.0f) * width,
-                new vec3( 1.0f,  1.0f, -1.0f) * width,
-                new vec3(-1.0f, -1.0f,  1.0f) * width,
-                new vec3(-1.0f, -1.0f, -1.0f) * width,
-                new vec3(-1.0f,  1.0f, -1.0f) * width,
-                new vec3(-1.0f,  1.0f,  1.0f) * width
-            };
-
-            ushort[] cubeIndices = {
+        public Mesh CreateCube(double scale)
+        {          
+            return new Mesh()
+            {
+                Vertices = new vec3[8]
+                {
+                    new vec3(1.0f, -1.0f, -1.0f) * (float)scale,
+                    new vec3(1.0f, -1.0f, 1.0f) * (float)scale,
+                    new vec3(1.0f, 1.0f, 1.0f) * (float)scale,
+                    new vec3(1.0f, 1.0f, -1.0f) * (float)scale,
+                    new vec3(-1.0f, -1.0f, 1.0f) * (float)scale,
+                    new vec3(-1.0f, -1.0f, -1.0f) * (float)scale,
+                    new vec3(-1.0f, 1.0f, -1.0f) * (float)scale,
+                    new vec3(-1.0f, 1.0f, 1.0f) * (float)scale
+                },
+                Normals = new List<vec3>(),
+                TexCoords = new List<vec2>(),
+                Tangents = new List<vec3>(),
+                Indices = new ushort[36]
+                {
                     0, 1, 2,  // x_pos
                     2, 3, 0,  //
                     4, 5, 6,  // x_neg
@@ -232,31 +236,9 @@ namespace Globe3DLight.ViewModels
                     7, 2, 1,  //
                     5, 0, 3,  // z_neg
                     3, 6, 5   //
-                };
-
-            var positionsAttribute = CreateVertexAttributePosition<vec3>(VertexAttributeType.FloatVector3);
-            cube.AddAttribute(positionsAttribute);
-
-            IndicesUnsignedShort indicesBase = new IndicesUnsignedShort();
-            cube.Indices = indicesBase;
-
-            cube.PrimitiveType = PrimitiveType.Triangles;
-            cube.FrontFaceWindingOrder = FrontFaceDirection.Cw;
-
-            IList<vec3> positions = positionsAttribute.Values;
-            IList<ushort> indices = indicesBase.Values;
-
-            //positions = cubeVertices;
-            //indices = cubeIndices;
-
-            for (int i = 0; i < cubeVertices.Length; i++)
-                positions.Add(cubeVertices[i]);
-
-            for (int i = 0; i < cubeIndices.Length; i++)
-                indices.Add(cubeIndices[i]);
-
-
-            return cube;
+                },
+                MaterialIndex = -1,
+            };
         }
 
         public IAMesh CreateSolidSphere(float radius, int rings, int sectors)
@@ -484,7 +466,7 @@ namespace Globe3DLight.ViewModels
             var obj = new Spacebox()
             {
                 Name = "Spacebox",
-                RenderModel = renderModelFactory.CreateSpacebox(1000000.0/*25000.0*/),
+                RenderModel = renderModelFactory.CreateSpacebox(),
                 IsVisible = true,
                 Children = ImmutableArray.Create<BaseEntity>(),
                 Logical = parent,
