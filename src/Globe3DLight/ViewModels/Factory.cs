@@ -241,54 +241,35 @@ namespace Globe3DLight.ViewModels
             };
         }
 
-        public IAMesh CreateSolidSphere(float radius, int rings, int sectors)
+        public Mesh CreateSolidSphere(double radius, int rings, int sectors)
         {
-            var sphere = CreateMesh();
-
-            var positionsAttribute = CreateVertexAttributePosition<vec3>(VertexAttributeType.FloatVector3);
-            sphere.AddAttribute(positionsAttribute);
-
-            IndicesUnsignedShort indicesBase = new IndicesUnsignedShort();
-            sphere.Indices = indicesBase;
-
-            sphere.PrimitiveType = PrimitiveType.Triangles;
-            sphere.FrontFaceWindingOrder = FrontFaceDirection.Ccw;
-
-            IList<vec3> positions = positionsAttribute.Values;
-            IList<ushort> indices = indicesBase.Values;
-
-            //  List<vec3> positions = new List<vec3>();
-            List<vec2> texcoords = new List<vec2>();
-            List<vec3> normals = new List<vec3>();
-            //  List<ushort> indices = new List<ushort>();
+            // FrontFaceDirection.Ccw
+            var indices = new List<ushort>();
+            var vertices = new List<vec3>();
+            var texcoords = new List<vec2>();
+            var normals = new List<vec3>();         
 
             double R = 1.0 / (double)(rings - 1);
             double S = 1.0 / (double)(sectors - 1);
-            int r, s;
-
-            for (r = 0; r < rings; r++)
+       
+            for (int r = 0; r < rings; r++)
             {
-                for (s = 0; s < sectors; s++)
+                for (int s = 0; s < sectors; s++)
                 {
                     double y = Math.Sin((-Math.PI / 2.0 + Math.PI * r * R));
                     double x = Math.Cos(2.0 * Math.PI * s * S) * Math.Sin(Math.PI * r * R);
                     double z = Math.Sin(2.0 * Math.PI * s * S) * Math.Sin(Math.PI * r * R);
 
-                    positions.Add(new vec3((float)x * radius, (float)y * radius, (float)z * radius));
+                    vertices.Add(new vec3((float)x * (float)radius, (float)y * (float)radius, (float)z * (float)radius));
                     texcoords.Add(new vec2((float)(s * S), (float)(r * R)));
                     normals.Add(new vec3((float)x, (float)y, (float)z));
                 }
             }
 
-            for (r = 0; r < rings - 1; r++)
+            for (int r = 0; r < rings - 1; r++)
             {
-                for (s = 0; s < sectors - 1; s++)
+                for (int s = 0; s < sectors - 1; s++)
                 {
-                    //indices.Add((ushort)(r * sectors + s));
-                    //indices.Add((ushort)(r * sectors + (s + 1)));
-                    //indices.Add((ushort)((r + 1) * sectors + (s + 1)));
-                    //indices.Add((ushort)((r + 1) * sectors + s));
-
                     indices.Add((ushort)(r * sectors + s));
                     indices.Add((ushort)(r * sectors + (s + 1)));
                     indices.Add((ushort)((r + 1) * sectors + (s + 1)));
@@ -299,13 +280,15 @@ namespace Globe3DLight.ViewModels
                 }
             }
 
-            //for (int i = 0; i < positions.Count; i++)
-            //    positionsRef.Add(positions[i]);
-
-            //for (int i = 0; i < indices.Count; i++)
-            //    indicesRef.Add(indices[i]);
-
-            return sphere;
+            return new Mesh()
+            {
+                Vertices = vertices,
+                Normals = normals,
+                TexCoords = texcoords,
+                Tangents = new List<vec3>(),
+                Indices = indices,
+                MaterialIndex = -1,
+            };
         }
 
         public ProjectContainerViewModel CreateProjectContainer(string name = "Project")

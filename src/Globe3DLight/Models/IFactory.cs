@@ -73,7 +73,7 @@ namespace Globe3DLight.Models
 
         Mesh CreateCube(double scale);
 
-        IAMesh CreateSolidSphere(float radius, int rings, int sectors);
+        Mesh CreateSolidSphere(double radius, int rings, int sectors);
 
         ISceneState CreateSceneState();
 
