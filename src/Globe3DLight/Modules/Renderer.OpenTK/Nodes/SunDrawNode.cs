@@ -13,13 +13,8 @@ namespace Globe3DLight.Renderer.OpenTK
 {
     internal class SunDrawNode : DrawNode, ISunDrawNode
     {
-        private readonly B.Context _context;
-        public SunRenderModel Sun { get; set; }
-        private readonly B.Device _device;
-        public bool IsComplete => _isComplete;
-
-        public string WaitKey => _key;
-
+        private readonly B.Context _context;       
+        private readonly B.Device _device;          
         private readonly string sunVS = @"
 #version 330
 
@@ -269,14 +264,11 @@ vec3 color = temperatureColor * unColorMult;
 ";
         private readonly B.ShaderProgram _sp;
         private readonly B.DrawState _drawState;
-
         private readonly B.TextureCreator _textureCreator;
-
         private string _key;
         private int _textureSunGlowName;
         private bool dirty;
         private bool _isComplete = false;
-
         private readonly B.Uniform<vec2> u_dims;
         private readonly B.Uniform<vec3> u_center;
         private readonly B.Uniform<float> u_NoiseZ;
@@ -285,9 +277,7 @@ vec3 color = temperatureColor * unColorMult;
         private readonly B.Uniform<vec3> u_ColorMult;
         private readonly B.Uniform<mat4> u_view;
         private readonly B.Uniform<mat4> u_proj;
-
-        private float DT = 0.0f;
-        
+        private float DT = 0.0f;        
      //   private const double toKM = 637.8;
         private const double diameter = 13926840.0;
         private const float temperature = 5778.0f;
@@ -298,7 +288,7 @@ vec3 color = temperatureColor * unColorMult;
 
         public SunDrawNode(SunRenderModel sun)
         {
-            this.Sun = sun;
+            Sun = sun;
 
             _device = new B.Device();
             _key = sun.SunGlowKey;
@@ -321,9 +311,13 @@ vec3 color = temperatureColor * unColorMult;
             u_proj = (B.Uniform<mat4>)_sp.Uniforms["u_proj"];
 
             _drawState = _device.CreateDrawState(_sp);
-
         }
 
+        public SunRenderModel Sun { get; set; }
+
+        public bool IsComplete => _isComplete;
+
+        public string WaitKey => _key;
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
@@ -346,19 +340,16 @@ vec3 color = temperatureColor * unColorMult;
             A.GL.Disable(A.EnableCap.Blend);
         }
 
-
         public override void UpdateGeometry()
         {
             if (dirty)
             {
-                var mesh = this.Sun.Billboard;
+                var mesh = Sun.Billboard;
 
                 _drawState.VertexArray = _context.CreateVertexArray_NEW(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
 
                 _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Back;
-                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder =
-                    (mesh.FrontFaceWindingOrder == Globe3DLight.Models.Geometry.FrontFaceDirection.Cw) ?
-                    A.FrontFaceDirection.Cw : A.FrontFaceDirection.Ccw;
+                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;
 
                 _drawState.RenderState.Blending.Enabled = true;
                 _drawState.RenderState.Blending.SourceRGBFactor = A.BlendingFactorSrc.One;
@@ -430,7 +421,5 @@ vec3 color = temperatureColor * unColorMult;
 
             return  _textureSunGlowName;
         }
-
     }
-
 }

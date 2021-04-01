@@ -15,7 +15,7 @@ using System.Linq;
 using System.Collections.Immutable;
 using GlmSharp;
 using System.Threading;
-using Globe3DLight.Models;
+using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.Models
 {
@@ -69,7 +69,7 @@ namespace Globe3DLight.Models
 
         IAMesh CreateMesh();
 
-        IAMesh CreateBillboard();
+        Mesh CreateBillboard();
 
         IAMesh CreateCube(float width);
 

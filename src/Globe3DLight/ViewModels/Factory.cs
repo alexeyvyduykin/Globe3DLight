@@ -17,6 +17,7 @@ using Globe3DLight.ViewModels.Geometry;
 using Globe3DLight.ViewModels.Renderer;
 using Globe3DLight.ViewModels.Scene;
 using Globe3DLight.ViewModels.Time;
+using Globe3DLight.ViewModels.Geometry.Models;
 
 namespace Globe3DLight.ViewModels
 {
@@ -184,42 +185,24 @@ namespace Globe3DLight.ViewModels
             };
         }
 
-
-        public IAMesh CreateBillboard()
-        {
-            var billboard = CreateMesh();
-
-            var billboardVertices = new vec2[4]
+        public Mesh CreateBillboard()
+        {        
+            return new Mesh() 
             {
-                new vec2(-1.0f, -1.0f),
-                new vec2(-1.0f, 1.0f),
-                new vec2(1.0f, 1.0f),
-                new vec2(1.0f, -1.0f)
+                Vertices = new vec3[4]           
+                {               
+                    new vec3(-1.0f, -1.0f, 0.0f),                
+                    new vec3(-1.0f, 1.0f, 0.0f),                
+                    new vec3(1.0f, 1.0f, 0.0f),               
+                    new vec3(1.0f, -1.0f, 0.0f)           
+                },
+                Normals = new List<vec3>(),
+                TexCoords = new List<vec2>(),
+                Tangents = new List<vec3>(),
+                Indices = new ushort[6] { 0, 1, 2, 0, 2, 3 },
+                MaterialIndex = -1,
             };
-
-            var billboardIndices = new ushort[6] { 0, 1, 2, 0, 2, 3 };
-
-            var positionsAttribute = CreateVertexAttributePosition<vec2>(VertexAttributeType.FloatVector2);
-            billboard.AddAttribute(positionsAttribute);
-
-            var indicesBase = new IndicesUnsignedShort();
-            billboard.Indices = indicesBase;
-
-            billboard.PrimitiveType = PrimitiveType.Triangles;
-            billboard.FrontFaceWindingOrder = FrontFaceDirection.Cw;
-
-            IList<vec2> positions = positionsAttribute.Values;
-            IList<ushort> indices = indicesBase.Values;
-
-            for (int i = 0; i < billboardVertices.Length; i++)
-                positions.Add(billboardVertices[i]);
-
-            for (int i = 0; i < billboardIndices.Length; i++)
-                indices.Add(billboardIndices[i]);
-
-            return billboard;
         }
-
 
         public IAMesh CreateCube(float width)
         {
