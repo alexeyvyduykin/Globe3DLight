@@ -7,6 +7,6 @@ namespace Globe3DLight.Models.Renderer
 {
     public interface IGroundStationDrawNode : IDrawNode
     {
-        GroundStationRenderModel GroundStation { get; set; }
+        RenderModel GroundStation { get; set; }
     }
 }

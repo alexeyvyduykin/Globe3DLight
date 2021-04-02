@@ -237,7 +237,7 @@ namespace Globe3DLight.ViewModels.Renderer
             }
         }
       
-        public void DrawRetranslator(object dc, RetranslatorRenderModel retranslator, dmat4 modelMatrix, ISceneState scene)
+        public void DrawRetranslator(object dc, RenderModel retranslator, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(retranslator);
             if (drawNodeCached != null)
@@ -258,7 +258,7 @@ namespace Globe3DLight.ViewModels.Renderer
             }
             else
             {
-                var drawNode = _drawNodeFactory.CreateRetranslatorDrawNode(retranslator);
+                var drawNode = _drawNodeFactory.CreateRetranslatorDrawNode(retranslator, _textureCache);
 
                 drawNode.UpdateStyle(); 
                 drawNode.UpdateGeometry();
@@ -269,7 +269,7 @@ namespace Globe3DLight.ViewModels.Renderer
             }
         }
         
-        public void DrawSatellite(object dc, SatelliteRenderModel satellite, dmat4 modelMatrix, ISceneState scene)
+        public void DrawSatellite(object dc, RenderModel satellite, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(satellite);
             if (drawNodeCached != null)
@@ -407,7 +407,7 @@ namespace Globe3DLight.ViewModels.Renderer
             }
         }
     
-        public void DrawGroundStation(object dc, GroundStationRenderModel groundStation, dmat4 modelMatrix, ISceneState scene)
+        public void DrawGroundStation(object dc, RenderModel groundStation, dmat4 modelMatrix, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(groundStation);
             if (drawNodeCached != null)
@@ -440,7 +440,7 @@ namespace Globe3DLight.ViewModels.Renderer
             }
         }
 
-        public void DrawGroundStationList(object dc, GroundStationRenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene)
+        public void DrawGroundStationList(object dc, RenderModel groundStation, IEnumerable<dmat4> modelMatrices, ISceneState scene)
         {
             var drawNodeCached = _drawNodeCache.Get(groundStation);
             if (drawNodeCached != null)

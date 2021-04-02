@@ -15,10 +15,10 @@ namespace Globe3DLight.ViewModels.Entities
 {
     public class Retranslator : BaseEntity, IDrawable
     {       
-        private RetranslatorRenderModel _renderModel;
+        private RenderModel _renderModel;       
         private BaseState _logical;
 
-        public RetranslatorRenderModel RenderModel
+        public RenderModel RenderModel
         {
             get => _renderModel;
             set => RaiseAndSetIfChanged(ref _renderModel, value);
@@ -33,7 +33,8 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {                    
+            {
+                renderer.DrawFrame(dc, RenderModel.Frame, Logical.ModelMatrix, scene);
                 renderer.DrawRetranslator(dc, RenderModel, Logical.ModelMatrix, scene);                
             }
         }

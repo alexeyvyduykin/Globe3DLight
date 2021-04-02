@@ -7,6 +7,6 @@ namespace Globe3DLight.Models.Renderer
 {
     public interface ISatelliteDrawNode : IDrawNode
     {       
-        SatelliteRenderModel Satellite { get; set; }
+        RenderModel Satellite { get; set; }
     }
 }

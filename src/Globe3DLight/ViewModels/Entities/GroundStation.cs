@@ -15,20 +15,13 @@ namespace Globe3DLight.ViewModels.Entities
 {
     public class GroundStation : BaseEntity, IDrawable, ITargetable
     { 
-        private GroundStationRenderModel _renderModel; 
-        private FrameRenderModel _frameRenderModel;
+        private RenderModel _renderModel;        
         private BaseState _logical;
       
-        public GroundStationRenderModel RenderModel
+        public RenderModel RenderModel
         {
             get => _renderModel;
             set => RaiseAndSetIfChanged(ref _renderModel, value);
-        }
-
-        public FrameRenderModel FrameRenderModel
-        {
-            get => _frameRenderModel;
-            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
         }
 
         public BaseState Logical
@@ -72,7 +65,7 @@ namespace Globe3DLight.ViewModels.Entities
 
                         var groundStationModelMatrix = m * groundStationData.ModelMatrix;
 
-                        renderer.DrawFrame(dc, FrameRenderModel, groundStationModelMatrix, scene);
+                        renderer.DrawFrame(dc, RenderModel.Frame, groundStationModelMatrix, scene);
 
                         renderer.DrawGroundStation(dc, RenderModel, groundStationModelMatrix, scene);
                     }

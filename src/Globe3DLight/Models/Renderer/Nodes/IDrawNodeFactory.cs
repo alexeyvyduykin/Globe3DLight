@@ -15,13 +15,13 @@ namespace Globe3DLight.Models.Renderer
        
         IOrbitDrawNode CreateOrbitDrawNode(OrbitRenderModel orbit);
        
-        IGroundStationDrawNode CreateGroundStationDrawNode(GroundStationRenderModel groundStation);
+        IGroundStationDrawNode CreateGroundStationDrawNode(RenderModel groundStation);
        
         IGroundObjectDrawNode CreateGroundObjectListDrawNode(GroundObjectRenderModel groundStation);
         
-        IRetranslatorDrawNode CreateRetranslatorDrawNode(RetranslatorRenderModel retranslator);
+        IRetranslatorDrawNode CreateRetranslatorDrawNode(RenderModel retranslator, ICache<string, int> textureCache);
         
-        ISatelliteDrawNode CreateSatelliteDrawNode(SatelliteRenderModel satellite, ICache<string, int> textureCache);
+        ISatelliteDrawNode CreateSatelliteDrawNode(RenderModel satellite, ICache<string, int> textureCache);
         
         ISensorDrawNode CreateSensorDrawNode(SensorRenderModel sensor);
 

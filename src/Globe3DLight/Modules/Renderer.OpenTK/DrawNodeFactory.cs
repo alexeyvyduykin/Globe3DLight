@@ -23,7 +23,7 @@ namespace Globe3DLight.Renderer.OpenTK
             return new FrameDrawNode(frame);
         }
 
-        public IGroundStationDrawNode CreateGroundStationDrawNode(GroundStationRenderModel groundStation)
+        public IGroundStationDrawNode CreateGroundStationDrawNode(RenderModel groundStation)
         {
             return new GroundStationDrawNode(groundStation);
         }
@@ -33,12 +33,12 @@ namespace Globe3DLight.Renderer.OpenTK
             return new GroundObjectDrawNode(groundObject);
         }
 
-        public IRetranslatorDrawNode CreateRetranslatorDrawNode(RetranslatorRenderModel retranslator)
+        public IRetranslatorDrawNode CreateRetranslatorDrawNode(RenderModel retranslator, ICache<string, int> textureCache)
         {
-            return new RetranslatorDrawNode(retranslator);
+            return new RetranslatorDrawNode(retranslator, textureCache);
         }
 
-        public ISatelliteDrawNode CreateSatelliteDrawNode(SatelliteRenderModel satellite, ICache<string, int> textureCache)
+        public ISatelliteDrawNode CreateSatelliteDrawNode(RenderModel satellite, ICache<string, int> textureCache)
         {
             return new SatelliteDrawNode(satellite, textureCache);
         }

@@ -78,7 +78,7 @@ namespace Globe3DLight.ViewModels.Entities
                                 {
                                     var matrix = m * ((GroundStationState)item).ModelMatrix;
 
-                                    renderer.DrawFrame(dc, groundStation.FrameRenderModel, matrix, scene);
+                                    renderer.DrawFrame(dc, groundStation.RenderModel.Frame, matrix, scene);
 
                                     renderer.DrawGroundStation(dc, groundStation.RenderModel, matrix, scene);
                                 }
@@ -97,7 +97,8 @@ namespace Globe3DLight.ViewModels.Entities
                             foreach (var item in collection.Values)
                             {
                                 var matrix = ((RetranslatorAnimator)item).ModelMatrix;
-
+                                
+                                renderer.DrawFrame(dc, retranslator.RenderModel.Frame, matrix, scene);
                                 renderer.DrawRetranslator(dc, retranslator.RenderModel, matrix, scene);
                             }
                         }
