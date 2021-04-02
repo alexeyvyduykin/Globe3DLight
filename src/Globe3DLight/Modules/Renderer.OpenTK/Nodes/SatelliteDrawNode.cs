@@ -13,9 +13,7 @@ namespace Globe3DLight.Renderer.OpenTK
 {
     
     internal class SatelliteDrawNode : DrawNode, ISatelliteDrawNode
-    {
-        public SatelliteRenderModel Satellite { get; set; }
-
+    { 
         private readonly string satelliteVS = @"
 #version 330
 
@@ -129,23 +127,18 @@ if( u_isTexture == 1.0 )
   finalColor *= sampler;  
 
 color = finalColor;
-}";
-       
-        private readonly B.ShaderProgram sp;
-        private readonly Model _model;
-  
+}";       
+        private readonly B.ShaderProgram _sp;
+        private readonly Model _model;  
         private readonly double _scale;// = 0.009;// 0.002;
-
         private readonly B.Device _device;
-        private bool dirty;
-
+        private bool _dirty;
         private readonly ICache<string, int> _textureCache;
-
         private IModelRenderer _modelRenderer;
 
-        public SatelliteDrawNode(SatelliteRenderModel satellite, ICache<string, int> textureCache)
+        public SatelliteDrawNode(RenderModel satellite, ICache<string, int> textureCache)
         {
-            this.Satellite = satellite;
+            Satellite = satellite;
 
             _textureCache = textureCache;
 
@@ -157,58 +150,57 @@ color = finalColor;
 
             _modelRenderer = new ModelRenderer(_model, textureCache);
 
-            sp = _device.CreateShaderProgram(satelliteVS, satelliteFS);
+            _sp = _device.CreateShaderProgram(satelliteVS, satelliteFS);
 
-            dirty = true;
+            _dirty = true;
 
-            A.GL.BindAttribLocation(sp.Handle, (int)0, "POSITION");
-            A.GL.BindAttribLocation(sp.Handle, (int)1, "NORMAL");
-            A.GL.BindAttribLocation(sp.Handle, (int)2, "TEXCOORD");
+            A.GL.BindAttribLocation(_sp.Handle, (int)0, "POSITION");
+            A.GL.BindAttribLocation(_sp.Handle, (int)1, "NORMAL");
+            A.GL.BindAttribLocation(_sp.Handle, (int)2, "TEXCOORD");
         }
+
+        public RenderModel Satellite { get; set; }
 
         private void SetUniforms(dmat4 modelMatrix, ISceneState scene)
         {
+            var model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
+            var view = scene.ViewMatrix;
+            var normalMatrix = (new dmat3((view * model).Inverse).Transposed);
+            var mvp = scene.ProjectionMatrix * view * model;
+            var modelView = view * model;
 
-            dmat4 model = modelMatrix * dmat4.Scale(new dvec3(_scale, _scale, _scale));
-            dmat4 view = scene.ViewMatrix;
-            dmat3 normalMatrix = (new dmat3((view * model).Inverse).Transposed);
-            dmat4 mvp = scene.ProjectionMatrix * view * model;
-            dmat4 modelView = view * model;
+            _sp.SetUniform("u_model", model.ToMat4());
+            _sp.SetUniform("u_view", view.ToMat4());
+            _sp.SetUniform("u_normalMatrix", normalMatrix.ToMat3());
+            _sp.SetUniform("u_modelView", modelView.ToMat4());
+            _sp.SetUniform("u_mvp", mvp.ToMat4());
 
-            sp.SetUniform("u_model", model.ToMat4());
-            sp.SetUniform("u_view", view.ToMat4());
-            sp.SetUniform("u_normalMatrix", normalMatrix.ToMat3());
-            sp.SetUniform("u_modelView", modelView.ToMat4());
-            sp.SetUniform("u_mvp", mvp.ToMat4());
-
-            sp.SetUniform("light.position", scene.LightPosition.ToVec4());
-            sp.SetUniform("light.ambient", new vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            sp.SetUniform("light.diffuse", new vec4(1.0f, 1.0f, 1.0f, 1.0f));
-            sp.SetUniform("light.specular", new vec4(0.7f, 0.7f, 0.7f, 1.0f));      
+            _sp.SetUniform("light.position", scene.LightPosition.ToVec4());
+            _sp.SetUniform("light.ambient", new vec4(1.0f, 1.0f, 1.0f, 1.0f));
+            _sp.SetUniform("light.diffuse", new vec4(1.0f, 1.0f, 1.0f, 1.0f));
+            _sp.SetUniform("light.specular", new vec4(0.7f, 0.7f, 0.7f, 1.0f));      
         }
        
         public override void UpdateGeometry()
         {
-            if (dirty == true)
+            if (_dirty == true)
             {
-                //modelObject = new C.Model(@"C:\resource\models\satellite_v3.ase", true);
-
                 _modelRenderer.SetupTextures();
 
-                dirty = false;
+                _dirty = false;
             }
         }
 
         public override void OnDraw(object dc, dmat4 modelMatrix, 
             ISceneState scene)
         {
-            if (dirty == false)
+            if (_dirty == false)
             {
-                sp.Bind();
+                _sp.Bind();
 
                 SetUniforms(modelMatrix, scene);
              
-                _modelRenderer.Draw(sp);
+                _modelRenderer.Draw(_sp);
 
                 B.ShaderProgram.UnBind();
             }

@@ -13,7 +13,6 @@ namespace Globe3DLight.Renderer.OpenTK
     internal class GroundStationDrawNode : DrawNode, IGroundStationDrawNode
     {
         private Device _device;
-        //private B.Context _context;  
         private readonly string groundStationVS = @"
 #version 330
 
@@ -102,42 +101,32 @@ finalColor += material.specular * light.specular * RdotVpow;
 color = finalColor;
 }";
         private bool _dirty;
-        private readonly ShaderProgram _sp;
-        //private readonly B.DrawState _drawState;
+        private readonly ShaderProgram _sp;       
         private readonly double _scale;
-        private readonly Mesh _mesh;
+        private readonly Model _model;
         private ModelRenderer__ _modelRenderer;
-        //private readonly B.Uniform<mat4> u_mvp;
-        //private readonly B.Uniform<vec4> u_color;
 
-        public GroundStationDrawNode(GroundStationRenderModel groundStation)
+        public GroundStationDrawNode(RenderModel groundStation)
         {
             GroundStation = groundStation;
 
-            //_context = new B.Context();
             _device = new Device();
             _dirty = true;
 
-            _mesh = groundStation.Mesh;
+            _model = groundStation.Model;
             _scale = groundStation.Scale;
 
             _sp = _device.CreateShaderProgram(groundStationVS, groundStationFS);
 
-            _modelRenderer = new ModelRenderer__(_mesh);
-
-            //   u_mvp = ((B.Uniform<mat4>)_sp.Uniforms["u_mvp"]);
-            //   u_color = ((B.Uniform<vec4>)_sp.Uniforms["u_color"]);
+            _modelRenderer = new ModelRenderer__(_model);
 
             //   u_color.Value = new vec4(0.565f, 0.537f, 0.518f, 1.0f); // #908984
-
-            //_drawState = new B.DrawState();
-            //_drawState.ShaderProgram = _sp;
 
             A.GL.BindAttribLocation(_sp.Handle, (int)0, "POSITION");
             A.GL.BindAttribLocation(_sp.Handle, (int)1, "NORMAL");
         }
 
-        public GroundStationRenderModel GroundStation { get; set; }
+        public RenderModel GroundStation { get; set; }
 
         private void SetUniforms(dmat4 modelMatrix, ISceneState scene)
         {
@@ -186,12 +175,12 @@ color = finalColor;
 
     internal class ModelRenderer__
     {
-        private readonly Mesh _mesh;
+        private readonly Model _model;
         private int _vao, _vbo, _ebo;
 
-        public ModelRenderer__(Mesh mesh)
+        public ModelRenderer__(Model model)
         {
-            _mesh = mesh;
+            _model = model;
             SetupMeshes();
         }
 
@@ -203,21 +192,26 @@ color = finalColor;
 
         public void Draw(ShaderProgram sp)
         {
-            sp.SetUniform("material.ambient", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            sp.SetUniform("material.diffuse", new vec4(0.565f, 0.537f, 0.518f, 1.0f));
-            sp.SetUniform("material.specular", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            sp.SetUniform("material.emission", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
-            sp.SetUniform("material.shininess", 10.0f);
+            for (int i = 0; i < _model.Meshes.Count; i++)
+            {
+                var mesh = _model.Meshes[i];
+               
+                sp.SetUniform("material.ambient", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                sp.SetUniform("material.diffuse", new vec4(0.565f, 0.537f, 0.518f, 1.0f));
+                sp.SetUniform("material.specular", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                sp.SetUniform("material.emission", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
+                sp.SetUniform("material.shininess", 10.0f);
 
-            // Draw mesh
-            A.GL.BindVertexArray(_vao);
-            A.GL.DrawElements(A.BeginMode.Triangles, _mesh.Indices.Count, A.DrawElementsType.UnsignedShort, 0);
-            A.GL.BindVertexArray(0);
+                // Draw mesh
+                A.GL.BindVertexArray(_vao);
+                A.GL.DrawElements(A.BeginMode.Triangles, mesh.Indices.Count, A.DrawElementsType.UnsignedShort, 0);
+                A.GL.BindVertexArray(0);
+            }
         }
 
         private void SetupMeshes()
         {
-            var mesh = _mesh;
+            var mesh = _model.Meshes.SingleOrDefault();
 
             var vertices = new Vertex[mesh.Vertices.Count];
 
@@ -257,6 +251,7 @@ color = finalColor;
             A.GL.EnableVertexAttribArray((int)1);
 
             A.GL.BindVertexArray(0);
+
         }
     }
 }
