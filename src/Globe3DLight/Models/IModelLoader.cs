@@ -4,6 +4,6 @@ namespace Globe3DLight.Models
 {
     public interface IModelLoader
     {
-        Model LoadModel(string path);
+        Model LoadModel(string path, bool flipUVs);
     }
 }

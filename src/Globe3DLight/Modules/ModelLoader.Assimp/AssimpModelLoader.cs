@@ -19,7 +19,7 @@ namespace Globe3DLight.ModelLoader.Assimp
             _serviceProvider = serviceProvider;
         }
 
-        public Model LoadModel(string path)
+        public Model LoadModel(string path, bool flipUVs)
         {
             A.Scene scene;
 
@@ -27,14 +27,19 @@ namespace Globe3DLight.ModelLoader.Assimp
             {
                 using var importer = new A.AssimpContext();
 
-                scene = importer.ImportFile(
-                    path,
+                var flags =
                     A.PostProcessSteps.PreTransformVertices |
                     A.PostProcessSteps.Triangulate |
                     A.PostProcessSteps.GenerateSmoothNormals |
                     A.PostProcessSteps.CalculateTangentSpace |
-                    A.PostProcessSteps.FlipWindingOrder |
-                    A.PostProcessSteps.FlipUVs);
+                    A.PostProcessSteps.FlipWindingOrder;
+
+                if (flipUVs == true)
+                { 
+                    flags |= A.PostProcessSteps.FlipUVs; 
+                }
+
+                scene = importer.ImportFile(path, flags);
             }
             catch (Exception)
             {
