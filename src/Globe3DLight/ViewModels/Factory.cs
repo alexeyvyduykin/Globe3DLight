@@ -106,7 +106,7 @@ namespace Globe3DLight.ViewModels
                 FieldOfViewY = 70.0f * (float)Math.PI / 180.0f, //Math.PI / 6.0, //70.0;
                 AspectRatio = 1,
                 CameraBehaviours = cameraBehaviours,
-                PerspectiveNearPlaneDistance = 10.5, // 0.5;
+                PerspectiveNearPlaneDistance = 80,// 10.5, // 0.5;
                 PerspectiveFarPlaneDistance = 2500000.0,
             };
         }
