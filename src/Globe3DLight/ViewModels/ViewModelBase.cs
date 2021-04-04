@@ -37,7 +37,7 @@ namespace Globe3DLight.ViewModels
 
         public void RaisePropertyChanged(PropertyChangedEventArgs e) => PropertyChanged?.Invoke(this, e);
          
-        public void RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string propertyName = default)
+        public void RaiseAndSetIfChanged<T>(ref T field, T value, [CallerMemberName] string? propertyName = default)
         {
             if (!Equals(field, value))
             {
@@ -45,18 +45,6 @@ namespace Globe3DLight.ViewModels
                 _isDirty = true;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));             
             }         
-        }
-
-        public bool Update<T>(ref T field, T value, [CallerMemberName] string propertyName = default)
-        {
-            if (!Equals(field, value))
-            {
-                field = value;
-                _isDirty = true;
-                RaisePropertyChanged(new PropertyChangedEventArgs(propertyName));
-                return true;
-            }
-            return false;
         }
 
         protected void ObserveSelf(

@@ -44,6 +44,16 @@ namespace Globe3DLight.ViewModels.Containers
                         arcballCamera.Resize((int)Width, (int)Height);
                     }
                 }
+
+                if(e.PropertyName == nameof(Tasks))
+                {                        
+                    AddTasks(((ScenarioContainerViewModel)s).Tasks);                    
+                }
+
+                if(e.PropertyName == nameof(CurrentTask))
+                {                       
+                    AddCurrentTask(((ScenarioContainerViewModel)s).CurrentTask);                    
+                }
             };
         }
 
@@ -74,25 +84,13 @@ namespace Globe3DLight.ViewModels.Containers
         public ImmutableArray<SatelliteTask> Tasks
         {
             get => _tasks;
-            set
-            {
-                if (Update(ref _tasks, value) == true)
-                {
-                    AddTasks(value);
-                }
-            }
+            set => RaiseAndSetIfChanged(ref _tasks, value);            
         }
 
         public SatelliteTask CurrentTask
         {
             get => _currentTask;
-            set
-            {
-                if (Update(ref _currentTask, value) == true)
-                {
-                    AddCurrentTask(value);
-                }
-            }
+            set => RaiseAndSetIfChanged(ref _currentTask, value);            
         }
 
         public BaseEntity CurrentEntity
