@@ -1,74 +1,53 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using Globe3DLight.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 namespace Globe3DLight.Serializer.Newtonsoft
 {
-    /// <summary>
-    /// Json serializer.
-    /// </summary>
     public sealed class NewtonsoftJsonSerializer : IJsonSerializer
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly JsonSerializerSettings _settings;
 
-        /// <summary>
-        /// Specifies the settings on a <see cref="JsonSerializer"/> object.
-        /// </summary>
-        private static readonly JsonSerializerSettings Settings;
-
-        /// <summary>
-        /// Initializes static data.
-        /// </summary>
-        static NewtonsoftJsonSerializer()
+        public NewtonsoftJsonSerializer(IServiceProvider serviceProvider)
         {
-            Settings = new JsonSerializerSettings()
+            _serviceProvider = serviceProvider;
+
+            _settings = new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented,
                 TypeNameHandling = TypeNameHandling.Objects,
-                PreserveReferencesHandling = PreserveReferencesHandling.Objects, 
+                PreserveReferencesHandling = PreserveReferencesHandling.Objects,
                 ReferenceLoopHandling = ReferenceLoopHandling.Serialize,
                 ContractResolver = new ProjectContractResolver(),
                 NullValueHandling = NullValueHandling.Ignore,
                 Converters =
                 {
                     new KeyValuePairConverter(),
-         //           new ArgbColorJsonConverter(),
-         //           new FontStyleConverter(),
-         //           new ShapeStateConverter()
                 }
             };
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="NewtonsoftJsonSerializer"/> class.
-        /// </summary>
-        /// <param name="serviceProvider">The service provider.</param>
-        public NewtonsoftJsonSerializer(IServiceProvider serviceProvider)
+        public string Serialize<T>(T value)
         {
-            _serviceProvider = serviceProvider;
+            return JsonConvert.SerializeObject(value, _settings);
         }
 
-        /// <inheritdoc/>
-        string IJsonSerializer.Serialize<T>(T value)
+        public T Deserialize<T>(string json)
         {
-            return JsonConvert.SerializeObject(value, Settings);
-        }
-
-        /// <inheritdoc/>
-        T IJsonSerializer.Deserialize<T>(string json)
-        {
-            return JsonConvert.DeserializeObject<T>(json, Settings);
+            return JsonConvert.DeserializeObject<T>(json, _settings);
         }
 
         public string SerializerWithSettings<T>(T value)
         {
-            return JsonConvert.SerializeObject(value, Settings);
+            return JsonConvert.SerializeObject(value, _settings);
         }
 
         public T DeserializeWithSettings<T>(string json)
         {
-            return JsonConvert.DeserializeObject<T>(json, Settings);
+            return JsonConvert.DeserializeObject<T>(json, _settings);
         }
     }
 }

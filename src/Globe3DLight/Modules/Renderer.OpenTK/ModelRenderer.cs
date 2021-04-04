@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.ViewModels.Geometry;
-using Globe3DLight.Renderer.OpenTK.Core;
-using A = OpenTK.Graphics.OpenGL;
-using GlmSharp;
+﻿#nullable enable
+using System;
 using System.Linq;
+using GlmSharp;
 using Globe3DLight.Models.Renderer;
+using Globe3DLight.Renderer.OpenTK.Core;
+using Globe3DLight.ViewModels.Geometry;
+using A = OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
@@ -20,25 +19,10 @@ namespace Globe3DLight.Renderer.OpenTK
     internal class ModelRenderer : IModelRenderer
     {
         private readonly Model _model;
-
-        private int[] _vaos, _vbos, _ebos;
-
-        private int[] _mapDiffuseNames;
-        private string[] _mapDiffuseTypes;
-
+        private readonly int[] _vaos, _vbos, _ebos;
+        private readonly int[] _mapDiffuseNames;
+        private readonly string[] _mapDiffuseTypes;
         private readonly ICache<string, int> _textureCache;
-
-        public ModelRenderer(Model model, ICache<string, int> textureCache)
-        {
-            _model = model;
-
-            _textureCache = textureCache;
-
-            _mapDiffuseNames = new int[_model.Materials.Count()];
-            _mapDiffuseTypes = new string[_model.Materials.Count()];
-
-            SetupMeshes();       
-        }
 
         private struct Vertex
         {
@@ -47,12 +31,27 @@ namespace Globe3DLight.Renderer.OpenTK
             public vec2 texCoords;
         }
 
+        public ModelRenderer(Model model, ICache<string, int> textureCache)
+        {
+            _model = model;
+
+            _textureCache = textureCache;
+
+            _mapDiffuseNames = new int[_model.Materials.Count];
+            _mapDiffuseTypes = new string[_model.Materials.Count];
+
+            _vaos = new int[_model.Meshes.Count];
+            _vbos = new int[_model.Meshes.Count];
+            _ebos = new int[_model.Meshes.Count];
+
+            SetupMeshes();
+        }
 
         public void Draw(ShaderProgram sp)
-        {          
-            for (int i = 0; i < _model.Meshes.Count; i++)         
+        {
+            for (int i = 0; i < _model.Meshes.Count; i++)
             {
-                var mesh = _model.Meshes[i];              
+                var mesh = _model.Meshes[i];
                 var material = _model.Materials[mesh.MaterialIndex];
 
                 if (material.HasTextureDiffuse == true)
@@ -60,7 +59,7 @@ namespace Globe3DLight.Renderer.OpenTK
                     A.GL.ActiveTexture(A.TextureUnit.Texture0 + 0); // Active proper texture unit before binding
                                                                     // Retrieve texture number (the N in diffuse_textureN)
                                                                     // stringstream ss;
-              
+
                     // Now set the sampler to the correct texture unit
                     A.GL.Uniform1(A.GL.GetUniformLocation(sp.Handle, _mapDiffuseTypes[mesh.MaterialIndex]), 0);
                     // And finally bind the texture
@@ -93,15 +92,9 @@ namespace Globe3DLight.Renderer.OpenTK
             }
         }
 
-
         private void SetupMeshes()
         {
-            int count = _model.Meshes.Count();
-            _vaos = new int[count];
-            _vbos = new int[count];
-            _ebos = new int[count];
-
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < _model.Meshes.Count; i++)
             {
                 var mesh = _model.Meshes[i];
 
@@ -109,10 +102,10 @@ namespace Globe3DLight.Renderer.OpenTK
 
                 for (int j = 0; j < mesh.Vertices.Count; j++)
                 {
-                    vertices[j] = new Vertex() 
+                    vertices[j] = new Vertex()
                     {
-                        position = mesh.Vertices[j],                    
-                        normal = mesh.Normals[j],                    
+                        position = mesh.Vertices[j],
+                        normal = mesh.Normals[j],
                         texCoords = mesh.TexCoords[j]
                     };
                 }
@@ -147,10 +140,8 @@ namespace Globe3DLight.Renderer.OpenTK
                 A.GL.EnableVertexAttribArray((int)2);
 
                 A.GL.BindVertexArray(0);
-
             }
         }
-
 
         public void SetupTextures()
         {
@@ -212,7 +203,5 @@ namespace Globe3DLight.Renderer.OpenTK
 
             return id;
         }
-
     }
-
 }

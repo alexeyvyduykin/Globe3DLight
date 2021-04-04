@@ -1,16 +1,16 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
-using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.ViewModels.Data;
-using Globe3DLight.Models.Data;
-using Globe3DLight.ViewModels.Editor;
-using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.Models.Scene;
-using Globe3DLight.ViewModels.Time;
 using Globe3DLight.Models;
 using Globe3DLight.Models.Editor;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Editor;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.ViewModels.Time;
 
 namespace Globe3DLight.ViewModels.Designer
 {
@@ -61,7 +61,7 @@ namespace Globe3DLight.ViewModels.Designer
         public static void InitializeContext(IServiceProvider serviceProvider)
         {
             var factory = serviceProvider.GetService<IFactory>();
-            
+
             var begin = DateTime.Now;
             var duration = TimeSpan.FromDays(1);
 
@@ -77,7 +77,7 @@ namespace Globe3DLight.ViewModels.Designer
 
             // Project
 
-            var containerFactory = serviceProvider.GetService<IContainerFactory>();        
+            var containerFactory = serviceProvider.GetService<IContainerFactory>();
 
             Project = containerFactory.GetProject();
 
@@ -202,7 +202,7 @@ namespace Globe3DLight.ViewModels.Designer
                     0.0, 86400.0, 60.0);
 
         public static SensorData SensorData =>
-        new SensorData("", "",         
+        new SensorData("", "",
             new List<ShootingRecord>()
             {
                 new ShootingRecord(0.0, 10.0, 0.12, 0.24, 550, 600, "GroundObject0043"),
@@ -211,30 +211,30 @@ namespace Globe3DLight.ViewModels.Designer
             },
             0.0, 86400.0);
 
-        public static AntennaData AntennaData =>      
-            new AntennaData("", "",                                   
-                new List<TranslationRecord>()            
-                {                                   
-                    new TranslationRecord(0.0, 10.0, "RTR0000001"),                                               
-                    new TranslationRecord(17.0, 23.0, "RTR0000002"),               
-                    new TranslationRecord(56.0, 60.0, "GST0000002")           
-                },           
+        public static AntennaData AntennaData =>
+            new AntennaData("", "",
+                new List<TranslationRecord>()
+                {
+                    new TranslationRecord(0.0, 10.0, "RTR0000001"),
+                    new TranslationRecord(17.0, 23.0, "RTR0000002"),
+                    new TranslationRecord(56.0, 60.0, "GST0000002")
+                },
                 0.0, 86400.0);
 
         public static RotationData RotationData =>
-            new RotationData("", "",               
-                new List<RotationRecord>()            
-                {               
-                    new RotationRecord(0.0, 10.0, 25.0),                
-                    new RotationRecord(12.0, 15.0, -25.0),                
+            new RotationData("", "",
+                new List<RotationRecord>()
+                {
+                    new RotationRecord(0.0, 10.0, 25.0),
+                    new RotationRecord(12.0, 15.0, -25.0),
                     new RotationRecord(22.0, 30.0, 25.0)
-                },           
+                },
                 0.0, 86400.0);
 
-        public static SunData SunData =>       
-            new SunData("Sun",           
-                new GlmSharp.dvec3(40000.0, -42000.0, 41500.0),             
-                new GlmSharp.dvec3(38000.0, -44000.0, 37500.0),            
+        public static SunData SunData =>
+            new SunData("Sun",
+                new GlmSharp.dvec3(40000.0, -42000.0, 41500.0),
+                new GlmSharp.dvec3(38000.0, -44000.0, 37500.0),
                 0.0, 86400.0);
     }
 }

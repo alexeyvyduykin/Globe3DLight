@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.IO;
@@ -12,7 +13,6 @@ using Globe3DLight.Timer;
 using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.ViewModels.Geometry;
 using Globe3DLight.ViewModels.Renderer;
 using Globe3DLight.ViewModels.Scene;
 using Globe3DLight.ViewModels.Time;
@@ -331,7 +331,7 @@ namespace Globe3DLight.ViewModels
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
             var renderModel = renderModelFactory.CreateGroundStation();
-         
+
             var fr_gs_collection = new LogicalCollectionViewModel()
             {
                 Name = "fr_gs_collection",
@@ -356,7 +356,7 @@ namespace Globe3DLight.ViewModels
                 {
                     Name = item.Name,
                     IsVisible = true,
-                    RenderModel = renderModel,            
+                    RenderModel = renderModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
                     Logical = fr_groundStation,
                 });
@@ -405,7 +405,7 @@ namespace Globe3DLight.ViewModels
                 {
                     Name = item.Name,
                     IsVisible = true,
-                    RenderModel = renderModel,                 
+                    RenderModel = renderModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
                     Logical = fr_retranslator,
                 });
@@ -434,7 +434,7 @@ namespace Globe3DLight.ViewModels
             var sensorModel = renderModelFactory.CreateSensor();
 
             var satelliteModel = renderModelFactory.CreateSatellite();
-        
+
             var list = new List<Satellite>();
 
             for (int i = 0; i < data.SatellitePositions.Count; i++)
@@ -479,7 +479,7 @@ namespace Globe3DLight.ViewModels
                 {
                     Name = data.SatellitePositions[i].Name,
                     IsVisible = true,
-                    RenderModel = satelliteModel,                 
+                    RenderModel = satelliteModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
                     Logical = fr_rotation,
                 };
@@ -537,10 +537,9 @@ namespace Globe3DLight.ViewModels
 
                 var sortEvents = events.OrderBy(s => s.Begin).ToList();
 
-                var task = new SatelliteTask(sortEvents)
+                var task = new SatelliteTask(satellites[i], sortEvents)
                 {
                     Name = name,
-                    Satellite = satellites[i],
                     HasRotations = true,
                     HasObservations = true,
                     HasTransmissions = true,

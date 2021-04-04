@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Linq;
@@ -8,24 +9,34 @@ namespace Globe3DLight.ViewModels.Entities
     public class SatelliteTask : ViewModelBase
     {
         private readonly IList<BaseSatelliteEvent> _sourceEvents;
-
         private bool _isVisible;
         private bool _hasRotations;
         private bool _hasObservations;
         private bool _hasTransmission;
         private string _searchString;
-
         private IList<BaseSatelliteEvent> _events;
-        private BaseSatelliteEvent _selectedEvent;
+        private BaseSatelliteEvent? _selectedEvent;
         private Satellite _satellite;
 
-        public SatelliteTask(IList<BaseSatelliteEvent> events)
+        public SatelliteTask(Satellite satellite, IList<BaseSatelliteEvent> events)
         {
             var sortEvents = events.OrderBy(s => s.Begin).ToList();
 
+            _satellite = satellite;
             _sourceEvents = sortEvents;
             _events = sortEvents;
             _selectedEvent = sortEvents.FirstOrDefault();
+            _searchString = string.Empty;
+
+            PropertyChanged += (s, e) =>
+            {
+                if (e.PropertyName == nameof(HasRotations) || e.PropertyName == nameof(HasObservations) || 
+                e.PropertyName == nameof(HasTransmissions) || e.PropertyName == nameof(SearchString))
+                {
+                    Events = CreateFrom(_sourceEvents);
+                    SelectedEvent = Events.FirstOrDefault();
+                }
+            };
         }
              
         private IList<BaseSatelliteEvent> CreateFrom(IList<BaseSatelliteEvent> source)
@@ -41,12 +52,6 @@ namespace Globe3DLight.ViewModels.Entities
             return source.Where(combined).Where(namePredicate).ToList();
         }
 
-        private void Update()
-        {
-            Events = CreateFrom(_sourceEvents);
-            SelectedEvent = Events.FirstOrDefault();
-        }
-
         public bool IsVisible 
         {
             get => _isVisible; 
@@ -56,41 +61,25 @@ namespace Globe3DLight.ViewModels.Entities
         public bool HasRotations
         {
             get => _hasRotations;
-            set 
-            {
-                RaiseAndSetIfChanged(ref _hasRotations, value);
-                Update();
-            }
+            set => RaiseAndSetIfChanged(ref _hasRotations, value);
         }
         
         public bool HasObservations
         {
             get => _hasObservations;
-            set 
-            {
-                RaiseAndSetIfChanged(ref _hasObservations, value);
-                Update();
-            }
+            set => RaiseAndSetIfChanged(ref _hasObservations, value);
         }
         
         public bool HasTransmissions
         {
             get => _hasTransmission;
-            set              
-            {
-                RaiseAndSetIfChanged(ref _hasTransmission, value);
-                Update();
-            }
+            set => RaiseAndSetIfChanged(ref _hasTransmission, value);
         }
         
         public string SearchString 
         {
             get => _searchString;
-            set 
-            {
-                RaiseAndSetIfChanged(ref _searchString, value);
-                Update();
-            }
+            set => RaiseAndSetIfChanged(ref _searchString, value);
         }
 
         public Satellite Satellite 
@@ -105,7 +94,7 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _events, value); 
         }
        
-        public BaseSatelliteEvent SelectedEvent 
+        public BaseSatelliteEvent? SelectedEvent 
         {
             get => _selectedEvent;
             set => RaiseAndSetIfChanged(ref _selectedEvent, value); 

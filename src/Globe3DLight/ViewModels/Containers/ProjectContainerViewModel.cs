@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable enable
+using System;
 using System.Collections.Immutable;
-using System.Text;
 using System.ComponentModel;
 using System.Reactive.Disposables;
 
@@ -10,39 +9,36 @@ namespace Globe3DLight.ViewModels.Containers
     public partial class ProjectContainerViewModel : BaseContainerViewModel
     {
         private ImmutableArray<ScenarioContainerViewModel> _scenarios;
-        private ScenarioContainerViewModel _currentScenario;
-        private ViewModelBase _selected;
+        private ScenarioContainerViewModel? _currentScenario;
+        private ViewModelBase? _selected;
 
         public ProjectContainerViewModel()
         {
-            PropertyChanged += (s, e) => 
+            PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(Selected))
                 {
                     SetSelected(Selected);
                 }
-            };            
+            };
         }
 
-        public ImmutableArray<ScenarioContainerViewModel> Scenarios 
-        { 
-            get => _scenarios; 
-            set => RaiseAndSetIfChanged(ref _scenarios, value); 
-        }
-
-        public ScenarioContainerViewModel CurrentScenario
+        public ImmutableArray<ScenarioContainerViewModel> Scenarios
         {
-            get => _currentScenario; 
-            set => RaiseAndSetIfChanged(ref _currentScenario, value);         
+            get => _scenarios;
+            set => RaiseAndSetIfChanged(ref _scenarios, value);
         }
 
-        public ViewModelBase Selected
+        public ScenarioContainerViewModel? CurrentScenario
+        {
+            get => _currentScenario;
+            set => RaiseAndSetIfChanged(ref _currentScenario, value);
+        }
+
+        public ViewModelBase? Selected
         {
             get => _selected;
-            set 
-            {                             
-                RaiseAndSetIfChanged(ref _selected, value);
-            }
+            set => RaiseAndSetIfChanged(ref _selected, value);
         }
 
         public void SetCurrentScenario(ScenarioContainerViewModel scenario)
@@ -51,15 +47,15 @@ namespace Globe3DLight.ViewModels.Containers
             Selected = scenario;
         }
 
-        public void SetSelected(ViewModelBase value)
+        public void SetSelected(ViewModelBase? value)
         {
-            if(value is ScenarioContainerViewModel scenario)
+            if (value is ScenarioContainerViewModel scenario)
             {
                 CurrentScenario = scenario;
             }
         }
 
-        public override IDisposable Subscribe(IObserver<(object sender, PropertyChangedEventArgs e)> observer)
+        public override IDisposable Subscribe(IObserver<(object? sender, PropertyChangedEventArgs e)> observer)
         {
             var mainDisposable = new CompositeDisposable();
             var disposablePropertyChanged = default(IDisposable);
@@ -68,7 +64,7 @@ namespace Globe3DLight.ViewModels.Containers
             ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);
             ObserveList(_scenarios, ref disposableDocuments, mainDisposable, observer);
 
-            void Handler(object sender, PropertyChangedEventArgs e)
+            void Handler(object? sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == nameof(Scenarios))
                 {

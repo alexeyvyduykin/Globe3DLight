@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -28,7 +29,7 @@ namespace Globe3DLight.ViewModels.Data
 
         public void Clear() => _list.Clear();
 
-        public T ActiveInterval(double t)
+        public T? ActiveInterval(double t)
         {
             if (_list.Count != 0)
             {
@@ -91,7 +92,7 @@ namespace Globe3DLight.ViewModels.Data
             return default;
         }
 
-        private T Miss(int index)
+        private T? Miss(int index)
         {
             return MissMode switch
             {

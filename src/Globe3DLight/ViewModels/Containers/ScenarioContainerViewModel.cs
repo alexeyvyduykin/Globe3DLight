@@ -1,16 +1,16 @@
-﻿using Globe3DLight.Models.Scene;
+﻿#nullable disable
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.ComponentModel;
 using System.Linq;
-using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.ViewModels.Time;
+using System.Reactive.Disposables;
 using GlmSharp;
 using Globe3DLight.Models;
-using System.ComponentModel;
 using Globe3DLight.Models.Data;
-using System.Reactive.Disposables;
+using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.ViewModels.Time;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -19,7 +19,8 @@ namespace Globe3DLight.ViewModels.Containers
     public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
 
     public class ScenarioContainerViewModel : BaseContainerViewModel
-    {       
+    {
+        private readonly InvalidateScenarioEventArgs _invalidateScenarioEventArgs;
         private ImmutableArray<LogicalViewModel> _logicalRoot;
         private IDataUpdater _updater;
         private ImmutableArray<BaseEntity> _entities;
@@ -31,10 +32,13 @@ namespace Globe3DLight.ViewModels.Containers
         private TimePresenter _timePresenter;
         private double _width;
         private double _height;
+
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
-        
+
         public ScenarioContainerViewModel()
         {
+            _invalidateScenarioEventArgs = new InvalidateScenarioEventArgs();
+            
             PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == nameof(Width) || e.PropertyName == nameof(Height))
@@ -45,17 +49,19 @@ namespace Globe3DLight.ViewModels.Containers
                     }
                 }
 
-                if(e.PropertyName == nameof(Tasks))
-                {                        
-                    AddTasks(((ScenarioContainerViewModel)s).Tasks);                    
+                if (e.PropertyName == nameof(Tasks))
+                {
+                    AddTasks(((ScenarioContainerViewModel)s).Tasks);
                 }
 
-                if(e.PropertyName == nameof(CurrentTask))
-                {                       
-                    AddCurrentTask(((ScenarioContainerViewModel)s).CurrentTask);                    
+                if (e.PropertyName == nameof(CurrentTask))
+                {
+                    AddCurrentTask(((ScenarioContainerViewModel)s).CurrentTask);
                 }
             };
         }
+
+        public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, _invalidateScenarioEventArgs);
 
         public ImmutableArray<LogicalViewModel> LogicalRoot
         {
@@ -84,13 +90,13 @@ namespace Globe3DLight.ViewModels.Containers
         public ImmutableArray<SatelliteTask> Tasks
         {
             get => _tasks;
-            set => RaiseAndSetIfChanged(ref _tasks, value);            
+            set => RaiseAndSetIfChanged(ref _tasks, value);
         }
 
         public SatelliteTask CurrentTask
         {
             get => _currentTask;
-            set => RaiseAndSetIfChanged(ref _currentTask, value);            
+            set => RaiseAndSetIfChanged(ref _currentTask, value);
         }
 
         public BaseEntity CurrentEntity
@@ -157,7 +163,7 @@ namespace Globe3DLight.ViewModels.Containers
         {
             foreach (var task in tasks)
             {
-                task.PropertyChanged += Task_PropertyChanged;             
+                task.PropertyChanged += Task_PropertyChanged;
             }
 
             void Task_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -183,7 +189,7 @@ namespace Globe3DLight.ViewModels.Containers
                 {
                     var task = sender as SatelliteTask;
 
-                    if(TimePresenter.Timer.IsRunning == true)
+                    if (TimePresenter.Timer.IsRunning == true)
                     {
                         TimePresenter.OnPause();
                     }
@@ -196,11 +202,10 @@ namespace Globe3DLight.ViewModels.Containers
                         TimePresenter.Update((time - begin).TotalSeconds);
                     }
                 }
-       
-            }    
+
+            }
         }
 
-        public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, new InvalidateScenarioEventArgs());
 
         public override bool IsDirty()
         {
@@ -213,7 +218,7 @@ namespace Globe3DLight.ViewModels.Containers
 
             return isDirty;
         }
-     
+
         public override void Invalidate()
         {
             base.Invalidate();

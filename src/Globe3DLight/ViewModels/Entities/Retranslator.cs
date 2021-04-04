@@ -1,21 +1,15 @@
-﻿using Globe3DLight.ViewModels.Containers;
+﻿#nullable disable
+using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Scene;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
-using Globe3DLight.Models.Renderer;
-using GlmSharp;
-using Globe3DLight.Models.Entities;
-using Globe3DLight.Models.Scene;
-using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class Retranslator : BaseEntity, IDrawable
-    {       
-        private RenderModel _renderModel;       
+    {
+        private RenderModel _renderModel;
         private BaseState _logical;
 
         public RenderModel RenderModel
@@ -35,7 +29,7 @@ namespace Globe3DLight.ViewModels.Entities
             if (IsVisible == true)
             {
                 renderer.DrawFrame(dc, RenderModel.Frame, Logical.ModelMatrix, scene);
-                renderer.DrawRetranslator(dc, RenderModel, Logical.ModelMatrix, scene);                
+                renderer.DrawRetranslator(dc, RenderModel, Logical.ModelMatrix, scene);
             }
         }
 

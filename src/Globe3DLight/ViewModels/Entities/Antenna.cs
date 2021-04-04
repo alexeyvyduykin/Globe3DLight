@@ -1,25 +1,18 @@
-﻿using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.Models.Data;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.Models.Scene;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable disable
 using GlmSharp;
-using System.Collections.Immutable;
-using System.Linq;
-using Globe3DLight.Models.Entities;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class Antenna : BaseEntity, IDrawable
     {
-        private AntennaRenderModel _renderModel; 
+        private AntennaRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
-        private BaseState _logical; 
+        private BaseState _logical;
 
         public AntennaRenderModel RenderModel
         {
@@ -32,6 +25,7 @@ namespace Globe3DLight.ViewModels.Entities
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
         }
+
         public FrameRenderModel FrameRenderModel
         {
             get => _frameRenderModel;

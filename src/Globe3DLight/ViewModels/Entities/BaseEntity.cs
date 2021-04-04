@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable disable
 using System.Collections.Immutable;
 using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.Models.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
@@ -17,7 +14,7 @@ namespace Globe3DLight.ViewModels.Entities
             get => _children;
             set => RaiseAndSetIfChanged(ref _children, value);
         }
-       
+
         public LogicalCollectionViewModel LogicalCollection
         {
             get => _logicalCollection;

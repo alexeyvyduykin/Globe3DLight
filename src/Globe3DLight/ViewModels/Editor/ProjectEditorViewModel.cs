@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.ViewModels.Scene;
+﻿#nullable disable
+using System;
+using System.ComponentModel;
 using System.Linq;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Data;
-using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.Models;
-using Globe3DLight.Models.Editor;
 using System.Reactive.Disposables;
 using System.Reactive.Subjects;
-using System.ComponentModel;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Entities;
 
 namespace Globe3DLight.ViewModels.Editor
 {
@@ -20,16 +18,31 @@ namespace Globe3DLight.ViewModels.Editor
         private readonly IServiceProvider _serviceProvider;
         private readonly Lazy<IFactory> _factory;
         private string _projectPath;
-        private readonly Lazy<IContainerFactory> _containerFactory;    
+        private readonly Lazy<IContainerFactory> _containerFactory;
         private readonly Lazy<IJsonSerializer> _jsonSerializer;
         private readonly Lazy<IFileSystem> _fileIO;
         private readonly Lazy<IRenderContext> _renderer;
-        private readonly Lazy<IPresenterContract> _presenter;    
+        private readonly Lazy<IPresenterContract> _presenter;
         private ProjectContainerViewModel _project;
         private readonly Lazy<IEditorTool> _currentTool;
         private readonly Lazy<IEditorCanvasPlatform> _canvasPlatform;
         private IDisposable _observer;
         private readonly Lazy<IProjectEditorPlatform> _platform;
+
+        public ProjectEditorViewModel(IServiceProvider serviceProvider)
+        {
+            _serviceProvider = serviceProvider;
+
+            _factory = _serviceProvider.GetServiceLazily<IFactory>();
+            _containerFactory = _serviceProvider.GetServiceLazily<IContainerFactory>();
+            _renderer = _serviceProvider.GetServiceLazily<IRenderContext>();
+            _presenter = _serviceProvider.GetServiceLazily<IPresenterContract>();
+            _currentTool = _serviceProvider.GetServiceLazily<IEditorTool>();
+            _jsonSerializer = _serviceProvider.GetServiceLazily<IJsonSerializer>();
+            _fileIO = _serviceProvider.GetServiceLazily<IFileSystem>();
+            _platform = _serviceProvider.GetServiceLazily<IProjectEditorPlatform>();
+            _canvasPlatform = _serviceProvider.GetServiceLazily<IEditorCanvasPlatform>();
+        }
 
         public ProjectContainerViewModel Project
         {
@@ -67,26 +80,11 @@ namespace Globe3DLight.ViewModels.Editor
 
         public IProjectEditorPlatform Platform => _platform.Value;
 
-        public ProjectEditorViewModel(IServiceProvider serviceProvider)
-        {
-            _serviceProvider = serviceProvider;
-
-            _factory = _serviceProvider.GetServiceLazily<IFactory>();       
-            _containerFactory = _serviceProvider.GetServiceLazily<IContainerFactory>();   
-            _renderer = _serviceProvider.GetServiceLazily<IRenderContext>();
-            _presenter = _serviceProvider.GetServiceLazily<IPresenterContract>();   
-            _currentTool = _serviceProvider.GetServiceLazily<IEditorTool>();
-            _jsonSerializer = _serviceProvider.GetServiceLazily<IJsonSerializer>();
-            _fileIO = _serviceProvider.GetServiceLazily<IFileSystem>();       
-            _platform = _serviceProvider.GetServiceLazily<IProjectEditorPlatform>();         
-            _canvasPlatform = _serviceProvider.GetServiceLazily<IEditorCanvasPlatform>();
-        }
-
         public void OnUpdate()
         {
             if (Project != null)
             {
-                Project.CurrentScenario.LogicalUpdate();            
+                Project.CurrentScenario.LogicalUpdate();
             }
         }
 
@@ -135,7 +133,7 @@ namespace Globe3DLight.ViewModels.Editor
             }
             catch //(Exception ex)
             {
-               // Log?.LogException(ex);
+                // Log?.LogException(ex);
             }
         }
 
@@ -262,24 +260,24 @@ namespace Globe3DLight.ViewModels.Editor
         {
             if (item is ScenarioContainerViewModel scenario)
             {
-                Project?.RemoveScenario(scenario);               
+                Project?.RemoveScenario(scenario);
                 var selected = Project?.Scenarios.FirstOrDefault();
                 Project?.SetCurrentScenario(selected);
             }
             if (item is LogicalViewModel node)
             {
                 Project?.RemoveLogicalNode(node);
-              //  var selected = Project?.CurrentScenario?.LogicalTreeNodeRoot.SingleOrDefault();
-               // Project?.CurrentScenario?.CurrentLogicalTreeNode = selected;
+                //  var selected = Project?.CurrentScenario?.LogicalTreeNodeRoot.SingleOrDefault();
+                // Project?.CurrentScenario?.CurrentLogicalTreeNode = selected;
 
 
-               // Project.SetSelected(selected);
+                // Project.SetSelected(selected);
                 //var selected = Project?.CurrentDocument?.Pages.FirstOrDefault();
                 //Project?.SetCurrentContainer(selected);
             }
             else if (item is ProjectEditorViewModel || item == null)
             {
-              //  OnDeleteSelected();
+                //  OnDeleteSelected();
             }
         }
 
@@ -304,7 +302,7 @@ namespace Globe3DLight.ViewModels.Editor
                 if (Project.Selected is ITargetable target)
                 {
                     Project.CurrentScenario.SetCameraTo(target);
-                }       
+                }
             }
         }
 
@@ -325,7 +323,7 @@ namespace Globe3DLight.ViewModels.Editor
         //    }
         //    catch (Exception)
         //    {
-               
+
         //    }
         //}
 
@@ -355,10 +353,10 @@ namespace Globe3DLight.ViewModels.Editor
         {
             if (project != null)
             {
-                Project = project;    
+                Project = project;
                 ProjectPath = path;
-        //        IsProjectDirty = false;
-               
+                //        IsProjectDirty = false;
+
                 var propertyChangedSubject = new Subject<(object sender, PropertyChangedEventArgs e)>();
                 var propertyChangedDisposable = Project.Subscribe(propertyChangedSubject);
                 var observable = propertyChangedSubject.Subscribe(ProjectChanged);
@@ -366,7 +364,7 @@ namespace Globe3DLight.ViewModels.Editor
                 Observer = new CompositeDisposable(propertyChangedDisposable, observable, propertyChangedSubject);
 
                 void ProjectChanged((object sender, PropertyChangedEventArgs e) arg)
-                {             
+                {
                     // _project?.CurrentContainer?.InvalidateLayer();
                     CanvasPlatform?.InvalidateControl?.Invoke();
                     //IsProjectDirty = true;
@@ -376,13 +374,13 @@ namespace Globe3DLight.ViewModels.Editor
 
         public void OnUnload()
         {
-            if (Observer is { })
+            if (Observer is not null)
             {
                 Observer?.Dispose();
                 Observer = null;
             }
 
-            if (Project != null)
+            if (Project is not null)
             {
                 Project = null;
                 //     ProjectPath = string.Empty;

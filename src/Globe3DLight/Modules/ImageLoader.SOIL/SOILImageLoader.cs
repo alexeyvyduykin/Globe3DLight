@@ -1,12 +1,10 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
+using System.Runtime.InteropServices;
 using Globe3DLight.Models;
 using Globe3DLight.Models.Image;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
 
 namespace Globe3DLight.ImageLoader.SOIL
 {
@@ -65,28 +63,24 @@ namespace Globe3DLight.ImageLoader.SOIL
 
         #endregion Constants 
 
-
         private readonly IServiceProvider _serviceProvider;
-        private readonly SOILFactory SOILFactory;
-
+        private readonly SOILFactory _SOILFactory;
 
         public SOILImageLoader(IServiceProvider serviceProvider)
         {
-            this._serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider;
 
-            SOILFactory = new SOILFactory();
+            _SOILFactory = new SOILFactory();
         }
 
-        public IDdsImage LoadDdsImageFromFile(string path)      
-        {                                    
-            var image = SOIL_direct_load_DDS(path);
-
-            return image;
-        }
-
-        public IEnumerable<IDdsImage> LoadDdsImageFromFiles(IEnumerable<string> paths)
+        public IDdsImage? LoadDdsImageFromFile(string path)
         {
-            var list = new List<IDdsImage>();
+            return SOIL_direct_load_DDS(path);
+        }
+
+        public IEnumerable<IDdsImage?> LoadDdsImageFromFiles(IEnumerable<string> paths)
+        {
+            var list = new List<IDdsImage?>();
 
             foreach (var path in paths)
             {
@@ -98,30 +92,24 @@ namespace Globe3DLight.ImageLoader.SOIL
             return list;
         }
 
-        private IDdsImage SOIL_direct_load_DDS(string filename)
+        private IDdsImage? SOIL_direct_load_DDS(string filename)
         {
-            IDdsImage image = null;
+            IDdsImage? image = default;
 
-            if (null == filename)
-            {
-                return null;
+            if (string.IsNullOrEmpty(filename) != true)
+            {             
+                var buffer = File.ReadAllBytes(filename);
+
+                unsafe
+                {
+                    /*	now try to do the loading	*/
+                    image = SOIL_direct_load_DDS_from_memory(buffer);
+                }
             }
 
-            var buffer = File.ReadAllBytes(filename);
-            var buffer_length = buffer.Length;
-
-            if (null == buffer)
-            {
-                return null;
-            }
-
-            unsafe
-            {
-                /*	now try to do the loading	*/
-                image = SOIL_direct_load_DDS_from_memory(buffer);
-            }
             return image;
         }
+
         private bool HasFlag(uint a, uint b)
         {
             return (a & b) == b;
@@ -137,21 +125,17 @@ namespace Globe3DLight.ImageLoader.SOIL
 
         private bool DDSImage(byte[] ddsImage, ref DDS_header header)
         {
-            if (ddsImage == null) return false;
-            if (ddsImage.Length == 0) return false;
+            if (ddsImage == null || ddsImage.Length == 0)
+                return false;
 
-            using (MemoryStream stream = new MemoryStream(ddsImage.Length))
-            {
-                stream.Write(ddsImage, 0, ddsImage.Length);
-                stream.Seek(0, SeekOrigin.Begin);
+            using MemoryStream stream = new MemoryStream(ddsImage.Length);
+            stream.Write(ddsImage, 0, ddsImage.Length);
+            stream.Seek(0, SeekOrigin.Begin);
 
-                using (BinaryReader reader = new BinaryReader(stream))
-                {
-                    //DDS_header header = new DDS_header();
-                    return ReadHeader(reader, ref header);
-                }
-            }
+            using BinaryReader reader = new BinaryReader(stream);
+            return ReadHeader(reader, ref header);
         }
+
         private bool ReadHeader(BinaryReader reader, ref DDS_header header)
         {
             //byte[] signature = reader.ReadBytes(4);
@@ -159,7 +143,6 @@ namespace Globe3DLight.ImageLoader.SOIL
             //    return false;
 
             header.dwMagic = reader.ReadUInt32();
-
 
             header.Size = reader.ReadUInt32();
             if (header.Size != 124)
@@ -197,7 +180,6 @@ namespace Globe3DLight.ImageLoader.SOIL
             header.PixelFormat.BBitMask = reader.ReadUInt32();
             header.PixelFormat.AlphaBitMask = reader.ReadUInt32();
 
-
             //caps 
             header.Caps1 = reader.ReadUInt32();
             header.Caps2 = reader.ReadUInt32();
@@ -209,21 +191,19 @@ namespace Globe3DLight.ImageLoader.SOIL
             return true;
         }
 
+        private IDdsImage? SOIL_direct_load_DDS_from_memory(byte[] buffer)
+        {
+            var header = new DDS_header();
 
-        private IDdsImage SOIL_direct_load_DDS_from_memory(byte[] buffer)
-        {           
-            DDS_header header = new DDS_header();
-                     
-            byte[] memoryTarget = new byte[Marshal.SizeOf(typeof(DDS_header)) /*headerLength*/];
+            var memoryTarget = new byte[Marshal.SizeOf(typeof(DDS_header))];
 
-            Array.Copy(buffer, 0, memoryTarget, 0, Marshal.SizeOf(typeof(DDS_header))/*headerLength*/);
+            Array.Copy(buffer, 0, memoryTarget, 0, Marshal.SizeOf(typeof(DDS_header)));
 
-            if (this.DDSImage(memoryTarget, ref header) == false)
+            if (DDSImage(memoryTarget, ref header) == false)
                 return null;
 
-            uint buffer_index = (uint)Marshal.SizeOf(typeof(DDS_header));// (uint)headerLength;// (uint)Marshal.SizeOf(header);
+            var buffer_index = (uint)Marshal.SizeOf(typeof(DDS_header));
             var buffer_length = buffer.Length;
-
 
             /*	OK, validated the header, let's load the image data	*/
             var width = (int)header.Width;
@@ -231,14 +211,11 @@ namespace Globe3DLight.ImageLoader.SOIL
             var uncompressed = 1 - (int)(header.PixelFormat.Flags & DDPF_FOURCC) / DDPF_FOURCC;
             var cubemap = (int)(header.Caps2 & DDSCAPS2_CUBEMAP) / DDSCAPS2_CUBEMAP;
 
-
-            byte[] data = new byte[buffer_length - buffer_index];
+            var data = new byte[buffer_length - buffer_index];
 
             Array.Copy(buffer, (int)buffer_index, data, 0, buffer_length - buffer_index);
 
             return new SOILDdsImage(width, height, data, header, uncompressed != 0);
-
-         //   return new SOILDdsImage(width, height, buffer, header, uncompressed != 0);
         }
     }
 }

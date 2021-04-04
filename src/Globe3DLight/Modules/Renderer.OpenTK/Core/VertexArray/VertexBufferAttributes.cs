@@ -1,43 +1,46 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using A = OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
     internal struct VertexBufferAttributeGL3x
     {
-        public VertexBufferAttribute VertexBufferAttribute { get; set; }
+        public VertexBufferAttribute? VertexBufferAttribute { get; set; }
+
         public bool Dirty { get; set; }
     }
 
-
     internal class VertexBufferAttributes
     {
-        private Device _device;
+        private readonly Device _device;
+        private readonly VertexBufferAttributeGL3x[] _attributes;
+        private int _count;
+        private int _maximumArrayIndex;
+        private bool _dirty;
+
         public VertexBufferAttributes()
         {
             _device = new Device();
-
-        attributes = new VertexBufferAttributeGL3x[_device.MaximumNumberOfVertexAttributes];
+            _attributes = new VertexBufferAttributeGL3x[_device.MaximumNumberOfVertexAttributes];
         }
-   
-        public virtual VertexBufferAttribute this[int index]
-        {
-            get { return attributes[index].VertexBufferAttribute; }
 
+        public virtual VertexBufferAttribute? this[int index]
+        {
+            get 
+            {
+                return _attributes[index].VertexBufferAttribute; 
+            }
             set
             {
-                if (attributes[index].VertexBufferAttribute != value)
+                if (_attributes[index].VertexBufferAttribute != value)
                 {
                     if (value != null)
                     {
                         if (value.NumberOfComponents < 1 || value.NumberOfComponents > 4)
                         {
-                            throw new ArgumentException(
-                                "NumberOfComponents must be between one and four.");
+                            throw new ArgumentException("NumberOfComponents must be between one and four.");
                         }
 
                         if (value.Normalize)
@@ -49,41 +52,34 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                                 (value.ComponentDatatype != A.VertexAttribPointerType.Int) &&
                                 (value.ComponentDatatype != A.VertexAttribPointerType.UnsignedInt))
                             {
-                                throw new ArgumentException(
-                                    "When Normalize is true, ComponentDatatype must be Byte, UnsignedByte, Short, UnsignedShort, Int, or UnsignedInt.");
+                                throw new ArgumentException("When Normalize is true, ComponentDatatype must be Byte, UnsignedByte, Short, UnsignedShort, Int, or UnsignedInt.");
                             }
                         }
                     }
 
-                    if ((attributes[index].VertexBufferAttribute != null) && (value == null))
+                    if ((_attributes[index].VertexBufferAttribute != null) && (value == null))
                     {
-                        --count;
+                        --_count;
                     }
-                    else if ((attributes[index].VertexBufferAttribute == null) && (value != null))
+                    else if ((_attributes[index].VertexBufferAttribute == null) && (value != null))
                     {
-                        ++count;
+                        ++_count;
                     }
 
-                    attributes[index].VertexBufferAttribute = value;
-                    attributes[index].Dirty = true;
-                    dirty = true;
+                    _attributes[index].VertexBufferAttribute = value;
+                    _attributes[index].Dirty = true;
+                    _dirty = true;
                 }
             }
         }
 
-        public virtual int Count
-        {
-            get { return count; }
-        }
+        public virtual int Count => _count;         
 
-        public virtual int MaximumCount
-        {
-            get { return attributes.Length; }
-        }
+        public virtual int MaximumCount => _attributes.Length;         
 
         public virtual IEnumerator GetEnumerator()
         {
-            foreach (VertexBufferAttributeGL3x attribute in attributes)
+            foreach (var attribute in _attributes)
             {
                 if (attribute.VertexBufferAttribute != null)
                 {
@@ -94,15 +90,15 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         internal void Clean()
         {
-            if (dirty)
+            if (_dirty)
             {
                 int maximumArrayIndex = 0;
 
-                for (int i = 0; i < attributes.Length; ++i)
+                for (int i = 0; i < _attributes.Length; ++i)
                 {
-                    VertexBufferAttribute attribute = attributes[i].VertexBufferAttribute;
+                    var attribute = _attributes[i].VertexBufferAttribute;
 
-                    if (attributes[i].Dirty)
+                    if (_attributes[i].Dirty)
                     {
                         if (attribute != null)
                         {
@@ -113,7 +109,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                             Detach(i);
                         }
 
-                        attributes[i].Dirty = false;
+                        _attributes[i].Dirty = false;
                     }
 
                     if (attribute != null)
@@ -122,8 +118,8 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     }
                 }
 
-                dirty = false;
-                this.maximumArrayIndex = maximumArrayIndex;
+                _dirty = false;
+                _maximumArrayIndex = maximumArrayIndex;
             }
         }
 
@@ -131,16 +127,21 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         {
             A.GL.EnableVertexAttribArray(index);
 
-            VertexBufferAttribute attribute = attributes[index].VertexBufferAttribute;
-            VertexBuffer bufferObjectGL = attribute.VertexBuffer as VertexBuffer;
+            var attribute = _attributes[index].VertexBufferAttribute;
 
-            bufferObjectGL.Bind();
-            A.GL.VertexAttribPointer(index,
-                attribute.NumberOfComponents,
-                attribute.ComponentDatatype,
-                attribute.Normalize,
-                attribute.StrideInBytes,
-                attribute.OffsetInBytes);
+            if (attribute != null)
+            {
+                var bufferObjectGL = attribute.VertexBuffer;
+
+                bufferObjectGL.Bind();
+
+                A.GL.VertexAttribPointer(index,
+                    attribute.NumberOfComponents,
+                    attribute.ComponentDatatype,
+                    attribute.Normalize,
+                    attribute.StrideInBytes,
+                    attribute.OffsetInBytes);
+            }
         }
 
         private static void Detach(int index)
@@ -152,12 +153,12 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         {
             get
             {
-                if (dirty)
+                if (_dirty)
                 {
                     throw new InvalidOperationException("MaximumArrayIndex is not valid until Clean() is called.");
                 }
 
-                return maximumArrayIndex;
+                return _maximumArrayIndex;
             }
         }
 
@@ -165,11 +166,5 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         {
             return attribute.VertexBuffer.SizeInBytes / attribute.StrideInBytes;
         }
-
-        private VertexBufferAttributeGL3x[] attributes;
-        private int count;
-        private int maximumArrayIndex;
-        private bool dirty;
-
     }
 }

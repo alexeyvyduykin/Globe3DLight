@@ -1,37 +1,48 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using OpenTKTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit;
+﻿#nullable enable
+using System;
 using A = OpenTK.Graphics.OpenGL;
+using OpenTKTextureUnit = OpenTK.Graphics.OpenGL.TextureUnit;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
     internal class TextureUnit : ICleanable
     {
-        public TextureUnit(int index, ICleanableObserver observer)
+        private readonly int _textureUnitIndex;
+        private readonly OpenTKTextureUnit _textureUnit;
+        private readonly ICleanableObserver _observer;
+        private Texture2D? _texture;       
+        private DirtyFlags _dirtyFlags;
+
+        [Flags]
+        private enum DirtyFlags
         {
-            this.textureUnitIndex = index;
-            this.textureUnit = OpenTKTextureUnit.Texture0 + index;
-            this.observer = observer;
+            None = 0,
+            Texture = 1,
+            TextureSampler = 2,
+            All = Texture | TextureSampler
         }
 
-        public Texture2D Texture
+        public TextureUnit(int index, ICleanableObserver observer)
         {
-            get { return texture; }
+            _textureUnitIndex = index;
+            _textureUnit = OpenTKTextureUnit.Texture0 + index;
+            _observer = observer;
+        }
 
+        public Texture2D? Texture
+        {
+            get { return _texture; }
             set
             {
-                if (texture != value)
+                if (_texture != value)
                 {
-                    if (dirtyFlags == DirtyFlags.None)
+                    if (_dirtyFlags == DirtyFlags.None)
                     {
-                        observer.NotifyDirty(this);
+                        _observer.NotifyDirty(this);
                     }
 
-                    dirtyFlags |= DirtyFlags.Texture;
-                    texture = value;
+                    _dirtyFlags |= DirtyFlags.Texture;
+                    _texture = value;
                 }
             }
         }
@@ -72,21 +83,19 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         //    Clean();
         //}
 
-        #region ICleanable Members
-
         public void Clean()
         {
-            if (dirtyFlags != DirtyFlags.None)
+            if (_dirtyFlags != DirtyFlags.None)
             {
                 //Validate();
 
-                A.GL.ActiveTexture(textureUnit);
+                A.GL.ActiveTexture(_textureUnit);
 
-                if ((dirtyFlags & DirtyFlags.Texture) == DirtyFlags.Texture)
+                if ((_dirtyFlags & DirtyFlags.Texture) == DirtyFlags.Texture)
                 {
-                    if (texture != null)
+                    if (_texture != null)
                     {
-                        texture.Bind();
+                        _texture.Bind();
                     }
                     else
                     {
@@ -95,7 +104,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     }
                 }
 
-                if ((dirtyFlags & DirtyFlags.TextureSampler) == DirtyFlags.TextureSampler)
+                if ((_dirtyFlags & DirtyFlags.TextureSampler) == DirtyFlags.TextureSampler)
                 {
                     //if (textureSampler != null)
                     //{
@@ -107,7 +116,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     //}
                 }
 
-                dirtyFlags = DirtyFlags.None;
+                _dirtyFlags = DirtyFlags.None;
             }
         }
 
@@ -122,8 +131,6 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         //        dirtyFlags = DirtyFlags.None;
         //    }      
         //}
-
-        #endregion
 
         //private void Validate()
         //{
@@ -152,22 +159,5 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         //        }
         //    }
         //}
-
-        [Flags]
-        private enum DirtyFlags
-        {
-            None = 0,
-            Texture = 1,
-            TextureSampler = 2,
-            All = Texture | TextureSampler
-        }
-
-        private readonly int textureUnitIndex;
-        private readonly OpenTKTextureUnit textureUnit;
-        private readonly ICleanableObserver observer;
-        private Texture2D texture;
-       // private TextureSamplerGL3x textureSampler;
-        private DirtyFlags dirtyFlags;
     }
-
 }

@@ -1,28 +1,23 @@
-﻿using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.Models.Data;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Scene;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
+﻿#nullable disable
 using GlmSharp;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class Earth : BaseEntity, IDrawable, ITargetable
-    {   
+    {
         private EarthRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
         private BaseState _logical;
 
-        public EarthRenderModel RenderModel 
+        public EarthRenderModel RenderModel
         {
-            get => _renderModel; 
-            set => RaiseAndSetIfChanged(ref _renderModel, value); 
+            get => _renderModel;
+            set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
         public FrameRenderModel FrameRenderModel
@@ -33,8 +28,8 @@ namespace Globe3DLight.ViewModels.Entities
 
         public BaseState Logical
         {
-            get => _logical; 
-            set => RaiseAndSetIfChanged(ref _logical, value); 
+            get => _logical;
+            set => RaiseAndSetIfChanged(ref _logical, value);
         }
 
         public dmat4 InverseAbsoluteModel => dmat4.Identity.Inverse;

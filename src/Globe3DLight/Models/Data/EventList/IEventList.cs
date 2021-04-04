@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,6 @@ namespace Globe3DLight.Models.Data
 
         void Clear();
 
-        T ActiveInterval(double t);
+        T? ActiveInterval(double t);
     }
 }

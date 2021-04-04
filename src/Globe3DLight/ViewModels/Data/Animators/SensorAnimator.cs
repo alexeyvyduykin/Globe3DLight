@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using GlmSharp;
 using System.Linq;
@@ -26,14 +27,15 @@ namespace Globe3DLight.ViewModels.Data
         private readonly SensorData _data;
         private IEventList<SensorInterval> _shootingEvents;
         private bool _enable;
-        private Shoot _shoot;
-        private Scan _scan;
+        private Shoot? _shoot;
+        private Scan? _scan;
         private int _direction;
         private bool _first = true;
 
         public SensorAnimator(SensorData data)
         {
             _data = data;
+            _shootingEvents = new EventList<SensorInterval>();
         }
 
         public bool Enable
@@ -42,13 +44,13 @@ namespace Globe3DLight.ViewModels.Data
             protected set => RaiseAndSetIfChanged(ref _enable, value);
         }
 
-        public Shoot Shoot
+        public Shoot? Shoot
         {
             get => _shoot;
             protected set => RaiseAndSetIfChanged(ref _shoot, value);
         }
 
-        public Scan Scan
+        public Scan? Scan
         {
             get => _scan;
             protected set => RaiseAndSetIfChanged(ref _scan, value);
@@ -61,9 +63,7 @@ namespace Globe3DLight.ViewModels.Data
         }
 
         private void Init(double t)
-        {
-            _shootingEvents = new EventList<SensorInterval>();
-     
+        {  
             if (Owner is SatelliteAnimator satAnimator)
             {
                 foreach (var item in _data.Shootings)
@@ -131,9 +131,9 @@ namespace Globe3DLight.ViewModels.Data
 
             var activeInterval = _shootingEvents.ActiveInterval(t);
 
-            Enable = activeInterval != default;
+            Enable = activeInterval is not null;
 
-            if (Enable == true)
+            if (activeInterval is not null)
             {
                 if (Owner is SatelliteAnimator satAnimator)
                 {
@@ -152,7 +152,7 @@ namespace Globe3DLight.ViewModels.Data
 
                     Scan = activeState.Scan;
 
-                    Direction = activeState.Direction;
+                    Direction = activeState.Direction;                   
                 }
             }
         }

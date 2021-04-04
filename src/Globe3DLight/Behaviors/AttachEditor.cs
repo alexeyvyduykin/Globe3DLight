@@ -1,21 +1,22 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using Avalonia;
 using Avalonia.Controls;
-using Globe3DLight.ViewModels.Editor;
-using Globe3DLight.Input;
 using Globe3DLight.Editor;
+using Globe3DLight.Input;
 using Globe3DLight.Models.Editor;
+using Globe3DLight.ViewModels.Editor;
 
 namespace Globe3DLight.Behaviors
 {
-    public class ProjectEditorInput
+    public class AttachEditor
     {
-        private readonly Control _control = null;
-        private AvaloniaInputSource__ _inputSource = null;
-        private ProjectEditorInputTarget _inputTarget = null;
-        private InputProcessor _inputProcessor = null;
+        private readonly Control _control;
+        private AvaloniaInputSource__ _inputSource;
+        private ProjectEditorInputTarget _inputTarget;
+        private InputProcessor _inputProcessor;
 
-        public ProjectEditorInput(Control control)
+        public AttachEditor(Control control)
         {
             _control = control;
             _control.GetObservable(Control.DataContextProperty).Subscribe(Changed);
