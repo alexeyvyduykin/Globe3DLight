@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using GlmSharp;
 using Globe3DLight.Models.Renderer;
@@ -13,7 +14,7 @@ namespace Globe3DLight.Renderer.OpenTK
     internal class GroundStationDrawNode : DrawNode, IGroundStationDrawNode
     {
         private Device _device;
-        private readonly string groundStationVS = @"
+        private readonly string _groundStationVS = @"
 #version 330
 
 layout (location = 0) in vec3 POSITION;
@@ -54,7 +55,7 @@ v_normal_CS = (u_modelView * vec4(NORMAL, 0.0)).xyz;
 
 gl_Position = u_mvp * vertex_MS;
 }";
-        private readonly string groundStationFS = @"
+        private readonly string _groundStationFS = @"
 #version 330
 
 in vec3 v_lightDir_CS;
@@ -101,7 +102,7 @@ finalColor += material.specular * light.specular * RdotVpow;
 color = finalColor;
 }";
         private bool _dirty;
-        private readonly ShaderProgram _sp;       
+        private readonly ShaderProgram _sp;
         private readonly double _scale;
         private readonly Model _model;
         private ModelRenderer__ _modelRenderer;
@@ -116,7 +117,7 @@ color = finalColor;
             _model = groundStation.Model;
             _scale = groundStation.Scale;
 
-            _sp = _device.CreateShaderProgram(groundStationVS, groundStationFS);
+            _sp = _device.CreateShaderProgram(_groundStationVS, _groundStationFS);
 
             _modelRenderer = new ModelRenderer__(_model);
 
@@ -195,7 +196,7 @@ color = finalColor;
             for (int i = 0; i < _model.Meshes.Count; i++)
             {
                 var mesh = _model.Meshes[i];
-               
+
                 sp.SetUniform("material.ambient", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
                 sp.SetUniform("material.diffuse", new vec4(0.565f, 0.537f, 0.518f, 1.0f));
                 sp.SetUniform("material.specular", new vec4(0.0f, 0.0f, 0.0f, 1.0f));
@@ -211,7 +212,7 @@ color = finalColor;
 
         private void SetupMeshes()
         {
-            var mesh = _model.Meshes.SingleOrDefault();
+            var mesh = _model.Meshes.Single();
 
             var vertices = new Vertex[mesh.Vertices.Count];
 

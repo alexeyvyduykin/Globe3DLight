@@ -1,16 +1,11 @@
-﻿using System;
-using System.IO;
+﻿#nullable enable
+using System;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
 using Avalonia.Controls;
-using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.ViewModels.Editor;
-using Globe3DLight.Models.Editor;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.ViewModels.Editor;
 using Globe3DLight.Views;
-using Microsoft.CodeAnalysis;
-
 
 namespace Globe3DLight.Editor
 {
@@ -59,7 +54,7 @@ namespace Globe3DLight.Editor
                 }
             }
         }
-     
+
         public void OnSave()
         {
             var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
@@ -87,9 +82,6 @@ namespace Globe3DLight.Editor
                 editor.OnSaveProject(result);
             }
         }
-
-
-
 
         public async void OnImportJson(string path)
         {
@@ -120,7 +112,7 @@ namespace Globe3DLight.Editor
                 }
             }
         }
-       
+
         public async void OnImportObject(string path)
         {
             if (path == null)
@@ -168,10 +160,10 @@ namespace Globe3DLight.Editor
             var result = await dlg.ShowAsync(GetWindow());
             if (result != null)
             {
-                editor.OnExportJson(result, item);
+                editor?.OnExportJson(result, item);
             }
         }
-  
+
         public async void OnExportObject(object item)
         {
             var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
@@ -187,61 +179,10 @@ namespace Globe3DLight.Editor
                     string resultExtension = System.IO.Path.GetExtension(result);
                     if (string.Compare(resultExtension, ".json", StringComparison.OrdinalIgnoreCase) == 0)
                     {
-                        editor.OnExportJson(result, item);
+                        editor?.OnExportJson(result, item);
                     }
                 }
             }
         }
-
-
-        //public async void OnExport(object item)
-        //{
-        //    var editor = _serviceProvider.GetService<IProjectEditor>();
-
-        //    string name = string.Empty;
-
-        //    if (item == null || item is IProjectEditor)
-        //    {
-        //        if (editor.Project == null)
-        //        {
-        //            return;
-        //        }
-
-        //        name = editor.Project.Name;
-        //        item = editor.Project;
-        //    }
-        //    else if (item is IProjectContainer project)
-        //    {
-        //        name = project.Name;
-        //    }
-        //    else if (item is IDocumentContainer document)
-        //    {
-        //        name = document.Name;
-        //    }
-        //    else if (item is IPageContainer page)
-        //    {
-        //        name = page.Name;
-        //    }
-
-        //    var dlg = new SaveFileDialog() { Title = "Save" };
-        //    foreach (var writer in editor?.FileWriters)
-        //    {
-        //        dlg.Filters.Add(new FileDialogFilter() { Name = writer.Name, Extensions = { writer.Extension } });
-        //    }
-        //    dlg.Filters.Add(new FileDialogFilter() { Name = "All", Extensions = { "*" } });
-        //    dlg.InitialFileName = name;
-        //    dlg.DefaultExtension = editor?.FileWriters.FirstOrDefault()?.Extension;
-
-        //    var result = await dlg.ShowAsync(GetWindow());
-        //    if (result != null)
-        //    {
-        //        string ext = System.IO.Path.GetExtension(result).ToLower().TrimStart('.');
-        //        var writer = editor.FileWriters.Where(w => string.Compare(w.Extension, ext, StringComparison.OrdinalIgnoreCase) == 0).FirstOrDefault();
-        //        if (writer != null)
-        //        {
-        //            editor.OnExport(result, item, writer);
-        //        }
-        //    }
-        //}
     }
 }

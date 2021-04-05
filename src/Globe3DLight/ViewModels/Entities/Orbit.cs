@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable disable
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.ViewModels.Data;
 using GlmSharp;
-using Globe3DLight.Models.Entities;
-using Globe3DLight.Models.Scene;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class Orbit : BaseEntity, IDrawable
     {
-        private OrbitRenderModel _renderModel;    
+        private OrbitRenderModel _renderModel;
         private BaseState _logical;
-     
+
         public Orbit()
         {
             PropertyChanged += (s, e) =>
@@ -48,9 +43,9 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {                   
-                renderer.DrawOrbit(dc, RenderModel, Logical.ModelMatrix, scene);                
-            }               
+            {
+                renderer.DrawOrbit(dc, RenderModel, Logical.ModelMatrix, scene);
+            }
         }
 
         public bool Invalidate(IRenderContext renderer)

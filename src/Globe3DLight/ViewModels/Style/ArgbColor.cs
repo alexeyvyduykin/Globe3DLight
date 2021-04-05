@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -14,35 +15,30 @@ namespace Globe3DLight.ViewModels.Style
         private byte _g;
         private byte _b;
 
-        /// <inheritdoc/>
         public byte A
         {
             get => _a;
             set => RaiseAndSetIfChanged(ref _a, value);
         }
 
-        /// <inheritdoc/>
         public byte R
         {
             get => _r;
             set => RaiseAndSetIfChanged(ref _r, value);
         }
 
-        /// <inheritdoc/>
         public byte G
         {
             get => _g;
             set => RaiseAndSetIfChanged(ref _g, value);
         }
 
-        /// <inheritdoc/>
         public byte B
         {
             get => _b;
             set => RaiseAndSetIfChanged(ref _b, value);
         }
 
-        /// <inheritdoc/>
         public override object Copy(IDictionary<object, object> shared)
         {
             return new ArgbColor()
@@ -54,30 +50,21 @@ namespace Globe3DLight.ViewModels.Style
             };
         }
 
-        /// <inheritdoc/>
         public override bool IsDirty()
         {
             var isDirty = base.IsDirty();
             return isDirty;
         }
 
-        /// <inheritdoc/>
         public override void Invalidate()
         {
             base.Invalidate();
         }
 
-        /// <inheritdoc/>
         public string ToXamlString() => ToXamlHex(this);
 
-        /// <inheritdoc/>
         public string ToSvgString() => ToSvgHex(this);
 
-        /// <summary>
-        /// Creates a <see cref="ArgbColor"/> from an integer.
-        /// </summary>
-        /// <param name="value">The integer value.</param>
-        /// <returns>The color.</returns>
         public static IArgbColor FromUInt32(uint value)
         {
             return new ArgbColor
@@ -100,12 +87,7 @@ namespace Globe3DLight.ViewModels.Style
             };
         }
 
-        /// <summary>
-        /// Parses a color string.
-        /// </summary>
-        /// <param name="s">The color string.</param>
-        /// <returns>The new instance of the <see cref="ArgbColor"/> class.</returns>
-        public static IArgbColor Parse(string s)
+        public static void Parse(string s, out uint color)
         {
             if (s[0] == '#')
             {
@@ -120,15 +102,15 @@ namespace Globe3DLight.ViewModels.Style
                     throw new FormatException($"Invalid color string: '{s}'.");
                 }
 
-                return FromUInt32(uint.Parse(s.Substring(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture) | or);
+                color = uint.Parse(s.Substring(1), NumberStyles.HexNumber, CultureInfo.InvariantCulture) | or;
             }
             else
             {
                 var upper = s.ToUpperInvariant();
                 var member = typeof(Colors).GetTypeInfo().DeclaredProperties.FirstOrDefault(x => x.Name.ToUpperInvariant() == upper);
-                if (member != null)
+                if (member is not null)
                 {
-                    return (ArgbColor)member.GetValue(null);
+                    color = (uint)member.GetValue(null);
                 }
                 else
                 {
@@ -137,21 +119,17 @@ namespace Globe3DLight.ViewModels.Style
             }
         }
 
-        /// <summary>
-        /// Converts a color to xaml hex string.
-        /// </summary>
-        /// <param name="c">The color instance.</param>
-        /// <returns>The color string.</returns>
+        public static IArgbColor Parse(string s)
+        {
+            Parse(s, out var value);
+            return FromUInt32(value);
+        }
+
         public static string ToXamlHex(IArgbColor c)
         {
             return string.Concat('#', c.A.ToString("X2"), c.R.ToString("X2"), c.G.ToString("X2"), c.B.ToString("X2"));
         }
 
-        /// <summary>
-        /// Converts a color to svg hex string.
-        /// </summary>
-        /// <param name="c">The color instance.</param>
-        /// <returns>The color string.</returns>
         public static string ToSvgHex(IArgbColor c)
         {
             return string.Concat('#', c.R.ToString("X2"), c.G.ToString("X2"), c.B.ToString("X2")); // NOTE: Not using c.A.ToString("X2")

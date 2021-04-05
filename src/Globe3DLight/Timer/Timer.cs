@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
@@ -7,88 +8,82 @@ namespace Globe3DLight.SceneTimer
 {
     internal class Timer
     {
-        public Timer()
-        {         
+        protected Stopwatch _timer;
+
+        public event EventHandler? OnReset;
+ 
+        public Timer() 
+        {
+            _timer = new Stopwatch();
         }
 
-        public void Start()
-        {
-            timer.Start();
-        }
+        public void Start() => _timer.Start();        
 
-        public void Pause()
-        {
-            timer.Stop();
-        }
+        public void Pause() => _timer.Stop();        
 
         public virtual void Reset()
         {
-            timer.Reset();
+            _timer.Reset();
 
-            if (OnReset != null)
-            {
-                OnReset(null, EventArgs.Empty);
-            }
+            OnReset?.Invoke(null, EventArgs.Empty);
         }
 
-        public virtual double Time()
-        {
-            return timer.Elapsed.TotalSeconds;
-        }
-
-        public bool IsRunning()
-        {
+        public virtual double Time() => _timer.Elapsed.TotalSeconds;
         
-            return timer.IsRunning;
-        }
-
-        public event EventHandler OnReset;
-
-        protected Stopwatch timer = new Stopwatch();
-
+        public bool IsRunning() => _timer.IsRunning;        
     }
 
     internal class AdvancedTimer : Timer
     {
+        private long _normalElapsedTime;
+        private double _acceleratedElapsedTime;
+        private double _acceleration;
+
+        public AdvancedTimer() : base()
+        {          
+            _normalElapsedTime = 0;      
+            _acceleratedElapsedTime = 0.0;         
+            _acceleration = 1.0;   
+        }
+
         public override double Time()
         {
-            long newNormalElapsedTime = timer.ElapsedTicks;
+            long newNormalElapsedTime = _timer.ElapsedTicks;
 
-            acceleratedElapsedTime += ((double)(newNormalElapsedTime - normalElapsedTime) / Stopwatch.Frequency) * acceleration;
+            _acceleratedElapsedTime += ((double)(newNormalElapsedTime - _normalElapsedTime) / Stopwatch.Frequency) * _acceleration;
 
-            normalElapsedTime = newNormalElapsedTime;
+            _normalElapsedTime = newNormalElapsedTime;
 
-            return acceleratedElapsedTime;
+            return _acceleratedElapsedTime;
         }
+
         public void SetElapsedTime(double dt)
         {
-            acceleratedElapsedTime = dt;
+            _acceleratedElapsedTime = dt;
         }
 
         public override void Reset()
         {
             base.Reset();
-            normalElapsedTime = 0;
-            acceleratedElapsedTime = 0.0;
-            acceleration = 1.0;
+            _normalElapsedTime = 0;
+            _acceleratedElapsedTime = 0.0;
+            _acceleration = 1.0;
         }
 
         public void Faster()
         {
-            if (acceleration >= 4096.0)
-                return;
-            acceleration *= 2.0;
+            if (_acceleration < 4096.0)
+            {
+                _acceleration *= 2.0;
+            }
         }
 
         public void Slower()
         {
-            if (acceleration <= 1.0)
-                return;
-            acceleration /= 2.0;
+            if (_acceleration > 1.0)
+            {
+                _acceleration /= 2.0;
+            }
         }
-
-        private long normalElapsedTime = 0;
-        private double acceleratedElapsedTime = 0.0;
-        private double acceleration = 1.0;
     }
 }

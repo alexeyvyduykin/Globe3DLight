@@ -1,13 +1,11 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.Models.Image;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Image;
+using Globe3DLight.Models.Renderer;
 
 namespace Globe3DLight.ViewModels
 {
@@ -16,8 +14,8 @@ namespace Globe3DLight.ViewModels
         private readonly IServiceProvider _serviceProvider;
         private readonly IImageLoader _imageLoader;
         private readonly IDictionary<string, string> _dictionary;
-        private Thread _thread;
-        private IDdsImage _currentImage;
+        private Thread? _thread;
+        private IDdsImage? _currentImage;
         private string _targetKey;
 
         public ImageLibrary(IServiceProvider serviceProvider)
@@ -27,12 +25,14 @@ namespace Globe3DLight.ViewModels
             _imageLoader = _serviceProvider.GetService<IImageLoader>();
 
             _dictionary = new Dictionary<string, string>();
-          
+
             State = IImageLibrary.ImageLibraryState.None;
+
+            _targetKey = string.Empty;
         }
 
         public IImageLibrary.ImageLibraryState State { get; protected set; }
-      
+
         public void AddKey(string key, string path)
         {
             if (File.Exists(path) == true)
@@ -66,14 +66,14 @@ namespace Globe3DLight.ViewModels
         }
 
         public void Pass(IThreadLoadingNode node, ICache<string, int> textureCache)
-        { 
+        {
             var key = node.WaitKey;
 
             if (textureCache.Get(key) != default)
             {
                 var name = textureCache.Get(key);
                 node.SetName(name);
-            }            
+            }
             else if (State == IImageLibrary.ImageLibraryState.None)
             {
                 _targetKey = key;
@@ -81,17 +81,17 @@ namespace Globe3DLight.ViewModels
                 _thread.Start();
                 State = IImageLibrary.ImageLibraryState.Loading;
             }
-            else if(State == IImageLibrary.ImageLibraryState.Loading)
+            else if (State == IImageLibrary.ImageLibraryState.Loading)
             {
-                if(_thread.IsAlive == false)
+                if (_thread?.IsAlive == false)
                 {
                     State = IImageLibrary.ImageLibraryState.Ready;
                 }
             }
             else if (State == IImageLibrary.ImageLibraryState.Ready)
             {
-                if (_targetKey == key)
-                {              
+                if (_targetKey == key && _currentImage is not null)
+                {
                     var name = node.SetImage(_currentImage);
                     textureCache.Set(key, name);
 
@@ -101,7 +101,7 @@ namespace Globe3DLight.ViewModels
         }
 
         private void LoadImage()
-        {         
+        {
             if (_dictionary.ContainsKey(_targetKey) == true)
             {
                 _currentImage = _imageLoader.LoadDdsImageFromFile(_dictionary[_targetKey]);

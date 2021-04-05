@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Linq;
 using Globe3DLight.ViewModels.Geometry;
 using A = OpenTK.Graphics.OpenGL;
@@ -9,17 +10,17 @@ namespace Globe3DLight.Renderer.OpenTK.Core
     {
         private readonly Device _device;
         private readonly RenderState _renderState;
-        private ShaderProgram _boundShaderProgram;
+        private ShaderProgram? _boundShaderProgram;
         private readonly TextureUnits _textureUnits;
 
         public Context()
         {
-            _renderState = new RenderState();
+            _device = new Device();
+
+            _renderState = _device.CreateRenderState();
             _textureUnits = new TextureUnits();
 
-            ForceApplyRenderState(_renderState);
-
-            _device = new Device();
+            ForceApplyRenderState(_renderState);            
         }
 
         public TextureUnits TextureUnits => _textureUnits;
@@ -484,7 +485,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             {
                 A.GL.DrawArrays(primitiveType, 0, vertexArray.MaximumArrayIndex() + 1);
             }
-        }       
+        }
     }
 
 }

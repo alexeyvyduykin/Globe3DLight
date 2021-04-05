@@ -1,10 +1,6 @@
-﻿using GlmSharp;
-using OpenTK;
-using OpenTK.Graphics;
-using A = OpenTK.Graphics.OpenGL;
-using System;
+﻿#nullable enable
 using System.Collections.Generic;
-using System.Diagnostics;
+using A = OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
@@ -196,11 +192,27 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             return new ShaderProgram(vertexShaderSource, geometryShaderSource, fragmentShaderSource);
         }
 
-        public DrawState CreateDrawState(ShaderProgram sp)
+        public DrawState CreateDrawState(RenderState state, ShaderProgram sp, VertexArray va)
         {
-            var drawState = new DrawState();
-            drawState.ShaderProgram = sp;
-            return drawState;
+            return new DrawState(state, sp, va);
+        }
+
+        public RenderState CreateRenderState()
+        {
+            return new RenderState()
+            {
+                PrimitiveRestart = new PrimitiveRestart(),
+                FacetCulling = new FacetCulling(),
+                ProgramPointSize = ProgramPointSize.Disabled,
+                RasterizationMode = A.PolygonMode.Fill,
+                ScissorTest = new ScissorTest(),
+                StencilTest = new StencilTest(),
+                DepthTest = new DepthTest(),
+                DepthRange = new DepthRange(),
+                Blending = new Blending(),
+                ColorMask = new ColorMask(true, true, true, true),
+                DepthMask = true,
+            };
         }
 
         public TextureCreator CreateTextureCreator()
@@ -265,7 +277,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
         //    get { return s_textureSamplers; }
         //}
 
-     
+
 
     }
 }

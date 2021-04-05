@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.ViewModels.Containers;
+﻿#nullable enable
 using System.Collections.Immutable;
-using System.Linq;
 using Globe3DLight.ViewModels;
+using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight
 {
     public static class LogicalExtensions
     {
-        public static void AddChild(this LogicalViewModel node, ViewModelBase child) 
+        public static void AddChild(this LogicalViewModel node, ViewModelBase child)
         {
             if (child != null)
             {
@@ -70,7 +67,7 @@ namespace Globe3DLight
         {
             var root = node;
 
-            while (root?.Owner != null)
+            while (root.Owner is not null)
             {
                 root = (LogicalViewModel)root.Owner;
             }
@@ -78,13 +75,7 @@ namespace Globe3DLight
             return root;
         }
 
-        //public static ILogical GetRoot(this ImmutableArray<ILogical> nodes)
-        //{
-        //    return nodes.FirstOrDefault().GetRoot();
-        //}
-
-
-        public static LogicalViewModel Find(this LogicalViewModel node, LogicalViewModel find) 
+        public static LogicalViewModel? Find(this LogicalViewModel node, LogicalViewModel find)
         {
             if (node.Equals(find) == true)
                 return node;
@@ -98,15 +89,5 @@ namespace Globe3DLight
 
             return default;
         }
-
-        //public static string GetFullName(this ILogical node) 
-        //{
-        //    if (node.Owner == null)
-        //    {
-        //        return node.State.Name;
-        //    }
-
-        //    return string.Format("{0}.{1}", ((ILogical)node.Owner).GetFullName(), node.State.Name);
-        //}
     }
 }

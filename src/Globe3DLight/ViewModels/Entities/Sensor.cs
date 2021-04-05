@@ -1,32 +1,27 @@
-﻿using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.ViewModels.Data;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Scene;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable disable
 using GlmSharp;
-using System.Collections.Immutable;
-using Globe3DLight.Models.Entities;
-using Globe3DLight.Models.Scene;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class Sensor : BaseEntity, IDrawable
     {
-        private SensorRenderModel _renderModel;         
+        private SensorRenderModel _renderModel;
         private BaseState _logical;
 
         public SensorRenderModel RenderModel
         {
-            get => _renderModel; 
-            set => RaiseAndSetIfChanged(ref _renderModel, value); 
+            get => _renderModel;
+            set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public BaseState Logical 
+        public BaseState Logical
         {
-            get => _logical; 
+            get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
         }
 

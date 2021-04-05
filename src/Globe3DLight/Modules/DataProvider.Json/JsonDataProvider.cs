@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable enable
+using System;
 using System.IO;
 using System.Threading.Tasks;
-using Globe3DLight.ViewModels.Data;
-using Microsoft.Extensions.Configuration;
-using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Data;
 using Globe3DLight.Models.Editor;
 using Globe3DLight.ViewModels;
-using Globe3DLight.Models.Data;
-using Globe3DLight.Models;
+using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.ViewModels.Data;
+using Microsoft.Extensions.Configuration;
 
 namespace Globe3DLight.DataProvider.Json
 {
@@ -25,7 +25,7 @@ namespace Globe3DLight.DataProvider.Json
             _fileSystem = _serviceProvider.GetService<IFileSystem>();
         }
 
-        public T CreateDataFromJson<T>(string json)
+        public T? CreateDataFromJson<T>(string json)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace Globe3DLight.DataProvider.Json
             }
         }
 
-        public T CreateDataFromPath<T>(string path)
+        public T? CreateDataFromPath<T>(string path)
         {
             var json = _fileSystem.ReadUtf8Text(path);
 
@@ -55,18 +55,22 @@ namespace Globe3DLight.DataProvider.Json
             var path = Path.Combine(Directory.GetCurrentDirectory(), dataPath);
 
             var json = _jsonSerializer.Serialize<ScenarioData>(data);
-         
+
             fileIO.WriteUtf8Text(Path.Combine(path, projectFilename), json);
         }
 
-        public async Task<ProjectContainerViewModel> LoadProject()
-        {         
+        public async Task<ProjectContainerViewModel?> LoadProject()
+        {
             var data = await LoadData();
+            if (data is not null)
+            {
+                return _serviceProvider.GetService<IContainerFactory>().GetProject(data);
+            }
 
-            return _serviceProvider.GetService<IContainerFactory>().GetProject(data);
+            return default;
         }
 
-        public async Task<ScenarioData> LoadData()
+        public async Task<ScenarioData?> LoadData()
         {
             var configuration = _serviceProvider.GetService<IConfigurationRoot>();
 

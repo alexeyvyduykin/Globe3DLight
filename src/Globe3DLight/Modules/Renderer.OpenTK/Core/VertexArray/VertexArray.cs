@@ -1,68 +1,62 @@
-﻿using System;
+﻿#nullable enable
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
     internal class VertexArray : Disposable
     {
+        private int _name;
+        private VertexBufferAttributes _attributes;
+        private IndexBuffer? _indexBuffer;
+        private bool _dirtyIndexBuffer;
+
         public VertexArray()
         {
-            name = GL.GenVertexArray();
-            attributes = new VertexBufferAttributes();
+            _name = GL.GenVertexArray();
+            _attributes = new VertexBufferAttributes();
         }
 
         public void Bind()
         {
-            GL.BindVertexArray(name);
+            GL.BindVertexArray(_name);
         }
 
         public void Clean()
         {
-            attributes.Clean();
+            _attributes.Clean();
 
-            if (dirtyIndexBuffer)
+            if (_dirtyIndexBuffer)
             {
-                if (indexBuffer != null)
+                if (_indexBuffer is not null)
                 {
-                    indexBuffer.Bind();
+                    _indexBuffer.Bind();
                 }
                 else
                 {
-                    IndexBuffer.UnBind(); 
+                    IndexBuffer.UnBind();
                 }
 
-                dirtyIndexBuffer = false;
+                _dirtyIndexBuffer = false;
             }
         }
 
-        public int MaximumArrayIndex()
+        public int MaximumArrayIndex() => _attributes.MaximumArrayIndex;
+        
+        public VertexBufferAttributes Attributes => _attributes; 
+        
+        public IndexBuffer? IndexBuffer
         {
-            return attributes.MaximumArrayIndex;
-        }
-
-        public VertexBufferAttributes Attributes
-        {
-            get { return attributes; }
-        }
-
-        public IndexBuffer IndexBuffer
-        {
-            get { return indexBuffer; }
+            get { return _indexBuffer; }
 
             set
             {
-                indexBuffer = value;
-                dirtyIndexBuffer = true;
+                _indexBuffer = value;
+                _dirtyIndexBuffer = true;
             }
         }
 
         public bool DisposeBuffers { get; set; }
-
-        #region Disposable Members
 
         protected override void Dispose(bool disposing)
         {
@@ -74,9 +68,9 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                     // Multiple components may share the same vertex buffer, so
                     // find the unique set of vertex buffers used by this vertex array.
                     //
-                    HashSet<VertexBuffer> vertexBuffers = new HashSet<VertexBuffer>();
+                    var vertexBuffers = new HashSet<VertexBuffer>();
 
-                    foreach (VertexBufferAttribute attribute in attributes)
+                    foreach (VertexBufferAttribute attribute in _attributes)
                     {
                         vertexBuffers.Add(attribute.VertexBuffer);
                     }
@@ -86,28 +80,21 @@ namespace Globe3DLight.Renderer.OpenTK.Core
                         vb.Dispose();
                     }
 
-                    if (indexBuffer != null)
+                    if (_indexBuffer is not null)
                     {
-                        indexBuffer.Dispose();
+                        _indexBuffer.Dispose();
                     }
                 }
 
-                if (name != 0)
+                if (_name != 0)
                 {
-                    GL.DeleteVertexArray(name);
-                    name = 0;
+                    GL.DeleteVertexArray(_name);
+                    _name = 0;
                 }
             }
 
             base.Dispose(disposing);
         }
-
-        #endregion
-
-        private int name;
-        private VertexBufferAttributes attributes;
-        private IndexBuffer indexBuffer;
-        private bool dirtyIndexBuffer;
     }
 
 }

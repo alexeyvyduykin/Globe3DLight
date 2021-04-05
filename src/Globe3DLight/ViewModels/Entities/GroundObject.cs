@@ -1,23 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Collections.Immutable;
-using Globe3DLight.Models.Renderer;
+﻿#nullable disable
 using GlmSharp;
-using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.Models.Entities;
-using Globe3DLight.Models.Scene;
-using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class GroundObject : BaseEntity, IDrawable, ITargetable
     {
-        private GroundObjectRenderModel _renderModel; 
+        private GroundObjectRenderModel _renderModel;
         private FrameRenderModel _frameRenderModel;
         private LogicalViewModel _logical;
 
@@ -82,7 +75,7 @@ namespace Globe3DLight.ViewModels.Entities
                 }
             }
         }
-   
+
         public bool Invalidate(IRenderContext renderer)
         {
             return false;

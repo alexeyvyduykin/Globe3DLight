@@ -1,23 +1,18 @@
-﻿using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.ViewModels.Data;
-using Globe3DLight.ViewModels.Scene;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
-using Globe3DLight.Models.Renderer;
+﻿#nullable disable
 using GlmSharp;
 using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
-
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
     public class GroundStation : BaseEntity, IDrawable, ITargetable
-    { 
-        private RenderModel _renderModel;        
+    {
+        private RenderModel _renderModel;
         private BaseState _logical;
-      
+
         public RenderModel RenderModel
         {
             get => _renderModel;
@@ -29,6 +24,7 @@ namespace Globe3DLight.ViewModels.Entities
             get => _logical;
             set => RaiseAndSetIfChanged(ref _logical, value);
         }
+
         public dmat4 InverseAbsoluteModel
         {
             get
@@ -40,11 +36,11 @@ namespace Globe3DLight.ViewModels.Entities
                         var collection = Logical.Owner;
                         var parent = (LogicalViewModel)collection.Owner;
                         if (parent is EarthAnimator j2000Data)
-                        {                      
+                        {
                             var modelMatrix = j2000Data.ModelMatrix * groundStationData.ModelMatrix;
                             return modelMatrix.Inverse;
                         }
-                    }                   
+                    }
                 }
 
                 return dmat4.Identity.Inverse;

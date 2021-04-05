@@ -1,4 +1,5 @@
-﻿using GlmSharp;
+﻿#nullable disable
+using GlmSharp;
 
 namespace Globe3DLight.ViewModels.Geometry
 {

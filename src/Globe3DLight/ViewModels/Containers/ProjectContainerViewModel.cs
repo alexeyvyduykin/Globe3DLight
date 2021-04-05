@@ -1,4 +1,4 @@
-﻿#nullable enable
+﻿#nullable disable
 using System;
 using System.Collections.Immutable;
 using System.ComponentModel;
@@ -9,8 +9,8 @@ namespace Globe3DLight.ViewModels.Containers
     public partial class ProjectContainerViewModel : BaseContainerViewModel
     {
         private ImmutableArray<ScenarioContainerViewModel> _scenarios;
-        private ScenarioContainerViewModel? _currentScenario;
-        private ViewModelBase? _selected;
+        private ScenarioContainerViewModel _currentScenario;
+        private ViewModelBase _selected;
 
         public ProjectContainerViewModel()
         {
@@ -29,13 +29,13 @@ namespace Globe3DLight.ViewModels.Containers
             set => RaiseAndSetIfChanged(ref _scenarios, value);
         }
 
-        public ScenarioContainerViewModel? CurrentScenario
+        public ScenarioContainerViewModel CurrentScenario
         {
             get => _currentScenario;
             set => RaiseAndSetIfChanged(ref _currentScenario, value);
         }
 
-        public ViewModelBase? Selected
+        public ViewModelBase Selected
         {
             get => _selected;
             set => RaiseAndSetIfChanged(ref _selected, value);
@@ -47,7 +47,7 @@ namespace Globe3DLight.ViewModels.Containers
             Selected = scenario;
         }
 
-        public void SetSelected(ViewModelBase? value)
+        public void SetSelected(ViewModelBase value)
         {
             if (value is ScenarioContainerViewModel scenario)
             {
@@ -55,7 +55,7 @@ namespace Globe3DLight.ViewModels.Containers
             }
         }
 
-        public override IDisposable Subscribe(IObserver<(object? sender, PropertyChangedEventArgs e)> observer)
+        public override IDisposable Subscribe(IObserver<(object sender, PropertyChangedEventArgs e)> observer)
         {
             var mainDisposable = new CompositeDisposable();
             var disposablePropertyChanged = default(IDisposable);
@@ -64,7 +64,7 @@ namespace Globe3DLight.ViewModels.Containers
             ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);
             ObserveList(_scenarios, ref disposableDocuments, mainDisposable, observer);
 
-            void Handler(object? sender, PropertyChangedEventArgs e)
+            void Handler(object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == nameof(Scenarios))
                 {

@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#nullable disable
+using System.Collections.Immutable;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Globe3DLight.ViewModels.Containers;
+using Globe3DLight.Models;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
-using System.Collections.Immutable;
-using Globe3DLight.Models.Entities;
-using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Entities
 {
@@ -23,11 +19,11 @@ namespace Globe3DLight.ViewModels.Entities
         //    get => _renderModel;
         //    set => Update(ref _renderModel, value);
         //}
-        
-        public ImmutableArray<BaseEntity> Values 
+
+        public ImmutableArray<BaseEntity> Values
         {
-            get => _values; 
-            set => RaiseAndSetIfChanged(ref _values, value); 
+            get => _values;
+            set => RaiseAndSetIfChanged(ref _values, value);
         }
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
@@ -62,7 +58,7 @@ namespace Globe3DLight.ViewModels.Entities
                         }
                     }
                 }
-                else if(proto is GroundStation groundStation)
+                else if (proto is GroundStation groundStation)
                 {
                     if (groundStation.IsVisible == true)
                     {
@@ -97,7 +93,7 @@ namespace Globe3DLight.ViewModels.Entities
                             foreach (var item in collection.Values)
                             {
                                 var matrix = ((RetranslatorAnimator)item).ModelMatrix;
-                                
+
                                 renderer.DrawFrame(dc, retranslator.RenderModel.Frame, matrix, scene);
                                 renderer.DrawRetranslator(dc, retranslator.RenderModel, matrix, scene);
                             }

@@ -1,4 +1,5 @@
-﻿using Globe3DLight.ViewModels.Geometry;
+﻿#nullable disable
+using Globe3DLight.ViewModels.Geometry;
 
 namespace Globe3DLight.ViewModels.Scene
 {

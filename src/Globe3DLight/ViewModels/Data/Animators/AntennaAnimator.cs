@@ -1,28 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable enable
+using System.Collections.Immutable;
 using GlmSharp;
-using System.Linq;
 using Globe3DLight.Models.Data;
 using Globe3DLight.Models.Entities;
-using System.Collections.Immutable;
 using Globe3DLight.ViewModels.Entities;
 
 namespace Globe3DLight.ViewModels.Data
 {
     public class AntennaAnimator : BaseState, IAnimator, IAssetable<BaseEntity>
-    {      
+    {
         private readonly AntennaData _data;
-        private IEventList<AntennaInterval> _translationEvents;
+        private readonly IEventList<AntennaInterval> _translationEvents;
         private ImmutableArray<BaseEntity> _assets;
         private bool _enable;
         private string _target;
-        private bool _first = true;    
+        private bool _first = true;
         private dvec3 _targetPosition;
 
         public AntennaAnimator(AntennaData data)
         {
             _data = data;
+            _translationEvents = new EventList<AntennaInterval>();
+            _target = string.Empty;
         }
 
         public bool Enable
@@ -43,16 +42,14 @@ namespace Globe3DLight.ViewModels.Data
             protected set => RaiseAndSetIfChanged(ref _targetPosition, value);
         }
 
-        public ImmutableArray<BaseEntity> Assets 
+        public ImmutableArray<BaseEntity> Assets
         {
             get => _assets;
             set => RaiseAndSetIfChanged(ref _assets, value);
         }
 
         private void Init()
-        {
-            _translationEvents = new EventList<AntennaInterval>();
-
+        {          
             foreach (var rec in _data.Translations)
             {
                 var begin = rec.BeginTime;
@@ -93,11 +90,11 @@ namespace Globe3DLight.ViewModels.Data
 
             Enable = activeInterval != default;
 
-            if (Enable == true)
+            if (activeInterval is not null)
             {
                 var value = activeInterval.Animate(t);
 
-                Target = value.Target;            
+                Target = value.Target;
                 TargetPosition = value.Position;
             }
         }

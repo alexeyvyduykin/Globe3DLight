@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,8 +36,8 @@ namespace Globe3DLight.ModelLoader.Assimp
                     A.PostProcessSteps.FlipWindingOrder;
 
                 if (flipUVs == true)
-                { 
-                    flags |= A.PostProcessSteps.FlipUVs; 
+                {
+                    flags |= A.PostProcessSteps.FlipUVs;
                 }
 
                 scene = importer.ImportFile(path, flags);
@@ -56,8 +57,8 @@ namespace Globe3DLight.ModelLoader.Assimp
             var materials = CreateMaterials(modelPath, scene.Materials);
 
             return new Model()
-            { 
-                Meshes =_meshes,                
+            {
+                Meshes = _meshes,
                 Materials = materials
             };
         }

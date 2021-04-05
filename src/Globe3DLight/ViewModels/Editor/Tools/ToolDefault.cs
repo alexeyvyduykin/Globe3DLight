@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Globe3DLight.Models.Editor;
+﻿#nullable enable
+using System;
 using Globe3DLight.Input;
+using Globe3DLight.Models.Editor;
 using Globe3DLight.Models.Scene;
 
 namespace Globe3DLight.ViewModels.Editor.Tools
@@ -11,12 +11,11 @@ namespace Globe3DLight.ViewModels.Editor.Tools
         public enum State { None, Zoom, Rotate }
         private readonly IServiceProvider _serviceProvider;
         private State _currentState = State.None;
-
         private (double x, double y) _lastPoint;
-      
+
         public ToolDefault(IServiceProvider serviceProvider) : base()
         {
-            _serviceProvider = serviceProvider;         
+            _serviceProvider = serviceProvider;
         }
 
         public void LeftDown(InputArgs args)
@@ -26,14 +25,14 @@ namespace Globe3DLight.ViewModels.Editor.Tools
             var camera = (IArcballCamera)editor.Project.CurrentScenario.SceneState.Camera;
 
             camera.RotateBegin((int)args.X, (int)args.Y);
-         
+
             _currentState = State.Rotate;
 
-            _lastPoint = (args.X, args.Y);       
+            _lastPoint = (args.X, args.Y);
         }
 
         public void LeftUp(InputArgs args)
-        {       
+        {
             _currentState = State.None;
         }
 
@@ -68,13 +67,13 @@ namespace Globe3DLight.ViewModels.Editor.Tools
                 var (_, func) = sceneState.CameraBehaviours[target.GetType()];
 
                 double value = (double)(args.Y - _lastPoint.y);
-         
+
                 var dz = func.Invoke(camera.Eye.Length);
 
                 camera.Zoom(Math.Sign(value) * dz);
             }
 
-            _lastPoint = (args.X, args.Y);            
+            _lastPoint = (args.X, args.Y);
         }
     }
 

@@ -1,44 +1,57 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.Text;
-using A = OpenTK.Graphics.OpenGL;
 using GlmSharp;
-using System.Collections.ObjectModel;
+using A = OpenTK.Graphics.OpenGL;
 
 namespace Globe3DLight.Renderer.OpenTK.Core
 {
     internal class ShaderProgram : Disposable, ICleanableObserver
     {
-        public ShaderProgram(string vertexShaderSource, string fragmentShaderSource) : 
+        private readonly ShaderObject _vertexShader;
+        private readonly ShaderObject? _geometryShader;
+        private readonly ShaderObject _fragmentShader;
+        private readonly int _program;
+        private readonly FragmentOutputs _fragmentOutputs;
+        private readonly ShaderVertexAttributeCollection _vertexAttributes;
+        private readonly IList<ICleanable> _dirtyUniforms;
+        private readonly UniformCollection _uniforms;
+
+        public ShaderProgram(string vertexShaderSource, string fragmentShaderSource) :
             this(vertexShaderSource, string.Empty, fragmentShaderSource)
         {
         }
 
         public ShaderProgram(string vertexShaderSource, string geometryShaderSource, string fragmentShaderSource)
         {
-            vertexShader = new ShaderObject(vertexShaderSource, A.ShaderType.VertexShader);
-            if (geometryShaderSource.Length > 0)
-                geometryShader = new ShaderObject(geometryShaderSource, A.ShaderType.GeometryShader);
-            fragmentShader = new ShaderObject(fragmentShaderSource, A.ShaderType.FragmentShader);
+            _vertexShader = new ShaderObject(vertexShaderSource, A.ShaderType.VertexShader);
+            if (string.IsNullOrEmpty(geometryShaderSource) == false)
+            {
+                _geometryShader = new ShaderObject(geometryShaderSource, A.ShaderType.GeometryShader);
+            }
+            _fragmentShader = new ShaderObject(fragmentShaderSource, A.ShaderType.FragmentShader);
 
-            program = A.GL.CreateProgram();
-            A.GL.AttachShader(program, vertexShader.Handle);
-      
-            if (geometryShaderSource.Length > 0)
-                A.GL.AttachShader(program, geometryShader.Handle);
-            A.GL.AttachShader(program, fragmentShader.Handle);
+            _program = A.GL.CreateProgram();
+            A.GL.AttachShader(_program, _vertexShader.Handle);
 
-            A.GL.LinkProgram(program);
+            if (_geometryShader is not null)
+            {
+                A.GL.AttachShader(_program, _geometryShader.Handle);
+            }
+            A.GL.AttachShader(_program, _fragmentShader.Handle);
 
-            A.GL.GetProgram(program, A.GetProgramParameterName.LinkStatus, out int linkStatus);
+            A.GL.LinkProgram(_program);
+
+            A.GL.GetProgram(_program, A.GetProgramParameterName.LinkStatus, out int linkStatus);
 
             if (linkStatus == 0)
                 throw new Exception("Could not link shader program. Link Log: /n/n" + ProgramInfoLog);
 
-            fragmentOutputs = new FragmentOutputs(program);
-            vertexAttributes = FindVertexAttributes(program);
-            dirtyUniforms = new List<ICleanable>();
-            uniforms = FindUniforms(program);
+            _fragmentOutputs = new FragmentOutputs(_program);
+            _vertexAttributes = FindVertexAttributes(_program);
+            _dirtyUniforms = new List<ICleanable>();
+            _uniforms = FindUniforms(_program);
         }
 
         private static ShaderVertexAttributeCollection FindVertexAttributes(int program)
@@ -51,7 +64,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
             ShaderVertexAttributeCollection vertexAttributes = new ShaderVertexAttributeCollection();
             for (int i = 0; i < numberOfAttributes; ++i)
-            {                              
+            {
                 StringBuilder attributeNameBuilder = new StringBuilder(attributeNameMaxLength);
 
                 A.GL.GetActiveAttrib(programHandle, i, attributeNameMaxLength,
@@ -86,7 +99,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
             UniformCollection uniforms = new UniformCollection();
             for (int i = 0; i < numberOfUniforms; ++i)
-            {                        
+            {
                 StringBuilder uniformNameBuilder = new StringBuilder(uniformNameMaxLength);
 
                 A.GL.GetActiveUniform(programHandle, i, uniformNameMaxLength,
@@ -182,81 +195,65 @@ namespace Globe3DLight.Renderer.OpenTK.Core
             throw new NotSupportedException("An implementation for uniform type " + type.ToString() + " does not exist.");
         }
 
-        public int Handle
-        {
-            get { return program; }
-        }
+        public int Handle => _program;         
 
         public void Bind()
         {
-            A.GL.UseProgram(program);
+            A.GL.UseProgram(_program);
         }
 
         public void Clean(Context context, DrawState drawState/*, SceneState sceneState*/)
         {
             //SetDrawAutomaticUniforms(context, drawState, sceneState);
 
-            for (int i = 0; i < dirtyUniforms.Count; ++i)
+            for (int i = 0; i < _dirtyUniforms.Count; ++i)
             {
-                dirtyUniforms[i].Clean();
+                _dirtyUniforms[i].Clean();
             }
-            dirtyUniforms.Clear();
+
+            _dirtyUniforms.Clear();
         }
 
-        private string ProgramInfoLog
-        {
-            get { return A.GL.GetProgramInfoLog(program); }
-        }
+        private string ProgramInfoLog => A.GL.GetProgramInfoLog(_program);         
 
         public static void UnBind()
         {
             A.GL.UseProgram(0);
         }
 
-        public FragmentOutputs FragmentOutputs
-        {
-            get { return fragmentOutputs; }
-        }
+        public FragmentOutputs FragmentOutputs => _fragmentOutputs; 
+        
+        public ShaderVertexAttributeCollection VertexAttributes => _vertexAttributes;         
 
-        public ShaderVertexAttributeCollection VertexAttributes
-        {
-            get { return vertexAttributes; }
-        }
-
-        public UniformCollection Uniforms
-        {
-            get { return uniforms; }
-        }
-
-        #region Uniforms DataTypes
+        public UniformCollection Uniforms => _uniforms;        
 
         public void SetUniform(string name, vec2 vector)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform2(loc, 1, vector.Values);
         }
 
         public void SetUniform(string name, dvec2 vector)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform2(loc, 1, ((vec2)vector).Values);
         }
 
         public void SetUniform(string name, vec3 vector)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform3(loc, 1, vector.Values);
         }
 
         public void SetUniform(string name, dvec3 vector)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform3(loc, 1, ((vec3)vector).Values);
         }
 
         public void SetUniform(string name, vec4 vector)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform4(loc, 1, vector.Values);
         }
 
@@ -268,7 +265,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         public void SetUniform(string name, float value)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform1(loc, value);
         }
 
@@ -280,7 +277,7 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         public void SetUniform(string name, mat3 matrix)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.UniformMatrix3(loc, 1, false, matrix.Values1D);
         }
 
@@ -292,19 +289,19 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         public void SetUniform(string name, mat4 matrix)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.UniformMatrix4(loc, 1, false, matrix.Values1D);
         }
 
         public void SetUniform(string name, dmat4 matrix)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.UniformMatrix4(loc, 1, false, Array.ConvertAll(matrix.Values1D, x => (float)x));
         }
 
         public void SetUniform(string name, mat4x2 matrix)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.UniformMatrix4x2(loc, 1, false, matrix.Values1D);
         }
 
@@ -316,51 +313,30 @@ namespace Globe3DLight.Renderer.OpenTK.Core
 
         public void SetUniform(string name, int value)
         {
-            int loc = A.GL.GetUniformLocation(program, name);
+            int loc = A.GL.GetUniformLocation(_program, name);
             A.GL.Uniform1(loc, value);
         }
-
-        #endregion
-
-        #region Disposeble Members
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                if (program != 0)
+                if (_program != 0)
                 {
-                    A.GL.DeleteProgram(program);
+                    A.GL.DeleteProgram(_program);
                 }
-                vertexShader.Dispose();
-                if (geometryShader != null)
-                    geometryShader.Dispose();
-                fragmentShader.Dispose();
+                _vertexShader.Dispose();
+                if (_geometryShader != null)
+                    _geometryShader.Dispose();
+                _fragmentShader.Dispose();
             }
 
             base.Dispose(disposing);
         }
 
-        #endregion
-
-        #region ICleanableObserver Members
-
         public void NotifyDirty(ICleanable value)
         {
-            dirtyUniforms.Add(value);
+            _dirtyUniforms.Add(value);
         }
-
-        #endregion
-
-        private readonly ShaderObject vertexShader;
-        private readonly ShaderObject geometryShader;
-        private readonly ShaderObject fragmentShader;
-
-        private readonly int program;
-
-        private readonly FragmentOutputs fragmentOutputs;
-        private readonly ShaderVertexAttributeCollection vertexAttributes;
-        private readonly IList<ICleanable> dirtyUniforms;
-        private readonly UniformCollection uniforms;
     }
 }

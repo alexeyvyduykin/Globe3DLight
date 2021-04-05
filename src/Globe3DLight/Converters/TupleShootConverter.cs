@@ -1,9 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Globalization;
-using System.Collections.Generic;
-using System.Text;
 using Avalonia.Data.Converters;
-using Globe3DLight;
 using GlmSharp;
 
 namespace Globe3DLight.Converters
@@ -22,7 +20,7 @@ namespace Globe3DLight.Converters
         {
             var shoot = ((dvec3, dvec3, dvec3, dvec3))value;
 
-            string parameterString = parameter as string;
+            var parameterString = (string)parameter;
             if (int.TryParse(parameterString, out int index))
             {
                 if (index >= 0 && index < 4)

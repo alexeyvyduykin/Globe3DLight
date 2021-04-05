@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.Models.Renderer;
+﻿#nullable disable
 using Avalonia;
 using Avalonia.Data;
+using Globe3DLight.Models.Renderer;
 
 namespace Globe3DLight.Modules.Renderer
 {

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿#nullable enable
+using System.Threading.Tasks;
 using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
 using System;
@@ -9,11 +10,11 @@ namespace Globe3DLight.Models.Editor
     {
         ProjectContainerViewModel GetProject();
 
-        ProjectContainerViewModel GetProject(ScenarioData data);
+        ProjectContainerViewModel? GetProject(ScenarioData data);
 
-        Task<ProjectContainerViewModel> GetFromDatabase();
+        Task<ProjectContainerViewModel?> GetFromDatabase();
 
-        Task<ProjectContainerViewModel> GetFromJson();
+        Task<ProjectContainerViewModel?> GetFromJson();
 
         Task SaveFromDatabaseToJson();
 

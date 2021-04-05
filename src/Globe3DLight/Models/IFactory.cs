@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
 using System.IO;
 using GlmSharp;
@@ -36,7 +37,7 @@ namespace Globe3DLight.Models
 
         LibraryViewModel<T> CreateLibrary<T>(string name, IEnumerable<T> items);
 
-        ICache<TKey, TValue> CreateCache<TKey, TValue>(Action<TValue> dispose = null);
+        ICache<TKey, TValue> CreateCache<TKey, TValue>(Action<TValue>? dispose = null);
 
         ISceneState CreateSceneState();
 

@@ -1,9 +1,7 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Globalization;
-using System.Collections.Generic;
-using System.Text;
 using Avalonia.Data.Converters;
-using Globe3DLight;
 using GlmSharp;
 
 namespace Globe3DLight.Converters
@@ -27,12 +25,13 @@ namespace Globe3DLight.Converters
                 //str += (vec[0] >= 0.0) ? string.Format("+{0:0.0}; ", vec[0]) : string.Format("-{0:0.0}; ", Math.Abs(vec[0]));
                 //str += (vec[1] >= 0.0) ? string.Format("+{0:0.0}; ", vec[1]) : string.Format("-{0:0.0}; ", Math.Abs(vec[1]));
                 //str += (vec[2] >= 0.0) ? string.Format("+{0:0.0}",   vec[2]) : string.Format("-{0:0.0}", Math.Abs(vec[2]));
-                            
+
                 //return str;
-             
+
                 return string.Format("{0: 0.0;-0.0}; {1: 0.0;-0.0}; {2: 0.0;-0.0}", vec[0], vec[1], vec[2]);
             }
-            return null;
+
+            return string.Empty;
         }
 
         /// <summary>

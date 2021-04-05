@@ -1,21 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable disable
+using System;
 using GlmSharp;
 using Globe3DLight.Models.Image;
-using B = Globe3DLight.Renderer.OpenTK.Core;
-using A = OpenTK.Graphics.OpenGL;
+using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.Models.Renderer;
+using A = OpenTK.Graphics.OpenGL;
+using B = Globe3DLight.Renderer.OpenTK.Core;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
     internal class SunDrawNode : DrawNode, ISunDrawNode
     {
-        private readonly B.Context _context;       
-        private readonly B.Device _device;          
-        private readonly string sunVS = @"
+        private readonly B.Context _context;
+        private readonly B.Device _device;
+        private readonly string _sunVS = @"
 #version 330
 
 layout (location = 0) in vec2 POSITION;
@@ -40,8 +39,8 @@ gl_Position.xy += POSITION * u_dims;
 
 //gl_Position = u_proj * u_view * vec4(POSITION, 1.0);
 
-}";      
-        private readonly string sunFS = @"#version 330
+}";
+        private readonly string _sunFS = @"#version 330
 
 vec3 mod2893(vec3 x) {
   return x - floor(x * (1.0 / 289.0)) * 289.0;
@@ -263,11 +262,11 @@ vec3 color = temperatureColor * unColorMult;
 }
 ";
         private readonly B.ShaderProgram _sp;
-        private readonly B.DrawState _drawState;
+        private B.DrawState _drawState;
         private readonly B.TextureCreator _textureCreator;
         private string _key;
         private int _textureSunGlowName;
-        private bool dirty;
+        private bool _dirty;
         private bool _isComplete = false;
         private readonly B.Uniform<vec2> u_dims;
         private readonly B.Uniform<vec3> u_center;
@@ -277,8 +276,8 @@ vec3 color = temperatureColor * unColorMult;
         private readonly B.Uniform<vec3> u_ColorMult;
         private readonly B.Uniform<mat4> u_view;
         private readonly B.Uniform<mat4> u_proj;
-        private float DT = 0.0f;        
-     //   private const double toKM = 637.8;
+        private float DT = 0.0f;
+        //   private const double toKM = 637.8;
         private const double diameter = 13926840.0;
         private const float temperature = 5778.0f;
         private const float colorMapU = (temperature - 800.0f) / 29200.0f;
@@ -297,9 +296,9 @@ vec3 color = temperatureColor * unColorMult;
 
             _context = new B.Context();
 
-            dirty = true;
+            _dirty = true;
 
-            _sp = _device.CreateShaderProgram(sunVS, sunFS);
+            _sp = _device.CreateShaderProgram(_sunVS, _sunFS);
 
             u_dims = (B.Uniform<vec2>)_sp.Uniforms["u_dims"];
             u_center = (B.Uniform<vec3>)_sp.Uniforms["u_center"];
@@ -309,8 +308,6 @@ vec3 color = temperatureColor * unColorMult;
             u_ColorMult = (B.Uniform<vec3>)_sp.Uniforms["unColorMult"];
             u_view = (B.Uniform<mat4>)_sp.Uniforms["u_view"];
             u_proj = (B.Uniform<mat4>)_sp.Uniforms["u_proj"];
-
-            _drawState = _device.CreateDrawState(_sp);
         }
 
         public SunRenderModel Sun { get; set; }
@@ -342,20 +339,24 @@ vec3 color = temperatureColor * unColorMult;
 
         public override void UpdateGeometry()
         {
-            if (dirty)
+            if (_dirty)
             {
                 var mesh = Sun.Billboard;
 
-                _drawState.VertexArray = _context.CreateVertexArray(mesh, _drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
+                var va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, A.BufferUsageHint.StaticDraw);
 
-                _drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Back;
-                _drawState.RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;
+                var state = _device.CreateRenderState();
 
-                _drawState.RenderState.Blending.Enabled = true;
-                _drawState.RenderState.Blending.SourceRGBFactor = A.BlendingFactorSrc.One;
-                _drawState.RenderState.Blending.DestinationRGBFactor = A.BlendingFactorDest.One;
+                state.FacetCulling.Face = A.CullFaceMode.Back;
+                state.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;
 
-                dirty = false;
+                state.Blending.Enabled = true;
+                state.Blending.SourceRGBFactor = A.BlendingFactorSrc.One;
+                state.Blending.DestinationRGBFactor = A.BlendingFactorDest.One;
+
+                _drawState = _device.CreateDrawState(state, _sp, va); 
+
+                _dirty = false;
             }
         }
 
@@ -364,7 +365,7 @@ vec3 color = temperatureColor * unColorMult;
             // modelMatrix = dmat4.Translate(sunData.Position)
 
             var pos = glm.Normalized(modelMatrix.Column3) * 160000.0;
-          //  var pos = modelMatrix.Column3 * 160000.0;
+            //  var pos = modelMatrix.Column3 * 160000.0;
 
             dvec3 sunPosition_WS = pos.ToDvec3();// new dvec3(glm.Normalized(pos) * range);
             dvec3 sunPosition_KM = modelMatrix.Column3.ToDvec3();// sunPosition_WS;// * toKM;
@@ -413,13 +414,13 @@ vec3 color = temperatureColor * unColorMult;
         }
 
         public int SetImage(IDdsImage image)
-        {                  
+        {
             var class1 = new B.TextureCreator();
             _textureSunGlowName = class1.Create1(image, 0, 0);
-        
+
             _isComplete = true;
 
-            return  _textureSunGlowName;
+            return _textureSunGlowName;
         }
     }
 }

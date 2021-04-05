@@ -1,8 +1,5 @@
-﻿using System;
+﻿#nullable disable
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata;
-
-//#nullable disable
 
 namespace Globe3DLight.DatabaseProvider.PostgreSQL
 {

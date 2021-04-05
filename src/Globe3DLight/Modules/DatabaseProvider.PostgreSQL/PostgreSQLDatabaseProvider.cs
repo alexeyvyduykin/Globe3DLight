@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable enable
+using System;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models.Editor;
+using Globe3DLight.ViewModels;
 using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
-using Globe3DLight.Models.Data;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
-using System.IO;
-using Globe3DLight.Models.Editor;
-using System.Collections.Immutable;
-using System.Threading.Tasks;
-using Globe3DLight.ViewModels;
+using Microsoft.Extensions.Configuration;
 
 namespace Globe3DLight.DatabaseProvider.PostgreSQL
 {
@@ -21,44 +19,34 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
         public PostgreSQLDatabaseProvider(IServiceProvider serviceProvider)
         {
-            _serviceProvider = serviceProvider;         
+            _serviceProvider = serviceProvider;
         }
 
-        public async Task<ScenarioData> LoadData() => await Task.Run(() => LoadScenarioDataFromDatabase());
-        
-        public async Task<ProjectContainerViewModel> LoadProject() => await Task.Run(() => LoadProjectFromDatabase());
+        public async Task<ScenarioData?> LoadData() => await Task.Run(() => LoadScenarioDataFromDatabase());
+
+        public async Task<ProjectContainerViewModel?> LoadProject() => await Task.Run(() => LoadProjectFromDatabase());
 
         public async Task Save()
         {
             var data = await LoadData();
 
-            _serviceProvider.GetService<IJsonDataProvider>().Save(data);
+            if (data is not null)
+            {
+                _serviceProvider.GetService<IJsonDataProvider>().Save(data);
+            }
         }
 
-        private ProjectContainerViewModel LoadProjectFromDatabase()
+        private ProjectContainerViewModel? LoadProjectFromDatabase()
         {
-            ProjectContainerViewModel project = null;
-
-            using (var db = new dbGlobe3DLightContext(GetOptions()))
-            {
-                var scenarioData = GetScenarioData(db);
-                //project = GetProject(db);
-                project = _serviceProvider.GetService<IContainerFactory>().GetProject(scenarioData);
-            }
-
-            return project;
+            using var db = new dbGlobe3DLightContext(GetOptions());
+            var scenarioData = GetScenarioData(db); 
+            return _serviceProvider.GetService<IContainerFactory>().GetProject(scenarioData);
         }
 
         private ScenarioData LoadScenarioDataFromDatabase()
-        {
-            ScenarioData data;
-
-            using (var db = new dbGlobe3DLightContext(GetOptions()))
-            {
-                data = GetScenarioData(db);
-            }
-
-            return data;
+        {       
+            using var db = new dbGlobe3DLightContext(GetOptions());                            
+            return GetScenarioData(db);
         }
 
         private DbContextOptions<dbGlobe3DLightContext> GetOptions()
@@ -84,16 +72,16 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         }
 
         private double ToJulianDate(DateTime date) => date.ToOADate() + 2415018.5;
-        
+
         private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
-        
+
         //private IProjectContainer GetProject(dbGlobe3DLightContext db)
         //{
         //    var factory = _serviceProvider.GetService<IFactory>();
         //    var containerFactory = _serviceProvider.GetService<IContainerFactory>();
         //    var objFactory = _serviceProvider.GetService<IScenarioObjectFactory>();
         //    var dataFactory = _serviceProvider.GetService<IDataFactory>();
-  
+
         //    var initialConditions = db.InitialConditions.FirstOrDefault();
         //    var groundStations = db.GroundStations.ToList();
         //    var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
@@ -105,7 +93,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         //    db.SatelliteToGroundStationTransfers.Load();
         //    db.SatelliteToRetranslatorTransfers.Load();     
         //    var satellites = db.Satellites.ToList();
-           
+
         //    var epoch = FromJulianDate(initialConditions.JulianDateOnTheDay);
         //    var earthAngleDeg = initialConditions.EarthAngleBegin;
 
@@ -117,7 +105,7 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         //    var scenario1 = containerFactory.GetScenario("Scenario1", begin, duration);
 
         //    var root = scenario1.LogicalTreeNodeRoot.FirstOrDefault();
-         
+
         //    var fr_j2000 = factory.CreateLogicalTreeNode("fr_j2000", dataFactory.CreateJ2000Animator(epoch, earthAngleDeg));
         //    root.AddChild(fr_j2000);
 
@@ -238,10 +226,10 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
         //    project.SetCurrentScenario(scenario1);
         //    return project;
         //}
-                            
+
         private ScenarioData GetScenarioData(dbGlobe3DLightContext db)
-        {                  
-            var initialConditions = db.InitialConditions.FirstOrDefault();
+        {
+            var initialConditions = db.InitialConditions.First();
             var groundStations = db.GroundStations.ToList();
             var retranslators = db.Retranslators.Include(s => s.RetranslatorPositions).ToList();
             var groundObjects = db.GroundObjects.ToList();
@@ -259,21 +247,21 @@ namespace Globe3DLight.DatabaseProvider.PostgreSQL
 
             return new ScenarioData
             (
-                Name:                  "Scenario1",
-                JulianDateOnTheDay:    epoch,
-                ModelingTimeBegin:     begin,
-                ModelingTimeDuration:  duration,
-                Sun:                   initialConditions.ToSunData(),
-                Earth:                 initialConditions.ToJ2000Data(),
-                GroundObjects:         groundObjects.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
-                GroundStations:        groundStations.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
+                Name: "Scenario1",
+                JulianDateOnTheDay: epoch,
+                ModelingTimeBegin: begin,
+                ModelingTimeDuration: duration,
+                Sun: initialConditions.ToSunData(),
+                Earth: initialConditions.ToJ2000Data(),
+                GroundObjects: groundObjects.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
+                GroundStations: groundStations.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
                 RetranslatorPositions: retranslators.OrderBy(s => s.Id).Select(s => s.ToData()).ToList(),
-                SatellitePositions:    satellites.OrderBy(s => s.Id).Select(s => s.ToSatelliteData()).ToList(),
-                SatelliteOrbits:       satellites.OrderBy(s => s.Id).Select(s => s.ToOrbitData()).ToList(),
-                SatelliteRotations:    satellites.OrderBy(s => s.Id).Select(s => s.ToRotationData()).ToList(),
-                SatelliteShootings:    satellites.OrderBy(s => s.Id).Select(s => s.ToSensorData()).ToList(),
-                SatelliteTransfers:    satellites.OrderBy(s => s.Id).Select(s => s.ToAntennaData()).ToList()
+                SatellitePositions: satellites.OrderBy(s => s.Id).Select(s => s.ToSatelliteData()).ToList(),
+                SatelliteOrbits: satellites.OrderBy(s => s.Id).Select(s => s.ToOrbitData()).ToList(),
+                SatelliteRotations: satellites.OrderBy(s => s.Id).Select(s => s.ToRotationData()).ToList(),
+                SatelliteShootings: satellites.OrderBy(s => s.Id).Select(s => s.ToSensorData()).ToList(),
+                SatelliteTransfers: satellites.OrderBy(s => s.Id).Select(s => s.ToAntennaData()).ToList()
             );
-        }          
+        }
     }
 }

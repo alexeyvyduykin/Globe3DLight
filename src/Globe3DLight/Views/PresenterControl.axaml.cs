@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable disable
+using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -7,12 +8,9 @@ using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Avalonia.Visuals.Media.Imaging;
 using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.Modules.Renderer;
+using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Renderer.Presenters;
-using System.Diagnostics;
-using System.Linq;
-using Globe3DLight.ViewModels.Data;
 
 namespace Globe3DLight.Views
 {
@@ -24,11 +22,13 @@ namespace Globe3DLight.Views
         private int _width;
         private int _height;
         private DispatcherTimer _timer;
-        private double _fps = 60;
-        private double _last = 0.0;
-        private int _frames = 0;
-        private double _totalTime = 0.0;
+        private double _fps = 60; 
         private double _currentFps = 0.0;
+#if USE_DIAGNOSTICS
+        private double _last = 0.0;
+        private int _frames = 0; 
+        private double _totalTime = 0.0;
+#endif
 
         private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
 
@@ -61,7 +61,7 @@ namespace Globe3DLight.Views
 
         public PresenterControl()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void InitializeComponent()
@@ -130,53 +130,54 @@ namespace Globe3DLight.Views
             context.DrawRectangle(new SolidColorBrush(Colors.Black, 0.70), null, new Rect(topLeft, size));
             context.DrawText(foreground, topLeft, text);
         }
-            
+
         internal void Draw(CustomState customState, object context)
         {
-            var drawingContext = context as DrawingContext;
-
-            if (customState.Container != null && customState.Renderer != null)
+            if (context is DrawingContext drawingContext)
             {
-                //          drawingContext.DrawRectangle(new Pen() { Brush = Brushes.Red, Thickness = 3 },
-                //new Rect(new Avalonia.Point(), new Avalonia.Size(_width, _height)));
-
-
-                try
+                if (customState.Container != null && customState.Renderer != null)
                 {
+                    //          drawingContext.DrawRectangle(new Pen() { Brush = Brushes.Red, Thickness = 3 },
+                    //new Rect(new Avalonia.Point(), new Avalonia.Size(_width, _height)));
 
-                    PresenterContract.DrawBegin();
+
+                    try
                     {
-                        s_editorPresenter.Render(context, customState.Renderer, customState.Container);
+
+                        PresenterContract.DrawBegin();
+                        {
+                            s_editorPresenter.Render(context, customState.Renderer, customState.Container);
+                        }
+
+                        WriteableBitmap bitmap =
+            new WriteableBitmap(new PixelSize(PresenterContract.Width, PresenterContract.Height), new Vector(/*144,144*/96.0, 96.0),
+            Avalonia.Platform.PixelFormat.Rgba8888, Avalonia.Platform.AlphaFormat.Unpremul);
+
+
+                        using (var buffer = bitmap.Lock())
+                        {
+                            PresenterContract.ReadPixels(buffer.Address, buffer.RowBytes);
+                        }
+
+                        using (drawingContext.PushPreTransform(_translateTransform.Value))
+                        using (drawingContext.PushPreTransform(_flipYTransform.Value))
+                        {
+                            drawingContext.DrawImage(
+                                bitmap/*, 1.0*/,
+                                new Rect(/*bitmap.Size*/new Avalonia.Size(PresenterContract.Width, PresenterContract.Height)),
+                                new Rect(new Avalonia.Size(_width, _height)),
+                                BitmapInterpolationMode.LowQuality);
+                        }
+
+
+                        customState.Container?.Invalidate();
+                        //customState.Renderer.State.PointStyle.Invalidate();
+                        //customState.Renderer.State.SelectedPointStyle.Invalidate();
                     }
-
-                    WriteableBitmap bitmap =
-        new WriteableBitmap(new PixelSize(PresenterContract.Width, PresenterContract.Height), new Vector(/*144,144*/96.0, 96.0),
-        Avalonia.Platform.PixelFormat.Rgba8888, Avalonia.Platform.AlphaFormat.Unpremul);
-
-
-                    using (var buffer = bitmap.Lock())
+                    catch
                     {
-                        PresenterContract.ReadPixels(buffer.Address, buffer.RowBytes);
+                        throw new System.Exception();
                     }
-
-                    using (drawingContext.PushPreTransform(_translateTransform.Value))
-                    using (drawingContext.PushPreTransform(_flipYTransform.Value))
-                    {
-                        drawingContext.DrawImage(
-                            bitmap/*, 1.0*/,
-                            new Rect(/*bitmap.Size*/new Avalonia.Size(PresenterContract.Width, PresenterContract.Height)),
-                            new Rect(new Avalonia.Size(_width, _height)),
-                            BitmapInterpolationMode.LowQuality);
-                    }
-
-
-                    customState.Container?.Invalidate();
-                    //customState.Renderer.State.PointStyle.Invalidate();
-                    //customState.Renderer.State.SelectedPointStyle.Invalidate();
-                }
-                catch
-                {
-                    throw new System.Exception();
                 }
             }
         }
@@ -218,7 +219,7 @@ namespace Globe3DLight.Views
 
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
-            _timer.Stop();
+            _timer?.Stop();
 
             //         _timer.Stop();
             //         _timer.Dispose();

@@ -1,7 +1,5 @@
-﻿using System;
+﻿#nullable disable
 using System.Collections.Immutable;
-using System.Text;
-using System.Collections.Generic;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -9,21 +7,21 @@ namespace Globe3DLight.ViewModels.Containers
     {
         private ImmutableArray<T> _items;
         private T _selected;
-      
+
         public ImmutableArray<T> Items
         {
             get => _items;
             set => RaiseAndSetIfChanged(ref _items, value);
         }
-  
+
         public T Selected
         {
             get => _selected;
             set => RaiseAndSetIfChanged(ref _selected, value);
         }
-        
+
         public void SetSelected(T item) => Selected = item;
-        
+
         public override bool IsDirty()
         {
             var isDirty = base.IsDirty();

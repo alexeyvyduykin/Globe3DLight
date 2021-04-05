@@ -1,76 +1,38 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿#nullable enable
+using System;
+using System.Collections.Immutable;
 using GlmSharp;
+using Globe3DLight.Models.Image;
+using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Geometry;
+using Globe3DLight.ViewModels.Scene;
 using A = OpenTK.Graphics.OpenGL;
 using B = Globe3DLight.Renderer.OpenTK.Core;
-using System.Collections.Immutable;
-using Globe3DLight.Models.Image;
-using Globe3DLight.ViewModels.Geometry;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Renderer.OpenTK
 {
-    //public class ScEarth : VisualObject, ITargetCameraObject, IFrameObject//, ISceneObjectData
-    //{
-
-    //    public dmat4 ModelMatrix => ParentNode.LastLogicalTreeNode.ModelMatrix;// LogicalTreeNode.ModelMatrix;
-
-    //    public string Name { get; set; }
-
-    //    public dmat4 InverseAbsoluteModel => dmat4.Identity;//throw new NotImplementedException();
-
-    //    public dvec3 Eye => new dvec3(0.0, 0.0, 36.0);
-
-    //    public dvec3 Target => dvec3.Zero;
-
-    //    public dvec3 Up => dvec3.UnitY;
-
-    //    public dvec3 Size => new dvec3(10.0, 10.0, 10.0);
-
-    //    public override void Render(Context context, SceneState scene)
-    //    {
-    //        var modelMatrix = ParentNode.LastLogicalTreeNode.ModelMatrix;// LogicalTreeNode.ModelMatrix;
-
-    //        Model.Render(modelMatrix, context, scene);
-    //    }
-    //}
-
     internal class EarthDrawNode : DrawNode, IEarthDrawNode, IDisposable
     {
-        private readonly B.Context _context;
-
+        private readonly B.Context _context; 
+        private B.Device _device;
         private readonly B.Uniform<mat4> u_model;
         private readonly B.Uniform<mat4> u_mvp;
         private readonly B.Uniform<mat3> u_normalMatrix;
         private readonly B.Uniform<mat4> u_view;
         private readonly B.Uniform<mat4> u_modelView;
-
         private readonly B.Uniform<vec4> u_lightPosition;
-
-      //  private readonly Uniform<mat4x2> u_modelZToClipCoordinates;
-
+        //  private readonly Uniform<mat4x2> u_modelZToClipCoordinates;
         private readonly B.Uniform<float> u_radius;
-
         private readonly ImmutableArray<string> _keys;
         private readonly B.Texture2D[] _maps;
         private int _currentLoadingTexture = 0;
-
         //private string[] keys = new string[] { "PosX", "NegZ", "NegX", "PosZ", "PosY", "NegY" };
-        public bool ShowGlobe { get; set; }
-
-        private bool dirty;
-
-        private readonly ImmutableArray<Mesh> meshes;
-        private readonly B.ShaderProgram sp;
-
-        private readonly B.DrawState[] drawStates;
-
-        public EarthRenderModel Earth { get; set; }
-
-        private readonly string earthGridVS = @"
+        private bool _dirty;
+        private readonly ImmutableArray<Mesh> _meshes;
+        private readonly B.ShaderProgram _sp;
+        private readonly B.DrawState[] _drawStates;
+        private readonly string _earthGridVS = @"
 #version 330
 
 layout (location = 0) in vec3 POSITION;
@@ -135,8 +97,7 @@ void main(void)
   gl_Position = u_mvp * vertex;
 }
 ";
-
-        private readonly string earthGridFS = @"
+        private readonly string _earthGridFS = @"
 #version 330
 
 uniform sampler2D u_diffuseMap;
@@ -295,37 +256,33 @@ color = finalColor;
 
         public EarthDrawNode(EarthRenderModel earth)
         {
-            this.Earth = earth;
+            Earth = earth;
 
             _context = new B.Context();
+            _device = new B.Device();
 
-            dirty = true;
+            _dirty = true;
             ShowGlobe = true;
-           
-            sp = new B.ShaderProgram(earthGridVS, earthGridFS);
 
-            u_model = ((B.Uniform<mat4>)sp.Uniforms["u_model"]);
-            u_mvp = ((B.Uniform<mat4>)sp.Uniforms["u_mvp"]);
-            u_normalMatrix = ((B.Uniform<mat3>)sp.Uniforms["u_normalMatrix"]);
-            u_view = ((B.Uniform<mat4>)sp.Uniforms["u_view"]);
-            u_modelView = ((B.Uniform<mat4>)sp.Uniforms["u_modelView"]);
-            u_lightPosition = ((B.Uniform<vec4>)sp.Uniforms["u_lightPosition"]);
-            u_radius = ((B.Uniform<float>)sp.Uniforms["u_radius"]);
+            _sp = new B.ShaderProgram(_earthGridVS, _earthGridFS);
 
-            meshes = Earth.Meshes;
+            u_model = ((B.Uniform<mat4>)_sp.Uniforms["u_model"]);
+            u_mvp = ((B.Uniform<mat4>)_sp.Uniforms["u_mvp"]);
+            u_normalMatrix = ((B.Uniform<mat3>)_sp.Uniforms["u_normalMatrix"]);
+            u_view = ((B.Uniform<mat4>)_sp.Uniforms["u_view"]);
+            u_modelView = ((B.Uniform<mat4>)_sp.Uniforms["u_modelView"]);
+            u_lightPosition = ((B.Uniform<vec4>)_sp.Uniforms["u_lightPosition"]);
+            u_radius = ((B.Uniform<float>)_sp.Uniforms["u_radius"]);
 
-            if (meshes.Length != 6)
+            _meshes = Earth.Meshes;
+
+            if (_meshes.Length != 6)
             {
                 throw new Exception();
             }
 
-            drawStates = new B.DrawState[6/*meshes.Count*/];
-            for (int i = 0; i < 6/*meshes.Count*/; i++)
-            {
-                drawStates[i] = new B.DrawState();
-                drawStates[i].ShaderProgram = sp;
-            }
-        
+            _drawStates = new B.DrawState[6];
+
             var builder = ImmutableArray.CreateBuilder<string>();
 
             builder.AddRange(earth.DiffuseKeys);
@@ -337,256 +294,41 @@ color = finalColor;
 
             _maps = new B.Texture2D[_keys.Length];
         }
-      
-        //private void LoadTextures2()
-        //{
-        //    SOIL soil = new SOIL();
 
-        //    string[] maps = new string[6] { "pos_x.dds", "neg_z.dds", "neg_x.dds", "pos_z.dds", "pos_y.dds", "neg_y.dds" };
+        public bool ShowGlobe { get; set; }
 
-        //    for (int i = 0; i < meshes.Length; i++)
-        //    {
-        //        string path = "C:/data/textures/EarthQubeMap/EarthDiffuseFake/" + maps[i];
-        //        int name = soil.SOIL_load_OGL_texture(path, 0, SOILFlags.DdsLoadDirect);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
+        public EarthRenderModel Earth { get; set; }
 
-        //        Maps[i + 0] = new Texture2D(name, TextureTarget.Texture2D);
-        //    }
-
-
-        //    for (int i = 0; i < meshes.Length; i++)
-        //    {
-        //        string path = "C:/data/textures/EarthQubeMap/EarthSpecInvertQubeMap4096x4096, border=0/" + maps[i];
-        //        int name = soil.SOIL_load_OGL_texture(path, 0, SOILFlags.DdsLoadDirect);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //        Maps[i + 6] = new Texture2D(name, TextureTarget.Texture2D);
-        //    }
-
-
-        //    for (int i = 0; i < meshes.Length; i++)
-        //    {
-        //        string path = "C:/data/textures/EarthQubeMap/EarthNormalQubeMap8192x8192, border=0/" + maps[i];
-        //        int name = soil.SOIL_load_OGL_texture(path, 0, SOILFlags.DdsLoadDirect);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //        Maps[i + 12] = new Texture2D(name, TextureTarget.Texture2D);
-        //    }
-
-
-        //    for (int i = 0; i < meshes.Length; i++)
-        //    {
-        //        string path = "C:/data/textures/EarthQubeMap/EarthNightQubeMap2048x2048, border=0/" + maps[i];
-        //        int name = soil.SOIL_load_OGL_texture(path, 0, SOILFlags.DdsLoadDirect);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //        GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //        Maps[i + 18] = new Texture2D(name, TextureTarget.Texture2D);
-        //    }
-        //}
-
-       // private System.Threading.Thread _imageThread;
-
-       // private Image.IDdsImage _currentImage = null;
-
-        //private void LoadTextures()
-        //{
-        //    if (_imageThread.IsAlive == true)
-        //        return;
-
-
-        //    if (dirty1 == true)
-        //    {
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            if (dirtyarr1[i] == true && _imageThread.IsAlive == false)
-        //            {
-        //                if (_dirtyarr1[i] == true)
-        //                {
-        //                    _imageThread = new System.Threading.Thread(() => _currentImage = DiffuseThread(i));
-        //                    _imageThread.Start();
-        //                    _dirtyarr1[i] = false;
-        //                }
-
-        //                if(__dirtyarr1[i] == false)
-        //                {
-        //                    var class1 = new TextureCreator();
-        //                    var name = class1.Create(_currentImage, 0, 0);
-
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //                    Maps[i + 0] = new Texture2D(name, TextureTarget.Texture2D);
-
-        //                    dirtyarr1[i] = false;
-        //                }
-
-        //                return;
-        //            }
-        //        }
-
-        //        dirty1 = false;      
-        //    }
-
-        //    if (dirty2 == true)
-        //    {
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            if (dirtyarr2[i] == true && _imageThread.IsAlive == false)
-        //            {
-        //                if (_dirtyarr2[i] == true)
-        //                {
-        //                    _imageThread = new System.Threading.Thread(() => _currentImage = SpecularThread(i));
-        //                    _imageThread.Start();
-        //                    _dirtyarr2[i] = false;
-        //                }
-
-        //                if (__dirtyarr2[i] == false)
-        //                {
-        //                    var class1 = new TextureCreator();
-        //                    var name = class1.Create(_currentImage, 0, 0);
-
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //                    Maps[i + 6] = new Texture2D(name, TextureTarget.Texture2D);
-
-        //                    dirtyarr2[i] = false;
-        //                }
-        //            }
-        //        }
-        //        dirty2 = false;          
-        //    }
-        //    if (dirty3 == true)
-        //    {
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            if (dirtyarr3[i] == true && _imageThread.IsAlive == false)
-        //            {
-        //                if (_dirtyarr3[i] == true)
-        //                {
-        //                    _imageThread = new System.Threading.Thread(() => _currentImage = NormalThread(i));
-        //                    _imageThread.Start();
-        //                    _dirtyarr3[i] = false;
-        //                }
-
-        //                if (__dirtyarr3[i] == false)
-        //                {
-        //                    var class1 = new TextureCreator();
-        //                    var name = class1.Create(_currentImage, 0, 0);
-
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //                    Maps[i + 12] = new Texture2D(name, TextureTarget.Texture2D);
-
-        //                    dirtyarr3[i] = false;
-        //                }
-        //            }
-        //        }
-        //        dirty3 = false;        
-        //    }
-
-
-        //    if (dirty4 == true)
-        //    {
-        //        for (int i = 0; i < 6; i++)
-        //        {
-        //            if (dirtyarr4[i] == true && _imageThread.IsAlive == false)
-        //            {
-        //                if (_dirtyarr4[i] == true)
-        //                {
-        //                    _imageThread = new System.Threading.Thread(() => _currentImage = NightThread(i));
-        //                    _imageThread.Start();
-        //                    _dirtyarr4[i] = false;
-        //                }
-
-        //                if (__dirtyarr4[i] == false)
-        //                {
-        //                    var class1 = new TextureCreator();
-        //                    var name = class1.Create(_currentImage, 0, 0);
-
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapS, (int)TextureWrapMode.ClampToEdge);
-        //                    GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureWrapT, (int)TextureWrapMode.ClampToEdge);
-
-        //                    Maps[i + 18] = new Texture2D(name, TextureTarget.Texture2D);
-
-        //                    dirtyarr4[i] = false;
-        //                }
-        //            }
-        //        }
-        //        dirty4 = false;             
-        //    }
-
-        //    dirty = false;
-        //}
-
-       // private bool _isNextThread = true;
-
-        //private void LoadTextures1()
-        //{
-        //    if(_currentThread > 23)
-        //    {
-        //        dirty = false;
-        //        return;
-        //    }
-
-        //    if (_threads[_currentThread].IsAlive == true)
-        //        return;
-
-        //    if (_isNextThread == true)
-        //    {
-        //        _threads[_currentThread].Start();
-        //        _isNextThread = false;
-        //        return;
-        //    }
-
-
-        //    if(_isNextThread == false)
-        //    {
-        //        _maps[_currentThread] = CreateTexture(_currentImage);
-
-        //        _currentThread++;
-
-        //        _isNextThread = true; 
-                
-        //        return;
-        //    }
-        //}
-
-        //bool onlyfirst = false;
-        
         public override void UpdateGeometry()
         {
-            if (dirty)
+            if (_dirty)
             {
+                var state = _device.CreateRenderState();
+                state.FacetCulling.Face = A.CullFaceMode.Back;
+                state.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw; // default
+
                 for (int i = 0; i < 6; i++)
-                {
-                    drawStates[i].VertexArray = _context.CreateVertexArray(meshes[i], drawStates[i].ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
-                    drawStates[i].RenderState.FacetCulling.Face = A.CullFaceMode.Back;
-                    drawStates[i].RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw; // default
+                {                                
+                    var va = _context.CreateVertexArray(_meshes[i], _sp.VertexAttributes, A.BufferUsageHint.StaticDraw);
+                    _drawStates[i] = _device.CreateDrawState(state, _sp, va);
                 }
 
-                dirty = false;
+                _dirty = false;
             }
         }
 
-
-
         public bool IsComplete => !(_currentLoadingTexture < _keys.Length);
+        
         public string WaitKey => IsComplete ? string.Empty : _keys[_currentLoadingTexture];
 
-        public int SetImage(IDdsImage image) 
+        public int SetImage(IDdsImage image)
         {
             var class1 = new B.TextureCreator();
             var name = class1.Create(image, 0, 0);
 
             A.GL.TexParameter(A.TextureTarget.Texture2D, A.TextureParameterName.TextureWrapS, (int)A.TextureWrapMode.ClampToEdge);
             A.GL.TexParameter(A.TextureTarget.Texture2D, A.TextureParameterName.TextureWrapT, (int)A.TextureWrapMode.ClampToEdge);
-            
+
             _maps[_currentLoadingTexture] = new B.Texture2D(name, A.TextureTarget.Texture2D);
 
             _currentLoadingTexture++;
@@ -594,7 +336,7 @@ color = finalColor;
             return name;
         }
 
-        public void SetName(int name) 
+        public void SetName(int name)
         {
             _maps[_currentLoadingTexture] = new B.Texture2D(name, A.TextureTarget.Texture2D);
 
@@ -602,11 +344,10 @@ color = finalColor;
         }
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
-        {                                
+        {
             if (ShowGlobe == true /*&& this.Earth.IsLoading == true*/)
             {
                 SetUniforms(modelMatrix, scene);
-
 
                 //int[] order = { 3, 2, 0, 1, 4, 5 };
                 //int[] order = { 0, 1, 2, 3, 4, 5 };
@@ -614,18 +355,18 @@ color = finalColor;
                 for (int i = 0; i < 6; i++)
                 {
                     _context.TextureUnits[0].Texture = _maps[i + 0];
-                    sp.SetUniform("u_diffuseMap", 0);
+                    _sp.SetUniform("u_diffuseMap", 0);
 
                     _context.TextureUnits[1].Texture = _maps[i + 6];
-                    sp.SetUniform("u_specularMap", 1);
+                    _sp.SetUniform("u_specularMap", 1);
 
                     _context.TextureUnits[2].Texture = _maps[i + 12];
-                    sp.SetUniform("u_normalMap", 2);
+                    _sp.SetUniform("u_normalMap", 2);
 
                     _context.TextureUnits[3].Texture = _maps[i + 18];
-                    sp.SetUniform("u_nightMap", 3);
+                    _sp.SetUniform("u_nightMap", 3);
 
-                    _context.Draw(A.PrimitiveType.Triangles, drawStates[i], scene);
+                    _context.Draw(A.PrimitiveType.Triangles, _drawStates[i], scene);
                 }
 
                 B.ShaderProgram.UnBind();
@@ -634,18 +375,18 @@ color = finalColor;
 
         public override void Dispose()
         {
-            for (int i = 0; i < meshes.Length; i++)
+            for (int i = 0; i < _meshes.Length; i++)
             {
-                drawStates[i].ShaderProgram.Dispose();
+                _drawStates[i].ShaderProgram.Dispose();
 
-                if (drawStates[i].VertexArray != null)
+                if (_drawStates[i].VertexArray != null)
                 {
-                    drawStates[i].VertexArray.Dispose();
+                    _drawStates[i].VertexArray.Dispose();
                 }
             }
         }
 
-        void SetUniforms(dmat4 modelMatrix, ISceneState sceneState)
+        private void SetUniforms(dmat4 modelMatrix, ISceneState sceneState)
         {
             dmat4 model = modelMatrix;
             dmat4 view = sceneState.ViewMatrix;
@@ -660,7 +401,7 @@ color = finalColor;
             u_mvp.Value = mvp.ToMat4();
 
             u_lightPosition.Value = sceneState.LightPosition.ToVec4();
-         
+
             u_radius.Value = (float)(6371.0);
         }
     }

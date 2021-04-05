@@ -1,11 +1,9 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Generic;
-using System.Text;
 using Globe3DLight.Models;
 using Globe3DLight.Models.Image;
-using A=Pfim;
-using System.IO;
-using System.Threading;
+using A = Pfim;
 
 namespace Globe3DLight.ImageLoader.Pfim
 {
@@ -18,19 +16,19 @@ namespace Globe3DLight.ImageLoader.Pfim
         {
             this._serviceProvider = serviceProvider;
 
-            PfimFactory = new PfimFactory();            
+            PfimFactory = new PfimFactory();
         }
 
-        public IDdsImage LoadDdsImageFromFile(string path)      
+        public IDdsImage? LoadDdsImageFromFile(string path)
         {
             using var image = A.Pfim.FromFile(path);
-           
+
             return PfimFactory.CreateDdsImage(image);
         }
 
-        public IEnumerable<IDdsImage> LoadDdsImageFromFiles(IEnumerable<string> paths)
+        public IEnumerable<IDdsImage?> LoadDdsImageFromFiles(IEnumerable<string> paths)
         {
-            var list = new List<IDdsImage>();
+            var list = new List<IDdsImage?>();
 
             foreach (var path in paths)
             {

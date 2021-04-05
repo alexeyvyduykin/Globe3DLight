@@ -1,4 +1,5 @@
-﻿using System;
+﻿#nullable enable
+using System;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,7 +46,7 @@ namespace Globe3DLight.ViewModels.Editor
             return project;
         }
 
-        public ProjectContainerViewModel GetProject(ScenarioData data)
+        public ProjectContainerViewModel? GetProject(ScenarioData data)
         {
             var factory = _serviceProvider.GetService<IFactory>();
 
@@ -59,7 +60,7 @@ namespace Globe3DLight.ViewModels.Editor
             project.AddScenario(scenario);
             project.SetCurrentScenario(scenario);
 
-            var root = scenario.LogicalRoot.FirstOrDefault();
+            var root = scenario.LogicalRoot.First();
 
             project.AddEntity(factory.CreateSpacebox((BaseState)root));
             project.AddEntity(factory.CreateSun(data.Sun, (BaseState)root));
@@ -93,7 +94,7 @@ namespace Globe3DLight.ViewModels.Editor
             return scenario;
         }
 
-        public async Task<ProjectContainerViewModel> GetFromDatabase()
+        public async Task<ProjectContainerViewModel?> GetFromDatabase()
         {
             try
             {
@@ -105,7 +106,7 @@ namespace Globe3DLight.ViewModels.Editor
             }
         }
 
-        public async Task<ProjectContainerViewModel> GetFromJson()
+        public async Task<ProjectContainerViewModel?> GetFromJson()
         {
             try
             {

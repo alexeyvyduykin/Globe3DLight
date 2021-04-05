@@ -1,14 +1,9 @@
-﻿using Globe3DLight.ViewModels.Containers;
-using Globe3DLight.Models.Renderer;
-using Globe3DLight.ViewModels.Scene;
-using System;
-using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Text;
-using Globe3DLight.ViewModels.Data;
-using Globe3DLight.Models.Entities;
-using Globe3DLight.Models.Scene;
+﻿#nullable disable
 using Globe3DLight.Models;
+using Globe3DLight.Models.Renderer;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.ViewModels.Entities
 {
@@ -19,7 +14,7 @@ namespace Globe3DLight.ViewModels.Entities
 
         public SpaceboxRenderModel RenderModel
         {
-            get => _renderModel; 
+            get => _renderModel;
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
@@ -32,8 +27,8 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {                    
-                renderer.DrawSpacebox(dc, RenderModel, Logical.ModelMatrix, scene);                
+            {
+                renderer.DrawSpacebox(dc, RenderModel, Logical.ModelMatrix, scene);
             }
         }
 

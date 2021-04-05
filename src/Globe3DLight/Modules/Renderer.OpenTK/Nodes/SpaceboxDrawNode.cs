@@ -1,4 +1,5 @@
-﻿using GlmSharp;
+﻿#nullable disable
+using GlmSharp;
 using Globe3DLight.Models.Image;
 using Globe3DLight.Models.Renderer;
 using Globe3DLight.Models.Scene;
@@ -12,13 +13,13 @@ namespace Globe3DLight.Renderer.OpenTK
     {
         private B.Context _context;
         private B.Device _device;
-        private bool dirty;
-        private readonly B.ShaderProgram sp;
-        private readonly B.DrawState drawState;
+        private bool _dirty;
+        private readonly B.ShaderProgram _sp;
+        private B.DrawState _drawState;
         private int _spaceboxCubemapName;
         private bool _isComplete = false;
         private string _key;
-        private readonly string spaceboxVS = @"
+        private readonly string _spaceboxVS = @"
 #version 330
 layout (location = 0) in vec3 POSITION;
 uniform mat4 u_mvp;
@@ -28,7 +29,7 @@ void main(void)
   gl_Position = u_mvp * vec4(POSITION, 1.0);
   v_texCoords = POSITION;
 }";
-        private readonly string spaceboxFS = @"
+        private readonly string _spaceboxFS = @"
 #version 330
 uniform samplerCube u_spacebox;
 in vec3 v_texCoords;
@@ -46,12 +47,9 @@ void main(void)
             _device = new B.Device();
             _key = spacebox.SpaceboxCubemapKey;
 
-            dirty = true;
+            _dirty = true;
 
-            sp = _device.CreateShaderProgram(spaceboxVS, spaceboxFS);
-
-            drawState = new B.DrawState();
-            drawState.ShaderProgram = sp;
+            _sp = _device.CreateShaderProgram(_spaceboxVS, _spaceboxFS);
         }
 
         public SpaceboxRenderModel Spacebox { get; set; }
@@ -62,36 +60,41 @@ void main(void)
 
         public override void UpdateGeometry()
         {
-            if (dirty)
+            if (_dirty)
             {
                 var mesh = Spacebox.Mesh;
 
-                drawState.VertexArray = _context.CreateVertexArray(mesh, drawState.ShaderProgram.VertexAttributes, A.BufferUsageHint.StaticDraw);
-                drawState.RenderState.FacetCulling.Face = A.CullFaceMode.Front;
-                drawState.RenderState.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;
+                var va = _context.CreateVertexArray(mesh, _sp.VertexAttributes, A.BufferUsageHint.StaticDraw);
                 
-                dirty = false;
+                var state = _device.CreateRenderState();
 
-                drawState.RenderState.DepthMask = false;
+                state.FacetCulling.Face = A.CullFaceMode.Front;
+                state.FacetCulling.FrontFaceWindingOrder = A.FrontFaceDirection.Cw;
+
+                state.DepthMask = false;
+
+                _drawState = _device.CreateDrawState(state, _sp, va);
+
+                _dirty = false;
             }
         }
 
         public override void OnDraw(object dc, dmat4 modelMatrix, ISceneState scene)
         {
-            if (dirty == false && _isComplete == true)
+            if (_dirty == false && _isComplete == true)
             {
-                sp.Bind();
+                _sp.Bind();
 
                 //          GL.DepthMask(false);// Remember to turn depth writing off
 
-                sp.SetUniform("u_mvp", scene.ProjectionMatrix.ToMat4() * scene.ViewMatrix.ToMat4() * mat4.Identity);
+                _sp.SetUniform("u_mvp", scene.ProjectionMatrix.ToMat4() * scene.ViewMatrix.ToMat4() * mat4.Identity);
 
                 // skybox cube
                 A.GL.ActiveTexture(A.TextureUnit.Texture0);
-                sp.SetUniform("u_spacebox", 0);
+                _sp.SetUniform("u_spacebox", 0);
                 A.GL.BindTexture(A.TextureTarget.TextureCubeMap, _spaceboxCubemapName);
 
-                _context.Draw(A.PrimitiveType.Triangles, drawState, scene);
+                _context.Draw(A.PrimitiveType.Triangles, _drawState, scene);
 
                 B.ShaderProgram.UnBind();
 
