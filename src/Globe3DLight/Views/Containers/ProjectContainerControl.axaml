@@ -52,10 +52,6 @@
                       <StackPanel Orientation="Horizontal">
                           <CheckBox IsChecked="{Binding IsVisible}" MinWidth="0" VerticalAlignment="Center"/>
                           <TextBlock Text="{Binding Name}" Background="Transparent"/>
-                          <Button IsVisible="{Binding, Converter={StaticResource IsTargetableConverter}}"
-                                  Command="{Binding $parent[TopLevel].DataContext.OnSetCameraTo}"
-                                  Content="AAA">
-                          </Button>
                       </StackPanel>
                   </TreeDataTemplate>
 
