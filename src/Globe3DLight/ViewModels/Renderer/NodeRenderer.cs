@@ -39,13 +39,13 @@ namespace Globe3DLight.ViewModels.Renderer
 
         public void DrawScenario(object dc, ScenarioContainerViewModel container)
         {
-            foreach (var obj in container.Entities)
+            foreach (var entity in container.Entities)
             {
-                DrawScenarioObject(dc, obj, container.SceneState);
+                DrawEntities(dc, entity, container.SceneState);
             }
         }
 
-        private void DrawScenarioObject(object dc, BaseEntity entity, ISceneState scene)
+        private void DrawEntities(object dc, BaseEntity entity, ISceneState scene)
         {
             if (entity != null)
             {
@@ -57,7 +57,7 @@ namespace Globe3DLight.ViewModels.Renderer
                     {
                         foreach (var item in obj.Children)
                         {
-                            DrawScenarioObject(dc, item, scene);
+                            DrawEntities(dc, item, scene);
                             //obj.DrawShape(dc, this, scene);
                         }
                     }
