@@ -9,7 +9,7 @@ namespace Globe3DLight.ViewModels.Editor
 {
     public static class ProjectExtensions
     {
-        public static BaseEntity AddEntity(this ProjectContainerViewModel project, BaseEntity entity)
+        public static T AddEntity<T>(this ProjectContainerViewModel project, T entity) where T : BaseEntity
         {
             if (project?.Scenarios != null && entity != null)
             {
@@ -42,13 +42,13 @@ namespace Globe3DLight.ViewModels.Editor
             }
         }
 
-        public static void AddChildFrame(this ProjectContainerViewModel project, LogicalViewModel node, LogicalViewModel child)
-        {
-            if (node != null && child != null)
-            {
-                node.AddChild(child);
-            }
-        }
+        //public static void AddChildFrame(this ProjectContainerViewModel project, LogicalViewModel node, LogicalViewModel child)
+        //{
+        //    if (node != null && child != null)
+        //    {
+        //        node.AddChild(child);
+        //    }
+        //}
 
         public static void RemoveScenario(this ProjectContainerViewModel project, ScenarioContainerViewModel scenario)
         {
@@ -59,21 +59,21 @@ namespace Globe3DLight.ViewModels.Editor
             }
         }
 
-        public static void RemoveLogicalNode(this ProjectContainerViewModel project, LogicalViewModel node)
-        {
-            if (node != null)
-            {
-                var root = node.GetRoot();
+        //public static void RemoveLogicalNode(this ProjectContainerViewModel project, LogicalViewModel node)
+        //{
+        //    if (node != null)
+        //    {
+        //        var root = node.GetRoot();
 
-                if (root != null)
-                {
-                    root.RemoveChild(node);
+        //        if (root != null)
+        //        {
+        //            root.RemoveChild(node);
 
-                    project.CurrentScenario.LogicalRoot = ImmutableArray.Create(root);
-                }
-            }
+        //            project.CurrentScenario.FrameRoot = ImmutableArray.Create(root);
+        //        }
+        //    }
 
-            return;
-        }
+        //    return;
+        //}
     }
 }

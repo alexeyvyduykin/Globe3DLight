@@ -18,8 +18,6 @@ namespace Globe3DLight.Models.Editor
 
         Task SaveFromDatabaseToJson();
 
-        ScenarioContainerViewModel GetScenario(string name, DateTime begin, TimeSpan duration);
-
         ProjectContainerViewModel GetEmptyProject();
     }
 }

@@ -19,7 +19,7 @@
              x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True"
              >
 
-    <Grid ShowGridLines="True" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,20">
+    <Grid ShowGridLines="False" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,20">
 
         <TabControl Padding="6,0,0,0" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
             <TabItem Header="Project" FontSize="20">
@@ -44,7 +44,7 @@
         <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2">
             <TabItem Header="Properties" FontSize="20">
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentLogical, Mode=TwoWay}"/>
+                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentFrame, Mode=TwoWay}"/>
                 </ScrollViewer>
             </TabItem>
             <TabItem Header="Scene" FontSize="20">

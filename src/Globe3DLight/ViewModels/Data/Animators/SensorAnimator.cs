@@ -63,8 +63,8 @@ namespace Globe3DLight.ViewModels.Data
         }
 
         private void Init(double t)
-        {  
-            if (Owner is SatelliteAnimator satAnimator)
+        {          
+            if (Parent is SatelliteAnimator satAnimator)
             {
                 foreach (var item in _data.Shootings)
                 {
@@ -119,6 +119,8 @@ namespace Globe3DLight.ViewModels.Data
                 satAnimator.Animate(t);
             }
 
+            ModelMatrix = dmat4.Identity;
+
             _first = false;
         }
 
@@ -135,7 +137,7 @@ namespace Globe3DLight.ViewModels.Data
 
             if (activeInterval is not null)
             {
-                if (Owner is SatelliteAnimator satAnimator)
+                if (Parent is SatelliteAnimator satAnimator)
                 {
                     var activeState = activeInterval.Animate(t);
 

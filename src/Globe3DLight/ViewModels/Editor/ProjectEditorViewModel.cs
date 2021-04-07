@@ -214,18 +214,6 @@ namespace Globe3DLight.ViewModels.Editor
                 //Log?.LogException(ex);
             }
         }
-        //public void OnExport(string path, object item, IFileWriter writer)
-        //{
-        //    try
-        //    {
-        //        using var stream = FileIO.Create(path);
-        //        writer?.Save(stream, item, Project);
-        //    }
-        //    catch //(Exception ex)
-        //    {
-        //        //Log?.LogException(ex);
-        //    }
-        //}
 
         public void OnImportObject(object item, bool restore)
         {
@@ -248,50 +236,10 @@ namespace Globe3DLight.ViewModels.Editor
         {
             if (Project != null)
             {
-                var scenario = ContainerFactory.GetScenario("Scenario1", DateTime.Now, TimeSpan.FromDays(1));
+                var scenario = Factory.CreateScenarioContainer("Scenario1", DateTime.Now, TimeSpan.FromDays(1));
 
                 Project.AddScenario(scenario);
                 Project.SetCurrentScenario(scenario);
-            }
-        }
-
-        //void OnRemoveScenario(IScenarioContainer scenario);
-        public void OnRemove(object item)
-        {
-            if (item is ScenarioContainerViewModel scenario)
-            {
-                Project?.RemoveScenario(scenario);
-                var selected = Project?.Scenarios.FirstOrDefault();
-                Project?.SetCurrentScenario(selected);
-            }
-            if (item is LogicalViewModel node)
-            {
-                Project?.RemoveLogicalNode(node);
-                //  var selected = Project?.CurrentScenario?.LogicalTreeNodeRoot.SingleOrDefault();
-                // Project?.CurrentScenario?.CurrentLogicalTreeNode = selected;
-
-
-                // Project.SetSelected(selected);
-                //var selected = Project?.CurrentDocument?.Pages.FirstOrDefault();
-                //Project?.SetCurrentContainer(selected);
-            }
-            else if (item is ProjectEditorViewModel || item == null)
-            {
-                //  OnDeleteSelected();
-            }
-        }
-
-        //void OnAddChildFrame(ITreeNode<IFrame> node);
-        public void OnAddFrame(object item)
-        {
-            if (item is LogicalViewModel node)
-            {
-                if (Project?.CurrentScenario != null)
-                {
-                    var child = Factory.CreateFrameState("Frame");
-
-                    Project.AddChildFrame(node, child);
-                }
             }
         }
 
@@ -305,49 +253,6 @@ namespace Globe3DLight.ViewModels.Editor
                 }
             }
         }
-
-        //public void OnImportJson__(string path)
-        //{
-        //    try
-        //    {
-        //        var json = FileIO?.ReadUtf8Text(path);
-        //        if (!string.IsNullOrWhiteSpace(json))
-        //        {
-        //            var item = JsonSerializer.Deserialize<object>(json);
-        //            if (item != null)
-        //            {
-        //                var name = System.IO.Path.GetFileNameWithoutExtension(path);
-        //                OnImportObject__(name, item);
-        //            }
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-
-        //    }
-        //}
-
-        //public void OnImportObject__(string name, object item)
-        //{
-        //    if (item is IDatabase db)
-        //    {
-        //        var data = DataFactory.CreateDataFromDatabase(db);            
-        //        OnImportObject__(name, data);
-        //    }
-        //    else if(item is IData data)
-        //    {
-        //        var node = Factory.CreateLogicalTreeNode(name, data);
-        //        OnImportObject__(name, node);
-        //    }
-        //    else if (item is ILogicalTreeNode child)
-        //    {
-        //        Project?.AddChildFrame(Project.CurrentScenario.CurrentLogicalTreeNode, child);
-        //    }
-        //    else
-        //    {
-        //        throw new NotSupportedException("Not supported import object.");
-        //    }
-        //}
 
         public void OnLoad(ProjectContainerViewModel project, string path = null)
         {

@@ -53,11 +53,7 @@ namespace Globe3DLight.ViewModels
             return new Cache<TKey, TValue>(dispose);
         }
 
-        public FrameState CreateFrameState(string name) => new FrameState()
-        {
-            Name = name,
-            Children = ImmutableArray.Create<ViewModelBase>(),
-        };
+        public IdentityState CreateIdentityState() => new IdentityState();
 
         public ProjectContainerViewModel CreateProjectContainer(string name = "Project")
         {
@@ -68,15 +64,26 @@ namespace Globe3DLight.ViewModels
             };
         }
 
-        public ScenarioContainerViewModel CreateScenarioContainer(string name = "Scenario")
+        public ScenarioContainerViewModel CreateScenarioContainer(string name, DateTime begin, TimeSpan duration)
         {
-            return new ScenarioContainerViewModel()
+            var frame = CreateRootFrame();
+
+            var scenario = new ScenarioContainerViewModel()
             {
-                Name = name,
-                LogicalRoot = ImmutableArray.Create<LogicalViewModel>(),
+                Name = name,       
+                IsExpanded = true,
+                FrameRoot = ImmutableArray.Create<FrameViewModel>(frame),
+                CurrentFrame = frame,
                 Entities = ImmutableArray.Create<BaseEntity>(),
-                Tasks = ImmutableArray.Create<SatelliteTask>(),
+                Tasks = ImmutableArray.Create<SatelliteTask>(), 
+                SceneState = CreateSceneState(),
+                Updater = CreateDataUpdater(),
+                TimePresenter = CreateSliderTimePresenter(begin, duration),
             };
+  
+            frame.Owner = scenario;
+
+            return scenario;
         }
 
         public ISceneState CreateSceneState()
@@ -106,7 +113,7 @@ namespace Globe3DLight.ViewModels
                 FieldOfViewY = 70.0f * (float)Math.PI / 180.0f, //Math.PI / 6.0, //70.0;
                 AspectRatio = 1,
                 CameraBehaviours = cameraBehaviours,
-                PerspectiveNearPlaneDistance = 80,// 10.5, // 0.5;
+                PerspectiveNearPlaneDistance = 85,// 10.5, // 0.5;
                 PerspectiveFarPlaneDistance = 2500000.0,
             };
         }
@@ -116,17 +123,17 @@ namespace Globe3DLight.ViewModels
             return new ArcballCamera(eye, dvec3.Zero, dvec3.UnitY);
         }
 
-        public LogicalCollectionViewModel CreateLogicalCollection(string name)
-        {
-            var builder = ImmutableArray.CreateBuilder<LogicalViewModel>();
+        //public LogicalCollectionViewModel CreateLogicalCollection(string name)
+        //{
+        //    var builder = ImmutableArray.CreateBuilder<LogicalViewModel>();
 
-            return new LogicalCollectionViewModel()
-            {
-                Name = name,
-                //State = states,
-                Values = builder.ToImmutable(),
-            };
-        }
+        //    return new LogicalCollectionViewModel()
+        //    {
+        //        Name = name,
+        //        //State = states,
+        //        Values = builder.ToImmutable(),
+        //    };
+        //}
 
         private ITimer CreateAcceleratedTimer()
         {
@@ -210,33 +217,256 @@ namespace Globe3DLight.ViewModels
         //}
         private DateTime FromJulianDate(double jd) => DateTime.FromOADate(jd - 2415018.5);
 
-        public Spacebox CreateSpacebox(BaseState parent)
+
+        public FrameViewModel CreateRootFrame()
+        {
+            var frame = new FrameViewModel()
+            {
+                Parent = null,
+                Children = ImmutableArray.Create<FrameViewModel>(),                
+                Name = "fr_root",
+                IsExpanded = true,
+                IsVisible = false,
+                State = CreateIdentityState(),                               
+                RenderModel = null,
+            };
+
+            return frame;
+        }
+
+        public FrameViewModel CreateFrame(string name, FrameViewModel parent)
+        {
+            var frame = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = name,
+                IsExpanded = false,
+                IsVisible = false,
+                State = CreateIdentityState(),
+                RenderModel = null,
+            };
+
+            parent.AddChild(frame);
+
+            return frame;
+        }
+
+        public FrameViewModel CreateCollectionFrame(string name, FrameViewModel parent)
+        {
+            var fr_collection = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = name,
+                IsExpanded = false,
+                IsVisible = true,
+                State = null,
+                RenderModel = null,
+            };
+
+            parent.AddChild(fr_collection);
+
+            return fr_collection;
+        }
+
+        public FrameViewModel CreateSunFrame(SunData data, FrameViewModel parent)
+        {    
+            var frame = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}", data.Name.ToLower()),
+                IsExpanded = false,
+                IsVisible = false,
+                State = new SunAnimator(data),
+                RenderModel = null,
+            };
+
+            parent.AddChild(frame);
+
+            return frame;
+        }
+
+        public FrameViewModel CreateEarthFrame(EarthData data, FrameViewModel parent, float scale)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
+         
+            var frame = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}", data.Name.ToLower()),
+                IsExpanded = true,
+                IsVisible = true,
+                State = new EarthAnimator(data),
+                RenderModel = renderModelFactory.CreateFrame(scale),
+            };
+
+            parent.AddChild(frame);
+
+            return frame;
+        }
+
+        public FrameViewModel CreateGroundObjectFrame(GroundObjectData data, FrameViewModel parent, FrameRenderModel model)
+        {          
+            var fr_groundObject = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}", data.Name.ToLower()),
+                IsExpanded = false,
+                IsVisible = true,
+                State = new GroundObjectState(data),
+                RenderModel = model,
+            };
+
+            parent.AddChild(fr_groundObject);
+
+            return fr_groundObject;
+        }
+
+        public FrameViewModel CreateGroundStationFrame(GroundStationData data, FrameViewModel parent, FrameRenderModel model)
+        {       
+            var fr_groundStation = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}", data.Name.ToLower()),
+                IsExpanded = false,
+                IsVisible = true,
+                State = new GroundStationState(data),
+                RenderModel = model,
+            };
+
+            parent.AddChild(fr_groundStation);
+
+            return fr_groundStation;
+        }
+
+        public FrameViewModel CreateRetranslatorFrame(RetranslatorData data, FrameViewModel parent, FrameRenderModel model)
+        {           
+            var fr_retranslator = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}", data.Name.ToLower()),
+                IsExpanded = false,
+                IsVisible = true,
+                State = new RetranslatorAnimator(data),
+                RenderModel = model,
+            };
+
+            parent.AddChild(fr_retranslator);
+
+            return fr_retranslator;
+        }
+
+        public (FrameViewModel fr_sat, FrameViewModel fr_rot, FrameViewModel fr_sen, FrameViewModel fr_ant, FrameViewModel fr_orb)
+            CreateSatellitesFrame(SatelliteData satelliteData, RotationData rotationData, SensorData sensorData,
+            AntennaData antennaData, OrbitData orbitData, FrameViewModel parent, 
+            FrameRenderModel satelliteModel, FrameRenderModel antennaModel, EntityList gss, EntityList rtrs)
+        {
+            var fr_satellite = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}", satelliteData.Name.ToLower()),
+                IsExpanded = true,
+                IsVisible = false,
+                State = new SatelliteAnimator(satelliteData),
+                RenderModel = null,
+            };
+
+            var fr_rotation = new FrameViewModel()
+            {
+                Parent = fr_satellite,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}_{1}", rotationData.Name.ToLower(), rotationData.SatelliteName.ToLower()),
+                IsExpanded = false,
+                IsVisible = true,
+                State = new RotationAnimator(rotationData),
+                RenderModel = satelliteModel,
+            };
+
+            var fr_sensor = new FrameViewModel()
+            {
+                Parent = fr_satellite,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}_{1}", sensorData.Name.ToLower(), sensorData.SatelliteName.ToLower()),
+                IsExpanded = false,
+                IsVisible = false,
+                State = new SensorAnimator(sensorData),
+                RenderModel = null,
+            };
+
+            var fr_antenna = new FrameViewModel()
+            {
+                Parent = fr_rotation,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}_{1}", antennaData.Name.ToLower(), antennaData.SatelliteName.ToLower()),
+                IsExpanded = false,
+                IsVisible = true,
+                State = new AntennaAnimator(antennaData)
+                {                   
+                    Assets = ImmutableArray.Create<BaseEntity>(),
+                    AttachPosition = new dvec3(67.74, -12.22, -23.5),
+                },
+                RenderModel = antennaModel,
+            };
+
+            var fr_orbit = new FrameViewModel()
+            {
+                Parent = parent,
+                Children = ImmutableArray.Create<FrameViewModel>(),
+                Name = string.Format("fr_{0}_{1}", orbitData.Name.ToLower(), orbitData.SatelliteName.ToLower()),
+                IsExpanded = false,
+                IsVisible = false,
+                State = new OrbitState(orbitData),
+                RenderModel = null,
+            };
+
+            parent.AddChild(fr_orbit);
+            parent.AddChild(fr_satellite);
+            fr_satellite.AddChild(fr_rotation);
+            fr_satellite.AddChild(fr_sensor);
+            fr_rotation.AddChild(fr_antenna);
+
+            ((AntennaAnimator)fr_antenna.State).AddAssets(gss.Values);
+            ((AntennaAnimator)fr_antenna.State).AddAssets(rtrs.Values);
+
+            return (fr_satellite, fr_rotation, fr_sensor, fr_antenna, fr_orbit);
+        }
+
+        //------------------------------------------------------------------------------------
+
+        public Spacebox CreateSpacebox(FrameViewModel parent)
+        {
+            var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
+
+            var fr_spacebox = CreateFrame("fr_spacebox", parent);
 
             var obj = new Spacebox()
             {
                 Name = "Spacebox",
                 RenderModel = renderModelFactory.CreateSpacebox(),
                 IsVisible = true,
-                Children = ImmutableArray.Create<BaseEntity>(),
-                Logical = parent,
+                Children = ImmutableArray.Create<BaseEntity>(),            
+                Frame = fr_spacebox,
             };
+
+            fr_spacebox.State.Parent = parent.State;
+
+            fr_spacebox.Owner = obj;
 
             return obj;
         }
 
-        public Sun CreateSun(SunData data, BaseState parent)
+        public Sun CreateSun(SunData data, FrameViewModel parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
-            var fr_sun = new SunAnimator(data)
-            {
-                Name = string.Format("fr_{0}", data.Name.ToLower()),
-                Children = ImmutableArray.Create<ViewModelBase>(),
-            };
-
-            parent.AddChild(fr_sun);
+            var fr_sun = CreateSunFrame(data, parent);
 
             var obj = new Sun()
             {
@@ -244,73 +474,62 @@ namespace Globe3DLight.ViewModels
                 IsVisible = true,
                 RenderModel = renderModelFactory.CreateSun(),
                 Children = ImmutableArray.Create<BaseEntity>(),
-                Logical = fr_sun,
+                Frame = fr_sun,
             };
+            
+            fr_sun.State.Parent = parent.State;
+            fr_sun.Owner = obj;
 
             return obj;
         }
 
-        public Earth CreateEarth(EarthData data, BaseState parent)
+        public Earth CreateEarth(EarthData data, FrameViewModel parent)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
 
-            var fr_earth = new EarthAnimator(data)
-            {
-                Name = string.Format("fr_{0}", data.Name.ToLower()),
-                Children = ImmutableArray.Create<ViewModelBase>(),
-            };
-
-            parent.AddChild(fr_earth);
-
+            var fr_earth = CreateEarthFrame(data, parent, 6371.0f * 1.3f);
+       
             var obj = new Earth()
             {
-                Name = data.Name,
-                FrameRenderModel = renderModelFactory.CreateFrame(6371.0f * 1.3f),
+                Name = data.Name,            
                 RenderModel = renderModelFactory.CreateEarth(),
                 IsVisible = true,
                 Children = ImmutableArray.Create<BaseEntity>(),
-                Logical = fr_earth,
+                Frame = fr_earth,
             };
+
+            fr_earth.State.Parent = parent.State;
+            fr_earth.Owner = obj;
 
             return obj;
         }
 
-        public EntityList CreateGroundObjects(ScenarioData data, BaseState parent)
-        {
-            var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
-
-            var renderModel = renderModelFactory.CreateGroundObject();
-            var frameModel = renderModelFactory.CreateFrame(30.0f);
-
-            var fr_go_collection = new LogicalCollectionViewModel()
-            {
-                Name = "fr_go_collection",
-                Values = ImmutableArray.Create<LogicalViewModel>(),
-            };
-
-            parent.AddChild(fr_go_collection);
+        public EntityList CreateGroundObjects(ScenarioData data, FrameViewModel parent)
+        {       
+            var renderModel = _serviceProvider.GetService<IRenderModelFactory>().CreateGroundObject();
+            var frameRenderModel = _serviceProvider.GetService<IRenderModelFactory>().CreateFrame(30.0f);
 
             var entities = new List<BaseEntity>();
 
+            var fr_go_collection = CreateCollectionFrame("fr_go_collection", parent);
+
             foreach (var item in data.GroundObjects)
             {
-                var fr_groundObject = new GroundObjectState(item)
-                {
-                    Name = string.Format("fr_{0}", item.Name.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
+                var fr_go = CreateGroundObjectFrame(item, fr_go_collection, frameRenderModel);
 
-                fr_go_collection.AddValue(fr_groundObject);
-
-                entities.Add(new GroundObject()
+                var go = new GroundObject()
                 {
                     Name = item.Name,
                     IsVisible = true,
-                    RenderModel = renderModel,
-                    FrameRenderModel = frameModel,
+                    RenderModel = renderModel,                  
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_groundObject,
-                });
+                    Frame = fr_go,
+                };
+
+                fr_go.State.Parent = parent.State;
+                fr_go.Owner = go;
+
+                entities.Add(go);
             }
 
             var builder = ImmutableArray.CreateBuilder<BaseEntity>();
@@ -320,46 +539,37 @@ namespace Globe3DLight.ViewModels
             {
                 Name = "GroundObjects",
                 IsVisible = true,
-                IsExpanded = false,
-                LogicalCollection = fr_go_collection,
+                IsExpanded = false,              
                 Values = builder.ToImmutable(),
             };
         }
 
-        public EntityList CreateGroundStations(ScenarioData data, BaseState parent)
-        {
-            var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
+        public EntityList CreateGroundStations(ScenarioData data, FrameViewModel parent)
+        {          
+            var renderModel = _serviceProvider.GetService<IRenderModelFactory>().CreateGroundStation(180.0);
+            var frameRenderModel = _serviceProvider.GetService<IRenderModelFactory>().CreateFrame(200.0f);
 
-            var renderModel = renderModelFactory.CreateGroundStation();
-
-            var fr_gs_collection = new LogicalCollectionViewModel()
-            {
-                Name = "fr_gs_collection",
-                Values = ImmutableArray.Create<LogicalViewModel>(),
-            };
-
-            parent.AddChild(fr_gs_collection);
+            var fr_gs_collection = CreateCollectionFrame("fr_gs_collection", parent);
 
             var entities = new List<BaseEntity>();
 
             foreach (var item in data.GroundStations)
             {
-                var fr_groundStation = new GroundStationState(item)
-                {
-                    Name = string.Format("fr_{0}", item.Name.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
-
-                fr_gs_collection.AddValue(fr_groundStation);
-
-                entities.Add(new GroundStation()
+                var fr_gs = CreateGroundStationFrame(item, fr_gs_collection, frameRenderModel);
+              
+                var gs = new GroundStation()
                 {
                     Name = item.Name,
                     IsVisible = true,
                     RenderModel = renderModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_groundStation,
-                });
+                    Frame = fr_gs,
+                };
+                
+                fr_gs.State.Parent = parent.State;
+                fr_gs.Owner = gs;
+
+                entities.Add(gs);
             }
 
             var builder = ImmutableArray.CreateBuilder<BaseEntity>();
@@ -370,45 +580,37 @@ namespace Globe3DLight.ViewModels
                 Name = "GroundStations",
                 IsVisible = true,
                 IsExpanded = false,
-                LogicalCollection = fr_gs_collection,
+                //LogicalCollection = fr_gs_collection,
                 Values = builder.ToImmutable(),
             };
         }
 
-        public EntityList CreateRetranslators(ScenarioData data, BaseState parent)
-        {
-            var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
+        public EntityList CreateRetranslators(ScenarioData data, FrameViewModel parent)
+        { 
+            var renderModel = _serviceProvider.GetService<IRenderModelFactory>().CreateRetranslator(500.0);
+            var frameRenderModel = _serviceProvider.GetService<IRenderModelFactory>().CreateFrame(6050.0f);
 
-            var renderModel = renderModelFactory.CreateRetranslator();
-
-            var fr_rtr_collection = new LogicalCollectionViewModel()
-            {
-                Name = "fr_rtr_collection",
-                Values = ImmutableArray.Create<LogicalViewModel>(),
-            };
-
-            parent.AddChild(fr_rtr_collection);
+            var fr_rtr_collection = CreateCollectionFrame("fr_rtr_collection", parent);
 
             var entities = new List<BaseEntity>();
 
             foreach (var item in data.RetranslatorPositions)
             {
-                var fr_retranslator = new RetranslatorAnimator(item)
-                {
-                    Name = string.Format("fr_{0}", item.Name.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
+                var fr_rtr = CreateRetranslatorFrame(item, fr_rtr_collection, frameRenderModel);
 
-                fr_rtr_collection.AddValue(fr_retranslator);
-
-                entities.Add(new Retranslator()
+                var rtr = new Retranslator()
                 {
                     Name = item.Name,
                     IsVisible = true,
                     RenderModel = renderModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_retranslator,
-                });
+                    Frame = fr_rtr,
+                };
+                
+                fr_rtr.State.Parent = parent.State;
+                fr_rtr.Owner = rtr;
+
+                entities.Add(rtr);
             }
 
             var builder = ImmutableArray.CreateBuilder<BaseEntity>();
@@ -419,69 +621,36 @@ namespace Globe3DLight.ViewModels
                 Name = "Retranslators",
                 IsVisible = true,
                 IsExpanded = false,
-                LogicalCollection = fr_rtr_collection,
+                //LogicalCollection = fr_rtr_collection,
                 Values = builder.ToImmutable(),
             };
         }
 
-        public IList<Satellite> CreateSatellites(ScenarioData data, BaseState parent, EntityList gss, EntityList rtrs)
+        public IList<Satellite> CreateSatellites(ScenarioData data, FrameViewModel parent, EntityList gss, EntityList rtrs)
         {
             var renderModelFactory = _serviceProvider.GetService<IRenderModelFactory>();
-
             var antennaModel = renderModelFactory.CreateAntenna();
             var antennaFrameModel = renderModelFactory.CreateFrame(50.0f);
-
+            var satelliteFrameModel = renderModelFactory.CreateFrame(200.0f);
             var sensorModel = renderModelFactory.CreateSensor();
-
-            var satelliteModel = renderModelFactory.CreateSatellite();
+            var satelliteModel = renderModelFactory.CreateSatellite(1.0);
 
             var list = new List<Satellite>();
 
             for (int i = 0; i < data.SatellitePositions.Count; i++)
             {
-                var fr_satellite = new SatelliteAnimator(data.SatellitePositions[i])
-                {
-                    Name = string.Format("fr_{0}", data.SatellitePositions[i].Name.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
-                var fr_rotation = new RotationAnimator(data.SatelliteRotations[i])
-                {
-                    Name = string.Format("fr_{0}_{1}", data.SatelliteRotations[i].Name.ToLower(), data.SatelliteRotations[i].SatelliteName.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
-                var fr_sensor = new SensorAnimator(data.SatelliteShootings[i])
-                {
-                    Name = string.Format("fr_{0}_{1}", data.SatelliteShootings[i].Name.ToLower(), data.SatelliteShootings[i].SatelliteName.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
-                var fr_antenna = new AntennaAnimator(data.SatelliteTransfers[i])
-                {
-                    Name = string.Format("fr_{0}_{1}", data.SatelliteTransfers[i].Name.ToLower(), data.SatelliteTransfers[i].SatelliteName.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                    Assets = ImmutableArray.Create<BaseEntity>(),
-                };
-                var fr_orbit = new OrbitState(data.SatelliteOrbits[i])
-                {
-                    Name = string.Format("fr_{0}_{1}", data.SatelliteOrbits[i].Name.ToLower(), data.SatelliteOrbits[i].SatelliteName.ToLower()),
-                    Children = ImmutableArray.Create<ViewModelBase>(),
-                };
-
-                parent.AddChild(fr_orbit);
-                parent.AddChild(fr_satellite);
-                fr_satellite.AddChild(fr_rotation);
-                fr_satellite.AddChild(fr_sensor);
-                fr_rotation.AddChild(fr_antenna);
-
-                fr_antenna.AddAssets(gss.Values);
-                fr_antenna.AddAssets(rtrs.Values);
-
+                var (fr_sat, fr_rot, fr_sen, fr_ant, fr_orb) = CreateSatellitesFrame(
+                    data.SatellitePositions[i], data.SatelliteRotations[i], 
+                    data.SatelliteShootings[i], data.SatelliteTransfers[i], data.SatelliteOrbits[i],
+                    parent, satelliteFrameModel, antennaFrameModel, gss, rtrs);
+                                        
                 var satellite = new Satellite()
                 {
                     Name = data.SatellitePositions[i].Name,
                     IsVisible = true,
                     RenderModel = satelliteModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_rotation,
+                    Frame = fr_rot,               
                 };
                 var sensor = new Sensor()
                 {
@@ -489,16 +658,15 @@ namespace Globe3DLight.ViewModels
                     IsVisible = true,
                     RenderModel = sensorModel,
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_sensor,
+                    Frame = fr_sen,
                 };
                 var antenna = new Antenna()
                 {
                     Name = string.Format("Antenna{0}", i + 1),
                     IsVisible = true,
-                    RenderModel = antennaModel,
-                    FrameRenderModel = antennaFrameModel,
+                    RenderModel = antennaModel,                 
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_antenna,
+                    Frame = fr_ant,
                 };
                 var orbit = new Orbit()
                 {
@@ -506,8 +674,19 @@ namespace Globe3DLight.ViewModels
                     IsVisible = true,
                     RenderModel = renderModelFactory.CreateOrbit(),
                     Children = ImmutableArray.Create<BaseEntity>(),
-                    Logical = fr_orbit,
+                    Frame = fr_orb,
                 };
+
+                fr_sat.State.Parent = parent.State;
+                fr_rot.State.Parent = fr_sat.State;
+                fr_sen.State.Parent = fr_sat.State;
+                fr_ant.State.Parent = fr_rot.State;
+                fr_orb.State.Parent = parent.State;
+
+                fr_rot.Owner = satellite;
+                fr_sen.Owner = sensor;
+                fr_ant.Owner = antenna;
+                fr_orb.Owner = orbit;
 
                 satellite.AddChild(sensor);
                 satellite.AddChild(antenna);

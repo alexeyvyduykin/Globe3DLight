@@ -7,9 +7,9 @@ using Globe3DLight.Models;
 
 namespace Globe3DLight.ViewModels.Data
 {
-    public class FrameState : BaseState, IFrameable
+    public class IdentityState : BaseState, IFrameable
     {  
-        public FrameState()
+        public IdentityState()
         {
             ModelMatrix = dmat4.Identity;
         }

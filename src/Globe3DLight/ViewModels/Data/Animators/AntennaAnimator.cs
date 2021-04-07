@@ -16,6 +16,7 @@ namespace Globe3DLight.ViewModels.Data
         private string _target;
         private bool _first = true;
         private dvec3 _targetPosition;
+        private dvec3 _attachPosition;
 
         public AntennaAnimator(AntennaData data)
         {
@@ -48,6 +49,12 @@ namespace Globe3DLight.ViewModels.Data
             set => RaiseAndSetIfChanged(ref _assets, value);
         }
 
+        public dvec3 AttachPosition
+        {
+            get => _attachPosition;
+            set => RaiseAndSetIfChanged(ref _attachPosition, value);
+        }
+        
         private void Init()
         {          
             foreach (var rec in _data.Translations)
@@ -62,7 +69,7 @@ namespace Globe3DLight.ViewModels.Data
                     {
                         if (gs.Name.Equals(target) == true)
                         {
-                            _translationEvents.Add(new AntennaInterval(begin, end, target, gs.Logical));
+                            _translationEvents.Add(new AntennaInterval(begin, end, target, gs.Frame.State));
                             break;
                         }
                     }
@@ -70,11 +77,14 @@ namespace Globe3DLight.ViewModels.Data
                     {
                         if (retranslator.Name.Equals(target) == true)
                         {
-                            _translationEvents.Add(new AntennaInterval(begin, end, target, retranslator.Logical));
+                            _translationEvents.Add(new AntennaInterval(begin, end, target, retranslator.Frame.State));
                         }
                     }
                 }
             }
+
+
+            ModelMatrix = dmat4.Translate(AttachPosition);
 
             _first = false;
         }
@@ -90,7 +100,7 @@ namespace Globe3DLight.ViewModels.Data
 
             Enable = activeInterval != default;
 
-            if (activeInterval is not null)
+            if (activeInterval != default)
             {
                 var value = activeInterval.Animate(t);
 

@@ -11,8 +11,14 @@ namespace Globe3DLight.ViewModels.Entities
 {
     public class Satellite : BaseEntity, IDrawable, ITargetable, IChildren
     {
-        private RenderModel _renderModel;
-        private BaseState _logical;
+        private RenderModel _renderModel;        
+        private FrameViewModel _frame;
+
+        public FrameViewModel Frame
+        {
+            get => _frame;
+            set => RaiseAndSetIfChanged(ref _frame, value);
+        }
 
         public RenderModel RenderModel
         {
@@ -20,21 +26,17 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public BaseState Logical
-        {
-            get => _logical;
-            set => RaiseAndSetIfChanged(ref _logical, value);
-        }
-
         public dmat4 InverseAbsoluteModel
         {
             get
             {
-                if (_logical?.Owner is IFrameable frameable)
+                if (Frame.Parent.State is SatelliteAnimator)
                 {
-                    return frameable.ModelMatrix.Inverse;
+                    if (Frame.Parent.State is IFrameable frameable)
+                    {
+                        return frameable.ModelMatrix.Inverse;
+                    }
                 }
-
                 return dmat4.Identity.Inverse;
             }
         }
@@ -42,9 +44,8 @@ namespace Globe3DLight.ViewModels.Entities
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {
-                renderer.DrawFrame(dc, RenderModel.Frame, Logical.AbsoluteModelMatrix, scene);
-                renderer.DrawSatellite(dc, RenderModel, Logical.AbsoluteModelMatrix, scene);
+            {              
+                renderer.DrawSatellite(dc, RenderModel, Frame.State.AbsoluteModelMatrix, scene);
             }
         }
 

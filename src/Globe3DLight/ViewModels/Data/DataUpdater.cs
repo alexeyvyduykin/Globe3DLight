@@ -1,51 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Globe3DLight.ViewModels.Containers;
-using System.Linq;
+﻿#nullable enable
 using Globe3DLight.Models.Data;
+using Globe3DLight.ViewModels.Entities;
 
 namespace Globe3DLight.ViewModels.Data
 {
     public class DataUpdater : IDataUpdater
     {
-        public void Update(double t, ViewModelBase obj)
+        public void Update(double t, FrameViewModel frame)
         {
-            if (obj is LogicalViewModel logical)
+            if (frame.State is not null)
             {
-                if (logical is IAnimator animator)
+                if (frame.State is IAnimator animator)
                 {
                     animator.Animate(t);
                 }
 
-                foreach (var item in logical.Children)
+                foreach (var item in frame.Children)
                 {
                     Update(t, item);
                 }
             }
-            else if (obj is LogicalCollectionViewModel collection)
+            else
             {
-                var first = collection.Values.FirstOrDefault();
-
-                if (first is IAnimator animator)
+                foreach (var item in frame.Children)
                 {
-                    foreach (var item in collection.Values)
-                    {
-                        if (item is IAnimator a)
-                        {
-                            a.Animate(t);
-                        }
-                    }
+                    Update(t, item);
                 }
-                // collection states not is animate
-                //foreach (var item in collection)
-                //{
-                //    if (item.State is IAnimator animator)
-                //    {
-                //        animator.Animate(t);
-                //    }
-                //}
             }
-        }        
+        }
     }
 }

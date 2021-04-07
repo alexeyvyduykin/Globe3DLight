@@ -21,17 +21,19 @@ namespace Globe3DLight.ViewModels.Containers
     public class ScenarioContainerViewModel : BaseContainerViewModel
     {
         private readonly InvalidateScenarioEventArgs _invalidateScenarioEventArgs;
-        private ImmutableArray<LogicalViewModel> _logicalRoot;
+       // private ImmutableArray<LogicalViewModel> _logicalRoot;
         private IDataUpdater _updater;
         private ImmutableArray<BaseEntity> _entities;
         private BaseEntity _currentEntity;
         private ImmutableArray<SatelliteTask> _tasks;
         private SatelliteTask _currentTask;
-        private LogicalViewModel _currentLogical;
+       // private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
         private TimePresenter _timePresenter;
         private double _width;
         private double _height;
+        private ImmutableArray<FrameViewModel> _frameRoot;
+        private FrameViewModel _currentFrame;
 
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
@@ -63,16 +65,28 @@ namespace Globe3DLight.ViewModels.Containers
 
         public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, _invalidateScenarioEventArgs);
 
-        public ImmutableArray<LogicalViewModel> LogicalRoot
+        //public ImmutableArray<LogicalViewModel> LogicalRoot
+        //{
+        //    get => _logicalRoot;
+        //    set => RaiseAndSetIfChanged(ref _logicalRoot, value);
+        //}
+
+        //public LogicalViewModel CurrentLogical
+        //{
+        //    get => _currentLogical;
+        //    set => RaiseAndSetIfChanged(ref _currentLogical, value);
+        //}
+
+        public ImmutableArray<FrameViewModel> FrameRoot
         {
-            get => _logicalRoot;
-            set => RaiseAndSetIfChanged(ref _logicalRoot, value);
+            get => _frameRoot;
+            set => RaiseAndSetIfChanged(ref _frameRoot, value);
         }
 
-        public LogicalViewModel CurrentLogical
+        public FrameViewModel CurrentFrame
         {
-            get => _currentLogical;
-            set => RaiseAndSetIfChanged(ref _currentLogical, value);
+            get => _currentFrame;
+            set => RaiseAndSetIfChanged(ref _currentFrame, value);
         }
 
         public IDataUpdater Updater
@@ -150,7 +164,7 @@ namespace Globe3DLight.ViewModels.Containers
         {
             //if (TimePresenter.Timer.IsRunning == true)
             {
-                Updater.Update(TimePresenter.Timer.CurrentTime, LogicalRoot.SingleOrDefault());
+                Updater.Update(TimePresenter.Timer.CurrentTime, FrameRoot.Single());
             }
         }
 

@@ -9,6 +9,7 @@
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
              xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
              xmlns:Data="clr-namespace:Globe3DLight.ViewModels.Data;assembly=Globe3DLight"
+             xmlns:Entities="clr-namespace:Globe3DLight.ViewModels.Entities;assembly=Globe3DLight"
              xmlns:SceneObjects="clr-namespace:Globe3DLight.ScenarioObjects;assembly=Globe3DLight"
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Project}"
@@ -23,7 +24,7 @@
 
     <Grid ColumnDefinitions="*" RowDefinitions="*">
 
-        <TreeView Items="{Binding CurrentScenario.LogicalRoot}" SelectedItem="{Binding CurrentScenario.CurrentLogical}" x:CompileBindings="False">
+        <TreeView Items="{Binding CurrentScenario.FrameRoot}" SelectedItem="{Binding CurrentScenario.CurrentFrame}" x:CompileBindings="False">
             <TreeView.Styles>
                 <Style Selector="TreeViewItem" x:DataType="TreeViewItem">
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
@@ -32,11 +33,12 @@
 
             <TreeView.DataTemplates>
 
-                <TreeDataTemplate DataType="Data:LogicalViewModel" ItemsSource="{Binding Children}" x:CompileBindings="False">
+                <TreeDataTemplate DataType="Entities:FrameViewModel" ItemsSource="{Binding Children}" x:CompileBindings="False">
 
                     <DockPanel LastChildFill="True">
                         <StackPanel Orientation="Horizontal">
-                            <CheckBox IsChecked="{Binding, Converter={StaticResource IsVisibleFrameConverter}}" MinWidth="0" VerticalAlignment="Center"/>
+                            <CheckBox IsEnabled="{Binding RenderModel, Converter={x:Static ObjectConverters.IsNotNull}}" 
+                                      IsChecked="{Binding IsVisible}" MinWidth="0" VerticalAlignment="Center"/>                                                       
                             <TextBlock Text="{Binding Name}" Background="Transparent" VerticalAlignment="Center"/>
                         </StackPanel>
                     </DockPanel>

@@ -11,8 +11,13 @@ namespace Globe3DLight.ViewModels.Entities
     public class Antenna : BaseEntity, IDrawable
     {
         private AntennaRenderModel _renderModel;
-        private FrameRenderModel _frameRenderModel;
-        private BaseState _logical;
+        private FrameViewModel _frame;
+
+        public FrameViewModel Frame
+        {
+            get => _frame;
+            set => RaiseAndSetIfChanged(ref _frame, value);
+        }
 
         public AntennaRenderModel RenderModel
         {
@@ -20,39 +25,16 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public BaseState Logical
-        {
-            get => _logical;
-            set => RaiseAndSetIfChanged(ref _logical, value);
-        }
-
-        public FrameRenderModel FrameRenderModel
-        {
-            get => _frameRenderModel;
-            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
-        }
-
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (Logical is AntennaAnimator antennaAnimator)
+                if (Frame.State is AntennaAnimator antennaAnimator)
                 {
-                    var rotationState = antennaAnimator.Owner;
-                    if (rotationState is RotationAnimator rotationAnimator)
+                    if (antennaAnimator.Enable == true)
                     {
-                        var attach = RenderModel.AttachPosition;
-
-                        var antennaModelMatrix = rotationAnimator.AbsoluteModelMatrix * dmat4.Translate(attach);
-
-                        renderer.DrawFrame(dc, FrameRenderModel, antennaModelMatrix, scene);
-
-                        if (antennaAnimator.Enable == true)
-                        {
-                            RenderModel.AbsoluteTargetPostion = antennaAnimator.TargetPosition;
-
-                            renderer.DrawAntenna(dc, RenderModel, antennaModelMatrix, scene);
-                        }
+                        RenderModel.AbsoluteTargetPostion = antennaAnimator.TargetPosition;
+                        renderer.DrawAntenna(dc, RenderModel, antennaAnimator.AbsoluteModelMatrix, scene);
                     }
                 }
             }

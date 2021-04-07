@@ -49,7 +49,7 @@ namespace Globe3DLight.ViewModels.Data
             double lat = glm.Radians(_lat);
             double r = _earthRadius;
 
-            dmat3 model3x3 = new dmat3();
+            var model3x3 = new dmat3();
             model3x3.m02 = -Math.Cos(lon) * Math.Sin(lat);
             model3x3.m12 = Math.Cos(lon) * Math.Cos(lat);
             model3x3.m22 = -Math.Sin(lon);
@@ -61,7 +61,7 @@ namespace Globe3DLight.ViewModels.Data
             model3x3.m21 = 0.0;
 
             ModelMatrix = new dmat4(model3x3) * dmat4.Translate(new dvec3(0.0, r, 0.0));
-            _position = new dvec3(ModelMatrix.Column3);
+            Position = new dvec3(ModelMatrix.Column3);
         }
     }
 }

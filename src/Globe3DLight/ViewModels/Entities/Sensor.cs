@@ -10,8 +10,14 @@ namespace Globe3DLight.ViewModels.Entities
 {
     public class Sensor : BaseEntity, IDrawable
     {
-        private SensorRenderModel _renderModel;
-        private BaseState _logical;
+        private SensorRenderModel _renderModel;        
+        private FrameViewModel _frame;
+
+        public FrameViewModel Frame
+        {
+            get => _frame;
+            set => RaiseAndSetIfChanged(ref _frame, value);
+        }
 
         public SensorRenderModel RenderModel
         {
@@ -19,22 +25,16 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public BaseState Logical
-        {
-            get => _logical;
-            set => RaiseAndSetIfChanged(ref _logical, value);
-        }
-
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
             {
-                if (Logical is SensorAnimator sensorData)
+                if (Frame.State is SensorAnimator state)
                 {
-                    if (sensorData.Enable == true)
+                    if (state.Enable == true)
                     {
-                        RenderModel.Shoot = sensorData.Shoot;
-                        RenderModel.Scan = sensorData.Scan;
+                        RenderModel.Shoot = state.Shoot;
+                        RenderModel.Scan = state.Scan;
 
                         renderer.DrawSensor(dc, RenderModel, dmat4.Identity, scene);
                     }

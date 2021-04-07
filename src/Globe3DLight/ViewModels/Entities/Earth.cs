@@ -11,8 +11,14 @@ namespace Globe3DLight.ViewModels.Entities
     public class Earth : BaseEntity, IDrawable, ITargetable
     {
         private EarthRenderModel _renderModel;
-        private FrameRenderModel _frameRenderModel;
-        private BaseState _logical;
+
+        private FrameViewModel _frame;
+
+        public FrameViewModel Frame
+        {
+            get => _frame;
+            set => RaiseAndSetIfChanged(ref _frame, value);
+        }
 
         public EarthRenderModel RenderModel
         {
@@ -20,27 +26,13 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public FrameRenderModel FrameRenderModel
-        {
-            get => _frameRenderModel;
-            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
-        }
-
-        public BaseState Logical
-        {
-            get => _logical;
-            set => RaiseAndSetIfChanged(ref _logical, value);
-        }
-
         public dmat4 InverseAbsoluteModel => dmat4.Identity.Inverse;
 
         public void DrawShape(object dc, IRenderContext renderer, ISceneState scene)
         {
             if (IsVisible == true)
-            {
-                renderer.DrawFrame(dc, FrameRenderModel, Logical.ModelMatrix, scene);
-
-                renderer.DrawEarth(dc, RenderModel, Logical.ModelMatrix, scene);
+            {         
+                renderer.DrawEarth(dc, RenderModel, Frame.State.ModelMatrix, scene);
             }
         }
 

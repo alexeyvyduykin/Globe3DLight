@@ -7,7 +7,7 @@ namespace Globe3DLight.ViewModels.Entities
     public abstract class BaseEntity : BaseContainerViewModel
     {
         private ImmutableArray<BaseEntity> _children;
-        private LogicalCollectionViewModel _logicalCollection;
+        //private LogicalCollectionViewModel _logicalCollection;
 
         public ImmutableArray<BaseEntity> Children
         {
@@ -15,11 +15,11 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _children, value);
         }
 
-        public LogicalCollectionViewModel LogicalCollection
-        {
-            get => _logicalCollection;
-            set => RaiseAndSetIfChanged(ref _logicalCollection, value);
-        }
+        //public LogicalCollectionViewModel LogicalCollection
+        //{
+        //    get => _logicalCollection;
+        //    set => RaiseAndSetIfChanged(ref _logicalCollection, value);
+        //}
 
         public override bool IsDirty()
         {

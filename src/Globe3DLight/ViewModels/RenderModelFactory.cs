@@ -23,7 +23,7 @@ namespace Globe3DLight.ViewModels
 
         EarthRenderModel CreateEarth();
 
-        RenderModel CreateSatellite();
+        RenderModel CreateSatellite(double scale);
 
         SunRenderModel CreateSun();
 
@@ -31,11 +31,11 @@ namespace Globe3DLight.ViewModels
 
         FrameRenderModel CreateFrame(float scale);
 
-        RenderModel CreateGroundStation();
+        RenderModel CreateGroundStation(double scale);
 
         GroundObjectRenderModel CreateGroundObject();
 
-        RenderModel CreateRetranslator();
+        RenderModel CreateRetranslator(double scale);
 
         AntennaRenderModel CreateAntenna();
 
@@ -177,13 +177,12 @@ namespace Globe3DLight.ViewModels
             return obj;
         }
 
-        public RenderModel CreateGroundStation()
+        public RenderModel CreateGroundStation(double scale)
         {           
             var obj = new RenderModel()
-            {
-                Frame = CreateFrame(200.0f),
+            {             
                 Model = LoadModelFromResources(@"models\tall_dish.obj", false),
-                Scale = 180.0, //70.0
+                Scale = scale,
             };
 
             return obj;
@@ -199,13 +198,12 @@ namespace Globe3DLight.ViewModels
             return obj;
         }
 
-        public RenderModel CreateRetranslator()
+        public RenderModel CreateRetranslator(double scale)
         {         
             var obj = new RenderModel()
-            {
-                Frame = CreateFrame(6050.0f),
+            {            
                 Model = LoadModelFromResources(@"models\tdrs.obj", true),           
-                Scale = 500,
+                Scale = scale,
             };
 
             return obj;
@@ -231,13 +229,12 @@ namespace Globe3DLight.ViewModels
             return obj;
         }
 
-        public RenderModel CreateSatellite()
+        public RenderModel CreateSatellite(double scale)
         {    
             return new RenderModel()
-            {
-                Frame = CreateFrame(200.0f),
+            {             
                 Model = LoadModelFromResources(@"models\satellite_v1.obj", true),
-                Scale = 1.0,                
+                Scale = scale,                
             };
         }
 
@@ -255,7 +252,7 @@ namespace Globe3DLight.ViewModels
         {
             var obj = new AntennaRenderModel()
             {
-                AttachPosition = new dvec3(67.74, -12.22, -23.5),
+         
             };
 
             return obj;

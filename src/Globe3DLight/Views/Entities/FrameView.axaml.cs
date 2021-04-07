@@ -1,14 +1,14 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Globe3DLight.Views.Containers
+namespace Globe3DLight.Views.Entities
 {
-    public class LogicalTreeNodeControl : UserControl
+    public class FrameView : UserControl
     {
-        public LogicalTreeNodeControl()
+        public FrameView()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void InitializeComponent()

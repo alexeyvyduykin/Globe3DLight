@@ -15,21 +15,21 @@ namespace Globe3DLight.Models
 {
     public interface IFactory
     {
-        FrameState CreateFrameState(string name);
+        IdentityState CreateIdentityState();
 
-        Spacebox CreateSpacebox(BaseState parent);
+        Spacebox CreateSpacebox(FrameViewModel parent);
 
-        Sun CreateSun(SunData data, BaseState parent);
+        Sun CreateSun(SunData data, FrameViewModel parent);
 
-        Earth CreateEarth(EarthData data, BaseState parent);
+        Earth CreateEarth(EarthData data, FrameViewModel parent);
 
-        EntityList CreateGroundObjects(ScenarioData data, BaseState parent);
+        EntityList CreateGroundObjects(ScenarioData data, FrameViewModel parent);
 
-        EntityList CreateGroundStations(ScenarioData data, BaseState parent);
+        EntityList CreateGroundStations(ScenarioData data, FrameViewModel parent);
 
-        EntityList CreateRetranslators(ScenarioData data, BaseState parent);
+        EntityList CreateRetranslators(ScenarioData data, FrameViewModel parent);
 
-        IList<Satellite> CreateSatellites(ScenarioData data, BaseState parent, EntityList gss, EntityList rtrs);
+        IList<Satellite> CreateSatellites(ScenarioData data, FrameViewModel parent, EntityList gss, EntityList rtrs);
 
         IList<SatelliteTask> CreateSatelliteTasks(IList<Satellite> satellites, ScenarioData data);
 
@@ -45,9 +45,9 @@ namespace Globe3DLight.Models
 
         ProjectContainerViewModel CreateProjectContainer(string name = "Project");
 
-        ScenarioContainerViewModel CreateScenarioContainer(string name = "Scenario");
+        ScenarioContainerViewModel CreateScenarioContainer(string name, DateTime begin, TimeSpan duration);
 
-        LogicalCollectionViewModel CreateLogicalCollection(string name);
+        //LogicalCollectionViewModel CreateLogicalCollection(string name);
 
         SliderTimePresenter CreateSliderTimePresenter(DateTime dateTime, TimeSpan timeSpan);
 
@@ -60,5 +60,7 @@ namespace Globe3DLight.Models
         ProjectContainerViewModel OpenProjectContainer(Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
 
         void SaveProjectContainer(ProjectContainerViewModel project/*, IImageCache imageCache*/, Stream stream, IFileSystem fileIO, IJsonSerializer serializer);
+
+        FrameViewModel CreateRootFrame();
     }
 }

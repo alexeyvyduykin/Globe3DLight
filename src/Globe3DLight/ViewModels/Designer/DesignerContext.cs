@@ -32,15 +32,15 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static Sensor Sensor { get; set; }
 
-        public static LogicalViewModel SatelliteNode { get; set; }
+        //public static LogicalViewModel SatelliteNode { get; set; }
 
-        public static LogicalViewModel SensorNode { get; set; }
+        //public static LogicalViewModel SensorNode { get; set; }
 
         public static BaseState RotationNode { get; set; }
 
-        public static LogicalViewModel SunNode { get; set; }
+        //public static LogicalViewModel SunNode { get; set; }
 
-        public static LogicalViewModel J2000Node { get; set; }
+        //public static LogicalViewModel J2000Node { get; set; }
 
         public static SatelliteData SatelliteData { get; set; }
 
@@ -57,6 +57,8 @@ namespace Globe3DLight.ViewModels.Designer
         public static AntennaData AntennaData { get; set; }
 
         public static GroundStationData GroundStationData { get; set; }
+
+        public static FrameViewModel Frame { get; set; }
 
         public static void InitializeContext(IServiceProvider serviceProvider)
         {
@@ -81,9 +83,9 @@ namespace Globe3DLight.ViewModels.Designer
 
             Project = containerFactory.GetProject();
 
-            Project.AddScenario(containerFactory.GetScenario("Scenario1", begin, duration));
-            Project.AddScenario(containerFactory.GetScenario("Scenario2", begin, duration));
-            Project.AddScenario(containerFactory.GetScenario("Scenario3", begin, duration));
+            Project.AddScenario(factory.CreateScenarioContainer("Scenario1", begin, duration));
+            Project.AddScenario(factory.CreateScenarioContainer("Scenario2", begin, duration));
+            Project.AddScenario(factory.CreateScenarioContainer("Scenario3", begin, duration));
             Project.CurrentScenario = Project.Scenarios.FirstOrDefault();
 
             // Database
@@ -96,6 +98,10 @@ namespace Globe3DLight.ViewModels.Designer
             RetranslatorData = DataDesigner.RetranslatorData;
             AntennaData = DataDesigner.AntennaData;
             GroundStationData = new GroundStationData("", 36.0, 42.17, 0.135, 6371.0);
+
+            // Frames
+
+            Frame = factory.CreateRootFrame();
 
             // Entities
 
@@ -156,11 +162,11 @@ namespace Globe3DLight.ViewModels.Designer
 
             //Sensor = objFactory.CreateSensor("Sensor1", null);
 
-            Project.AddChildFrame(Project.CurrentScenario.LogicalRoot.FirstOrDefault(), factory.CreateFrameState("Frame1"));
+            //Project.AddChildFrame(Project.CurrentScenario.FrameRoot.First().State, factory.CreateIdentityState());
 
             //   Template = factory.CreateTemplateContainer();
 
-            Scenario = factory.CreateScenarioContainer();
+            Scenario = factory.CreateScenarioContainer("Scenario1", begin, duration);
 
             //var dt = DateTime.Now;
             //var events = new List<BaseSatelliteEvent>();

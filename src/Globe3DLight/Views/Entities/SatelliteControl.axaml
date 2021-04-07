@@ -20,10 +20,10 @@
   
     <TabControl Grid.Row="1" Grid.ColumnSpan="2">
       <TabItem Header="OrbitNode" FontSize="14">
-        <ContentControl Content="{Binding Logical.Owner, Mode=TwoWay}"/>
+        <ContentControl Content="{Binding Frame.Owner, Mode=TwoWay}"/>
       </TabItem>
       <TabItem Header="RotationNode" FontSize="14">
-        <ContentControl Content="{Binding Logical, Mode=TwoWay}"/>
+        <ContentControl Content="{Binding Frame, Mode=TwoWay}"/>
       </TabItem>
     </TabControl>  
 

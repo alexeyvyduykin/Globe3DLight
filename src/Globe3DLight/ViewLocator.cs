@@ -26,7 +26,10 @@ namespace Globe3DLight
 
         public IControl Build(object data)
         {
-            var name = data.GetType()?.FullName?.Replace("Globe3DLight", "Globe3DLight.AvaloniaUI.Views") + "Control";
+            //var name = data.GetType()?.FullName?.Replace("Globe3DLight", "Globe3DLight.Views") + "Control";
+
+            var name = data.GetType()?.FullName?.Replace("Model", "");
+          
             if (name == null)
             {
                 return new TextBlock { Text = "Invalid Data Type" };

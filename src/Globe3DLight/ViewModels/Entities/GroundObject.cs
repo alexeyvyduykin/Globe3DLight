@@ -11,8 +11,14 @@ namespace Globe3DLight.ViewModels.Entities
     public class GroundObject : BaseEntity, IDrawable, ITargetable
     {
         private GroundObjectRenderModel _renderModel;
-        private FrameRenderModel _frameRenderModel;
-        private LogicalViewModel _logical;
+
+        private FrameViewModel _frame;
+
+        public FrameViewModel Frame
+        {
+            get => _frame;
+            set => RaiseAndSetIfChanged(ref _frame, value);
+        }
 
         public GroundObjectRenderModel RenderModel
         {
@@ -20,29 +26,17 @@ namespace Globe3DLight.ViewModels.Entities
             set => RaiseAndSetIfChanged(ref _renderModel, value);
         }
 
-        public FrameRenderModel FrameRenderModel
-        {
-            get => _frameRenderModel;
-            set => RaiseAndSetIfChanged(ref _frameRenderModel, value);
-        }
-
-        public LogicalViewModel Logical
-        {
-            get => _logical;
-            set => RaiseAndSetIfChanged(ref _logical, value);
-        }
-
         public dmat4 InverseAbsoluteModel
         {
             get
             {
-                if (_logical is IFrameable)
+                if (Frame.State is IFrameable)
                 {
-                    if (Logical is GroundObjectState groundObjectState)
+                    if (Frame.State is GroundObjectState groundObjectState)
                     {
-                        var collection = Logical.Owner;
-                        var parent = (LogicalViewModel)collection.Owner;
-                        if (parent is EarthAnimator j2000Data)
+                        var collection = Frame.Parent;
+                        var parent = collection.Parent;
+                        if (parent.State is EarthAnimator j2000Data)
                         {
                             var modelMatrix = j2000Data.ModelMatrix * groundObjectState.ModelMatrix;
                             return modelMatrix.Inverse;
@@ -58,17 +52,15 @@ namespace Globe3DLight.ViewModels.Entities
         {
             if (IsVisible == true)
             {
-                if (Logical is GroundObjectState groundObjectState)
+                if (Frame.State is GroundObjectState groundObjectState)
                 {
-                    var collection = Logical.Owner;
-                    var parent = (LogicalViewModel)collection.Owner;
-                    if (parent is EarthAnimator j2000Data)
+                    var collection = Frame.Parent;
+                    var parent = collection.Parent;
+                    if (parent.State is EarthAnimator j2000Data)
                     {
                         var m = j2000Data.ModelMatrix;
 
                         var matrix = m * groundObjectState.ModelMatrix;
-
-                        renderer.DrawFrame(dc, FrameRenderModel, matrix, scene);
 
                         renderer.DrawGroundObject(dc, RenderModel, matrix, scene);
                     }
