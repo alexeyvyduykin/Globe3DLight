@@ -4,15 +4,15 @@ using System.Globalization;
 
 namespace Globe3DLight.Spatial
 {
-    public struct Rect2I
+    public struct RectI
     {
-        private static readonly Rect2I s_empty = new();
+        private static readonly RectI s_empty = new();
         private int _x;
         private int _y;
         private int _width;
         private int _height;
 
-        public Rect2I(int x, int y, int width, int height)
+        public RectI(int x, int y, int width, int height)
         {
             _x = x;
             _y = y;
@@ -20,7 +20,7 @@ namespace Globe3DLight.Spatial
             _height = height;
         }
 
-        public Rect2I(Point2I location, SizeI size)
+        public RectI(Point2I location, SizeI size)
         {
             _x = location.X;
             _y = location.Y;
@@ -28,7 +28,7 @@ namespace Globe3DLight.Spatial
             _height = size.Height;
         }
 
-        public Rect2I(Point2I point1, Point2I point2)
+        public RectI(Point2I point1, Point2I point2)
         {
             _x = point1.X;
             _y = point1.Y;
@@ -36,9 +36,9 @@ namespace Globe3DLight.Spatial
             _height = point2.Y - point1.Y;
         }
 
-        public static Rect2I Empty => s_empty;
+        public static RectI Empty => s_empty;
 
-        public static Rect2I FromLTRB(int left, int top, int right, int bottom)
+        public static RectI FromLTRB(int left, int top, int right, int bottom)
         {
             return new(left, top, right - left, bottom - top);
         }
@@ -105,19 +105,19 @@ namespace Globe3DLight.Spatial
 
         public override bool Equals(object? obj)
         {
-            if (!(obj is Rect2I))
+            if (!(obj is RectI))
                 return false;
 
-            var comp = (Rect2I)obj;
+            var comp = (RectI)obj;
             return (comp.X == X) && (comp.Y == Y) && (comp.Width == Width) && (comp.Height == Height);
         }
 
-        public static bool operator ==(Rect2I left, Rect2I right)
+        public static bool operator ==(RectI left, RectI right)
         {
             return (left.X == right.X && left.Y == right.Y && left.Width == right.Width && left.Height == right.Height);
         }
 
-        public static bool operator !=(Rect2I left, Rect2I right)
+        public static bool operator !=(RectI left, RectI right)
         {
             return !(left == right);
         }
@@ -132,7 +132,7 @@ namespace Globe3DLight.Spatial
             return Contains(pt.X, pt.Y);
         }
 
-        public bool Contains(Rect2I rect)
+        public bool Contains(RectI rect)
         {
             return (_x <= rect.X) && ((rect.X + rect.Width) <= (_x + _width)) && (_y <= rect.Y) && ((rect.Y + rect.Height) <= (_y + _height));
         }
@@ -160,14 +160,14 @@ namespace Globe3DLight.Spatial
             Inflate(size.Width, size.Height);
         }
 
-        public static Rect2I Inflate(Rect2I rect, int x, int y)
+        public static RectI Inflate(RectI rect, int x, int y)
         {
             var r = rect;
             r.Inflate(x, y);
             return r;
         }
 
-        public void Intersect(Rect2I rect)
+        public void Intersect(RectI rect)
         {
             var result = Intersect(rect, this);
 
@@ -177,7 +177,7 @@ namespace Globe3DLight.Spatial
             _height = result.Height;
         }
 
-        public static Rect2I Intersect(Rect2I a, Rect2I b)
+        public static RectI Intersect(RectI a, RectI b)
         {
             int x1 = Math.Max(a.X, b.X);
             int x2 = Math.Min(a.X + a.Width, b.X + b.Width);
@@ -186,18 +186,18 @@ namespace Globe3DLight.Spatial
 
             if (x2 >= x1 && y2 >= y1)
             {
-                return new Rect2I(x1, y1, x2 - x1, y2 - y1);
+                return new RectI(x1, y1, x2 - x1, y2 - y1);
             }
 
             return Empty;
         }
 
-        public bool IntersectsWith(Rect2I rect)
+        public bool IntersectsWith(RectI rect)
         {
             return (rect.X < _x + _width) && (_x < (rect.X + rect.Width)) && (rect.Y < _y + _height) && (_y < rect.Y + rect.Height);
         }
 
-        public static Rect2I Union(Rect2I a, Rect2I b)
+        public static RectI Union(RectI a, RectI b)
         {
             int x1 = Math.Min(a.X, b.X);
             int x2 = Math.Max(a.X + a.Width, b.X + b.Width);
