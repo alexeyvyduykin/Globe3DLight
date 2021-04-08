@@ -98,10 +98,10 @@ namespace Globe3DLight.Spatial
             return minX <= X && X <= maxX && minY <= Y && Y <= maxY;
         }
 
-        public Rect2D ExpandToRect(double radius)
+        public RectD ExpandToRect(double radius)
         {
             double size = radius * 2;
-            return new Rect2D(X - radius, Y - radius, size, size);
+            return new RectD(X - radius, Y - radius, size, size);
         }
 
         public static bool operator <(Point2D p1, Point2D p2)

@@ -3,14 +3,14 @@ using System;
 
 namespace Globe3DLight.Spatial
 {
-    public struct Rect2D
+    public struct RectD
     {
         public readonly double X;
         public readonly double Y;
         public readonly double Width;
         public readonly double Height;
 
-        public Rect2D(double x, double y, double width, double height)
+        public RectD(double x, double y, double width, double height)
         {
             this.X = x;
             this.Y = y;
@@ -26,16 +26,16 @@ namespace Globe3DLight.Spatial
             height = this.Height;
         }
 
-        public static Rect2D FromPoints(double x1, double y1, double x2, double y2, double dx = 0.0, double dy = 0.0)
+        public static RectD FromPoints(double x1, double y1, double x2, double y2, double dx = 0.0, double dy = 0.0)
         {
             double x = (double)Math.Min(x1 + dx, x2 + dx);
             double y = (double)Math.Min(y1 + dy, y2 + dy);
             double width = Math.Abs(Math.Max(x1 + dx, x2 + dx) - x);
             double height = Math.Abs(Math.Max(y1 + dy, y2 + dy) - y);
-            return new Rect2D(x, y, width, height);
+            return new RectD(x, y, width, height);
         }
 
-        public static Rect2D FromPoints(Point2D tl, Point2D br, double dx = 0.0, double dy = 0.0)
+        public static RectD FromPoints(Point2D tl, Point2D br, double dx = 0.0, double dy = 0.0)
         {
             return FromPoints(tl.X, tl.Y, br.X, br.Y, dx, dy);
         }
@@ -91,7 +91,7 @@ namespace Globe3DLight.Spatial
                 && (y - Height <= Y);
         }
 
-        public bool IntersectsWith(Rect2D rect)
+        public bool IntersectsWith(RectD rect)
         {
             return (rect.Left <= Right)
                 && (rect.Right >= Left)
