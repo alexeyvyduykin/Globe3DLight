@@ -57,7 +57,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return res;
         }
 
-        public override void UpdateWindow(SCWindow window)
+        public override void UpdateWindow(RectI window)
         {
             switch (base.CoordType)
             {
@@ -147,7 +147,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateDynamicLabelPosition(Point2 point)
+        public override void UpdateDynamicLabelPosition(Point2D point)
         {
             if (base.CoordType == EAxisCoordType.Y)
             {

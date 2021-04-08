@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
@@ -37,7 +38,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         public abstract SCAxisInfo AxisInfo { get; }
 
-        public abstract void UpdateWindow(SCWindow window);
+        public abstract void UpdateWindow(RectI window);
         public abstract void UpdateViewport(SCViewport viewport);
         public abstract void UpdateScreen(SCViewport screen);
 

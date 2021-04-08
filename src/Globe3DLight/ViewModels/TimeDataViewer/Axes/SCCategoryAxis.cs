@@ -45,7 +45,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return res;
         }
 
-        public override void UpdateWindow(SCWindow window)
+        public override void UpdateWindow(RectI window)
         {
             switch (base.CoordType)
             {
@@ -106,7 +106,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         {
             if (TargetMarkers.ContainsKey(marker.Name) == false)
             {
-                TargetMarkers.Add(marker.Name, new Point2());
+                TargetMarkers.Add(marker.Name, new Point2D());
             }
 
             TargetMarkers[marker.Name] = marker.LocalPosition;
@@ -117,7 +117,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         }
 
         //  List<SCAxisLabelPosition> FollowLabels = new List<SCAxisLabelPosition>();
-        Dictionary<string, Point2> TargetMarkers = new Dictionary<string, Point2>();
+        Dictionary<string, Point2D> TargetMarkers = new Dictionary<string, Point2D>();
 
         public double MinValue { get; protected set; }
         public double MaxValue { get; protected set; }

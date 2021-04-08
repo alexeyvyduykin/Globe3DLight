@@ -8,7 +8,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 {
     public interface ISCTargetMarker
     {
-        Point2 LocalPosition { get; }
+        Point2D LocalPosition { get; }
         string Name { get; set; }
     }
 }

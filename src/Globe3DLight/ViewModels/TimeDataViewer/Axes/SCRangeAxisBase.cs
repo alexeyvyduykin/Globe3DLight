@@ -8,6 +8,6 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 {
     public abstract class SCRangeAxisBase : SCAxisBase
     {
-        public abstract void UpdateDynamicLabelPosition(Point2 point);
+        public abstract void UpdateDynamicLabelPosition(Point2D point);
     }
 }

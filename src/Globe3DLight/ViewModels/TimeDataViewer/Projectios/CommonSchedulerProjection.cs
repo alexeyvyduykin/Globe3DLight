@@ -7,7 +7,7 @@ using Globe3DLight.Spatial;
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
     // the base projection
-    public class CommonSchedulerProjection : SCProjection
+    public class CommonSchedulerProjection : BaseProjection
     {
         public static readonly CommonSchedulerProjection Instance = new CommonSchedulerProjection();
 
@@ -39,7 +39,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         //}
 
 
-        public override SCPoint FromSchedulerPointToPixel(double px, double py, double zoom)
+        public override Point2I FromSchedulerPointToPixel(double px, double py, double zoom)
         {
             px = Clip(px, Level0.Left, Level0.Right);
             py = Clip(py, Level0.Bottom, Level0.Top);
@@ -47,10 +47,10 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             int x = (int)(/*Level0.Left +*/ Bounds.Width * px * (zoom + 1.0) / Level0.Width);
             int y = (int)(Level0.Height/*Bounds.Height*/ - py);
 
-            return new SCPoint(x, y);
+            return new Point2I(x, y);
         }
 
-        public override Point2 FromPixelToSchedulerPoint(int x, int y, double zoom)
+        public override Point2D FromPixelToSchedulerPoint(int x, int y, double zoom)
         {
             x = Clip(x, 0, (int)(Bounds.Width * (zoom + 1.0)));
             y = Clip(y, 0, (int)Level0.Height/*Bounds.Height*/);
@@ -58,7 +58,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             double px = Level0.Left + Level0.Width * x / ((Bounds.Width) * (zoom + 1.0));
             double py = Level0.Height /*Bounds.Height*/ - y;
 
-            return new Point2(px, py);
+            return new Point2D(px, py);
         }
 
         //double GetScaleX(int zoom)
@@ -85,12 +85,12 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         //    }
         //}
 
-        public override void UpdateBounds(SCRect bounds)
+        public override void UpdateBounds(RectI bounds)
         {
             base.Bounds = bounds;
         }
 
-        public override void UpdateLevel0(SCSchedulerRect level0)
+        public override void UpdateLevel0(RectD level0)
         {
             base.Level0 = level0;
         }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
@@ -71,7 +72,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         public abstract string Name { get; }
 
         // provider projection    
-        public abstract SCProjection Projection { get; }
+        public abstract BaseProjection Projection { get; }
 
         static readonly List<SCTimeSchedulerProvider> SchedulerProviders = new List<SCTimeSchedulerProvider>();
 
@@ -109,7 +110,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         }
 
         // area of scheduler       
-        public SCSchedulerRect? Area;
+        public RectD? Area;
 
         // minimum level of zoom     
         public int MinZoom;
@@ -173,7 +174,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         }
 
         readonly CommonSchedulerProjection projection = CommonSchedulerProjection.Instance;
-        public override SCProjection Projection
+        public override BaseProjection Projection
         {
             get
             {

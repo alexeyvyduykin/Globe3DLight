@@ -29,7 +29,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        public override SCProjection Projection
+        public override BaseProjection Projection
         {
             get
             {

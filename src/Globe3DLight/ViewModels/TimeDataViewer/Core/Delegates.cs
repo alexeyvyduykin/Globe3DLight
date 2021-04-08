@@ -12,14 +12,14 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
     public delegate void SCTargetMarkerPositionChanged(ISCTargetMarker marker);
     public delegate void SchedulerTypeChanged(SCTimeSchedulerProvider type);
-    public delegate void SCPositionChanged(Point2 point);
+    public delegate void SCPositionChanged(Point2D point);
 
     public delegate void SCAxisLengthChanged(int length);
     public delegate void AxisChanged();
     public delegate void AxisRect3Changed(int w, int h);
 
 
-    public delegate void SchedulerWindowChanged(SCWindow window);
+    public delegate void SchedulerWindowChanged(RectI window);
     public delegate void SchedulerViewportChanged(SCViewport viewport);
 
     public delegate void AxisShapeChanged(SCAxisInfo info);

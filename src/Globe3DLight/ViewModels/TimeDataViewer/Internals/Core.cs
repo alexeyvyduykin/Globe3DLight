@@ -60,8 +60,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        SCWindow _windowAreaZoom;
-        public SCWindow WindowAreaZoom
+        RectI _windowAreaZoom;
+        public RectI WindowAreaZoom
         {
             get
             {
@@ -206,30 +206,30 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        public bool IsWindowArea(Point2 point)
+        public bool IsWindowArea(Point2D point)
         {
-            SCPoint sc0 = RenderOffsetAbsolute;
+            Point2I sc0 = RenderOffsetAbsolute;
 
             int x0 = Math.Max(sc0.X, 0);
             int y0 = Math.Max(sc0.Y, 0);
             int x1 = Math.Min(WindowAreaZoom.Width + sc0.X, Width__);
             int y1 = Math.Min(WindowAreaZoom.Height + sc0.Y, Height__);
-            var rect = new Rect2(x0, y0, Math.Abs(x1 - x0), Math.Abs(y1 - y0));
+            var rect = new RectD(x0, y0, Math.Abs(x1 - x0), Math.Abs(y1 - y0));
 
             return rect.Contains(point);
         }
 
-        public Rect2 RenderVisibleWindow
+        public RectD RenderVisibleWindow
         {
             get
             {
-                SCPoint sc0 = RenderOffsetAbsolute;
+                Point2I sc0 = RenderOffsetAbsolute;
 
-                var result = SCRect.Intersect(
-                    new SCRect(0, 0, Width__, Height__),
-                    new SCRect(sc0.X, sc0.Y, WindowAreaZoom.Width, WindowAreaZoom.Height));
+                var result = RectI.Intersect(
+                    new RectI(0, 0, Width__, Height__),
+                    new RectI(sc0.X, sc0.Y, WindowAreaZoom.Width, WindowAreaZoom.Height));
 
-                return new Rect2(result.X, result.Y, result.Width, result.Height);
+                return new RectD(result.X, result.Y, result.Width, result.Height);
 
                 //int x0 = Math.Max(sc0.X, 0);
                 //int y0 = Math.Max(sc0.Y, 0);
@@ -240,9 +240,9 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        SCPoint _renderOffset;
+        Point2I _renderOffset;
 
-        public SCPoint RenderOffsetAbsolute
+        public Point2I RenderOffsetAbsolute
         {
             get
             {
@@ -254,7 +254,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        SCPoint RenderOffsetValidate(SCPoint offset)
+        Point2I RenderOffsetValidate(Point2I offset)
         {
             var x = offset.X;
             var y = offset.Y;
@@ -265,16 +265,16 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             y = Math.Min(y, 0);
             y = Math.Max(y + WindowAreaZoom.Height, this.Height__) - WindowAreaZoom.Height;
 
-            return new SCPoint(x, y);
+            return new Point2I(x, y);
         }
 
-        public SCPoint mouseDown;
-        public SCPoint mouseCurrent;
+        public Point2I mouseDown;
+        public Point2I mouseCurrent;
 
-        public Point2 mouseCurrentAbsolute;
+        public Point2D mouseCurrentAbsolute;
 
-        public SCPoint ZoomScreenPosition/* ZoomPositionAbsolute*/ { get; set; }
-        public Point2 ZoomPositionLocal
+        public Point2I ZoomScreenPosition/* ZoomPositionAbsolute*/ { get; set; }
+        public Point2D ZoomPositionLocal
         {
             get
             {
@@ -297,11 +297,11 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         bool IsViewportInit { get; set; } = false;
 
-        public SCWindow RenderWindowArea
+        public RectI RenderWindowArea
         {
             get
             {
-                return new SCWindow(RenderOffsetAbsolute.X, RenderOffsetAbsolute.Y, WindowAreaZoom.Width, WindowAreaZoom.Height);
+                return new RectI(RenderOffsetAbsolute.X, RenderOffsetAbsolute.Y, WindowAreaZoom.Width, WindowAreaZoom.Height);
             }
         }
 
@@ -329,7 +329,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
             return false;
         }
-        public SCPoint GetRenderOffset(Point2 pos)
+        public Point2I GetRenderOffset(Point2D pos)
         {
             var xAbs = AxisX.FromLocalToAbsolute(pos.X);
             var yAbs = AxisY.FromLocalToAbsolute(pos.Y);
@@ -343,10 +343,10 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             // var offsetX = wz / 2.0 - this.Width__ / 2.0;
             // var offsetY = hz / 2.0 - this.Height__ / 2.0;
 
-            return new SCPoint(offsetX, offsetY);
+            return new Point2I(offsetX, offsetY);
         }
 
-        SCWindow CreateWindowAreaZoom(int zm, double sclX, double sclY)
+        RectI CreateWindowAreaZoom(int zm, double sclX, double sclY)
         {
             var w0 = this.Width__;
             var h0 = this.Height__;
@@ -357,7 +357,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             int w = w0 + (int)(zm * stepx);
             int h = h0 + (int)(zm * stepy);
 
-            return new SCWindow(0, 0, w, h);
+            return new RectI(0, 0, w, h);
         }
 
         private SCViewport CreateViewportAreaScreen__2()
@@ -374,7 +374,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         SCViewport CreateViewportAreaScreen__()
         {
-            SCWindow Abs = WindowAreaZoom;
+            RectI Abs = WindowAreaZoom;
             SCViewport Loc = ViewportAreaData;
 
             int x00 = -RenderOffsetAbsolute.X;
@@ -402,7 +402,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         SCViewport CreateViewportAreaScreen()
         {
-            SCWindow Abs = WindowAreaZoom;
+            RectI Abs = WindowAreaZoom;
             SCViewport Loc = ViewportAreaData;
 
             int x00 = -RenderOffsetAbsolute.X;
@@ -446,13 +446,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         #region Dragging
 
-        public SCPoint dragPoint;
+        public Point2I dragPoint;
 
         public bool IsDragging = false;
 
         public bool CanDragMap = true;
 
-        public void BeginDrag(SCPoint pt)
+        public void BeginDrag(Point2I pt)
         {
             dragPoint.X = pt.X - RenderOffsetAbsolute.X;
             dragPoint.Y = pt.Y - RenderOffsetAbsolute.Y;
@@ -462,17 +462,17 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         public void EndDrag()
         {
             IsDragging = false;
-            mouseDown = SCPoint.Empty;
+            mouseDown = Point2I.Empty;
         }
 
 
 
-        public void Drag(SCPoint pt)
+        public void Drag(Point2I pt)
         {
             //  _renderOffset.X = pt.X - dragPoint.X;
             //  _renderOffset.Y = pt.Y - dragPoint.Y;
 
-            RenderOffsetAbsolute = new SCPoint(pt.X - dragPoint.X, pt.Y - dragPoint.Y);
+            RenderOffsetAbsolute = new Point2I(pt.X - dragPoint.X, pt.Y - dragPoint.Y);
 
             if (IsDragging == true)
             {
@@ -488,19 +488,19 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         #endregion
 
-        public Rect2 RenderSize
+        public RectD RenderSize
         {
             get
             {
-                return new Rect2(RenderOffsetAbsolute.X, RenderOffsetAbsolute.Y, WindowAreaZoom.Width, WindowAreaZoom.Height);
+                return new RectD(RenderOffsetAbsolute.X, RenderOffsetAbsolute.Y, WindowAreaZoom.Width, WindowAreaZoom.Height);
             }
         }
 
-        public SCWindow Screen
+        public RectI Screen
         {
             get
             {
-                return new SCWindow(0, 0, Width__, Height__);
+                return new RectI(0, 0, Width__, Height__);
             }
         }
 
@@ -518,51 +518,51 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
 
 
-        public Point2 FromScreenToLocal(int x, int y)
+        public Point2D FromScreenToLocal(int x, int y)
         {
-            SCPoint pLocal = new SCPoint(x, y);
+            var pLocal = new Point2I(x, y);
 
             pLocal.OffsetNegative(RenderOffsetAbsolute);
 
-            return new Point2(
+            return new Point2D(
                 AxisX.FromAbsoluteToLocal(pLocal.X),
                 AxisY.FromAbsoluteToLocal(pLocal.Y));
 
             //   return Provider.Projection.FromPixelToSchedulerPoint(pLocal, Zoom);
         }
 
-        public Point2 FromAbsoluteToLocal(int x, int y)
+        public Point2D FromAbsoluteToLocal(int x, int y)
         {
-            SCPoint pLocal = new SCPoint(x, y);
+            var pLocal = new Point2I(x, y);
 
-            return new Point2(
+            return new Point2D(
                 AxisX.FromAbsoluteToLocal(pLocal.X),
                 AxisY.FromAbsoluteToLocal(pLocal.Y));
         }
 
-        public SCPoint FromLocalToScreen(Point2 shedulerPoint)
+        public Point2I FromLocalToScreen(Point2D shedulerPoint)
         {
-            // SCPoint pLocal = Provider.Projection.FromSchedulerPointToPixel(shedulerPoint, Zoom);
+            // Point2I pLocal = Provider.Projection.FromSchedulerPointToPixel(shedulerPoint, Zoom);
 
-            SCPoint pLocal = new SCPoint(
+            var pLocal = new Point2I(
                 AxisX.FromLocalToAbsolute(shedulerPoint.X),
                 AxisY.FromLocalToAbsolute(shedulerPoint.Y));
 
 
             pLocal.Offset(RenderOffsetAbsolute);
 
-            return new SCPoint(pLocal.X, pLocal.Y);
+            return new Point2I(pLocal.X, pLocal.Y);
         }
 
-        public SCPoint FromLocalToAbsolute(Point2 shedulerPoint)
+        public Point2I FromLocalToAbsolute(Point2D shedulerPoint)
         {
-            // SCPoint pLocal = Provider.Projection.FromSchedulerPointToPixel(shedulerPoint, Zoom);
+            // Point2I pLocal = Provider.Projection.FromSchedulerPointToPixel(shedulerPoint, Zoom);
 
-            SCPoint pLocal = new SCPoint(
+            var pLocal = new Point2I(
                 AxisX.FromLocalToAbsolute(shedulerPoint.X),
                 AxisY.FromLocalToAbsolute(shedulerPoint.Y));
 
-            return new SCPoint(pLocal.X, pLocal.Y);
+            return new Point2I(pLocal.X, pLocal.Y);
         }
 
         #endregion
@@ -605,11 +605,11 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 {
                     WindowAreaZoom = CreateWindowAreaZoom(i, scaleX, scaleY);
 
-                    SCPoint p0 = new SCPoint(
+                    var p0 = new Point2I(
                         AxisX.FromLocalToAbsolute(rect.Left),
                         AxisY.FromLocalToAbsolute(rect.Bottom)
                         );
-                    SCPoint p1 = new SCPoint(
+                    var p1 = new Point2I(
                         AxisX.FromLocalToAbsolute(rect.Right),
                         AxisY.FromLocalToAbsolute(rect.Top)
                         );
