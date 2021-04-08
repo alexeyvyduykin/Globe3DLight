@@ -1,19 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿#nullable enable
+using System;
 
 namespace Globe3DLight.Spatial
 {
-    public struct Rect2
+    public struct Rect2D
     {
         public readonly double X;
         public readonly double Y;
         public readonly double Width;
         public readonly double Height;
 
-        public Rect2(double x, double y, double width, double height)
+        public Rect2D(double x, double y, double width, double height)
         {
             this.X = x;
             this.Y = y;
@@ -29,16 +26,16 @@ namespace Globe3DLight.Spatial
             height = this.Height;
         }
 
-        public static Rect2 FromPoints(double x1, double y1, double x2, double y2, double dx = 0.0, double dy = 0.0)
+        public static Rect2D FromPoints(double x1, double y1, double x2, double y2, double dx = 0.0, double dy = 0.0)
         {
             double x = (double)Math.Min(x1 + dx, x2 + dx);
             double y = (double)Math.Min(y1 + dy, y2 + dy);
             double width = Math.Abs(Math.Max(x1 + dx, x2 + dx) - x);
             double height = Math.Abs(Math.Max(y1 + dy, y2 + dy) - y);
-            return new Rect2(x, y, width, height);
+            return new Rect2D(x, y, width, height);
         }
 
-        public static Rect2 FromPoints(Point2 tl, Point2 br, double dx = 0.0, double dy = 0.0)
+        public static Rect2D FromPoints(Point2D tl, Point2D br, double dx = 0.0, double dy = 0.0)
         {
             return FromPoints(tl.X, tl.Y, br.X, br.Y, dx, dy);
         }
@@ -63,22 +60,22 @@ namespace Globe3DLight.Spatial
             get { return X + Width; }
         }
 
-        public Point2 Center
+        public Point2D Center
         {
-            get { return new Point2(X + (Width / 2), Y + (Height / 2)); }
+            get { return new Point2D(X + (Width / 2), Y + (Height / 2)); }
         }
 
-        public Point2 TopLeft
+        public Point2D TopLeft
         {
-            get { return new Point2(X, Y); }
+            get { return new Point2D(X, Y); }
         }
 
-        public Point2 BottomRight
+        public Point2D BottomRight
         {
-            get { return new Point2(X + Width, Y + Height); }
+            get { return new Point2D(X + Width, Y + Height); }
         }
 
-        public bool Contains(Point2 point)
+        public bool Contains(Point2D point)
         {
             return (point.X >= X)
                 && (point.X - Width <= X)
@@ -94,7 +91,7 @@ namespace Globe3DLight.Spatial
                 && (y - Height <= Y);
         }
 
-        public bool IntersectsWith(Rect2 rect)
+        public bool IntersectsWith(Rect2D rect)
         {
             return (rect.Left <= Right)
                 && (rect.Right >= Left)
