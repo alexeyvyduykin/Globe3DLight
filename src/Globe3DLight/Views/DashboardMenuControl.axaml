@@ -1,15 +1,18 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Globe3DLight.Views.DashboardMenuControl"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="Globe3DLight.Views.DashboardMenuControl">
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"     
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"            
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True"
+             >
     
     <Menu x:CompileBindings="False">
         <MenuItem Header="_File">
-            <MenuItem Header="New"/>
+            <MenuItem Header="Update data\project1.json with Database" Command="{Binding OnFromDatabaseToJson}"/>
             <Separator/>
-            <MenuItem Header="Exit"/>
+            <MenuItem Header="Exit" Command="{Binding Platform.OnExit}"/>
         </MenuItem>
     </Menu>
     
