@@ -13,13 +13,14 @@
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
              xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
              xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
+             xmlns:Scheduler="clr-namespace:Globe3DLight.Views.TimeDataViewer"
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"
              d:DesignWidth="1200" d:DesignHeight="580"
              x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True"
              >
 
-    <Grid ShowGridLines="False" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,20">
+    <Grid ShowGridLines="False" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,300,20">
 
         <TabControl Padding="6,0,0,0" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
             <TabItem Header="Project" FontSize="20">
@@ -39,6 +40,8 @@
 
         <views:ScenarioControl x:Name="Scenario" Grid.Column="2" Grid.Row="2"/>
 
+        <Scheduler:CustomSchedulerControl Grid.Column="2" Grid.Row="3"></Scheduler:CustomSchedulerControl>
+        
         <GridSplitter x:Name="RightGridSplitter" Grid.Column="3" Grid.Row="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
 
         <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2">

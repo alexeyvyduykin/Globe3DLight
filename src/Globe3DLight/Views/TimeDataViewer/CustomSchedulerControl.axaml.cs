@@ -18,6 +18,8 @@ namespace Globe3DLight.Views.TimeDataViewer
             AvaloniaXamlLoader.Load(this);
 
             Scheduler = this.FindControl<SchedulerControl>("Scheduler");
+
+            Init();
         }
     
         SchedulerControl Scheduler;
