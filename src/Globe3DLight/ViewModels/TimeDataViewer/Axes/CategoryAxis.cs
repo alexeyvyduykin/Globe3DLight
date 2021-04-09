@@ -6,11 +6,17 @@ using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
-    public class SCCategoryAxis : SCAxisBase
+    public class CategoryAxis : BaseAxis
     {
-        public SCCategoryAxis()
+        private AxisInfo _axisInfo;
+        private bool _dirty = true;
+        //  List<SCAxisLabelPosition> FollowLabels = new List<SCAxisLabelPosition>();
+        private readonly Dictionary<string, Point2D> _targetMarkers;
+
+        public CategoryAxis()
         {
-            base.IsDynamicLabelEnable = false;
+            _targetMarkers = new Dictionary<string, Point2D>();
+            IsDynamicLabelEnable = false;
         }
 
         public override double FromAbsoluteToLocal(int pixel)
@@ -64,7 +70,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             //      base.AreaMap = window;
         }
 
-        public override void UpdateViewport(SCViewport viewport)
+        public override void UpdateViewport(RectD viewport)
         {
             switch (base.CoordType)
             {
@@ -83,7 +89,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateScreen(SCViewport screen)
+        public override void UpdateScreen(RectD screen)
         {
             switch (base.CoordType)
             {
@@ -98,55 +104,54 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 default:
                     break;
             }
-            dirty = true;
+            _dirty = true;
             base.UpdateAxis();
         }
 
-        public override void UpdateFollowLabelPosition(ISCTargetMarker marker)
+        public override void UpdateFollowLabelPosition(BaseTargetMarker marker)
         {
-            if (TargetMarkers.ContainsKey(marker.Name) == false)
+            if (_targetMarkers.ContainsKey(marker.Name) == false)
             {
-                TargetMarkers.Add(marker.Name, new Point2D());
+                _targetMarkers.Add(marker.Name, new Point2D());
             }
 
-            TargetMarkers[marker.Name] = marker.LocalPosition;
+            _targetMarkers[marker.Name] = marker.LocalPosition;
 
-            dirty = true;
+            _dirty = true;
 
             base.UpdateAxis();
         }
 
-        //  List<SCAxisLabelPosition> FollowLabels = new List<SCAxisLabelPosition>();
-        Dictionary<string, Point2D> TargetMarkers = new Dictionary<string, Point2D>();
-
         public double MinValue { get; protected set; }
+
         public double MaxValue { get; protected set; }
 
         public double MinScreenValue { get; protected set; }
+
         public double MaxScreenValue { get; protected set; }
 
         public int MinPixel { get; protected set; }
+
         public int MaxPixel { get; protected set; }
 
-
-        void UpdateAxisInfo()
+        private void UpdateAxisInfo()
         {
-            _axisInfo = new SCAxisInfo()
+            _axisInfo = new AxisInfo()
             {
                 Labels = null,
                 CoordType = base.CoordType,
                 MinValue = MinScreenValue,
                 MaxValue = MaxScreenValue,
-                FollowLabels = new List<SCAxisLabelPosition>(),
+                FollowLabels = new List<AxisLabelPosition>(),
                 IsDynamicLabelEnable = false,
-                IsFoolowLabelsMode = true,
+                IsFollowLabelsMode = true,
             };
 
-            foreach (var item in TargetMarkers)
+            foreach (var item in _targetMarkers)
             {
                 if (base.CoordType == EAxisCoordType.X)
                 {
-                    _axisInfo.FollowLabels.Add(new SCAxisLabelPosition()
+                    _axisInfo.FollowLabels.Add(new AxisLabelPosition()
                     {
                         Value = item.Value.X,
                         Label = item.Key,
@@ -154,7 +159,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 }
                 else if (base.CoordType == EAxisCoordType.Y)
                 {
-                    _axisInfo.FollowLabels.Add(new SCAxisLabelPosition()
+                    _axisInfo.FollowLabels.Add(new AxisLabelPosition()
                     {
                         Value = item.Value.Y,
                         Label = item.Key,
@@ -163,16 +168,14 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        SCAxisInfo _axisInfo;
-        bool dirty = true;
-        public override SCAxisInfo AxisInfo
+        public override AxisInfo AxisInfo
         {
             get
             {
-                if (dirty == true)
+                if (_dirty == true)
                 {
                     UpdateAxisInfo();
-                    dirty = false;
+                    _dirty = false;
                 }
 
                 return _axisInfo;

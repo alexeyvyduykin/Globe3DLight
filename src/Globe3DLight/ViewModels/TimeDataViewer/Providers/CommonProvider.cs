@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
-    public abstract class TimeSchedulerProviderBase : SCTimeSchedulerProvider
+    public abstract class TimeSchedulerProviderBase : BaseTimeSchedulerProvider
     {
         public TimeSchedulerProviderBase()
         {
@@ -58,31 +58,20 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
     // GoogleMap provider   
     public class CommonTimeSchedulerProvider : TimeSchedulerProviderBase
     {
+        private readonly string _name = "GoogleMap";
         public static readonly CommonTimeSchedulerProvider Instance;
 
-        CommonTimeSchedulerProvider() { }
+        public CommonTimeSchedulerProvider() { }
 
         static CommonTimeSchedulerProvider()
         {
             Instance = new CommonTimeSchedulerProvider();
         }
 
-        readonly Guid id = new Guid("D7287DA0-A7FF-405F-8166-B7BAF26D066C");
-        public override Guid Id
-        {
-            get
-            {
-                return id;
-            }
-        }
+        private readonly Guid id = new Guid("D7287DA0-A7FF-405F-8166-B7BAF26D066C");
 
-        readonly string name = "GoogleMap";
-        public override string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public override Guid Id => id;
+
+        public override string Name => _name;
     }
 }

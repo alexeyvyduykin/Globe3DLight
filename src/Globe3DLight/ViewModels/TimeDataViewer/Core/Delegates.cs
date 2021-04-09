@@ -10,8 +10,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
     public delegate void SCZoomChanged();
     public delegate void SCSizeChanged(int width, int height);
 
-    public delegate void SCTargetMarkerPositionChanged(ISCTargetMarker marker);
-    public delegate void SchedulerTypeChanged(SCTimeSchedulerProvider type);
+    public delegate void SCTargetMarkerPositionChanged(BaseTargetMarker marker);
+    public delegate void SchedulerTypeChanged(BaseTimeSchedulerProvider type);
     public delegate void SCPositionChanged(Point2D point);
 
     public delegate void SCAxisLengthChanged(int length);
@@ -20,8 +20,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
 
     public delegate void SchedulerWindowChanged(RectI window);
-    public delegate void SchedulerViewportChanged(SCViewport viewport);
+    public delegate void SchedulerViewportChanged(RectD viewport);
 
-    public delegate void AxisShapeChanged(SCAxisInfo info);
-
+    public delegate void AxisShapeChanged(AxisInfo info);
 }

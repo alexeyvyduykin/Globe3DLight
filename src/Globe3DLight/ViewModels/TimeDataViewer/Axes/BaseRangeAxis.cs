@@ -6,9 +6,8 @@ using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
-    public interface ISCTargetMarker
+    public abstract class BaseRangeAxis : BaseAxis
     {
-        Point2D LocalPosition { get; }
-        string Name { get; set; }
+        public abstract void UpdateDynamicLabelPosition(Point2D point);
     }
 }

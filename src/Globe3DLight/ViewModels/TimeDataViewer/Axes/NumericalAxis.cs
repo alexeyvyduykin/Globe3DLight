@@ -6,9 +6,15 @@ using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
-    public class SCNumericalAxis : SCRangeAxisBase
+    public class NumericalAxis : BaseRangeAxis
     {
-        public SCNumericalAxis() { }
+        private AxisLabelPosition _dynamicLabel;
+        private IList<AxisLabelPosition> _followLabels;
+
+        public NumericalAxis() 
+        {
+            _followLabels = new List<AxisLabelPosition>();
+        }
 
         public override double FromAbsoluteToLocal(int pixel)
         {
@@ -92,7 +98,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             //      base.AreaMap = window;
         }
 
-        public override void UpdateViewport(SCViewport viewport)
+        public override void UpdateViewport(RectD viewport)
         {
             switch (base.CoordType)
             {
@@ -128,7 +134,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateScreen(SCViewport screen)
+        public override void UpdateScreen(RectD screen)
         {
             switch (base.CoordType)
             {
@@ -151,7 +157,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         {
             if (base.CoordType == EAxisCoordType.Y)
             {
-                DynamicLabel = new SCAxisLabelPosition()
+                _dynamicLabel = new AxisLabelPosition()
                 {
                     Label = string.Format("{0:F2}", point.Y),
                     Value = point.Y
@@ -159,7 +165,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
             else if (base.CoordType == EAxisCoordType.X)
             {
-                DynamicLabel = new SCAxisLabelPosition()
+                _dynamicLabel = new AxisLabelPosition()
                 {
                     Label = string.Format("{0:F2}", point.X),
                     Value = point.X
@@ -169,35 +175,35 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateFollowLabelPosition(ISCTargetMarker marker)
+        public override void UpdateFollowLabelPosition(BaseTargetMarker marker)
         {
         }
 
-        SCAxisLabelPosition DynamicLabel;
-        List<SCAxisLabelPosition> FollowLabels = new List<SCAxisLabelPosition>();
-
         public double MinValue { get; protected set; }
+
         public double MaxValue { get; protected set; }
 
         public double MinScreenValue { get; protected set; }
+
         public double MaxScreenValue { get; protected set; }
 
         public int MinPixel { get; protected set; }
+
         public int MaxPixel { get; protected set; }
 
         //   int LengthPixel { get { return MaxPixel - MinPixel; } }
 
-        public override SCAxisInfo AxisInfo
+        public override AxisInfo AxisInfo
         {
             get
             {
-                SCAxisInfo axisInfo = new SCAxisInfo()
+                AxisInfo axisInfo = new AxisInfo()
                 {
-                    Labels = new List<SCAxisLabelPosition>(),
+                    Labels = new List<AxisLabelPosition>(),
                     CoordType = base.CoordType,
                     MinValue = MinScreenValue,
                     MaxValue = MaxScreenValue,
-                    FollowLabels = new List<SCAxisLabelPosition>()
+                    FollowLabels = new List<AxisLabelPosition>()
                 };
 
                 int count = 10;
@@ -207,11 +213,11 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 if (step == 0.0)
                     return axisInfo;
 
-                if (this.FollowLabels.Count == 0)
+                if (_followLabels.Count == 0)
                 {
                     for (int i = 0; i < count + 1; i++)
                     {
-                        axisInfo.Labels.Add(new SCAxisLabelPosition()
+                        axisInfo.Labels.Add(new AxisLabelPosition()
                         {
                             Label = string.Format("{0:F2}", MinScreenValue + i * step),
                             Value = MinScreenValue + i * step
@@ -220,9 +226,9 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 }
                 else
                 {
-                    axisInfo.IsFoolowLabelsMode = true;
+                    axisInfo.IsFollowLabelsMode = true;
 
-                    foreach (var item in FollowLabels)
+                    foreach (var item in _followLabels)
                     {
                         axisInfo.FollowLabels.Add(item);
                     }
@@ -235,7 +241,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 if (base.IsDynamicLabelEnable == true)
                 {
                     axisInfo.IsDynamicLabelEnable = true;
-                    axisInfo.DynamicLabel = DynamicLabel;
+                    axisInfo.DynamicLabel = _dynamicLabel;
                 }
 
                 return axisInfo;

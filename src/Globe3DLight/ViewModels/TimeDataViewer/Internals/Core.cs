@@ -1,4 +1,4 @@
-﻿#nullable enable
+﻿#nullable disable
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,13 +9,37 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 {
     public class Core
     {
-        internal int Width__;
-        internal int Height__;
+        private int _width;
+        private int _height;
+        private BaseAxis _axisX;
+        private BaseAxis _axisY;
+        private RectI _windowAreaZoom;
+        private RectD _viewportAreaScreen;
+        private RectD _viewportAreaData = new RectD();
+        private Point2I _renderOffset;
+        private Point2I _mouseDown;
+        private Point2I _mouseCurrent;
+        private Point2D _mouseCurrentAbsolute;
+        private int _zoom;
+        private Point2I _dragPoint;
+        private bool _isDragging = false;
+        private bool _canDragMap = true;
+        private int _maxZoom = 100;
+        private int _minZoom = 0;
+        //    public MouseWheelZoomType MouseWheelZoomType = MouseWheelZoomType.ViewCenter;
+        private bool _mouseWheelZoomEnabled = true;
+        private double _scaleX = 1.0; // 30 %        
+        private double _scaleY = 0.0;
 
-        public int TrueHeight { get { return Height__; } }
+        public event SCDragChanged OnDragChanged;
+        public event SCZoomChanged OnZoomChanged;
+        public event SCSizeChanged OnSizeChanged;
 
-        SCAxisBase _axisX, _axisY;
-        public SCAxisBase AxisX
+        public Core() { }
+
+        public int TrueHeight => _height;
+    
+        public BaseAxis AxisX
         {
             get
             {
@@ -36,7 +60,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 _axisX = value;
             }
         }
-        public SCAxisBase AxisY
+
+        public BaseAxis AxisY
         {
             get
             {
@@ -59,8 +84,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 _axisY = value;
             }
         }
-
-        RectI _windowAreaZoom;
+    
         public RectI WindowAreaZoom
         {
             get
@@ -81,9 +105,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 }
             }
         }
-
-        SCViewport _viewportAreaScreen;
-        public SCViewport ViewportAreaScreen
+     
+        public RectD ViewportAreaScreen
         {
             get
             {
@@ -91,14 +114,14 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
             private set
             {
-                if (_viewportAreaScreen != value)
-                {
+               // if (_viewportAreaScreen != value)
+               // {
                     _viewportAreaScreen = value;
 
 
-                    if (AxisX is SCDateTimeAxis)
+                    if (AxisX is TimeAxis)
                     {
-                        var axis = AxisX as SCDateTimeAxis;
+                        var axis = AxisX as TimeAxis;
                         string x = string.Format("{0:dd/MMM/yyyy HH:mm}", axis.Epoch0.AddSeconds(value.X));
                         string w = TimeSpan.FromSeconds(value.Width).ToString(@"dd\.hh\:mm\:ss");
                         Debug.WriteLine("Core: ViewportAreaScreen -> X = {0}; Y = {1}; W = {2}; H = {3}", x, value.Y, w, value.Height);
@@ -113,19 +136,18 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
                     //  if (OnSchedulerViewportChanged != null)
                     //      OnSchedulerViewportChanged(_currentViewportArea);
-                }
+               // }
             }
         }
-
-        private SCViewport _viewportAreaData = SCViewport.Empty;
-        public SCViewport ViewportAreaData
+   
+        public RectD ViewportAreaData
         {
             get
             {
-                if (_viewportAreaData.IsEmpty == true)
-                {
-                    //      _viewportAreaData = new SCViewport(0.0, 0.0, 1.0, 1.0);
-                }
+                //if (_viewportAreaData.IsEmpty == true)
+                //{
+                //    //      _viewportAreaData = new SCViewport(0.0, 0.0, 1.0, 1.0);
+                //}
 
                 return _viewportAreaData;
             }
@@ -133,9 +155,9 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             {
                 _viewportAreaData = value;
 
-                if (AxisX is SCDateTimeAxis)
+                if (AxisX is TimeAxis)
                 {
-                    var axis = AxisX as SCDateTimeAxis;
+                    var axis = AxisX as TimeAxis;
                     string x = string.Format("{0:dd/MMM/yyyy HH:mm}", axis.Epoch0.AddSeconds(value.X));
                     string w = TimeSpan.FromSeconds(value.Width).ToString(@"dd\.hh\:mm\:ss");
                     Debug.WriteLine("Core: ViewportAreaData -> X = {0}; Y = {1}; W = {2}; H = {3}", x, value.Y, w, value.Height);
@@ -154,13 +176,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 IsViewportInit = true;
             }
         }
-
-
-
-
-        public Core() { }
-
-        public void SetViewportArea(SCViewport viewport)
+   
+        public void SetViewportArea(RectD viewport)
         {
             ViewportAreaData = viewport;
             ViewportAreaScreen = viewport;
@@ -169,12 +186,11 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         // size
         public void UpdateSize(int width, int height)
         {
-            var temp_pos = FromScreenToLocal(Width__ / 2, Height__ / 2);
-
+            var temp_pos = FromScreenToLocal(_width / 2, _height / 2);
 
             //========================================
-            this.Width__ = width;
-            this.Height__ = height;
+            _width = width;
+            _height = height;
 
             if (OnSizeChanged != null)
             {
@@ -184,7 +200,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             Debug.WriteLine("OnSizeChanged : Core, w: " + width + ", h: " + height);
             //========================================
 
-            WindowAreaZoom = CreateWindowAreaZoom(_zoom, scaleX, scaleY);
+            WindowAreaZoom = CreateWindowAreaZoom(_zoom, _scaleX, _scaleY);
 
             RenderOffsetAbsolute = GetRenderOffset(temp_pos);
 
@@ -197,14 +213,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             //    ViewportAreaScreen = CreateViewportAreaScreen();
         }
 
-
-        public bool IsStarted
-        {
-            get
-            {
-                return IsViewportInit == true;
-            }
-        }
+        public bool IsStarted => IsViewportInit == true;
 
         public bool IsWindowArea(Point2D point)
         {
@@ -212,8 +221,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
             int x0 = Math.Max(sc0.X, 0);
             int y0 = Math.Max(sc0.Y, 0);
-            int x1 = Math.Min(WindowAreaZoom.Width + sc0.X, Width__);
-            int y1 = Math.Min(WindowAreaZoom.Height + sc0.Y, Height__);
+            int x1 = Math.Min(WindowAreaZoom.Width + sc0.X, _width);
+            int y1 = Math.Min(WindowAreaZoom.Height + sc0.Y, _height);
             var rect = new RectD(x0, y0, Math.Abs(x1 - x0), Math.Abs(y1 - y0));
 
             return rect.Contains(point);
@@ -226,7 +235,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 Point2I sc0 = RenderOffsetAbsolute;
 
                 var result = RectI.Intersect(
-                    new RectI(0, 0, Width__, Height__),
+                    new RectI(0, 0, _width, _height),
                     new RectI(sc0.X, sc0.Y, WindowAreaZoom.Width, WindowAreaZoom.Height));
 
                 return new RectD(result.X, result.Y, result.Width, result.Height);
@@ -239,9 +248,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 //return new Rect(x0, y0, x1 - x0, y1 - y0);
             }
         }
-
-        Point2I _renderOffset;
-
+      
         public Point2I RenderOffsetAbsolute
         {
             get
@@ -254,26 +261,22 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        Point2I RenderOffsetValidate(Point2I offset)
+        private Point2I RenderOffsetValidate(Point2I offset)
         {
             var x = offset.X;
             var y = offset.Y;
 
             x = Math.Min(x, 0);
-            x = Math.Max(x + WindowAreaZoom.Width, this.Width__) - WindowAreaZoom.Width;
+            x = Math.Max(x + WindowAreaZoom.Width, _width) - WindowAreaZoom.Width;
 
             y = Math.Min(y, 0);
-            y = Math.Max(y + WindowAreaZoom.Height, this.Height__) - WindowAreaZoom.Height;
+            y = Math.Max(y + WindowAreaZoom.Height, _height) - WindowAreaZoom.Height;
 
             return new Point2I(x, y);
         }
 
-        public Point2I mouseDown;
-        public Point2I mouseCurrent;
-
-        public Point2D mouseCurrentAbsolute;
-
-        public Point2I ZoomScreenPosition/* ZoomPositionAbsolute*/ { get; set; }
+        public Point2I ZoomScreenPosition { get; set; }
+        
         public Point2D ZoomPositionLocal
         {
             get
@@ -282,18 +285,17 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-        internal int maxZoom = 100;
-        internal int minZoom = 0;
+        public int MaxZoom 
+        {
+            get => _maxZoom; 
+            set => _maxZoom = value; 
+        }
 
-        public int MaxZoom { get { return maxZoom; } set { maxZoom = value; } }
-        public int MinZoom { get { return minZoom; } set { minZoom = value; } }
-
-        //    public MouseWheelZoomType MouseWheelZoomType = MouseWheelZoomType.ViewCenter;
-        public bool MouseWheelZoomEnabled = true;
-
-        double scaleX = 1.0; // 30 %        
-        double scaleY = 0.0;
-
+        public int MinZoom 
+        {
+            get => _minZoom; 
+            set => _minZoom = value;
+        }
 
         bool IsViewportInit { get; set; } = false;
 
@@ -305,18 +307,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
-
-
-        // Drag
-        // Zoom
-
-        bool Zooming(int zm)
+        private bool Zooming(int zm)
         {
             if (IsStarted == true)
             {
                 var posLoc = ZoomPositionLocal;
 
-                WindowAreaZoom = CreateWindowAreaZoom(zm, scaleX, scaleY);
+                WindowAreaZoom = CreateWindowAreaZoom(zm, _scaleX, _scaleY);
 
                 RenderOffsetAbsolute = GetRenderOffset(posLoc);
 
@@ -329,6 +326,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
             return false;
         }
+
         public Point2I GetRenderOffset(Point2D pos)
         {
             var xAbs = AxisX.FromLocalToAbsolute(pos.X);
@@ -337,8 +335,8 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             //  var wz = WindowAreaZoom.Width;
             //  var hz = WindowAreaZoom.Height;
 
-            var offsetX = Width__ / 2 - xAbs;
-            var offsetY = Height__ / 2 - yAbs;
+            var offsetX = _width / 2 - xAbs;
+            var offsetY = _height / 2 - yAbs;
 
             // var offsetX = wz / 2.0 - this.Width__ / 2.0;
             // var offsetY = hz / 2.0 - this.Height__ / 2.0;
@@ -346,10 +344,10 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return new Point2I(offsetX, offsetY);
         }
 
-        RectI CreateWindowAreaZoom(int zm, double sclX, double sclY)
+        private RectI CreateWindowAreaZoom(int zm, double sclX, double sclY)
         {
-            var w0 = this.Width__;
-            var h0 = this.Height__;
+            var w0 = _width;
+            var h0 = _height;
 
             double stepx = w0 * sclX;
             double stepy = h0 * sclY;
@@ -360,29 +358,29 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return new RectI(0, 0, w, h);
         }
 
-        private SCViewport CreateViewportAreaScreen__2()
+        private RectD CreateViewportAreaScreen__2()
         {
             var wnd1 = RenderVisibleWindow;
             //  var wnd0 = WindowArea0;
             var VpData = ViewportAreaData;
 
-            var left = wnd1.Left * VpData.Width / this.Width__;// wnd0.Width;
-            var right = wnd1.Right * VpData.Width / this.Height__;// wnd0.Width;
+            var left = wnd1.Left * VpData.Width / _width;// wnd0.Width;
+            var right = wnd1.Right * VpData.Width / _height;// wnd0.Width;
 
-            return new SCViewport(left, ViewportAreaData.Y, right - left, ViewportAreaData.Height);
+            return new RectD(left, ViewportAreaData.Y, right - left, ViewportAreaData.Height);
         }
 
-        SCViewport CreateViewportAreaScreen__()
+        private RectD CreateViewportAreaScreen__()
         {
             RectI Abs = WindowAreaZoom;
-            SCViewport Loc = ViewportAreaData;
+            RectD Loc = ViewportAreaData;
 
             int x00 = -RenderOffsetAbsolute.X;
             int y00 = -RenderOffsetAbsolute.Y;
-            int h = this.Height__;
+            int h = _height;
             // int x01 = x00;
             int y01 = y00 + h;
-            int w = this.Width__;
+            int w = _width;
             int x10 = x00 + w;
             // int y10 = y00;
             // int x11 = x10;
@@ -397,13 +395,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             if (right - left < 0 || top - bottom < 0)
                 throw new Exception();
 
-            return new SCViewport(left, bottom, right - left, top - bottom);
+            return new RectD(left, bottom, right - left, top - bottom);
         }
 
-        SCViewport CreateViewportAreaScreen()
+        private RectD CreateViewportAreaScreen()
         {
             RectI Abs = WindowAreaZoom;
-            SCViewport Loc = ViewportAreaData;
+            RectD Loc = ViewportAreaData;
 
             int x00 = -RenderOffsetAbsolute.X;
             int y00 = -RenderOffsetAbsolute.Y;
@@ -411,16 +409,15 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             double bottom = y00 * Loc.Height / Abs.Height + Loc.Y;
             double left = x00 * Loc.Width / Abs.Width + Loc.X;
 
-            double w = this.Width__ * Loc.Width / Abs.Width;
-            double h = this.Height__ * Loc.Height / Abs.Height;
+            double w = _width * Loc.Width / Abs.Width;
+            double h = _height * Loc.Height / Abs.Height;
 
             if (w < 0 || h < 0)
                 throw new Exception();
 
-            return new SCViewport(left, bottom, w, h);
+            return new RectD(left, bottom, w, h);
         }
-
-        private int _zoom;
+   
         public int Zoom
         {
             get
@@ -429,7 +426,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
             set
             {
-                if (_zoom != value && IsDragging == false)
+                if (_zoom != value && _isDragging == false)
                 {
                     _zoom = value;
 
@@ -443,38 +440,28 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 }
             }
         }
-
-        #region Dragging
-
-        public Point2I dragPoint;
-
-        public bool IsDragging = false;
-
-        public bool CanDragMap = true;
-
+        
         public void BeginDrag(Point2I pt)
         {
-            dragPoint.X = pt.X - RenderOffsetAbsolute.X;
-            dragPoint.Y = pt.Y - RenderOffsetAbsolute.Y;
-            IsDragging = true;
+            _dragPoint.X = pt.X - RenderOffsetAbsolute.X;
+            _dragPoint.Y = pt.Y - RenderOffsetAbsolute.Y;
+            _isDragging = true;
         }
 
         public void EndDrag()
         {
-            IsDragging = false;
-            mouseDown = Point2I.Empty;
+            _isDragging = false;
+            _mouseDown = Point2I.Empty;
         }
-
-
 
         public void Drag(Point2I pt)
         {
             //  _renderOffset.X = pt.X - dragPoint.X;
             //  _renderOffset.Y = pt.Y - dragPoint.Y;
 
-            RenderOffsetAbsolute = new Point2I(pt.X - dragPoint.X, pt.Y - dragPoint.Y);
+            RenderOffsetAbsolute = new Point2I(pt.X - _dragPoint.X, pt.Y - _dragPoint.Y);
 
-            if (IsDragging == true)
+            if (_isDragging == true)
             {
                 ViewportAreaScreen = CreateViewportAreaScreen();
 
@@ -485,24 +472,9 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
         }
 
+        public RectD RenderSize => new RectD(RenderOffsetAbsolute.X, RenderOffsetAbsolute.Y, WindowAreaZoom.Width, WindowAreaZoom.Height);
 
-        #endregion
-
-        public RectD RenderSize
-        {
-            get
-            {
-                return new RectD(RenderOffsetAbsolute.X, RenderOffsetAbsolute.Y, WindowAreaZoom.Width, WindowAreaZoom.Height);
-            }
-        }
-
-        public RectI Screen
-        {
-            get
-            {
-                return new RectI(0, 0, Width__, Height__);
-            }
-        }
+        public RectI Screen => new RectI(0, 0, _width, _height);
 
         protected static double Clipp(double n, double minValue, double maxValue)
         {
@@ -514,19 +486,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return Math.Min(Math.Max(n, minValue), maxValue);
         }
 
-        #region From...To...
-
-
-
         public Point2D FromScreenToLocal(int x, int y)
         {
             var pLocal = new Point2I(x, y);
 
             pLocal.OffsetNegative(RenderOffsetAbsolute);
 
-            return new Point2D(
-                AxisX.FromAbsoluteToLocal(pLocal.X),
-                AxisY.FromAbsoluteToLocal(pLocal.Y));
+            return new Point2D(AxisX.FromAbsoluteToLocal(pLocal.X), AxisY.FromAbsoluteToLocal(pLocal.Y));
 
             //   return Provider.Projection.FromPixelToSchedulerPoint(pLocal, Zoom);
         }
@@ -535,19 +501,14 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         {
             var pLocal = new Point2I(x, y);
 
-            return new Point2D(
-                AxisX.FromAbsoluteToLocal(pLocal.X),
-                AxisY.FromAbsoluteToLocal(pLocal.Y));
+            return new Point2D(AxisX.FromAbsoluteToLocal(pLocal.X), AxisY.FromAbsoluteToLocal(pLocal.Y));
         }
 
         public Point2I FromLocalToScreen(Point2D shedulerPoint)
         {
             // Point2I pLocal = Provider.Projection.FromSchedulerPointToPixel(shedulerPoint, Zoom);
 
-            var pLocal = new Point2I(
-                AxisX.FromLocalToAbsolute(shedulerPoint.X),
-                AxisY.FromLocalToAbsolute(shedulerPoint.Y));
-
+            var pLocal = new Point2I(AxisX.FromLocalToAbsolute(shedulerPoint.X), AxisY.FromLocalToAbsolute(shedulerPoint.Y));
 
             pLocal.Offset(RenderOffsetAbsolute);
 
@@ -558,14 +519,11 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         {
             // Point2I pLocal = Provider.Projection.FromSchedulerPointToPixel(shedulerPoint, Zoom);
 
-            var pLocal = new Point2I(
-                AxisX.FromLocalToAbsolute(shedulerPoint.X),
-                AxisY.FromLocalToAbsolute(shedulerPoint.Y));
+            var pLocal = new Point2I(AxisX.FromLocalToAbsolute(shedulerPoint.X), AxisY.FromLocalToAbsolute(shedulerPoint.Y));
 
             return new Point2I(pLocal.X, pLocal.Y);
         }
 
-        #endregion
 
         //public System.Windows.Media.Transform ToViewportInPixels
         //{
@@ -591,19 +549,20 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
 
         // gets max zoom level to fit rectangle
-        public int GetMaxZoomToFitRect(SCViewport rect)
+        
+        public int GetMaxZoomToFitRect(RectD rect)
         {
-            int zoom = minZoom;
+            int zoom = _minZoom;
 
             if (rect.Height == 0.0 || rect.Width == 0.0)
             {
-                zoom = maxZoom / 2;
+                zoom = _maxZoom / 2;
             }
             else
             {
-                for (int i = (int)zoom; i <= maxZoom; i++)
+                for (int i = (int)zoom; i <= _maxZoom; i++)
                 {
-                    WindowAreaZoom = CreateWindowAreaZoom(i, scaleX, scaleY);
+                    WindowAreaZoom = CreateWindowAreaZoom(i, _scaleX, _scaleY);
 
                     var p0 = new Point2I(
                         AxisX.FromLocalToAbsolute(rect.Left),
@@ -614,7 +573,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                         AxisY.FromLocalToAbsolute(rect.Top)
                         );
 
-                    if (((p1.X - p0.X) <= this.Width__/* WindowArea0.Width*/ + 10) && (p1.Y - p0.Y) <= this.Height__ /*WindowArea0.Height*/ + 10)
+                    if (((p1.X - p0.X) <= _width + 10) && (p1.Y - p0.Y) <= _height + 10)
                     {
                         zoom = i;
                     }
@@ -627,9 +586,5 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
             return zoom;
         }
-
-        public event SCDragChanged OnDragChanged;
-        public event SCZoomChanged OnZoomChanged;
-        public event SCSizeChanged OnSizeChanged;
     }
 }

@@ -6,15 +6,36 @@ using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
-    public class SCDateTimeAxis : SCRangeAxisBase
+    public enum TimePeriod
     {
-        class Lab
-        {
-            public double Time { get; set; }
-            public string StrTime { get; set; }
-        }
+        Hour,
+        Day,
+        Week,
+        Month,
+        Year,
+    }
 
-        public SCDateTimeAxis() { }
+    public class TimeAxis : BaseRangeAxis
+    {
+        private AxisLabelPosition _dynamicLabel;
+        private readonly Dictionary<TimePeriod, string> _labelFormatPool = new()
+        {
+            { TimePeriod.Hour, @"{0:HH:mm}" },
+            { TimePeriod.Day, @"{0:HH:mm}" },
+            { TimePeriod.Week, @"{0:dd/MMM}" },
+            { TimePeriod.Month, @"{0:dd}" },
+            { TimePeriod.Year, @"{0:dd/MMM}" },
+        };
+        private readonly Dictionary<TimePeriod, double> _labelDeltaPool = new()
+        {
+            { TimePeriod.Hour, 60.0 * 5 },
+            { TimePeriod.Day, 3600.0 * 2 },
+            { TimePeriod.Week, 86400.0 },
+            { TimePeriod.Month, 86400.0 },
+            { TimePeriod.Year, 86400.0 * 12 },
+        };
+        
+        public TimeAxis() { }
 
         public DateTime Epoch0 { get; set; } = new DateTime(2000, 1, 1);
 
@@ -50,7 +71,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return res;
         }
 
-        public override void UpdateViewport(SCViewport viewport)
+        public override void UpdateViewport(RectD viewport)
         {
             switch (base.CoordType)
             {
@@ -71,7 +92,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateScreen(SCViewport screen)
+        public override void UpdateScreen(RectD screen)
         {
             switch (base.CoordType)
             {
@@ -110,53 +131,30 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         }
 
         public double MinValue { get; protected set; }
+
         public double MaxValue { get; protected set; }
 
         public double MinScreenValue { get; protected set; }
+
         public double MaxScreenValue { get; protected set; }
 
         public int MinPixel { get; protected set; }
+
         public int MaxPixel { get; protected set; }
 
         public TimePeriod TimePeriodMode { get; set; }
-        public enum TimePeriod
+               
+        private List<AxisLabelPosition> CreateLabels()
         {
-            Hour,
-            Day,
-            Week,
-            Month,
-            Year,
-        }
-
-        Dictionary<TimePeriod, string> LabelFormatPool = new Dictionary<TimePeriod, string>()
-        {
-            { TimePeriod.Hour, @"{0:HH:mm}" },
-            { TimePeriod.Day, @"{0:HH:mm}" },
-            { TimePeriod.Week, @"{0:dd/MMM}" },
-            { TimePeriod.Month, @"{0:dd}" },
-            { TimePeriod.Year, @"{0:dd/MMM}" },
-        };
-
-        Dictionary<TimePeriod, double> LabelDeltaPool = new Dictionary<TimePeriod, double>()
-        {
-            { TimePeriod.Hour, 60.0 * 5 },
-            { TimePeriod.Day, 3600.0 * 2 },
-            { TimePeriod.Week, 86400.0 },
-            { TimePeriod.Month, 86400.0 },
-            { TimePeriod.Year, 86400.0 * 12 },
-        };
-
-        List<SCAxisLabelPosition> CreateLabels()
-        {
-            var labs = new List<SCAxisLabelPosition>();
+            var labs = new List<AxisLabelPosition>();
 
             if ((MaxScreenValue - MinScreenValue) == 0.0)
                 return labs;
 
-            if (LabelDeltaPool.ContainsKey(TimePeriodMode) == false)
+            if (_labelDeltaPool.ContainsKey(TimePeriodMode) == false)
                 return labs;
 
-            double delta = LabelDeltaPool[TimePeriodMode];
+            double delta = _labelDeltaPool[TimePeriodMode];
 
             int fl = (int)Math.Floor(MinScreenValue / delta);
 
@@ -167,9 +165,9 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
             while (value <= MaxScreenValue)
             {
-                labs.Add(new SCAxisLabelPosition()
+                labs.Add(new AxisLabelPosition()
                 {
-                    Label = string.Format(LabelFormatPool[TimePeriodMode], Epoch0.AddSeconds(value)),
+                    Label = string.Format(_labelFormatPool[TimePeriodMode], Epoch0.AddSeconds(value)),
                     Value = value
                 });
                 value += delta;
@@ -178,14 +176,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return labs;
         }
 
-        string CreateMinMaxLabel(double value)
+        private string CreateMinMaxLabel(double value)
         {
             if ((MaxScreenValue - MinScreenValue) == 0.0)
                 return string.Empty;
 
             return Epoch0.AddSeconds(value).ToString(@"dd/MMM/yyyy");
         }
-
 
         //List<SCAxisLabelPosition> CreateLabels()
         //{
@@ -287,7 +284,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         {
             if (base.CoordType == EAxisCoordType.Y)
             {
-                DynamicLabel = new SCAxisLabelPosition()
+                _dynamicLabel = new AxisLabelPosition()
                 {
                     Label = string.Format("{0:HH:mm:ss}", Epoch0.AddSeconds(point.Y)),
                     Value = point.Y
@@ -295,7 +292,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
             else if (base.CoordType == EAxisCoordType.X)
             {
-                DynamicLabel = new SCAxisLabelPosition()
+                _dynamicLabel = new AxisLabelPosition()
                 {
                     Label = string.Format("{0:HH:mm:ss}", Epoch0.AddSeconds(point.X)),
                     Value = point.X
@@ -305,15 +302,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateFollowLabelPosition(ISCTargetMarker marker) { }
-
-        SCAxisLabelPosition DynamicLabel;
-
-        public override SCAxisInfo AxisInfo
+        public override void UpdateFollowLabelPosition(BaseTargetMarker marker) { }
+  
+        public override AxisInfo AxisInfo
         {
             get
             {
-                SCAxisInfo axisInfo = new SCAxisInfo()
+                var axisInfo = new AxisInfo()
                 {
                     Labels = CreateLabels(),
                     CoordType = base.CoordType,
@@ -326,12 +321,11 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
                 if (base.IsDynamicLabelEnable == true)
                 {
                     axisInfo.IsDynamicLabelEnable = true;
-                    axisInfo.DynamicLabel = DynamicLabel;// new SCAxisLabelPosition() { Label = "!dfgfd!", Value = 43200.0 };
+                    axisInfo.DynamicLabel = _dynamicLabel;// new SCAxisLabelPosition() { Label = "!dfgfd!", Value = 43200.0 };
                 }
 
                 return axisInfo;
             }
         }
-
     }
 }
