@@ -6,7 +6,7 @@ using Globe3DLight.Spatial;
 
 namespace Globe3DLight.ViewModels.TimeDataViewer
 {
-    public abstract class BaseTargetMarker
+    public interface ITargetMarker
     {
         public Point2D LocalPosition { get; }
 

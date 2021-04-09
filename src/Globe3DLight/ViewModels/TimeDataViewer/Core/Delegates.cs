@@ -10,7 +10,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
     public delegate void SCZoomChanged();
     public delegate void SCSizeChanged(int width, int height);
 
-    public delegate void SCTargetMarkerPositionChanged(BaseTargetMarker marker);
+    public delegate void SCTargetMarkerPositionChanged(ITargetMarker marker);
     public delegate void SchedulerTypeChanged(BaseTimeSchedulerProvider type);
     public delegate void SCPositionChanged(Point2D point);
 

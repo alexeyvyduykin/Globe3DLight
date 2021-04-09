@@ -142,6 +142,6 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
         public abstract void UpdateScreen(RectD screen);
 
-        public abstract void UpdateFollowLabelPosition(BaseTargetMarker marker);
+        public abstract void UpdateFollowLabelPosition(ITargetMarker marker);
     }
 }

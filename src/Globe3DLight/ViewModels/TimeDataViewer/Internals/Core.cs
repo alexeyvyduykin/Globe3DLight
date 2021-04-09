@@ -17,17 +17,17 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         private RectD _viewportAreaScreen;
         private RectD _viewportAreaData = new RectD();
         private Point2I _renderOffset;
-        private Point2I _mouseDown;
-        private Point2I _mouseCurrent;
-        private Point2D _mouseCurrentAbsolute;
+        public Point2I MouseDown;
+        public Point2I MouseCurrent;
+   //     private Point2D _mouseCurrentAbsolute;
         private int _zoom;
         private Point2I _dragPoint;
-        private bool _isDragging = false;
-        private bool _canDragMap = true;
+        public bool IsDragging = false;
+        public bool CanDragMap = true;
         private int _maxZoom = 100;
         private int _minZoom = 0;
         //    public MouseWheelZoomType MouseWheelZoomType = MouseWheelZoomType.ViewCenter;
-        private bool _mouseWheelZoomEnabled = true;
+        public bool MouseWheelZoomEnabled = true;
         private double _scaleX = 1.0; // 30 %        
         private double _scaleY = 0.0;
 
@@ -426,7 +426,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             }
             set
             {
-                if (_zoom != value && _isDragging == false)
+                if (_zoom != value && IsDragging == false)
                 {
                     _zoom = value;
 
@@ -445,13 +445,13 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
         {
             _dragPoint.X = pt.X - RenderOffsetAbsolute.X;
             _dragPoint.Y = pt.Y - RenderOffsetAbsolute.Y;
-            _isDragging = true;
+            IsDragging = true;
         }
 
         public void EndDrag()
         {
-            _isDragging = false;
-            _mouseDown = Point2I.Empty;
+            IsDragging = false;
+            MouseDown = Point2I.Empty;
         }
 
         public void Drag(Point2I pt)
@@ -461,7 +461,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
 
             RenderOffsetAbsolute = new Point2I(pt.X - _dragPoint.X, pt.Y - _dragPoint.Y);
 
-            if (_isDragging == true)
+            if (IsDragging == true)
             {
                 ViewportAreaScreen = CreateViewportAreaScreen();
 
@@ -524,32 +524,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             return new Point2I(pLocal.X, pLocal.Y);
         }
 
-
-        //public System.Windows.Media.Transform ToViewportInPixels
-        //{
-        //    get
-        //    {
-        //        System.Windows.Media.TransformGroup group = new System.Windows.Media.TransformGroup();
-
-        //        int y = RenderOffsetAbsolute.Y;
-        //        double sclY = 1.0;
-        //        if (AxisY.IsInversed == true)
-        //        {
-        //            y = WindowAreaZoom.Height + y;
-        //            sclY = -1.0;
-        //        }
-
-        //        group.Children.Add(new System.Windows.Media.ScaleTransform(1.0, sclY));
-        //        group.Children.Add(new System.Windows.Media.TranslateTransform(RenderOffsetAbsolute.X, y));
-
-        //        return group;
-        //    }
-        //}
-
-
-
-        // gets max zoom level to fit rectangle
-        
+        // gets max zoom level to fit rectangle        
         public int GetMaxZoomToFitRect(RectD rect)
         {
             int zoom = _minZoom;

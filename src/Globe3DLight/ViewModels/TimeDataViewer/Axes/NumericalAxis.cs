@@ -175,7 +175,7 @@ namespace Globe3DLight.ViewModels.TimeDataViewer
             base.UpdateAxis();
         }
 
-        public override void UpdateFollowLabelPosition(BaseTargetMarker marker)
+        public override void UpdateFollowLabelPosition(ITargetMarker marker)
         {
         }
 
