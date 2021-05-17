@@ -1,0 +1,51 @@
+<UserControl x:Class="Globe3DLight.Views.TimeDataViewer"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                  
+             xmlns:sch="clr-namespace:TimeDataViewer;assembly=Globe3DLight"
+             xmlns:shapes="clr-namespace:TimeDataViewer.Shapes;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight" 
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="Containers:ScenarioContainerViewModel" x:CompileBindings="True"
+             >
+
+    <Grid RowDefinitions="*, 60" ColumnDefinitions="*" ShowGridLines="False" Background="WhiteSmoke">
+
+        <sch:SchedulerControl Name="scheduler"
+                              Grid.Row="0"
+                              Epoch="{Binding TimePresenter.Begin}"
+                              CurrentTime="{Binding TimePresenter.CurrentTime}">
+
+            <sch:SchedulerControl.Series>
+                <sch:Series Category="Rotation" Items="{Binding CurrentTask.Rotations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+                    <sch:Series.IntervalTemplate>
+                        <shapes:IntervalVisual Background="Yellow"/>
+                    </sch:Series.IntervalTemplate>
+                </sch:Series>
+
+                <sch:Series Category="Observation" Items="{Binding CurrentTask.Observations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+
+                    <sch:Series.IntervalTemplate>
+                        <shapes:IntervalVisual Background="Blue"/>
+                    </sch:Series.IntervalTemplate>
+
+                </sch:Series>
+
+                <sch:Series Category="Transmission" Items="{Binding CurrentTask.Transmissions}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+
+                    <sch:Series.IntervalTemplate>
+                        <shapes:IntervalVisual Background="Green"/>
+                    </sch:Series.IntervalTemplate>
+
+                </sch:Series>
+
+            </sch:SchedulerControl.Series>
+
+        </sch:SchedulerControl>
+
+        <sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="1"/>
+
+    </Grid>
+
+</UserControl>
