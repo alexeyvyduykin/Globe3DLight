@@ -714,7 +714,7 @@ namespace Globe3DLight.ViewModels
                 events.AddRange(CreateObservationEvents(data.SatelliteShootings[i], epochOnDay));
                 events.AddRange(CreateTransmissionEvents(data.SatelliteTransfers[i], epochOnDay));
 
-                var sortEvents = events.OrderBy(s => s.Begin).ToList();
+                var sortEvents = events.OrderBy(s => s.BeginTime/*Begin*/).ToList();
 
                 var task = new SatelliteTask(satellites[i], sortEvents)
                 {
@@ -740,8 +740,11 @@ namespace Globe3DLight.ViewModels
                     events.Add(new RotationEvent()
                     {
                         Name = (item.Angle < 0) ? "Left" : "Right",
-                        Begin = dt.AddSeconds(item.BeginTime),
-                        Duration = TimeSpan.FromSeconds(item.EndTime - item.BeginTime),
+                        Epoch = dt,
+                        BeginTime = item.BeginTime,
+                        EndTime = item.EndTime,
+                        //Begin = dt.AddSeconds(item.BeginTime),
+                        //Duration = TimeSpan.FromSeconds(item.EndTime - item.BeginTime),
                     });
                 }
 
@@ -757,8 +760,11 @@ namespace Globe3DLight.ViewModels
                     events.Add(new ObservationEvent()
                     {
                         Name = item.TargetName,
-                        Begin = dt.AddSeconds(item.BeginTime),
-                        Duration = TimeSpan.FromSeconds(item.EndTime - item.BeginTime),
+                        Epoch = dt,
+                        BeginTime = item.BeginTime,
+                        EndTime = item.EndTime,
+                        //Begin = dt.AddSeconds(item.BeginTime),
+                        //Duration = TimeSpan.FromSeconds(item.EndTime - item.BeginTime),
                     });
                 }
 
@@ -774,8 +780,11 @@ namespace Globe3DLight.ViewModels
                     events.Add(new TransmissionEvent()
                     {
                         Name = item.Target,
-                        Begin = dt.AddSeconds(item.BeginTime),
-                        Duration = TimeSpan.FromSeconds(item.EndTime - item.BeginTime),
+                        Epoch = dt,
+                        BeginTime = item.BeginTime,
+                        EndTime = item.EndTime,
+                        //Begin = dt.AddSeconds(item.BeginTime),
+                        //Duration = TimeSpan.FromSeconds(item.EndTime - item.BeginTime),
                     });
                 }
                 return events;

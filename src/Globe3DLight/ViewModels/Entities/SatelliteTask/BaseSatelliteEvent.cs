@@ -6,19 +6,30 @@ namespace Globe3DLight.ViewModels.Entities
 {
     public abstract class BaseSatelliteEvent : ViewModelBase
     {
-        private DateTime _begin;
-        private TimeSpan _duration;
+        private DateTime _epoch;
+        private double _beginTime;
+        private double _endTime;
 
-        public DateTime Begin 
+        public DateTime Epoch
         {
-            get => _begin; 
-            set => RaiseAndSetIfChanged(ref _begin, value); 
+            get => _epoch;
+            set => RaiseAndSetIfChanged(ref _epoch, value);
         }
 
-        public TimeSpan Duration 
+        public double BeginTime
         {
-            get => _duration; 
-            set => RaiseAndSetIfChanged(ref _duration, value); 
+            get => _beginTime;
+            set => RaiseAndSetIfChanged(ref _beginTime, value);
         }
+
+        public double EndTime
+        {
+            get => _endTime;
+            set => RaiseAndSetIfChanged(ref _endTime, value);
+        }
+
+        public DateTime Begin => Epoch.AddSeconds(_beginTime);
+
+        public TimeSpan Duration => Epoch.AddSeconds(_endTime) - Epoch.AddSeconds(_beginTime);
     }
 }

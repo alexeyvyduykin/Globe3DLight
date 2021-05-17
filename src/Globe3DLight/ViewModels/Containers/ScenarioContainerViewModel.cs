@@ -210,7 +210,7 @@ namespace Globe3DLight.ViewModels.Containers
 
                     if (task.SelectedEvent != null)
                     {
-                        var time = task.SelectedEvent.Begin;
+                        var time = task.SelectedEvent.Epoch.AddSeconds(task.SelectedEvent.BeginTime);//task.SelectedEvent.Begin;
                         var begin = TimePresenter.Begin;
 
                         TimePresenter.Update((time - begin).TotalSeconds);
