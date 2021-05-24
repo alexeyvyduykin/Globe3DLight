@@ -5,10 +5,11 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeDataViewer.Spatial;
 using Avalonia.Controls;
+using TimeDataViewer.Core;
 
 namespace TimeDataViewer.Models
 {
-    public interface IScheduler : IControl
+    public interface ISchedulerControl : IControl
     {
         Point2D FromAbsoluteToLocal(int x, int y);
 
@@ -21,6 +22,10 @@ namespace TimeDataViewer.Models
         RectI AbsoluteWindow { get; }
 
         DateTime Epoch { get; }
+        
+        ITimeAxis AxisX { get; }
+
+        ICategoryAxis AxisY { get; }
 
         event EventHandler OnZoomChanged;
 

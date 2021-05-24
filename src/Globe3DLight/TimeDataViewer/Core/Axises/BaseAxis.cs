@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeDataViewer.Spatial;
 using TimeDataViewer.ViewModels;
+using System.Diagnostics;
 
 namespace TimeDataViewer.Core
 {
@@ -53,6 +54,7 @@ namespace TimeDataViewer.Core
         protected virtual void Invalidate()
         {
             OnAxisChanged?.Invoke(this, EventArgs.Empty);
+            //Debug.WriteLine($"BaseAxis -> OnAxisChanged -> Count = {OnAxisChanged?.GetInvocationList().Length}");
         }
 
         public abstract void UpdateWindow(RectI window);

@@ -243,6 +243,12 @@ namespace Globe3DLight.ViewModels.Containers
             }
         }
 
+        public int AbsolutePositionX { get; set; }
+
+        public int AbsolutePositionY { get; set; }
+
+        public int ZIndex { get; set; }
+
         public override IDisposable Subscribe(IObserver<(object sender, PropertyChangedEventArgs e)> observer)
         {
             var mainDisposable = new CompositeDisposable();

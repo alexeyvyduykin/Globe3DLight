@@ -24,8 +24,6 @@ namespace TimeDataViewer.Shapes
     {
         private double _widthX = 0.0;           
         private readonly ScaleTransform _scale;
-        private IScheduler? _map;
-        private IntervalViewModel? _marker;
         private bool _popupIsOpen;
 
         public IntervalVisual()
@@ -33,8 +31,6 @@ namespace TimeDataViewer.Shapes
             PointerEnter += IntervalVisual_PointerEnter;
             PointerLeave += IntervalVisual_PointerLeave;
          
-            DataContextProperty.Changed.AddClassHandler<IntervalVisual>((d, e) => d.MarkerChanged(e));
-
             _popupIsOpen = false;
 
             _scale = new ScaleTransform(1, 1);                
@@ -76,46 +72,13 @@ namespace TimeDataViewer.Shapes
             set { SetValue(StrokeThicknessProperty, value); }
         }
 
-        private void MarkerChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            if (e.NewValue is IntervalViewModel marker)
-            {
-                _marker = marker;
-                _marker.ZIndex = 100;
-            }
-        }
-
-        protected override void OnAttachedToLogicalTree(LogicalTreeAttachmentEventArgs e)
-        {
-            base.OnAttachedToLogicalTree(e);
-
-            _map = (_marker is not null) ? _marker.Scheduler : null;
-
-            if (_map is not null)
-            {
-                _map.OnZoomChanged += (s, e) => Update();
-                _map.OnSizeChanged += (s, e) => Update();
-            }
-        }
-
-        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
-        {
-            base.OnDetachedFromLogicalTree(e);
-
-            if (_map is not null)
-            {
-                _map.OnZoomChanged -= (s, e) => Update();
-                _map.OnSizeChanged -= (s, e) => Update();
-            }
-        }
-
         private void IntervalVisual_PointerLeave(object? sender, PointerEventArgs e)
         {
             if (_popupIsOpen == true)
             {
                 _popupIsOpen = false;
 
-                _map?.HideTooltip();
+                Scheduler?.HideTooltip();
                 
                 Cursor = new Cursor(StandardCursorType.Arrow);
 
@@ -131,12 +94,12 @@ namespace TimeDataViewer.Shapes
             {
                 _popupIsOpen = true;
 
-                if (_marker is not null)
-                {
-                    var tooltip = Series.Tooltip;
-                    tooltip.DataContext = Series.CreateTooltip(_marker);
+                if (Marker is not null && Marker is IInterval ival)
+                {                   
+                    var tooltip = ival.SeriesControl.Tooltip;
+                    tooltip.DataContext = ival.SeriesControl.CreateTooltip(ival);
 
-                    _map?.ShowTooltip(this, tooltip);
+                    Scheduler?.ShowTooltip(this, tooltip);
                 }
 
                 Cursor = new Cursor(StandardCursorType.Hand);
@@ -147,23 +110,25 @@ namespace TimeDataViewer.Shapes
             }
         }
 
-        private void Update()
+        protected override void Update()
         {        
-            if (_map is not null && _marker is not null)
+            if (Scheduler is not null && Marker is not null && Marker is IInterval marker)
             {
-                var d1 = _map.FromLocalToAbsolute(new Point2D(_marker.Left, _marker.LocalPosition.Y)).X;
-                var d2 = _map.FromLocalToAbsolute(new Point2D(_marker.Right, _marker.LocalPosition.Y)).X;
+                var d1 = Scheduler.FromLocalToAbsolute(new Point2D(marker.Left, marker.LocalPosition.Y)).X;
+                var d2 = Scheduler.FromLocalToAbsolute(new Point2D(marker.Right, marker.LocalPosition.Y)).X;
 
                 _widthX = d2 - d1;
-            }
 
-            InvalidateVisual();        
+         //       InvalidateVisual();
+            }               
         }
         
         public override void Render(DrawingContext context)
-        {                      
+        {
             if (_widthX == 0.0)
+            {
                 return;
+            }
 
             var p0 = new Point(-_widthX / 2.0, -HeightY / 2.0);
             var p1 = new Point(_widthX / 2.0, HeightY / 2.0);
@@ -179,13 +144,12 @@ namespace TimeDataViewer.Shapes
             }
         }
 
-        public override BaseIntervalVisual Clone()
-        {   
+        public override BaseIntervalVisual Clone(IInterval interval)
+        {
             return new IntervalVisual() 
-            {              
+            {
                 Background = this.Background,
-                HeightY = this.HeightY,
-                Series = this.Series,
+                DataContext = interval 
             };
         }
     }

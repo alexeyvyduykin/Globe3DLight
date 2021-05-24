@@ -28,10 +28,11 @@ namespace TimeDataViewer.Core
      
         public event EventHandler OnDragChanged;
         public event EventHandler OnZoomChanged;
-        public event SizeChangedEventHandler OnSizeChanged;
-        public event WindowChangedEventHandler OnWindowChanged;
-        public event ClientViewportChangedEventHandler OnClientViewportChanged;
-        public event ViewportChangedEventHandler OnViewportChanged;
+       
+        private event SizeChangedEventHandler OnSizeChanged;        
+        private event WindowChangedEventHandler OnWindowChanged;
+        private event ClientViewportChangedEventHandler OnClientViewportChanged;
+        private event ViewportChangedEventHandler OnViewportChanged;
 
         public Area() 
         {
@@ -39,15 +40,34 @@ namespace TimeDataViewer.Core
             _axisX = _coreFactory.CreateTimeAxis();
             _axisY = _coreFactory.CreateCategoryAxis();
 
-            OnSizeChanged += (w, h) => _axisX.UpdateWindow(new RectI(0, 0, w, h));
-            OnWindowChanged += (e) => _axisX.UpdateWindow(e);
-            OnClientViewportChanged += (e) => _axisX.UpdateClientViewport(e);
-            OnViewportChanged += (e) => _axisX.UpdateViewport(e);
+            OnSizeChanged += SizeChangedEvent;
+            OnWindowChanged += WindowChangedEvent;
+            OnClientViewportChanged += ClientViewportChangedEvent;
+            OnViewportChanged += ViewportChangedEvent;
+        }
 
-            OnSizeChanged += (w, h) => _axisY.UpdateWindow(new RectI(0, 0, w, h));
-            OnWindowChanged += (e) => _axisY.UpdateWindow(e);
-            OnClientViewportChanged += (e) => _axisY.UpdateClientViewport(e);
-            OnViewportChanged += (e) => _axisY.UpdateViewport(e);
+        private void SizeChangedEvent(int width, int height)
+        {
+            _axisX.UpdateWindow(new RectI(0, 0, width, height));
+            _axisY.UpdateWindow(new RectI(0, 0, width, height));
+        }
+
+        private void WindowChangedEvent(RectI rect)
+        {
+            _axisX.UpdateWindow(rect);
+            _axisY.UpdateWindow(rect);
+        }
+
+        private void ClientViewportChangedEvent(RectD rect)
+        {
+            _axisX.UpdateClientViewport(rect);
+            _axisY.UpdateClientViewport(rect);
+        }
+
+        private void ViewportChangedEvent(RectD rect)
+        {
+            _axisX.UpdateViewport(rect);
+            _axisY.UpdateViewport(rect);
         }
 
         public int Width => _width;
@@ -89,6 +109,7 @@ namespace TimeDataViewer.Core
                 _window = value;
 
                 OnWindowChanged?.Invoke(_window);
+                //Debug.WriteLine($"Area -> OnWindowChanged -> Count = {OnWindowChanged?.GetInvocationList().Length}");
             }
         }
      
@@ -103,6 +124,7 @@ namespace TimeDataViewer.Core
                 _clientViewport = value;
 
                 OnClientViewportChanged?.Invoke(_clientViewport);
+                //Debug.WriteLine($"Area -> OnClientViewportChanged -> Count = {OnClientViewportChanged?.GetInvocationList().Length}");
             }
         }
    
@@ -117,6 +139,7 @@ namespace TimeDataViewer.Core
                 _viewport = value;
 
                 OnViewportChanged?.Invoke(_viewport);
+                //Debug.WriteLine($"Area -> OnViewportChanged -> Count = {OnViewportChanged?.GetInvocationList().Length}");
             }
         }
 
@@ -143,7 +166,8 @@ namespace TimeDataViewer.Core
 
                     Zooming(_zoom);
                    
-                    OnZoomChanged?.Invoke(this, EventArgs.Empty);                    
+                    OnZoomChanged?.Invoke(this, EventArgs.Empty);
+                    //Debug.WriteLine($"Area -> OnZoomChanged -> Count = {OnZoomChanged?.GetInvocationList().Length}");
                 }
             }
         }
@@ -163,6 +187,7 @@ namespace TimeDataViewer.Core
             _height = height;
 
             OnSizeChanged?.Invoke(width, height);
+            //Debug.WriteLine($"Area -> OnSizeChanged -> Count = {OnSizeChanged?.GetInvocationList().Length}");
 
             Window = CreateWindow(_zoom);
 
@@ -193,6 +218,7 @@ namespace TimeDataViewer.Core
                 ClientViewport = CreateClientViewport();
 
                 OnDragChanged?.Invoke(this, EventArgs.Empty);
+                //Debug.WriteLine($"Area -> OnDragChanged -> Count = {OnDragChanged?.GetInvocationList().Length}");
             }
         }
 
@@ -255,6 +281,7 @@ namespace TimeDataViewer.Core
             ClientViewport = CreateClientViewport();
 
             OnDragChanged?.Invoke(this, EventArgs.Empty);
+            //Debug.WriteLine($"Area -> OnDragChanged -> Count = {OnDragChanged?.GetInvocationList().Length}");
         }
 
         private Point2I CreateWindowOffset(Point2D pos)

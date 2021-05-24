@@ -18,7 +18,7 @@ using Avalonia.Styling;
 using Avalonia.VisualTree;
 using TimeDataViewer.ViewModels;
 using TimeDataViewer.Core;
-using TimeDataViewer.Spatial;
+using TimeDataViewer.Models;
 using System.Xml;
 using Avalonia.Markup.Xaml.Templates;
 using Avalonia.Controls.Metadata;
@@ -50,6 +50,7 @@ namespace TimeDataViewer
         private double _height;
         private readonly bool _labelRectangleVisible = false;
         private bool _isDynamicLabel;
+        private readonly IBrush _brush = new SolidColorBrush() { Color = Color.Parse("#F5F5F5") /*Colors.WhiteSmoke*/ };
 
         public SchedulerAxisXControl()
         {
@@ -68,15 +69,27 @@ namespace TimeDataViewer
             _defaultRectPen = new Pen(Brushes.Black, 1.0);   
         }
 
+        protected override void OnDataContextBeginUpdate()
+        {
+            base.OnDataContextBeginUpdate();
+
+            if (DataContext is not null && DataContext is ISchedulerControl scheduler)
+            {
+                scheduler.AxisX.OnAxisChanged -= OnAxisChanged;
+                scheduler.PointerEnter -= OnMapEnter;
+                scheduler.PointerLeave -= OnMapLeave;
+            }
+        }
+
         protected override void OnDataContextChanged(EventArgs e)
         {
             base.OnDataContextChanged(e);
 
-            if(DataContext is SchedulerControl map)
+            if(DataContext is ISchedulerControl scheduler)
             {
-                map.AxisX.OnAxisChanged += OnAxisChanged;
-                map.PointerEnter += OnMapEnter;
-                map.PointerLeave += OnMapLeave;
+                scheduler.AxisX.OnAxisChanged += OnAxisChanged;
+                scheduler.PointerEnter += OnMapEnter;
+                scheduler.PointerLeave += OnMapLeave;
             }
         }
 
@@ -84,14 +97,14 @@ namespace TimeDataViewer
         {
             _isDynamicLabel = true;
 
-            base.InvalidateVisual();
+            InvalidateVisual();
         }
 
         private void OnMapLeave(object? s, EventArgs e)
         {
             _isDynamicLabel = false;
 
-            base.InvalidateVisual();
+            InvalidateVisual();
         }
 
         protected override void ArrangeCore(Rect finalRect)
@@ -151,7 +164,9 @@ namespace TimeDataViewer
         }
 
         public override void Render(DrawingContext context)
-        {          
+        {
+            context.FillRectangle(_brush, new Rect(0, 0, Bounds.Width, Bounds.Height));
+
             foreach (var label in _labels)
             {
                 DrawTick(context, label, _tickSize);

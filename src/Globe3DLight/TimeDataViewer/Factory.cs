@@ -26,35 +26,29 @@ using Avalonia.Input.GestureRecognizers;
 using Avalonia.Input.TextInput;
 using Avalonia.Interactivity;
 using TimeDataViewer.Shapes;
+using TimeDataViewer.Models;
 
 namespace TimeDataViewer
 {
     public class Factory
     {
-        public SeriesViewModel CreateSeries(string category)
+        public ISeries CreateSeries(string category, ISeriesControl series)
         {
-            var marker = new SeriesViewModel(category);
-
-            marker.Shape = new StringVisual(marker);
-
-            return marker;
+            return new SeriesViewModel() 
+            {
+                Name = category,
+                ZIndex = 30,            
+                SeriesControl = series
+            };
         }
 
-        public IntervalViewModel CreateInterval(Interval ival, SeriesViewModel parent, BaseIntervalVisual template)
+        public IInterval CreateInterval(double left, double right, ISeriesControl series)
         {
-            var marker = new IntervalViewModel(ival.Left, ival.Right);
-            
-            marker.Series = parent;
-
-            var visual = template.Clone();
-
-            visual.DataContext = marker;
-
-            marker.Shape = visual;
-
-            parent.Intervals.Add(marker);
-
-            return marker;
-        }        
+            return new IntervalViewModel(left, right) 
+            {
+                ZIndex = 100,            
+                SeriesControl = series, 
+            };
+        }
     }
 }

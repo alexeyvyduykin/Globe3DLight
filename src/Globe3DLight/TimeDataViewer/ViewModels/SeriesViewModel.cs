@@ -9,21 +9,27 @@ using System.Drawing;
 using System.ComponentModel;
 using Avalonia.Media;
 using System.Windows;
-using TimeDataViewer.Spatial;
+using TimeDataViewer.Models;
 
 namespace TimeDataViewer.ViewModels
 {
-    public class SeriesViewModel : MarkerViewModel
+    public class SeriesViewModel : MarkerViewModel, ISeries
     {
-        private readonly List<IntervalViewModel> _intervals;
+        private readonly List<IInterval> _intervals;
+        private ISeriesControl? _series;
 
-        public SeriesViewModel(string name) : base()
-        {
-            Name = name;
-            _intervals = new List<IntervalViewModel>();
+        public SeriesViewModel() : base()
+        {         
+            _intervals = new List<IInterval>();         
         }
 
-        public List<IntervalViewModel> Intervals => _intervals;
+        public ISeriesControl? SeriesControl
+        {
+            get => _series;
+            set => _series = value;
+        }
+
+        public IList<IInterval> Intervals => _intervals;
 
         public double MinTime() => (_intervals.Count == 0) ? 0.0 : _intervals.Min(s => s.Left);
 

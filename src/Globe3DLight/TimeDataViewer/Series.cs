@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Linq;
 using Avalonia.Controls.Presenters;
 using Avalonia.Controls.Templates;
-using Avalonia.Input;
+using Avalonia.Threading;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Metadata;
@@ -29,46 +29,43 @@ using Avalonia.Interactivity;
 using Avalonia.Controls.Generators;
 using Avalonia.Controls.Primitives;
 using TimeDataViewer.Views;
+using System.Threading.Tasks;
+using TimeDataViewer.Models;
 
 namespace TimeDataViewer
 {
     public record Interval(double Left, double Right);
 
-    public class Series : ItemsControl, IStyleable // TemplatedControl
+    public class Series : ItemsControl, IStyleable, ISeriesControl
     {
         Type IStyleable.StyleKey => typeof(ItemsControl);
 
         private readonly Factory _factory;
+        private ISeries? _seriesViewModel;
+        private BaseIntervalVisual _intervalTemplate;
+       
+        public event EventHandler? OnInvalidateData;
 
         public Series()
         {
             _factory = new Factory();
-            IntervalTemplate = new IntervalVisual() { Series = this };
-
-            IntervalTemplateProperty.Changed.AddClassHandler<Series>((d, e) => d.IntervalTemplateChanged(e));
         }
 
-        public SeriesViewModel? String { get; set; }
-
-        public IEnumerable<IntervalViewModel>? Ivals { get; set; }
+        public ISeries? SeriesViewModel 
+        {
+            get => _seriesViewModel; 
+            set => _seriesViewModel = value; 
+        }
 
         public bool DirtyItems { get; set; } = false;
 
-        private void IntervalTemplateChanged(AvaloniaPropertyChangedEventArgs e)
-        {
-            if(e.NewValue is not null && e.NewValue is BaseIntervalVisual ival)
-            {
-                ival.Series = this;
-            }
-        }
-
-        public static readonly StyledProperty<BaseIntervalVisual> IntervalTemplateProperty =    
+        public static readonly StyledProperty<BaseIntervalVisual> IntervalTemplateProperty =
             AvaloniaProperty.Register<Series, BaseIntervalVisual>(nameof(IntervalTemplate));
 
         public BaseIntervalVisual IntervalTemplate
         {
-            get { return GetValue(IntervalTemplateProperty); }
-            set { SetValue(IntervalTemplateProperty, value); }
+            get { return _intervalTemplate; }
+            set { SetAndRaise(IntervalTemplateProperty, ref _intervalTemplate, value); }
         }
 
         public static readonly StyledProperty<Control> TooltipProperty =    
@@ -107,33 +104,15 @@ namespace TimeDataViewer
             set { SetValue(CategoryProperty, value); }
         }
 
-        private void ItemsSource_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs e)
+        protected override void OnDetachedFromLogicalTree(LogicalTreeAttachmentEventArgs e)
         {
-            PassingLogicalTree(e);
-        }
+            base.OnDetachedFromLogicalTree(e);
 
-        private void PassingLogicalTree(NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems is not null)
+            if (OnInvalidateData is not null)
             {
-                foreach (var item in e.NewItems.OfType<ISetLogicalParent>())
+                foreach (var d in OnInvalidateData.GetInvocationList())
                 {
-                    item.SetParent(this);
-                }
-                LogicalChildren.AddRange(e.NewItems.OfType<ILogical>());
-                VisualChildren.AddRange(e.NewItems.OfType<IVisual>());
-            }
-
-            if (e.OldItems is not null)
-            {
-                foreach (var item in e.OldItems.OfType<ISetLogicalParent>())
-                {
-                    item.SetParent(null);
-                }
-                foreach (var item in e.OldItems)
-                {
-                    LogicalChildren.Remove((ILogical)item);
-                    VisualChildren.Remove((IVisual)item);
+                    OnInvalidateData -= (EventHandler)d;
                 }
             }
         }
@@ -144,21 +123,37 @@ namespace TimeDataViewer
 
             if (e.NewValue is not null && e.NewValue is IEnumerable items)
             {
-                if (items is IEnumerable<Interval>)
-                {
-                    String = _factory.CreateSeries(Category);
-                    Ivals = ((IList<Interval>)Items).Select(s => _factory.CreateInterval(s, String, IntervalTemplate));
-
+                if (DirtyItems == false)
+                {                                  
+                    Update(items);
                     DirtyItems = true;
-                }
-                else
-                {
-                    UpdateItems(items);
+                    OnInvalidateData?.Invoke(this, EventArgs.Empty);
+                    //Debug.WriteLine($"Series -> OnInvalidateData -> Count = {OnInvalidateData?.GetInvocationList().Length}");
                 }
             }
         }
 
-        private void UpdateItems(IEnumerable items)
+        private void Update(IEnumerable items)
+        {
+            IList<Interval> list;
+
+            if (items is IEnumerable<Interval> ivals)
+            {
+                list = new List<Interval>(ivals);
+            }
+            else
+            {
+                list = UpdateItems(items);
+            }
+
+            _seriesViewModel = _factory.CreateSeries(Category, this);
+
+            var intervals = list.Select(s => _factory.CreateInterval(s.Left, s.Right, this));
+
+            _seriesViewModel.ReplaceIntervals(intervals);
+        }
+
+        private IList<Interval> UpdateItems(IEnumerable items)
         {
             if (string.IsNullOrWhiteSpace(LeftBindingPath) == false && string.IsNullOrWhiteSpace(RightBindingPath) == false)
             {
@@ -177,16 +172,27 @@ namespace TimeDataViewer
                         list.Add(new Interval(left, right));
                     }
                 }
-
-                Items = new ObservableCollection<Interval>(list);
+                return list;             
             }
+
+            return new List<Interval>();
         }
 
-        public SchedulerControl? Map => (((ILogical)this).LogicalParent is SchedulerControl map) ? map : null;
+        public SchedulerControl? Scheduler => (((ILogical)this).LogicalParent is SchedulerControl scheduler) ? scheduler : null;
 
-        public virtual IntervalTooltipViewModel CreateTooltip(IntervalViewModel marker)
+        public virtual IntervalTooltipViewModel CreateTooltip(IInterval marker)
         {
             return new IntervalTooltipViewModel(marker);
+        }
+
+        public virtual IShape CreateIntervalShape(IInterval interval)
+        {
+            return IntervalTemplate.Clone(interval);
+        }
+
+        public IShape CreateSeriesShape()
+        {                
+            return new SeriesVisual() { DataContext = this };            
         }
     }
 }

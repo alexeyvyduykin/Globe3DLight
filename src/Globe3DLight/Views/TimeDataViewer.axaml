@@ -10,42 +10,59 @@
              x:DataType="Containers:ScenarioContainerViewModel" x:CompileBindings="True"
              >
 
-    <Grid RowDefinitions="*, 60" ColumnDefinitions="*" ShowGridLines="False" Background="WhiteSmoke">
+        <Grid RowDefinitions="Auto,*,60">
 
-        <sch:SchedulerControl Name="scheduler"
-                              Grid.Row="0"
-                              Epoch="{Binding TimePresenter.Begin}"
-                              CurrentTime="{Binding TimePresenter.CurrentTime}">
+            <Grid ColumnDefinitions="80,400" 
+                  RowDefinitions="30" 
+                  Grid.Row="0"                   
+                  HorizontalAlignment="Center">
 
-            <sch:SchedulerControl.Series>
-                <sch:Series Category="Rotation" Items="{Binding CurrentTask.Rotations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
-                    <sch:Series.IntervalTemplate>
-                        <shapes:IntervalVisual Background="Yellow"/>
-                    </sch:Series.IntervalTemplate>
-                </sch:Series>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Zoom: "/>
+                    <TextBlock Text="{Binding #scheduler.Zoom}"/>
+                </StackPanel>
 
-                <sch:Series Category="Observation" Items="{Binding CurrentTask.Observations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+                <Border Grid.Column="1" Margin="1">
+                    <Border.Background>
+                        <SolidColorBrush Color="Silver" Opacity="0.3"/>
+                    </Border.Background>
+                    <Slider TickFrequency="1"
+                            IsSnapToTickEnabled="True"                          
+                            Padding="5,-15"
+                            Value="{Binding #scheduler.Zoom}"/>
+                </Border>
+            </Grid>
 
-                    <sch:Series.IntervalTemplate>
-                        <shapes:IntervalVisual Background="Blue"/>
-                    </sch:Series.IntervalTemplate>
+            <sch:SchedulerControl x:Name="scheduler"
+                                  Grid.Row="1"
+                                  Epoch="{Binding TimePresenter.Begin}"
+                                  CurrentTime="{Binding TimePresenter.CurrentTime}">
 
-                </sch:Series>
+                <sch:SchedulerControl.Series>
+                    <sch:Series Category="Rotation" Items="{Binding CurrentTask.Rotations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+                        <sch:Series.IntervalTemplate>
+                            <shapes:IntervalVisual Background="Yellow"/>
+                        </sch:Series.IntervalTemplate>
+                    </sch:Series>
 
-                <sch:Series Category="Transmission" Items="{Binding CurrentTask.Transmissions}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+                    <sch:Series Category="Observation" Items="{Binding CurrentTask.Observations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+                        <sch:Series.IntervalTemplate>
+                            <shapes:IntervalVisual Background="Blue"/>
+                        </sch:Series.IntervalTemplate>
+                    </sch:Series>
 
-                    <sch:Series.IntervalTemplate>
-                        <shapes:IntervalVisual Background="Green"/>
-                    </sch:Series.IntervalTemplate>
+                    <sch:Series Category="Transmission" Items="{Binding CurrentTask.Transmissions}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">
+                        <sch:Series.IntervalTemplate>
+                            <shapes:IntervalVisual Background="Green"/>
+                        </sch:Series.IntervalTemplate>
+                    </sch:Series>
 
-                </sch:Series>
+                </sch:SchedulerControl.Series>
 
-            </sch:SchedulerControl.Series>
+            </sch:SchedulerControl>
 
-        </sch:SchedulerControl>
+            <sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="2"/>
 
-        <sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="1"/>
-
-    </Grid>
+        </Grid>
 
 </UserControl>

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TimeDataViewer.Spatial;
 using System.Collections.ObjectModel;
 using Avalonia;
+using TimeDataViewer.Models;
 
 namespace TimeDataViewer
 {
@@ -37,6 +38,18 @@ namespace TimeDataViewer
         public static Rect ToAvaloniaRect(this RectD rect)
         {
             return new Rect(rect.X, rect.Y, rect.Width, rect.Height);
+        }
+
+        public static void ReplaceIntervals(this ISeries series, IEnumerable<IInterval> ivals)
+        {
+            series.Intervals.Clear();
+          
+            foreach (var item in ivals)
+            {
+                item.Series = series;
+
+                series.Intervals.Add(item);
+            }
         }
     }
 }

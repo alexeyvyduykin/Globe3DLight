@@ -3,31 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Globe3DLight.ViewModels;
+using TimeDataViewer.Models;
 
 namespace TimeDataViewer.ViewModels
 {
     public class IntervalTooltipViewModel : ViewModelBase
     {
-        private readonly IntervalViewModel _marker;
+        private readonly IInterval _marker;
         private string _category;
         private string _date;
         private string _begin;
         private string _end;
 
-        public IntervalTooltipViewModel(IntervalViewModel marker)
+        public IntervalTooltipViewModel(IInterval marker)
         {
             _marker = marker;
 
             var left = marker.Left;
             var right = marker.Right;
 
-            var strng = marker.Series;
+            var series = marker.Series;
             // var epoch = DateTime.Now.Date;
 
-            var epoch = marker.Series.Scheduler.Epoch;
+            var epoch = marker.SeriesControl.Scheduler.Epoch;
 
-            _category = strng.Name;
+            _category = series.Name;
             _date = epoch.AddSeconds(left).ToShortDateString();
             _begin = epoch.AddSeconds(left).ToLongTimeString();
             _end = epoch.AddSeconds(right).ToLongTimeString();
