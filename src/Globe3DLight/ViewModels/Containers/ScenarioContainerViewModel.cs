@@ -34,6 +34,9 @@ namespace Globe3DLight.ViewModels.Containers
         private double _height;
         private ImmutableArray<FrameViewModel> _frameRoot;
         private FrameViewModel _currentFrame;
+        private bool _isVisualMode;
+        private bool _isLogicalMode;
+        private bool _isTaskMode;
 
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
@@ -123,6 +126,24 @@ namespace Globe3DLight.ViewModels.Containers
         {
             get => _sceneState;
             set => RaiseAndSetIfChanged(ref _sceneState, value);
+        }
+
+        public bool IsVisualMode
+        {
+            get => _isVisualMode;
+            set => RaiseAndSetIfChanged(ref _isVisualMode, value);
+        }
+
+        public bool IsLogicalMode
+        {
+            get => _isLogicalMode;
+            set => RaiseAndSetIfChanged(ref _isLogicalMode, value);
+        }
+
+        public bool IsTaskMode
+        {
+            get => _isTaskMode;
+            set => RaiseAndSetIfChanged(ref _isTaskMode, value);
         }
 
         public double Width

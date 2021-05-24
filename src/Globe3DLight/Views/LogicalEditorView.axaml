@@ -1,0 +1,52 @@
+<UserControl x:Class="Globe3DLight.Views.LogicalEditorView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:containers="clr-namespace:Globe3DLight.Views.Containers;assembly=Globe3DLight"
+             xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"         
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
+             xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"     
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             d:DataContext="{x:Static Designer:DesignerContext.Editor}"        
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False"
+             >
+
+    <Grid ColumnDefinitions="250,6,*,6,250" RowDefinitions="*,20">
+
+        <containers:FrameContainerControl Grid.RowSpan="2" DataContext="{Binding Project}" IsVisible="{Binding Project.CurrentScenario.IsLogicalMode}"/>
+        
+        <GridSplitter x:Name="LeftGridSplitter" Grid.Column="1" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+
+        <views:ScenarioControl x:Name="Scenario" Grid.Column="2" Grid.Row="0"/>
+
+        <GridSplitter x:Name="RightGridSplitter" Grid.Column="3" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+
+        <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="0">
+            <TabItem Header="Properties" FontSize="20">
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentFrame, Mode=TwoWay}"/>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Scene" FontSize="20">
+                <TabControl>
+                    <TabItem Header="Scenario">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ContentControl Content="{Binding Project.CurrentScenario, Mode=TwoWay}"/>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem Header="Camera">
+                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+                            <ContentControl Content="{Binding Project.CurrentScenario.SceneState.Camera, Mode=TwoWay}"/>
+                        </ScrollViewer>
+                    </TabItem>
+                </TabControl>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+    
+</UserControl>

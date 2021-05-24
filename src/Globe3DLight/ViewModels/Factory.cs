@@ -79,6 +79,7 @@ namespace Globe3DLight.ViewModels
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
                 TimePresenter = CreateSliderTimePresenter(begin, duration),
+                IsVisualMode = true,
             };
   
             frame.Owner = scenario;
@@ -114,7 +115,7 @@ namespace Globe3DLight.ViewModels
                 AspectRatio = 1,
                 CameraBehaviours = cameraBehaviours,
                 PerspectiveNearPlaneDistance = 85,// 10.5, // 0.5;
-                PerspectiveFarPlaneDistance = 2500000.0,
+                PerspectiveFarPlaneDistance = 2500000.0,                
             };
         }
 

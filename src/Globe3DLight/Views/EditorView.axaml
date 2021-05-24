@@ -16,58 +16,126 @@
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"
              d:DesignWidth="1200" d:DesignHeight="580"
-             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True"
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False"
              >
-
-    <Grid ShowGridLines="False" ColumnDefinitions="250,6,*,6,250" RowDefinitions="Auto,Auto,*,300,20">
-
-        <TabControl Padding="6,0,0,0" Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
-            <TabItem Header="Project" FontSize="20">
-                <containers:ProjectContainerControl DataContext="{Binding Project}"/>
-            </TabItem>
-            <TabItem Header="Frames" FontSize="20">
-                <containers:FrameContainerControl DataContext="{Binding Project}"/>
-            </TabItem>
-            <TabItem Header="Tasks" FontSize="20">
-                <containers:TaskContainerControl DataContext="{Binding Project.CurrentScenario}"/>
-            </TabItem>
-        </TabControl>
-
-        <GridSplitter x:Name="LeftGridSplitter" Grid.Column="1" Grid.Row="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
-
-        <views:TimePresenterControl Grid.Column="2" Grid.Row="1" DataContext="{Binding Project.CurrentScenario.TimePresenter}"/>
-
-        <views:ScenarioControl x:Name="Scenario" Grid.Column="2" Grid.Row="2"/>
-
-        <views:TimeDataViewer Grid.Column="2" Grid.Row="3" 
-                              DataContext="{Binding Project.CurrentScenario}"/>
         
-        <GridSplitter x:Name="RightGridSplitter" Grid.Column="3" Grid.Row="1" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+    <UserControl.Styles>
 
-        <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="1" Grid.RowSpan="2">
-            <TabItem Header="Properties" FontSize="20">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentFrame, Mode=TwoWay}"/>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Scene" FontSize="20">
-                <TabControl>
-                    <TabItem Header="Scenario">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ContentControl Content="{Binding Project.CurrentScenario, Mode=TwoWay}"/>
-                        </ScrollViewer>
-                    </TabItem>
-                    <TabItem Header="Camera">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ContentControl Content="{Binding Project.CurrentScenario.SceneState.Camera, Mode=TwoWay}"/>
-                        </ScrollViewer>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
-        </TabControl>
+        <Style Selector="RadioButton.tglb">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackground}" />
+            <Setter Property="Foreground" Value="{DynamicResource ToggleButtonForeground}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrush}" />
+            <Setter Property="BorderThickness" Value="{DynamicResource ToggleButtonBorderThemeThickness}" />
+            <Setter Property="Padding" Value="8,5,8,6" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="VerticalAlignment" Value="Stretch" />
+            <Setter Property="FontWeight" Value="Normal" />
+            <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <ContentPresenter x:Name="PART_ContentPresenter"
+                                      Background="{TemplateBinding Background}"
+                                      BorderBrush="{TemplateBinding BorderBrush}"
+                                      BorderThickness="{TemplateBinding BorderThickness}"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}"
+                                      Padding="{TemplateBinding Padding}"
+                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+                </ControlTemplate>
+            </Setter>
+        </Style>
 
+        <Style Selector="RadioButton.tglb /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="CornerRadius" Value="{DynamicResource ControlCornerRadius}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundPointerOver}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushPointerOver}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundPointerOver}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:pressed  /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundPressed}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushPressed}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundPressed}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushDisabled}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundDisabled}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:checked /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundChecked}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushChecked}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundChecked}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPointerOver}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushCheckedPointerOver}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundCheckedPointerOver}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedPressed}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushCheckedPressed}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundCheckedPressed}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:checked:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundCheckedDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushCheckedDisabled}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundCheckedDisabled}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:indeterminate /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundIndeterminate}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushIndeterminate}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundIndeterminate}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:indeterminate:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundIndeterminatePointerOver}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushIndeterminatePointerOver}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundIndeterminatePointerOver}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:indeterminate:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundIndeterminatePressed}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushIndeterminatePressed}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundIndeterminatePressed}" />
+        </Style>
+
+        <Style Selector="RadioButton.tglb:indeterminate:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="{DynamicResource ToggleButtonBackgroundIndeterminateDisabled}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ToggleButtonBorderBrushIndeterminateDisabled}" />
+            <Setter Property="TextBlock.Foreground" Value="{DynamicResource ToggleButtonForegroundIndeterminateDisabled}" />
+        </Style>
+        
+    </UserControl.Styles>
+        
+    <Grid RowDefinitions="Auto,*">
+
+        <Grid Grid.Row="0" RowDefinitions="*" ColumnDefinitions="Auto,Auto">
+            <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="*">
+                <RadioButton Name="rb1" Grid.Column="0" FontSize="20" Width="50" GroupName="GroupName1" Content="Visual" IsChecked="{Binding Project.CurrentScenario.IsVisualMode}" Classes="tglb"/>
+                <RadioButton Name="rb2" Grid.Column="1" FontSize="20" Width="50" GroupName="GroupName1" Content="Logical" IsChecked="{Binding Project.CurrentScenario.IsLogicalMode}" Classes="tglb"/>
+                <RadioButton Name="rb3" Grid.Column="2" FontSize="20" Width="50" GroupName="GroupName1" Content="Tasks" IsChecked="{Binding Project.CurrentScenario.IsTaskMode}" Classes="tglb"/>
+            </Grid>
+
+            <views:TimePresenterControl Grid.Column="1" DataContext="{Binding Project.CurrentScenario.TimePresenter}"/>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <views:VisualEditorView IsVisible="{Binding #rb1.IsChecked}"/>
+            <views:LogicalEditorView IsVisible="{Binding #rb2.IsChecked}"/>
+            <views:TaskEditorView IsVisible="{Binding #rb3.IsChecked}"/>
+        </Grid>
+        
     </Grid>
-
-
 
 </UserControl>
