@@ -117,7 +117,24 @@
         </Style>
         
     </UserControl.Styles>
-        
+
+    <!--
+    <UserControl.Resources>
+
+        <ContentControl x:Key="VisualModeTemplate">
+            <views:VisualEditorView/>
+        </ContentControl>
+
+        <ContentControl x:Key="LogicalModeTemplate">
+            <views:LogicalEditorView/>
+        </ContentControl>
+
+        <ContentControl x:Key="TaskModeTemplate">
+            <views:TaskEditorView/>
+        </ContentControl>
+
+    </UserControl.Resources>
+        -->
     <Grid RowDefinitions="Auto,*">
 
         <Grid Grid.Row="0" RowDefinitions="*" ColumnDefinitions="Auto,Auto">
@@ -130,12 +147,34 @@
             <views:TimePresenterControl Grid.Column="1" DataContext="{Binding Project.CurrentScenario.TimePresenter}"/>
         </Grid>
 
+      
         <Grid Grid.Row="1">
             <views:VisualEditorView IsVisible="{Binding #rb1.IsChecked}"/>
             <views:LogicalEditorView IsVisible="{Binding #rb2.IsChecked}"/>
             <views:TaskEditorView IsVisible="{Binding #rb3.IsChecked}"/>
         </Grid>
-        
+     
+ <!--
+    <Grid Grid.Row="1">
+
+      <ContentControl Name="presenter">
+        <i:Interaction.Behaviors>
+          <ia:DataTriggerBehavior Binding="{Binding #rb1.IsChecked}" ComparisonCondition="Equal" Value="True">
+            <ia:ChangePropertyAction TargetObject="{Binding #presenter}" PropertyName="Content" Value="{DynamicResource VisualModeTemplate}"/>
+          </ia:DataTriggerBehavior>
+          <ia:DataTriggerBehavior Binding="{Binding #rb2.IsChecked}" ComparisonCondition="Equal" Value="True">
+            <ia:ChangePropertyAction TargetObject="{Binding #presenter}" PropertyName="Content" Value="{DynamicResource LogicalModeTemplate}"/>
+          </ia:DataTriggerBehavior>
+          <ia:DataTriggerBehavior Binding="{Binding #rb3.IsChecked}" ComparisonCondition="Equal" Value="True">
+            <ia:ChangePropertyAction TargetObject="{Binding #presenter}" PropertyName="Content" Value="{DynamicResource TaskModeTemplate}"/>
+          </ia:DataTriggerBehavior>
+        </i:Interaction.Behaviors>
+
+      </ContentControl>
+                         
+    </Grid>    
+     -->
+
     </Grid>
 
 </UserControl>

@@ -7,7 +7,7 @@
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
              xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
-             Width="{Binding $self.Container.Width}" Height="{Binding $self.Container.Height}"
+            
              Focusable="True"  
              xmlns:Designer="clr-namespace:Globe3DLight.ViewModels.Designer;assembly=Globe3DLight"  
              mc:Ignorable="d"  
@@ -15,5 +15,5 @@
              d:DesignWidth="600" d:DesignHeight="600"  
              x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False">
 
-  
+    <!--  Width="{Binding $self.Container.Width}" Height="{Binding $self.Container.Height}" -->
 </UserControl>

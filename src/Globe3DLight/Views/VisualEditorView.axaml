@@ -12,7 +12,7 @@
              xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"     
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"        
-             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False"
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False"            
              >
 
 
@@ -20,11 +20,11 @@
 
         <containers:ProjectContainerControl Grid.RowSpan="2" DataContext="{Binding Project}" IsVisible="{Binding Project.CurrentScenario.IsVisualMode}"/>
 
-        <GridSplitter x:Name="LeftGridSplitter" Grid.Column="1" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+        <GridSplitter Grid.Column="1" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
 
-        <views:ScenarioControl x:Name="Scenario" Grid.Column="2" Grid.Row="0"/>
+        <views:ScenarioControl Grid.Column="2" Grid.Row="0"/>
 
-        <GridSplitter x:Name="RightGridSplitter" Grid.Column="3" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
+        <GridSplitter Grid.Column="3" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
 
         <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="0">
             <TabItem Header="Properties" FontSize="20">

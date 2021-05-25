@@ -14,23 +14,9 @@ namespace Globe3DLight.Renderer.OpenTK
     {
         private readonly GameWindow _window;
 
-        public int Width
-        {
-            get => _window.Width;
-            set => _window.Width = value;
-        }
-
-        public int Height
-        {
-            get => _window.Height;
-            set => _window.Height = value;
-        }
-
         public OpenTKPresenter()
-        {
-            //  OpenTK.Toolkit.Init();
-
-            _window = new GameWindow(/*1112,941,*/600, 600,
+        {             
+            _window = new GameWindow(1,1,
                 new GraphicsMode(24, 24, 8),
                 "Globe3DNative",
                 GameWindowFlags.Default,
@@ -40,46 +26,30 @@ namespace Globe3DLight.Renderer.OpenTK
 
             _window.Visible = false;
             _window.MakeCurrent();
-
-
-
-
-            //   GlWindow = new AvaloniaGraphicsWindow(this, 1/*1*/, 1/*1*/);
         }
 
-        public void Resize(int w, int h)
+        public int Width => _window.Width;    
+        
+        public int Height => _window.Height;       
+        
+        public void Resize(double width, double height)
         {
-            float fWidth = (float)w;
-            float fHeight = (float)h;
-            //  if(Height == 0.) Height = 1.;
+            var w = (width != 0.0) ? width : 1.0;            
+            var h = (height != 0.0) ? height : 1.0;
+            
+            _window.ClientSize = new Size((int)w, (int)h);
 
-            float scale = 1.0f;
-            if (fHeight / fWidth >= scale)
+            if (w >= h)
             {
-                this.Width = w;
-                this.Height = (int)(scale * w);
-            }
-            else
-            {
-                this.Width = (int)(fHeight / scale);
-                this.Height = h;
+                var d = (w - h) / 2.0;
+                GL.Viewport(0, (int)-d, (int)w, (int)w);             
             }
 
-            if (fWidth >= fHeight)
+            if (h > w)
             {
-                float d = (fWidth - fHeight) / 2.0f;
-                GL.Viewport(0, (int)-d, (int)fWidth, (int)fWidth);
-                //viewport = new IntRect(0, (int)fWidth, (int)-d, (int)(fHeight + d));
-            }
-
-            if (fHeight > fWidth)
-            {
-                float d = (fHeight - fWidth) / 2.0f;
-                GL.Viewport((int)-d, 0, (int)fHeight, (int)fHeight);
-                //viewport = new IntRect((int)-d, (int)(fWidth + d), 0, (int)fHeight);
-            }
-
-            _window.ClientSize = new Size(w, h);
+                var d = (h - w) / 2.0;
+                GL.Viewport((int)-d, 0, (int)h, (int)h);           
+            }          
         }
 
         public void DrawBegin()
@@ -90,9 +60,6 @@ namespace Globe3DLight.Renderer.OpenTK
 
         public void ReadPixels(IntPtr pixels, int rowBytes)
         {
-            //GL.ClearColor(0.0f, 1.0f, 1.0f, 1.0f);
-            //GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-
             GL.Flush();
 
             GL.PixelStore(PixelStoreParameter.PackRowLength, rowBytes / 4);

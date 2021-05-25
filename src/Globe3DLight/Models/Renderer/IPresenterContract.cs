@@ -9,9 +9,10 @@ namespace Globe3DLight.Models.Renderer
     public interface IPresenterContract
     {
         void ReadPixels(IntPtr pixels, int rowBytes);
+        
         void DrawBegin();
 
-        void Resize(int w, int h);
+        void Resize(double width, double height);
 
         int Width { get; }
 

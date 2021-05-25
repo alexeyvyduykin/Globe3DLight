@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
@@ -11,27 +10,48 @@ using Globe3DLight.Models.Renderer;
 using Globe3DLight.Modules.Renderer;
 using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Renderer.Presenters;
+using System.Diagnostics;
+using Avalonia.Input;
 
 namespace Globe3DLight.Views
 {
     public class PresenterControl : UserControl
     {
-        private readonly TranslateTransform _translateTransform = new TranslateTransform();
-        private readonly ScaleTransform _flipYTransform = new ScaleTransform(1, -1);
+        private readonly TranslateTransform _transform;
+        private readonly ScaleTransform _flipYTransform;
+        private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
 
         private int _width;
         private int _height;
         private DispatcherTimer _timer;
         private double _fps = 60; 
         private double _currentFps = 0.0;
+
 #if USE_DIAGNOSTICS
         private double _last = 0.0;
         private int _frames = 0; 
         private double _totalTime = 0.0;
 #endif
 
-        private static readonly IContainerPresenter s_editorPresenter = new EditorPresenter();
+        internal struct CustomState
+        {
+            public ScenarioContainerViewModel Container;
+            public IRenderContext Renderer;
+        }
 
+        public PresenterControl()
+        {
+            InitializeComponent();
+
+            _transform = new TranslateTransform();
+            _flipYTransform = new ScaleTransform(1, -1);
+        }
+
+        private void InitializeComponent()
+        {
+            AvaloniaXamlLoader.Load(this);
+        }
+       
         public static readonly StyledProperty<ScenarioContainerViewModel> ContainerProperty =
             AvaloniaProperty.Register<PresenterControl, ScenarioContainerViewModel>(nameof(Container), null);
 
@@ -57,22 +77,6 @@ namespace Globe3DLight.Views
         {
             get => GetValue(PresenterContractProperty);
             set => SetValue(PresenterContractProperty, value);
-        }
-
-        public PresenterControl()
-        {
-            InitializeComponent();
-        }
-
-        private void InitializeComponent()
-        {
-            AvaloniaXamlLoader.Load(this);
-        }
-
-        internal struct CustomState
-        {
-            public ScenarioContainerViewModel Container;
-            public IRenderContext Renderer;
         }
 
         public override void Render(DrawingContext context)
@@ -137,48 +141,79 @@ namespace Globe3DLight.Views
             {
                 if (customState.Container != null && customState.Renderer != null)
                 {
+                    UpdatePresenterContract();
                     //          drawingContext.DrawRectangle(new Pen() { Brush = Brushes.Red, Thickness = 3 },
                     //new Rect(new Avalonia.Point(), new Avalonia.Size(_width, _height)));
 
-
                     try
                     {
-
                         PresenterContract.DrawBegin();
                         {
                             s_editorPresenter.Render(context, customState.Renderer, customState.Container);
                         }
 
-                        WriteableBitmap bitmap =
-            new WriteableBitmap(new PixelSize(PresenterContract.Width, PresenterContract.Height), new Vector(/*144,144*/96.0, 96.0),
-            Avalonia.Platform.PixelFormat.Rgba8888, Avalonia.Platform.AlphaFormat.Unpremul);
-
+                        var bitmap = new WriteableBitmap(
+                            new PixelSize(PresenterContract.Width, PresenterContract.Height), 
+                            new Vector(/*144,144*/96.0, 96.0),            
+                            Avalonia.Platform.PixelFormat.Rgba8888, Avalonia.Platform.AlphaFormat.Unpremul);
 
                         using (var buffer = bitmap.Lock())
                         {
                             PresenterContract.ReadPixels(buffer.Address, buffer.RowBytes);
                         }
 
-                        using (drawingContext.PushPreTransform(_translateTransform.Value))
+                        using (drawingContext.PushPreTransform(_transform.Value))
                         using (drawingContext.PushPreTransform(_flipYTransform.Value))
                         {
                             drawingContext.DrawImage(
-                                bitmap/*, 1.0*/,
-                                new Rect(/*bitmap.Size*/new Avalonia.Size(PresenterContract.Width, PresenterContract.Height)),
-                                new Rect(new Avalonia.Size(_width, _height)),
+                                bitmap,
+                                new Rect(new Size(PresenterContract.Width, PresenterContract.Height)),
+                                new Rect(new Size(_width, _height)),
                                 BitmapInterpolationMode.LowQuality);
                         }
 
-
+                        //             Debug.WriteLine($"Width: {PresenterContract.Width}, Height: {PresenterContract.Height}");
+                        //             Debug.WriteLine($"_Width: {_width}, _Height: {_height}");
+                        
                         customState.Container?.Invalidate();
-                        //customState.Renderer.State.PointStyle.Invalidate();
-                        //customState.Renderer.State.SelectedPointStyle.Invalidate();
                     }
                     catch
                     {
-                        throw new System.Exception();
+                        throw new Exception("Error: PresenterControl -> Draw");
                     }
                 }
+            }
+        }
+
+        protected override void ArrangeCore(Rect finalRect)
+        {
+            base.ArrangeCore(finalRect);
+
+            var width = (int)finalRect.Width;
+            var height = (int)finalRect.Height;
+
+            if (_width != width || _height != height)
+            {
+                _width = width;
+                _height = height;
+
+                if (Container is not null)
+                {
+                    Container.Width = _width;
+                    Container.Height = _height;
+                }
+
+                PresenterContract.Resize(_width, _height);
+
+                _transform.Y = _height;
+            }
+        }
+
+        void UpdatePresenterContract()
+        {
+            if (PresenterContract.Width != _width || PresenterContract.Height != _height)
+            {
+                PresenterContract.Resize(_width, _height);
             }
         }
 
@@ -186,43 +221,25 @@ namespace Globe3DLight.Views
         {
             base.OnAttachedToVisualTree(e);
 
-            //      _timer = new System.Timers.Timer(1000.0 / _fps);
-            // Hook up the Elapsed event for the timer. 
-            //       _timer.Elapsed += (s, e) => base.InvalidateVisual();
-            //       _timer.AutoReset = true;
-            //        _timer.Enabled = true;
-
-
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromSeconds(1.0 / _fps);
-            _timer.Tick += (s, e) => base.InvalidateVisual();
+            _timer.Tick += _timer_Tick;
             _timer.Start();
         }
 
-        protected override Size MeasureCore(Size availableSize)
+        private void _timer_Tick(object? sender, EventArgs e)
         {
-            _width = (int)availableSize.Width;
-            _height = (int)availableSize.Height;
-
-            if (Container != null)
-            {
-                Container.Width = _width;
-                Container.Height = _height;
-            }
-
-            PresenterContract.Resize(_width, _height);
-
-            _translateTransform.Y = _height;
-
-            return base.MeasureCore(availableSize);
+            InvalidateVisual();
         }
-
+  
         protected override void OnDetachedFromVisualTree(VisualTreeAttachmentEventArgs e)
         {
-            _timer?.Stop();
-
-            //         _timer.Stop();
-            //         _timer.Dispose();
+            if (_timer is not null)
+            {
+                _timer.Stop();
+                _timer.Tick -= _timer_Tick;              
+            }
+           
             base.OnDetachedFromVisualTree(e);
         }
     }
