@@ -75,7 +75,7 @@ namespace Globe3DLight.ViewModels
                 FrameRoot = ImmutableArray.Create<FrameViewModel>(frame),
                 CurrentFrame = frame,
                 Entities = ImmutableArray.Create<BaseEntity>(),
-                Tasks = ImmutableArray.Create<SatelliteTask>(), 
+                Tasks = ImmutableArray.Create<SatelliteTask>(),              
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
                 TimePresenter = CreateSliderTimePresenter(begin, duration),
@@ -790,6 +790,11 @@ namespace Globe3DLight.ViewModels
                 }
                 return events;
             }
+        }
+
+        public GroundObjectList CreateGroundObjectList(EntityList gos)
+        {
+            return new GroundObjectList(gos);
         }
     }
 }

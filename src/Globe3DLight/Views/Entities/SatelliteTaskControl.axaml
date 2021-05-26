@@ -214,7 +214,7 @@
 
 
     <Grid ColumnDefinitions="*" RowDefinitions="*">
-        <Grid ColumnDefinitions="*" RowDefinitions="1*, 4*" ShowGridLines="True">
+        <Grid ColumnDefinitions="*" RowDefinitions="Auto, *" ShowGridLines="True">
 
             <Grid ColumnDefinitions="*" RowDefinitions="1*,1*,1*,1.5*" Margin="2" Grid.Column="0" Grid.Row="0">
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
@@ -231,7 +231,6 @@
                 </StackPanel>
                 <TextBox Text="{Binding SearchString}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" />
             </Grid>
-
 
             <Grid ColumnDefinitions="*" RowDefinitions="*" Grid.Column="0" Grid.Row="1">
 
@@ -293,6 +292,7 @@
                 </ListBox>
 
             </Grid>
+       
         </Grid>
     </Grid>
   

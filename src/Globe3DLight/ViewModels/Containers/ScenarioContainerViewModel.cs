@@ -27,6 +27,7 @@ namespace Globe3DLight.ViewModels.Containers
         private BaseEntity _currentEntity;
         private ImmutableArray<SatelliteTask> _tasks;
         private SatelliteTask _currentTask;
+        private GroundObjectList _groundObjectList;
        // private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
         private TimePresenter _timePresenter;
@@ -114,6 +115,12 @@ namespace Globe3DLight.ViewModels.Containers
         {
             get => _currentTask;
             set => RaiseAndSetIfChanged(ref _currentTask, value);
+        }
+
+        public GroundObjectList GroundObjectList
+        {
+            get => _groundObjectList;
+            set => RaiseAndSetIfChanged(ref _groundObjectList, value);
         }
 
         public BaseEntity CurrentEntity

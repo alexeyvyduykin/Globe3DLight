@@ -33,6 +33,8 @@ namespace Globe3DLight.Models
 
         IList<SatelliteTask> CreateSatelliteTasks(IList<Satellite> satellites, ScenarioData data);
 
+        GroundObjectList CreateGroundObjectList(EntityList gos);
+
         LibraryViewModel<T> CreateLibrary<T>(string name);
 
         LibraryViewModel<T> CreateLibrary<T>(string name, IEnumerable<T> items);

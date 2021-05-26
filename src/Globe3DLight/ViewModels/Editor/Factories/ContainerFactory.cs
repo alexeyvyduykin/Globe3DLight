@@ -64,12 +64,13 @@ namespace Globe3DLight.ViewModels.Editor
             project.AddEntity(factory.CreateSpacebox(root));
             project.AddEntity(factory.CreateSun(data.Sun, root));
             var earth = project.AddEntity(factory.CreateEarth(data.Earth, root));
-            project.AddEntity(factory.CreateGroundObjects(data, earth.Frame));
+            var gos = project.AddEntity(factory.CreateGroundObjects(data, earth.Frame));
             var gss = project.AddEntity(factory.CreateGroundStations(data, earth.Frame));
             var rtrs = project.AddEntity(factory.CreateRetranslators(data, root));
             var satellites = project.AddEntities(factory.CreateSatellites(data, root, gss, rtrs));
 
             scenario.AddSatelliteTasks(factory.CreateSatelliteTasks(satellites, data));
+            scenario.AddGroundObjectList(factory.CreateGroundObjectList(gos));            
 
             return project;
         }

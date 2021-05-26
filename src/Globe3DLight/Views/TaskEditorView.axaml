@@ -18,34 +18,17 @@
 
     <Grid ColumnDefinitions="250,*,250" RowDefinitions="*,300">
             
-        <containers:TaskContainerControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" DataContext="{Binding Project.CurrentScenario}" IsVisible="{Binding Project.CurrentScenario.IsTaskMode}"/>
+        <containers:TaskContainerControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2" 
+                                         DataContext="{Binding Project.CurrentScenario}" 
+                                         IsVisible="{Binding Project.CurrentScenario.IsTaskMode}"/>
                 
         <views:ScenarioControl Grid.Column="1" Grid.Row="0"/>
         
         <views:TimeDataViewer Grid.Column="1" Grid.Row="1" DataContext="{Binding Project.CurrentScenario}"/>
 
-        <TabControl Padding="0,0,6,0" Grid.Column="2" Grid.Row="0" Grid.RowSpan="2">
-            <TabItem Header="Properties" FontSize="20">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentFrame, Mode=TwoWay}"/>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Scene" FontSize="20">
-                <TabControl>
-                    <TabItem Header="Scenario">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ContentControl Content="{Binding Project.CurrentScenario, Mode=TwoWay}"/>
-                        </ScrollViewer>
-                    </TabItem>
-                    <TabItem Header="Camera">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ContentControl Content="{Binding Project.CurrentScenario.SceneState.Camera, Mode=TwoWay}"/>
-                        </ScrollViewer>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
-        </TabControl>
-
+        <containers:GroundObjectContainerControl Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
+                                                 DataContext="{Binding Project.CurrentScenario}" />
+        
     </Grid>
     
 </UserControl>

@@ -29,5 +29,10 @@ namespace Globe3DLight
                 scenario.Tasks = builder.ToImmutable();
             }
         }
+
+        public static void AddGroundObjectList(this ScenarioContainerViewModel scenario, GroundObjectList list)
+        {                
+            scenario.GroundObjectList = list;            
+        }
     }
 }
