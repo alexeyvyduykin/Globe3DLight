@@ -79,7 +79,7 @@ namespace Globe3DLight.ViewModels
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
                 TimePresenter = CreateSliderTimePresenter(begin, duration),
-                IsVisualMode = true,
+                CurrentScenarioMode = ScenarioMode.Visual,            
             };
   
             frame.Owner = scenario;

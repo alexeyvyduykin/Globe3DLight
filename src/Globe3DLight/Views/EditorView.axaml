@@ -2,23 +2,27 @@
              xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                          
-             xmlns:containers="clr-namespace:Globe3DLight.Views.Containers;assembly=Globe3DLight"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"           
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
-             xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"         
-             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
-             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
-             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
-             xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
-             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"           
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"            
+             xmlns:views="clr-namespace:Globe3DLight.Views"         
+             xmlns:converters="clr-namespace:Globe3DLight.Converters"
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer"
+             xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors"
+             xmlns:containers="clr-namespace:Globe3DLight.Views.Containers"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers"           
              mc:Ignorable="d"
              d:DataContext="{x:Static Designer:DesignerContext.Editor}"
              d:DesignWidth="1200" d:DesignHeight="580"
              x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False"
              >
-        
+
+    <UserControl.Resources>
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+    </UserControl.Resources>
+
     <UserControl.Styles>
 
         <Style Selector="RadioButton.tglb">
@@ -118,63 +122,36 @@
         
     </UserControl.Styles>
 
-    <!--
-    <UserControl.Resources>
-
-        <ContentControl x:Key="VisualModeTemplate">
-            <views:VisualEditorView/>
-        </ContentControl>
-
-        <ContentControl x:Key="LogicalModeTemplate">
-            <views:LogicalEditorView/>
-        </ContentControl>
-
-        <ContentControl x:Key="TaskModeTemplate">
-            <views:TaskEditorView/>
-        </ContentControl>
-
-    </UserControl.Resources>
-        -->
     <Grid RowDefinitions="Auto,*">
 
         <Grid Grid.Row="0" RowDefinitions="*" ColumnDefinitions="Auto,Auto">
-            <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="*">
-                <RadioButton Name="rb1" Grid.Column="0" FontSize="20" Width="50" GroupName="GroupName1" Content="Visual" IsChecked="{Binding Project.CurrentScenario.IsVisualMode}" Classes="tglb"/>
-                <RadioButton Name="rb2" Grid.Column="1" FontSize="20" Width="50" GroupName="GroupName1" Content="Logical" IsChecked="{Binding Project.CurrentScenario.IsLogicalMode}" Classes="tglb"/>
-                <RadioButton Name="rb3" Grid.Column="2" FontSize="20" Width="50" GroupName="GroupName1" Content="Tasks" IsChecked="{Binding Project.CurrentScenario.IsTaskMode}" Classes="tglb"/>
+            <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="*">               
+                <RadioButton Name="rb1" Grid.Column="0" FontSize="20" Width="50" Classes="tglb"
+                             GroupName="GroupName1" Content="Visual"
+                             IsChecked="{Binding Project.CurrentScenario.CurrentScenarioMode, 
+                             Converter={StaticResource EnumToBooleanConverter}, 
+                             ConverterParameter={x:Static Containers:ScenarioMode.Visual}}"/>
+                <RadioButton Name="rb2" Grid.Column="1" FontSize="20" Width="50" Classes="tglb"
+                             GroupName="GroupName1" Content="Logical" 
+                             IsChecked="{Binding Project.CurrentScenario.CurrentScenarioMode,
+                             Converter={StaticResource EnumToBooleanConverter}, 
+                             ConverterParameter={x:Static Containers:ScenarioMode.Logical}}}"/>
+                <RadioButton Name="rb3" Grid.Column="2" FontSize="20" Width="50" Classes="tglb"
+                             GroupName="GroupName1" Content="Tasks" 
+                             IsChecked="{Binding Project.CurrentScenario.CurrentScenarioMode,
+                             Converter={StaticResource EnumToBooleanConverter}, 
+                             ConverterParameter={x:Static Containers:ScenarioMode.Task}}}"/>
             </Grid>
 
             <views:TimePresenterControl Grid.Column="1" DataContext="{Binding Project.CurrentScenario.TimePresenter}"/>
         </Grid>
-
       
         <Grid Grid.Row="1">
             <views:VisualEditorView IsVisible="{Binding #rb1.IsChecked}"/>
             <views:LogicalEditorView IsVisible="{Binding #rb2.IsChecked}"/>
             <views:TaskEditorView IsVisible="{Binding #rb3.IsChecked}"/>
         </Grid>
-     
- <!--
-    <Grid Grid.Row="1">
-
-      <ContentControl Name="presenter">
-        <i:Interaction.Behaviors>
-          <ia:DataTriggerBehavior Binding="{Binding #rb1.IsChecked}" ComparisonCondition="Equal" Value="True">
-            <ia:ChangePropertyAction TargetObject="{Binding #presenter}" PropertyName="Content" Value="{DynamicResource VisualModeTemplate}"/>
-          </ia:DataTriggerBehavior>
-          <ia:DataTriggerBehavior Binding="{Binding #rb2.IsChecked}" ComparisonCondition="Equal" Value="True">
-            <ia:ChangePropertyAction TargetObject="{Binding #presenter}" PropertyName="Content" Value="{DynamicResource LogicalModeTemplate}"/>
-          </ia:DataTriggerBehavior>
-          <ia:DataTriggerBehavior Binding="{Binding #rb3.IsChecked}" ComparisonCondition="Equal" Value="True">
-            <ia:ChangePropertyAction TargetObject="{Binding #presenter}" PropertyName="Content" Value="{DynamicResource TaskModeTemplate}"/>
-          </ia:DataTriggerBehavior>
-        </i:Interaction.Behaviors>
-
-      </ContentControl>
-                         
-    </Grid>    
-     -->
-
+   
     </Grid>
 
 </UserControl>

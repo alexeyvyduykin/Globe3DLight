@@ -1,5 +1,4 @@
-﻿#nullable disable
-using System;
+﻿using System;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Linq;
@@ -18,15 +17,15 @@ namespace Globe3DLight.ViewModels.Containers
 
     public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
 
-    public class ScenarioContainerViewModel : BaseContainerViewModel
+    public enum ScenarioMode { Visual, Logical, Task };
+
+    public partial class ScenarioContainerViewModel : BaseContainerViewModel
     {
         private readonly InvalidateScenarioEventArgs _invalidateScenarioEventArgs;
        // private ImmutableArray<LogicalViewModel> _logicalRoot;
         private IDataUpdater _updater;
         private ImmutableArray<BaseEntity> _entities;
         private BaseEntity _currentEntity;
-        private ImmutableArray<SatelliteTask> _tasks;
-        private SatelliteTask _currentTask;
         private GroundObjectList _groundObjectList;
        // private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
@@ -35,9 +34,7 @@ namespace Globe3DLight.ViewModels.Containers
         private double _height;
         private ImmutableArray<FrameViewModel> _frameRoot;
         private FrameViewModel _currentFrame;
-        private bool _isVisualMode;
-        private bool _isLogicalMode;
-        private bool _isTaskMode;
+        private ScenarioMode _currentScenarioMode;
 
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
@@ -54,17 +51,23 @@ namespace Globe3DLight.ViewModels.Containers
                         arcballCamera.Resize((int)Width, (int)Height);
                     }
                 }
-
-                if (e.PropertyName == nameof(Tasks))
-                {
-                    AddTasks(((ScenarioContainerViewModel)s).Tasks);
-                }
-
-                if (e.PropertyName == nameof(CurrentTask))
-                {
-                    AddCurrentTask(((ScenarioContainerViewModel)s).CurrentTask);
-                }
             };
+
+            PropertyChanged += ScenarioModeChangedEvent;
+        }
+
+        private void ScenarioModeChangedEvent(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ScenarioContainerViewModel.CurrentScenarioMode))
+            {
+                if(CurrentScenarioMode == ScenarioMode.Task)
+                {
+                    if (CurrentTask != null)
+                    {
+                        SetCameraTo(CurrentTask.Satellite);
+                    }
+                }
+            }
         }
 
         public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, _invalidateScenarioEventArgs);
@@ -105,18 +108,6 @@ namespace Globe3DLight.ViewModels.Containers
             set => RaiseAndSetIfChanged(ref _entities, value);
         }
 
-        public ImmutableArray<SatelliteTask> Tasks
-        {
-            get => _tasks;
-            set => RaiseAndSetIfChanged(ref _tasks, value);
-        }
-
-        public SatelliteTask CurrentTask
-        {
-            get => _currentTask;
-            set => RaiseAndSetIfChanged(ref _currentTask, value);
-        }
-
         public GroundObjectList GroundObjectList
         {
             get => _groundObjectList;
@@ -135,22 +126,10 @@ namespace Globe3DLight.ViewModels.Containers
             set => RaiseAndSetIfChanged(ref _sceneState, value);
         }
 
-        public bool IsVisualMode
+        public ScenarioMode CurrentScenarioMode
         {
-            get => _isVisualMode;
-            set => RaiseAndSetIfChanged(ref _isVisualMode, value);
-        }
-
-        public bool IsLogicalMode
-        {
-            get => _isLogicalMode;
-            set => RaiseAndSetIfChanged(ref _isLogicalMode, value);
-        }
-
-        public bool IsTaskMode
-        {
-            get => _isTaskMode;
-            set => RaiseAndSetIfChanged(ref _isTaskMode, value);
+            get => _currentScenarioMode;
+            set => RaiseAndSetIfChanged(ref _currentScenarioMode, value);
         }
 
         public double Width
@@ -196,57 +175,6 @@ namespace Globe3DLight.ViewModels.Containers
             }
         }
 
-        private void AddCurrentTask(SatelliteTask currentTask)
-        {
-            SetCameraTo(currentTask.Satellite);
-        }
-
-        private void AddTasks(ImmutableArray<SatelliteTask> tasks)
-        {
-            foreach (var task in tasks)
-            {
-                task.PropertyChanged += Task_PropertyChanged;
-            }
-
-            void Task_PropertyChanged(object sender, PropertyChangedEventArgs e)
-            {
-                if (e.PropertyName == nameof(SatelliteTask.IsVisible))
-                {
-                    var task = sender as SatelliteTask;
-                    if (task.IsVisible == true)
-                    {
-                        foreach (var item in Tasks)
-                        {
-                            if (item != task)
-                            {
-                                item.IsVisible = false;
-                            }
-                        }
-
-                        CurrentTask = task;
-                    }
-                }
-
-                if (e.PropertyName == nameof(SatelliteTask.SelectedEvent))
-                {
-                    var task = sender as SatelliteTask;
-
-                    if (TimePresenter.Timer.IsRunning == true)
-                    {
-                        TimePresenter.OnPause();
-                    }
-
-                    if (task.SelectedEvent != null)
-                    {
-                        var time = task.SelectedEvent.Epoch.AddSeconds(task.SelectedEvent.BeginTime);//task.SelectedEvent.Begin;
-                        var begin = TimePresenter.Begin;
-
-                        TimePresenter.Update((time - begin).TotalSeconds);
-                    }
-                }
-
-            }
-        }
 
 
         public override bool IsDirty()
