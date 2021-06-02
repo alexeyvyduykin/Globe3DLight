@@ -48,7 +48,7 @@ namespace Globe3DLight.ViewModels.Time
 
             var sliderValue = (int)(CurrentTime * _sliderMax / Duration.TotalSeconds);
 
-            RaiseAndSetIfChanged(ref _sliderValue, sliderValue, nameof(SliderValue));
+            RaiseAndSetIfChanged(ref _sliderValue, sliderValue, nameof(SliderTimePresenter.SliderValue));
         }
 
         private void FromSlider(int value)

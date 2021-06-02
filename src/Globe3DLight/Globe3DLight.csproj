@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Icons.axaml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -28,12 +29,6 @@
     <PackageReference Include="Pfim" Version="0.10.0" />
     <PackageReference Include="OpenTK.NETCore" Version="1.1.2749.6433" />
     <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Entities\GroundObjectListControl.axaml.cs">
-      <DependentUpon>GroundObjectListControl.axaml</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

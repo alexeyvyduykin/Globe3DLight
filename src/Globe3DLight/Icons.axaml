@@ -1,0 +1,64 @@
+﻿<Style xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <Design.PreviewWith>
+        <Border Padding="20">
+            <Button Width="50" Height="50" Padding="0">
+                <Button.Content>
+                    <DrawingPresenter Margin="0" Stretch="Fill" Drawing="{StaticResource FastForward}"/>
+                </Button.Content>
+            </Button>
+        </Border>
+    </Design.PreviewWith>
+
+    <Style.Resources>
+
+        <!-- ClipGeometry="M0,0 V50 H50 V0 H0 Z" -->
+
+        <DrawingGroup x:Key="FastForward">
+            <GeometryDrawing Brush="{DynamicResource IconTransparentBrush}" Geometry="F1M0,0L50,0L50,50L0,50z"/>
+            <GeometryDrawing Brush="{DynamicResource IconAccentBrush1}" Geometry="F1 M50,50z M0,0z M3,8.15625L3,10 3,40 3,41.84375 4.53125,40.84375 24,28.15625 24,40 24,41.84375 25.53125,40.84375 48.53125,25.84375 49.84375,25 48.53125,24.15625 25.53125,9.15625 24,8.15625 24,10 24,21.84375 4.53125,9.15625 3,8.15625z M5,11.84375L24.46875,24.53125 25.1875,25 24.46875,25.46875 5,38.15625 5,11.84375z M26,11.84375L46.1875,25 26,38.15625 26,26.3125 26,25.53125 26,24.46875 26,23.6875 26,11.84375z">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="{DynamicResource IconAccentBrush1}" Thickness="2"/>
+                </GeometryDrawing.Pen>
+            </GeometryDrawing>
+        </DrawingGroup>
+
+        <DrawingGroup x:Key="Pause">
+            <GeometryDrawing Brush="{DynamicResource IconTransparentBrush}" Geometry="F1M0,0L50,0L50,50L0,50z"/>
+            <GeometryDrawing Brush="{DynamicResource IconAccentBrush1}" Geometry="F1 M50,50z M0,0z M12,8L12,9 12,41 12,42 13,42 21,42 22,42 22,41 22,9 22,8 21,8 13,8 12,8z M28,8L28,9 28,41 28,42 29,42 37,42 38,42 38,41 38,9 38,8 37,8 29,8 28,8z M14,10L20,10 20,40 14,40 14,10z M30,10L36,10 36,40 30,40 30,10z">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="{DynamicResource IconAccentBrush2}" Thickness="2"/>
+                </GeometryDrawing.Pen>
+            </GeometryDrawing>
+        </DrawingGroup>
+
+        <DrawingGroup x:Key="Play">
+            <GeometryDrawing Brush="{DynamicResource IconTransparentBrush}" Geometry="F1M0,0L50,0L50,50L0,50z"/>
+            <GeometryDrawing Brush="{DynamicResource IconAccentBrush1}" Geometry="F1 M50,50z M0,0z M10,5.25L10,7 10,43 10,44.75 11.5,43.875 42.09375,25.875 43.5625,25 42.09375,24.125 11.5,6.125 10,5.25z M12,8.75L39.59375,25 12,41.25 12,8.75z">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="{DynamicResource IconAccentBrush1}" Thickness="2"/>
+                </GeometryDrawing.Pen>
+            </GeometryDrawing>
+        </DrawingGroup>
+
+        <DrawingGroup x:Key="Rewind">
+            <GeometryDrawing Brush="{DynamicResource IconTransparentBrush}" Geometry="F1M0,0L50,0L50,50L0,50z"/>
+            <GeometryDrawing Brush="{DynamicResource IconAccentBrush1}" Geometry="F1 M50,50z M0,0z M26,8.15625L24.46875,9.15625 1.46875,24.15625 0.15625,25 1.46875,25.84375 24.46875,40.84375 26,41.84375 26,40 26,28.15625 45.46875,40.84375 47,41.84375 47,40 47,10 47,8.15625 45.46875,9.15625 26,21.84375 26,10 26,8.15625z M24,11.84375L24,23.6875 24,24.46875 24,25.53125 24,26.3125 24,38.15625 3.8125,25 24,11.84375z M45,11.84375L45,38.15625 25.53125,25.46875 24.8125,25 25.53125,24.53125 45,11.84375z">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="{DynamicResource IconAccentBrush1}" Thickness="2"/>
+                </GeometryDrawing.Pen>
+            </GeometryDrawing>
+        </DrawingGroup>
+
+        <DrawingGroup x:Key="SkipToStart">
+            <GeometryDrawing Brush="{DynamicResource IconTransparentBrush}" Geometry="F1M0,0L50,0L50,50L0,50z"/>
+            <GeometryDrawing Brush="{DynamicResource IconAccentBrush1}" Geometry="F1 M50,50z M0,0z M39,8.15625L37.46875,9.15625 18,21.84375 18,10 18,9 17,9 11,9 10,9 10,10 10,40 10,41 11,41 17,41 18,41 18,40 18,28.15625 37.46875,40.84375 39,41.84375 39,40 39,10 39,8.15625z M12,11L16,11 16,23.6875 16,24.46875 16,25.53125 16,26.3125 16,39 12,39 12,11z M37,11.84375L37,38.15625 17.53125,25.46875 16.8125,25 17.53125,24.53125 37,11.84375z">
+                <GeometryDrawing.Pen>
+                    <Pen Brush="{DynamicResource IconAccentBrush1}" Thickness="2"/>
+                </GeometryDrawing.Pen>
+            </GeometryDrawing>
+        </DrawingGroup>
+
+    </Style.Resources>
+</Style>

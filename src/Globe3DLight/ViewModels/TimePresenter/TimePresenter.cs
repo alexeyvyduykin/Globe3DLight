@@ -6,14 +6,30 @@ using System.Diagnostics;
 
 namespace Globe3DLight.ViewModels.Time
 {
+    public enum TimerMode { Play, Stop, Pause };
+
+    public delegate void TimeEventHandler(object? sender, TimeEventArgs e);
+
+    public class TimeEventArgs : EventArgs
+    {
+        private readonly double _time;
+        public TimeEventArgs(double time)
+        {
+            _time = time;
+        }
+
+        public double Time => _time;
+    }
+
     public class TimePresenter : ViewModelBase
     {
         private ITimer _timer;  
         private DateTime _begin;
         private TimeSpan _duration;
         private readonly System.Timers.Timer _timerThread;
-        private double _currentTime;
-        private string _currentTimeString;
+        private double _currentTime;    
+        private TimerMode _timerMode;
+        private DateTime _currentDateTime;
 
         public TimePresenter(ITimer timer, DateTime begin, TimeSpan duration)
         {
@@ -21,7 +37,9 @@ namespace Globe3DLight.ViewModels.Time
             _begin = begin;
             _duration = duration;
             _currentTime = 0.0;
-            _currentTimeString = string.Empty;
+            _currentDateTime = begin;
+
+            _timerMode = TimerMode.Stop;
 
             // 1000 milliseconds = 1 sec
             _timerThread = new System.Timers.Timer(1000.0 / 60.0);
@@ -32,22 +50,22 @@ namespace Globe3DLight.ViewModels.Time
             _timerThread.Enabled = true;
         }
 
-        public DateTime Begin 
+        public TimerMode TimerMode
         {
-            get => _begin; 
-            protected set => RaiseAndSetIfChanged(ref _begin, value); 
+            get => _timerMode;
+            set => RaiseAndSetIfChanged(ref _timerMode, value);
         }
 
-        public TimeSpan Duration 
+        public DateTime Begin
         {
-            get => _duration; 
-            protected set => RaiseAndSetIfChanged(ref _duration, value); 
+            get => _begin;
+            set => RaiseAndSetIfChanged(ref _begin, value);
         }
 
-        public string CurrentTimeString
+        public TimeSpan Duration
         {
-            get => _currentTimeString;
-            protected set => RaiseAndSetIfChanged(ref _currentTimeString, value);
+            get => _duration;
+            set => RaiseAndSetIfChanged(ref _duration, value);
         }
 
         public double CurrentTime 
@@ -56,12 +74,16 @@ namespace Globe3DLight.ViewModels.Time
             protected set => RaiseAndSetIfChanged(ref _currentTime, value); 
         }
 
+        public DateTime CurrentDateTime
+        {
+            get => _currentDateTime;
+            set => RaiseAndSetIfChanged(ref _currentDateTime, value);
+        }
+
         protected virtual void TimerThreadElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
-            CurrentTime = _timer.CurrentTime;
-       
-            var dt = Begin.AddSeconds(CurrentTime);
-            CurrentTimeString = dt.ToLongDateString() + " " + dt.ToLongTimeString();               
+            CurrentTime = _timer.CurrentTime;      
+            CurrentDateTime = _begin.AddSeconds(CurrentTime);                  
         }
 
         public ITimer Timer
@@ -77,33 +99,42 @@ namespace Globe3DLight.ViewModels.Time
     
         public void OnReset()
         {
+            TimerMode = TimerMode.Stop;
             _timer.Reset();
         }
 
         public void OnPlay()
         {
+            TimerMode = TimerMode.Play;
             _timer.Start();
         }
 
         public void OnPause()
         {
+            TimerMode = TimerMode.Pause;
             _timer.Pause();
         }
 
         public void OnSlower()
         {
-            if(_timer is IAcceleratedTimer acceleratedTimer)
+            if (TimerMode == TimerMode.Play)
             {
-                acceleratedTimer.Slower();
-            }            
+                if (_timer is IAcceleratedTimer acceleratedTimer)
+                {
+                    acceleratedTimer.Slower();
+                }
+            }
         }
 
         public void OnFaster()
         {
-            if (_timer is IAcceleratedTimer acceleratedTimer)
+            if (TimerMode == TimerMode.Play)
             {
-                acceleratedTimer.Faster();
-            }        
+                if (_timer is IAcceleratedTimer acceleratedTimer)
+                {
+                    acceleratedTimer.Faster();
+                }
+            }
         }
     }
 }
