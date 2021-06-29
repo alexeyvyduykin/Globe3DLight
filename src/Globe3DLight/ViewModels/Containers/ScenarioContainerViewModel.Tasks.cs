@@ -9,7 +9,6 @@ using Globe3DLight.Models.Data;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.ViewModels.Time;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -57,15 +56,15 @@ namespace Globe3DLight.ViewModels.Containers
 
                 if (task.SelectedEvent is not null)
                 {
-                    if (TimePresenter.Timer.IsRunning == true)
+                    if (SceneTimerEditor.Timer.IsRunning == true)
                     {
-                        TimePresenter.OnPause();
+                        SceneTimerEditor.OnPause();
                     }
 
                     var time = task.SelectedEvent.Epoch.AddSeconds(task.SelectedEvent.BeginTime);//task.SelectedEvent.Begin;
-                    var begin = TimePresenter.Begin;
+                    var begin = SceneTimerEditor.Begin;
 
-                    TimePresenter.Update((time - begin).TotalSeconds);
+                    SceneTimerEditor.Update((time - begin).TotalSeconds);
                 }
             }
         }

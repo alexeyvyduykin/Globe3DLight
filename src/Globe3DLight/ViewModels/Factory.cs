@@ -15,7 +15,7 @@ using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
 using Globe3DLight.ViewModels.Renderer;
 using Globe3DLight.ViewModels.Scene;
-using Globe3DLight.ViewModels.Time;
+using Globe3DLight.ViewModels.Editors;
 
 namespace Globe3DLight.ViewModels
 {
@@ -78,7 +78,7 @@ namespace Globe3DLight.ViewModels
                 Tasks = ImmutableArray.Create<SatelliteTask>(),              
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
-                TimePresenter = CreateSliderTimePresenter(begin, duration),
+                SceneTimerEditor = CreateSceneTimerEditor(begin, duration),
                 CurrentScenarioMode = ScenarioMode.Visual,            
             };
   
@@ -141,11 +141,11 @@ namespace Globe3DLight.ViewModels
             return new AcceleratedTimer();
         }
 
-        public SliderTimePresenter CreateSliderTimePresenter(DateTime dateTime, TimeSpan timeSpan)
+        public SceneTimerEditorViewModel CreateSceneTimerEditor(DateTime dateTime, TimeSpan timeSpan)
         {
             var timer = CreateAcceleratedTimer();
 
-            return new SliderTimePresenter(timer, dateTime, timeSpan, 0, 1000);
+            return new SceneTimerEditorViewModel(timer, dateTime, timeSpan);
         }
 
         public IDataUpdater CreateDataUpdater()

@@ -9,7 +9,7 @@ using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.ViewModels.Time;
+using Globe3DLight.ViewModels.Editors;
 
 namespace Globe3DLight.Models
 {
@@ -51,7 +51,7 @@ namespace Globe3DLight.Models
 
         //LogicalCollectionViewModel CreateLogicalCollection(string name);
 
-        SliderTimePresenter CreateSliderTimePresenter(DateTime dateTime, TimeSpan timeSpan);
+        SceneTimerEditorViewModel CreateSceneTimerEditor(DateTime dateTime, TimeSpan timeSpan);
 
         IDataUpdater CreateDataUpdater();
 

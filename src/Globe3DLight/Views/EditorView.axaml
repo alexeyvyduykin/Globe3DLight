@@ -9,6 +9,7 @@
              xmlns:views="clr-namespace:Globe3DLight.Views"         
              xmlns:converters="clr-namespace:Globe3DLight.Converters"
              xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor"
+             xmlns:editors="clr-namespace:Globe3DLight.Views.Editors"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer"
              xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors"
              xmlns:containers="clr-namespace:Globe3DLight.Views.Containers"
@@ -143,7 +144,12 @@
                              ConverterParameter={x:Static Containers:ScenarioMode.Task}}}"/>
             </Grid>
 
-            <views:TimePresenterControl Grid.Column="1" DataContext="{Binding Project.CurrentScenario.TimePresenter}"/>
+
+
+            <editors:SceneTimerEditor Grid.Column="1"
+                                      Width="400"
+                                      DataContext="{Binding Project.CurrentScenario.SceneTimerEditor}"/>
+            
         </Grid>
       
         <Grid Grid.Row="1">

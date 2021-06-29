@@ -35,8 +35,8 @@
 
             <sch:SchedulerControl x:Name="scheduler"
                                   Grid.Row="1"
-                                  Epoch="{Binding TimePresenter.Begin}"
-                                  CurrentTime="{Binding TimePresenter.CurrentTime}">
+                                  Epoch="{Binding SceneTimerEditor.Begin}"
+                                  CurrentTime="{Binding SceneTimerEditor.CurrentTime}">
 
                 <sch:SchedulerControl.Series>
                     <sch:Series Category="Rotation" Items="{Binding CurrentTask.Rotations}" LeftBindingPath="BeginTime" RightBindingPath="EndTime">

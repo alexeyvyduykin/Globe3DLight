@@ -71,7 +71,7 @@ namespace Globe3DLight.Converters
     
     public class DateTimeToTimeConverter : IValueConverter
     {
-        private readonly string _format = "hh:mm:ss";
+        private readonly string _format = "HH:mm:ss";
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

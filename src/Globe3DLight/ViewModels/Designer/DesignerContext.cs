@@ -10,7 +10,7 @@ using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Editor;
 using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.ViewModels.Time;
+using Globe3DLight.ViewModels.Editors;
 
 namespace Globe3DLight.ViewModels.Designer
 {
@@ -22,7 +22,7 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static ProjectContainerViewModel Project { get; set; }
 
-        public static SliderTimePresenter SliderTimePresenter { get; set; }
+        public static SceneTimerEditorViewModel SceneTimerEditor { get; set; }
 
         public static ICamera ArcballCamera { get; set; }
 
@@ -71,7 +71,7 @@ namespace Globe3DLight.ViewModels.Designer
 
             Editor = serviceProvider.GetService<ProjectEditorViewModel>();
 
-            SliderTimePresenter = factory.CreateSliderTimePresenter(begin, duration);// serviceProvider.GetService<ISceneTimer>();
+            SceneTimerEditor = factory.CreateSceneTimerEditor(begin, duration);// serviceProvider.GetService<ISceneTimer>();
 
             // New Project
 

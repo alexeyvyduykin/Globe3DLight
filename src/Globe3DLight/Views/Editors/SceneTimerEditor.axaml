@@ -1,21 +1,19 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Globe3DLight.Views.Editors.SceneTimerEditor"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"    
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"         
              xmlns:converters="clr-namespace:Globe3DLight.Converters"
-             xmlns:controls="clr-namespace:Globe3DLight.Controls"
-             
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"             
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"          
-             Margin="10"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="180"
-             x:Class="Globe3DLight.Views.Editors.SceneTimerEditor">
-
-  <UserControl.DataContext>
-    <vm:SceneTimerEditorViewModel/>
-  </UserControl.DataContext>
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+             xmlns:editors="clr-namespace:Globe3DLight.ViewModels.Editors"                                         
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer"
+             mc:Ignorable="d"
+             d:DataContext="{x:Static Designer:DesignerContext.SceneTimerEditor}"
+             d:DesignWidth="500" d:DesignHeight="64"
+             x:DataType="editors:SceneTimerEditorViewModel" x:CompileBindings="False">
 
 
   <UserControl.Resources>
@@ -103,13 +101,13 @@
          VerticalAlignment="Center"
          Grid.Column="1">
         <i:Interaction.Behaviors>
-          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static vm:TimerMode.Stop}">
+          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static editors:TimerMode.Stop}">
             <ia:ChangePropertyAction TargetObject="{Binding #btnPause}" PropertyName="IsVisible" Value="False"/>
           </ia:DataTriggerBehavior>
-          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static vm:TimerMode.Play}">
+          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static editors:TimerMode.Play}">
             <ia:ChangePropertyAction TargetObject="{Binding #btnPause}" PropertyName="IsVisible" Value="True"/>
           </ia:DataTriggerBehavior>
-          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static vm:TimerMode.Pause}">
+          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static editors:TimerMode.Pause}">
             <ia:ChangePropertyAction TargetObject="{Binding #btnPause}" PropertyName="IsVisible" Value="False"/>
           </ia:DataTriggerBehavior>
         </i:Interaction.Behaviors>
@@ -147,11 +145,10 @@
 
     <controls:Editor.PanelContent>
       <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
-        <Slider Value="{Binding SliderTime}"
-        Margin="8,4,8,4"
-        Minimum="{Binding SliderTimeMinumum}"
-        Maximum="{Binding SliderTimeMaximum}"
-              />
+        <Slider Value="{Binding SliderValue}"        
+                Margin="8,4,8,4"        
+                Minimum="{Binding SliderMin}"        
+                Maximum="{Binding SliderMax}"/>
      
         <Panel Grid.Column="1">
         <ContentControl Content="{Binding CurrentDateTime}" Classes="t1"/>

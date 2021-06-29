@@ -9,7 +9,7 @@ using Globe3DLight.Models.Data;
 using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
-using Globe3DLight.ViewModels.Time;
+using Globe3DLight.ViewModels.Editors;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -29,7 +29,7 @@ namespace Globe3DLight.ViewModels.Containers
         private GroundObjectList _groundObjectList;
        // private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
-        private TimePresenter _timePresenter;
+        private SceneTimerEditorViewModel _sceneTimerEditor;
         private double _width;
         private double _height;
         private ImmutableArray<FrameViewModel> _frameRoot;
@@ -144,10 +144,10 @@ namespace Globe3DLight.ViewModels.Containers
             set => RaiseAndSetIfChanged(ref _height, value);
         }
 
-        public TimePresenter TimePresenter
+        public SceneTimerEditorViewModel SceneTimerEditor
         {
-            get => _timePresenter;
-            set => RaiseAndSetIfChanged(ref _timePresenter, value);
+            get => _sceneTimerEditor;
+            set => RaiseAndSetIfChanged(ref _sceneTimerEditor, value);
         }
 
         public void SetCameraTo(ITargetable target)
@@ -171,7 +171,7 @@ namespace Globe3DLight.ViewModels.Containers
         {
             //if (TimePresenter.Timer.IsRunning == true)
             {
-                Updater.Update(TimePresenter.Timer.CurrentTime, FrameRoot.Single());
+                Updater.Update(SceneTimerEditor.Timer.CurrentTime, FrameRoot.Single());
             }
         }
 
@@ -213,14 +213,14 @@ namespace Globe3DLight.ViewModels.Containers
             var disposableShapes = default(CompositeDisposable);
 
             ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);
-            ObserveObject(_timePresenter, ref disposableTimePresenter, mainDisposable, observer);
+            ObserveObject(_sceneTimerEditor, ref disposableTimePresenter, mainDisposable, observer);
             ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
 
             void Handler(object sender, PropertyChangedEventArgs e)
             {
-                if (e.PropertyName == nameof(TimePresenter))
+                if (e.PropertyName == nameof(SceneTimerEditorViewModel))
                 {
-                    ObserveObject(_timePresenter, ref disposableTimePresenter, mainDisposable, observer);
+                    ObserveObject(_sceneTimerEditor, ref disposableTimePresenter, mainDisposable, observer);
                 }
 
                 if (e.PropertyName == nameof(Entities))
