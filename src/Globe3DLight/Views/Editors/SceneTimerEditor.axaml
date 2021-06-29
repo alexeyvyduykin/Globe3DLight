@@ -1,0 +1,164 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"    
+             xmlns:converters="clr-namespace:Globe3DLight.Converters"
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"
+             
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"          
+             Margin="10"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="180"
+             x:Class="Globe3DLight.Views.Editors.SceneTimerEditor">
+
+  <UserControl.DataContext>
+    <vm:SceneTimerEditorViewModel/>
+  </UserControl.DataContext>
+
+
+  <UserControl.Resources>
+
+    <DrawingPresenter x:Key="IconPlay1" Drawing="{DynamicResource BlenderIconPlay1}" Width="10" Height="10"/>
+    <DrawingPresenter x:Key="IconPlay2" Drawing="{DynamicResource BlenderIconPlay2}" Width="10" Height="10"/>
+
+    <DrawingPresenter x:Key="IconPause" Drawing="{DynamicResource BlenderIconPause}" Width="10" Height="10"/>
+
+    <DrawingPresenter x:Key="IconToStart" Drawing="{DynamicResource BlenderIconToStart}" Width="10" Height="10"/>
+    <DrawingPresenter x:Key="IconToEnd" Drawing="{DynamicResource BlenderIconToEnd}" Width="10" Height="10"/>
+
+    <DrawingPresenter x:Key="IconFaster" Drawing="{DynamicResource BlenderIconFaster}" Width="10" Height="10"/>
+    <DrawingPresenter x:Key="IconSlower" Drawing="{DynamicResource BlenderIconSlower}" Width="10" Height="10"/>
+
+    <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+    <converters:DateTimeToDateConverter x:Key="DateTimeToDateConverter"/>
+    <converters:DateTimeToTimeConverter x:Key="DateTimeToTimeConverter"/>
+
+    <x:Double x:Key="SliderHorizontalThumbWidth">8</x:Double>
+    <x:Double x:Key="SliderHorizontalThumbHeight">22</x:Double>
+
+  </UserControl.Resources>
+
+  <UserControl.Styles>
+
+    <Style Selector="ContentControl">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="BORDER">
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="4"
+                        Spacing="4">
+              <Border Background="{DynamicResource NumberFieldInnerBrush}"
+                      CornerRadius="{DynamicResource ThemeControlCornerRadius}">
+              <TextBlock Foreground="{DynamicResource RegularTextBrush}"                        
+                         FontSize="14"  
+                         Padding="4,2"
+                         VerticalAlignment="Center"
+                         Text="{Binding CurrentDateTime, 
+                         Converter={StaticResource DateTimeToDateConverter}}"/>
+              </Border>
+              <Border Background="{DynamicResource NumberFieldInnerBrush}"
+                      CornerRadius="{DynamicResource ThemeControlCornerRadius}">
+              <TextBlock Foreground="{DynamicResource RegularTextBrush}"
+                         FontSize="14"     
+                         Padding="4,2"              
+                         VerticalAlignment="Center"              
+                         Text="{Binding CurrentDateTime, 
+                         Converter={StaticResource DateTimeToTimeConverter}}"/>
+            </Border>
+            </StackPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+    <Style Selector="Button">
+      <Setter Property="VerticalAlignment" Value="Center"></Setter>      
+    </Style>
+
+    <Style Selector="Button /template/ ContentPresenter">
+      <Setter Property="CornerRadius" Value="0"></Setter>
+    </Style>
+
+    <Style Selector="controls|Editor /template/ Grid#PART_Grid">
+
+    </Style>
+
+  </UserControl.Styles>
+
+
+  <controls:Editor>
+
+    <controls:Editor.Icon>
+      <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+        <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorSceneTimerIcon1}"/>
+      </Viewbox>
+    </controls:Editor.Icon>
+
+    <controls:Editor.HeaderContent>
+      <Grid ColumnDefinitions="20,20,20,20,4,20,20" RowDefinitions="20"
+         HorizontalAlignment="Center"
+         VerticalAlignment="Center"
+         Grid.Column="1">
+        <i:Interaction.Behaviors>
+          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static vm:TimerMode.Stop}">
+            <ia:ChangePropertyAction TargetObject="{Binding #btnPause}" PropertyName="IsVisible" Value="False"/>
+          </ia:DataTriggerBehavior>
+          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static vm:TimerMode.Play}">
+            <ia:ChangePropertyAction TargetObject="{Binding #btnPause}" PropertyName="IsVisible" Value="True"/>
+          </ia:DataTriggerBehavior>
+          <ia:DataTriggerBehavior Binding="{Binding TimerMode}" ComparisonCondition="Equal" Value="{x:Static vm:TimerMode.Pause}">
+            <ia:ChangePropertyAction TargetObject="{Binding #btnPause}" PropertyName="IsVisible" Value="False"/>
+          </ia:DataTriggerBehavior>
+        </i:Interaction.Behaviors>
+
+        <Button x:Name="btnReset" Classes="left"
+                Command="{Binding OnReset}" Content="{StaticResource IconToStart}"
+                Grid.Column="0"/>
+
+        <Button x:Name="btnPlay2"
+                Command="{Binding OnPlay}" Content="{StaticResource IconPlay2}"
+                Grid.Column="1"/>
+
+        <Button x:Name="btnPlay1"
+                Command="{Binding OnPlay}" Content="{StaticResource IconPlay1}"
+                Grid.Column="2"/>
+
+        <Button x:Name="btnPause"
+                Command="{Binding OnPause}" Content="{StaticResource IconPause}"
+                Grid.Column="1" Grid.ColumnSpan="2" IsVisible="False"/>
+
+        <Button x:Name="btnToEnd" Classes="right"
+                Command="{Binding OnReset}" Content="{StaticResource IconToEnd}"
+                Grid.Column="3"/>
+
+        <Button Command="{Binding OnSlower}" Classes="left"
+                Grid.Column="5"
+                Content="{DynamicResource IconSlower}"/>
+
+        <Button Command="{Binding OnFaster}" Classes="right"
+                Grid.Column="6"
+                Content="{DynamicResource IconFaster}"/>
+      </Grid>
+
+    </controls:Editor.HeaderContent>
+
+    <controls:Editor.PanelContent>
+      <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+        <Slider Value="{Binding SliderTime}"
+        Margin="8,4,8,4"
+        Minimum="{Binding SliderTimeMinumum}"
+        Maximum="{Binding SliderTimeMaximum}"
+              />
+     
+        <Panel Grid.Column="1">
+        <ContentControl Content="{Binding CurrentDateTime}" Classes="t1"/>
+      </Panel>       
+      </Grid>
+    </controls:Editor.PanelContent>
+    
+  </controls:Editor>
+  
+</UserControl>

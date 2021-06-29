@@ -1,0 +1,78 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+  <Design.PreviewWith>
+    <Border Padding="20" Background="Silver">
+      <Border Background="{DynamicResource MenuBackInnerBrush}"
+              BorderBrush="{DynamicResource MenuBackOutlineBrush}"
+              BorderThickness="0"        
+              Padding="0,4,0,8"
+              Classes="bottom">
+        <StackPanel HorizontalAlignment="Stretch">
+          <ComboBoxItem>Item 1</ComboBoxItem>
+          <ComboBoxItem>Item 2 long long</ComboBoxItem>
+          <ComboBoxItem IsSelected="True">Item 3</ComboBoxItem>
+          <ComboBoxItem>Item 4</ComboBoxItem>
+        </StackPanel>
+      </Border>
+    </Border>
+  </Design.PreviewWith>
+
+  <Style Selector="ComboBoxItem">
+    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter Name="PART_ContentPresenter"                                                                                          
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          Content="{TemplateBinding Content}"
+                          HorizontalContentAlignment="Stretch"
+                          VerticalContentAlignment="Center" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="ComboBoxItem">
+    <Setter Property="Background" Value="{DynamicResource ComboBoxItemBackground}" />
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource RadioButtonTextBrush}" />    
+  </Style>
+
+  <Style Selector="ComboBoxItem /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource MenuBackInnerBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MenuBackOutlineBrush}" />
+    <Setter Property="BorderThickness" Value="0" />
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource RadioButtonTextBrush}" />
+    <Setter Property="Padding" Value="8,2,8,2" />
+  </Style>
+  
+  
+  <!--  PointerOver state  -->
+  <Style Selector="ComboBoxItem:pointerover /template/ ContentPresenter">
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MenuBackOutlineBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RadioButtonInnerSelectedBrush}" />
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource RadioButtonTextBrush}" />
+  </Style>
+
+  <!--  Pressed state  -->
+  <Style Selector="ComboBoxItem:pressed /template/ ContentPresenter">
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MenuBackOutlineBrush}" />
+    <Setter Property="Background" Value="{DynamicResource RadioButtonInnerSelectedBrush}" />
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource RadioButtonTextBrush}" />
+  </Style>
+    
+  <!--  Selected state  -->
+  <Style Selector="ComboBoxItem:selected /template/ ContentPresenter">
+    <Setter Property="Background" Value="{DynamicResource MenuBackInnerBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MenuBackOutlineBrush}" />
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource RadioButtonTextBrush}" />
+  </Style>
+
+  <!--  Pointerover and Selected state  -->
+  <Style Selector="ComboBoxItem:pointerover:selected /template/ ContentPresenter">
+    <Setter Property="Opacity" Value="1.0" />
+    <Setter Property="Background" Value="{DynamicResource RadioButtonInnerSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource MenuBackOutlineBrush}" />
+    <Setter Property="TextBlock.Foreground" Value="{DynamicResource RadioButtonTextBrush}" />
+  </Style>
+
+</Styles>

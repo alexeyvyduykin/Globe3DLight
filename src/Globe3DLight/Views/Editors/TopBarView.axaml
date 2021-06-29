@@ -1,0 +1,130 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Globe3DLight.ViewModels"
+             xmlns:converters="clr-namespace:Globe3DLight.Converters"
+             xmlns:markups="clr-namespace:Globe3DLight.Markups"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+             xmlns:sys="using:System"
+             Margin="10" 
+             mc:Ignorable="d" d:DesignWidth="580" d:DesignHeight="200"
+             x:Class="Globe3DLight.Views.Editors.TopBarView">
+
+  <UserControl.DataContext>
+    <vm:TopBarViewModel/>
+  </UserControl.DataContext>
+
+
+  <UserControl.Styles>
+
+    <Style Selector="MenuItem.globe3d">
+      <Setter Property="Foreground" Value="{DynamicResource PulldownTextBrush}"></Setter>
+      <Setter Property="Padding" Value="0,0"></Setter>
+      <Setter Property="Margin" Value="0,0"></Setter>
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="PART_LayoutRoot"
+                  Padding="1,1">
+            <Panel>
+              <Viewbox Stretch="UniformToFill" Width="16" Height="16">
+                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditor3DGlobeIcon}"/>
+              </Viewbox>
+              <Popup Name="PART_Popup"
+                     WindowManagerAddShadowHint="False"
+                     MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                     IsLightDismissEnabled="True"
+                     IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
+                     OverlayInputPassThroughElement="{Binding $parent[Menu]}">
+                <Border Background="{DynamicResource MenuBackInnerBrush}"
+                        BorderBrush="{DynamicResource MenuBackOutlineBrush}"
+                        BorderThickness="1"
+                        Padding="2"
+                        MinHeight="12"
+                        HorizontalAlignment="Stretch"
+                        CornerRadius="{DynamicResource MenuBackRoundness}">
+                  <ScrollViewer Classes="menuscroller">
+                    <ItemsPresenter Name="PART_ItemsPresenter"
+                                    Items="{TemplateBinding Items}"
+                                    ItemsPanel="{TemplateBinding ItemsPanel}"
+                                    ItemTemplate="{TemplateBinding ItemTemplate}"
+                                    Margin="0"
+                                    Grid.IsSharedSizeScope="True" />
+                  </ScrollViewer>
+                </Border>
+              </Popup>
+            </Panel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+    <Style Selector="MenuItem"> 
+      <Setter Property="FontSize" Value="{DynamicResource WidgetFontSize}"></Setter>
+    </Style>
+
+    <Style Selector="Menu > MenuItem /template/ Border#PART_LayoutRoot">
+      <Setter Property="Background" Value="Transparent"></Setter>
+    </Style>
+
+    <Style Selector="TabStripItem">
+      <Setter Property="FontSize" Value="{DynamicResource WidgetFontSize}"></Setter>
+    </Style>
+
+    <Style Selector="TabStripItem.t1 /template/ Border#PART_LayoutRoot">   
+      <Setter Property="CornerRadius" Value="4,4,0,0" />
+    </Style>
+    
+  </UserControl.Styles>
+  
+
+  <Border Background="{DynamicResource TopBarHeaderBrush}" Height="24">
+    <DockPanel>
+      <Menu VerticalAlignment="Top">
+        <MenuItem Classes="globe3d">
+          <MenuItem Header="1"/>
+          <MenuItem Header="2"/>
+          <MenuItem Header="3"/>
+        </MenuItem>
+        <MenuItem Header="File">
+          <MenuItem Header="1"/>
+          <MenuItem Header="2"/>
+          <MenuItem Header="3"/>
+        </MenuItem>
+        <MenuItem Header="Edit">
+          <MenuItem Header="1"/>
+          <MenuItem Header="2"/>
+          <MenuItem Header="3"/>
+        </MenuItem>
+        <MenuItem Header="Render">
+          <MenuItem Header="1"/>
+          <MenuItem Header="2"/>
+          <MenuItem Header="3"/>
+        </MenuItem>
+        <MenuItem Header="Window">
+          <MenuItem Header="1"/>
+          <MenuItem Header="2"/>
+          <MenuItem Header="3"/>
+        </MenuItem>
+        <MenuItem Header="Help">
+          <MenuItem Header="1"/>
+          <MenuItem Header="2"/>
+          <MenuItem Header="3"/>
+        </MenuItem>
+      </Menu>
+
+
+      <TabStrip Margin="20,0" VerticalAlignment="Bottom">
+        <TabStripItem Content="Visual/Logical" Classes="t1"></TabStripItem>
+        <TabStripItem Content="Task" Classes="t1"></TabStripItem>
+        <TabStripItem Content="Globe2D" Classes="t1"></TabStripItem>
+      </TabStrip>
+      
+    </DockPanel>
+    
+    
+  </Border>
+
+</UserControl>

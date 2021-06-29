@@ -1,0 +1,198 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"
+             xmlns:converters="clr-namespace:Globe3DLight.Converters"
+             xmlns:markups="clr-namespace:Globe3DLight.Markups"
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"             
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+             Margin="10" 
+             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="450"
+             x:Class="Globe3DLight.Views.Editors.PropertiesEditor">
+
+  <UserControl.DataContext>
+    <vm:PropertiesEditorViewModel/>
+  </UserControl.DataContext>
+
+<!--
+<SolidColorBrush x:Key="PropertiesTitleBrush" Color="{StaticResource idThemeSpaceTitle1}"/> --><!-- header expander текст для всех уровней --><!--
+<SolidColorBrush x:Key="PropertiesTextBrush" Color="{StaticResource idThemeSpaceText1}"/> --><!-- все TextBlock/Labels для всех уровней --><!--
+
+  
+ <SolidColorBrush x:Key="PropertiesPanelBackgroundBrush" Color="{StaticResource idPanelColorsBackground1}"></SolidColorBrush>
+<SolidColorBrush x:Key="PropertiesSubPanelBackgroundBrush" Color="{StaticResource idPanelColorsSubBackground1}" Opacity="0.141"></SolidColorBrush>
+
+  
+  -->
+        
+  <UserControl.Styles>  
+    <!--<StyleInclude Source="avares://Globe3DLight/Styles/ExpanderItemProperty.axaml"/>-->
+
+    <Style Selector="TabItem.left /template/ Border#PART_LayoutRoot">
+      <Setter Property="CornerRadius" Value="4,0,0,4"/>
+      <Setter Property="Margin" Value="16,2,0,2"></Setter>
+    </Style>
+        
+    <Style Selector="Expander">
+      <Setter Property="IsExpanded" Value="True"/>      
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+    </Style>
+
+    <Style Selector="TabControl">
+      <Setter Property="Background" Value="{DynamicResource PropertiesNavigationBarBackgroundBrush}"></Setter>
+    </Style>
+
+    <Style Selector="TabControl /template/ Border#PART_Border">
+      <Setter Property="CornerRadius" Value="0,0,4,4"></Setter>
+    </Style>
+
+    <Style Selector="TabControl /template/ ContentPresenter#PART_SelectedContentHost">
+      <Setter Property="Background" Value="{DynamicResource PropertiesWindowBackgroundBrush}"/>
+      <Setter Property="CornerRadius" Value="0,0,4,0"/>
+    </Style>
+
+    <Style Selector="TextBlock.label">
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <Style Selector="Expander:not(:expanded) /template/ ToggleButton#ExpanderHeader /template/ Border#ToggleButtonBackground">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="Expander:expanded:down /template/ ToggleButton#ExpanderHeader /template/ Border#ToggleButtonBackground">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    <Style Selector="Expander:expanded:down /template/ Border#ExpanderContent">
+      <Setter Property="CornerRadius" Value="0" />
+    </Style>
+
+    <Style Selector="controls|Editor /template/ ContentPresenter#PanelContentPresenter">
+
+    </Style>
+        
+  </UserControl.Styles>
+
+
+  <controls:Editor>
+
+    <controls:Editor.Icon>
+      <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+        <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorPropertiesIcon}"/>
+      </Viewbox>
+    </controls:Editor.Icon>
+
+    <controls:Editor.PanelContent>
+      
+     <TabControl TabStripPlacement="Left">
+        <TabItem Classes="left">
+          <TabItem.Header>
+            <Viewbox Width="16" Height="16" Margin="4" Stretch="UniformToFill">
+              <DrawingPresenter Drawing="{StaticResource ObjectProperty}" Stretch="None"/>
+            </Viewbox>
+          </TabItem.Header>
+
+          <StackPanel>
+            <Expander Header="SubProperty1">
+
+              <Grid ColumnDefinitions="3*,5*" RowDefinitions="*,*" Margin="4">
+                <TextBlock Text="Value1" Classes="label"/>
+                <TextBlock Grid.Column="1"
+                           Text="{Binding Entity.Value1}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Text="Value2"
+                           Grid.Row="1"
+                           Classes="label"/>
+                <TextBlock Grid.Column="1"
+                           Grid.Row="1"
+                           Text="{Binding Entity.Value2}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+              </Grid>
+
+            </Expander>
+
+            <Expander Header="SubProperty2">
+
+              <Grid ColumnDefinitions="3*,5*" RowDefinitions="*,*" Margin="4">
+                <TextBlock Text="Name1" Classes="label"/>
+                <TextBox Grid.Column="1"
+                           Text="{Binding Entity.Name1}"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Text="Name2"
+                           Grid.Row="1"
+                           Classes="label"/>
+                <TextBox Grid.Column="1"
+                           Grid.Row="1"
+                           Text="{Binding Entity.Name1}"
+                           HorizontalAlignment="Stretch"
+                           VerticalAlignment="Center"/>
+              </Grid>
+
+            </Expander>
+
+            <Expander Header="SubProperty3">
+
+              <Grid ColumnDefinitions="3*,5*" RowDefinitions="*,*,*" Margin="4">
+                <CheckBox Grid.Column="1"
+                          Content="Is1"
+                          IsChecked="{Binding Entity.Is1}"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+
+                <CheckBox Grid.Column="1"
+                          Content="Is2"
+                          IsChecked="{Binding Entity.Is2}"
+                           Grid.Row="1"
+                           HorizontalAlignment="Left"
+                           VerticalAlignment="Center"/>
+
+                <TextBlock Text="Mode"
+                            Grid.Row="2"
+                            Classes="label"/>
+                <ComboBox Grid.Column="1"
+                          Grid.Row="2"
+                          SelectedItem="{Binding Entity.Mode}"
+                          Items="{Binding Source={markups:EnumBindingSource {x:Type vm:EntityMode}}}"
+                          HorizontalAlignment="Stretch"
+                          VerticalAlignment="Center"/>
+                <!--<prop:ColorProperty Grid.Row="3" Label="Color" Value="{Binding Entity.Color}"/>-->
+              </Grid>
+            </Expander>
+          </StackPanel>
+
+        </TabItem>
+        <TabItem Classes="left">
+          <TabItem.Header>
+            <Viewbox Width="16" Height="16" Margin="4" Stretch="UniformToFill">
+              <DrawingPresenter Drawing="{StaticResource ObjectDataProperty}" Stretch="None"/>
+            </Viewbox>
+          </TabItem.Header>
+
+          <Border />
+
+        </TabItem>
+        <TabItem Classes="left">
+          <TabItem.Header>
+            <Viewbox Width="16" Height="16" Margin="4" Stretch="UniformToFill">
+              <DrawingPresenter Drawing="{StaticResource SceneProperty}" Stretch="None"/>
+            </Viewbox>
+          </TabItem.Header>
+
+          <Border />
+
+        </TabItem>
+      </TabControl>
+
+
+    </controls:Editor.PanelContent>
+    
+  </controls:Editor>
+    
+</UserControl>

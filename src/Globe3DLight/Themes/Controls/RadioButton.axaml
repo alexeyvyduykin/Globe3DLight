@@ -1,0 +1,90 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Design.PreviewWith>
+    <Border Padding="20" Background="Silver">
+      <StackPanel Spacing="5" Width="150" HorizontalAlignment="Center">
+        <RadioButton GroupName="group1" Content="Option 1" />
+        <RadioButton GroupName="group1" Content="Option 2" IsChecked="True" />
+        <RadioButton GroupName="group1" Content="Option 3" />
+        <Separator Height="4"></Separator>
+        <RadioButton GroupName="group2" Content="Option 1" IsChecked="True" />
+        <RadioButton GroupName="group2" Content="Option 2" />
+        <RadioButton GroupName="group2" Content="Option 3" />
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+
+      
+  <Style Selector="RadioButton">        
+    <Setter Property="Padding" Value="8,4,0,4" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="HorizontalContentAlignment" Value="Left" />
+    <Setter Property="VerticalContentAlignment" Value="Center" />
+    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    <Setter Property="Template">
+      <ControlTemplate TargetType="RadioButton">
+        <Border Name="RootBorder"
+                Background="{TemplateBinding Background}"
+                BorderBrush="{TemplateBinding BorderBrush}"
+                BorderThickness="{TemplateBinding BorderThickness}">
+          
+            <ContentPresenter Name="PART_ContentPresenter"
+                              Content="{TemplateBinding Content}"
+                              ContentTemplate="{TemplateBinding ContentTemplate}"
+                              TextBlock.Foreground="{TemplateBinding Foreground}"
+                              Margin="{TemplateBinding Padding}"
+                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />         
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+
+  <Style Selector="RadioButton">
+    <Setter Property="Background" Value="{DynamicResource RadioButtonInnerBrush}" />
+    <Setter Property="Foreground" Value="{DynamicResource RadioButtonTextBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RadioButtonOutlineBrush}" />
+    <Setter Property="BorderThickness" Value="1" />   
+  </Style>
+
+  <Style Selector="RadioButton /template/ Border#RootBorder">
+    <Setter Property="CornerRadius" Value="{DynamicResource RadioButtonRoundness}" />  
+  </Style>
+  
+  <Style Selector="RadioButton:pointerover /template/ Border#RootBorder">
+    <Setter Property="Background" Value="{DynamicResource RadioButtonInnerBrush}" />  
+    <Setter Property="BorderBrush" Value="{DynamicResource RadioButtonOutlineBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+
+  <Style Selector="RadioButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="(TextBlock.Foreground)" Value="{DynamicResource RadioButtonTextBrush}" />
+  </Style>
+
+  <Style Selector="RadioButton:checked /template/ Border#RootBorder">
+    <Setter Property="Background" Value="{DynamicResource RadioButtonInnerSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource RadioButtonOutlineBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+  </Style>
+
+  <!--<Style Selector="RadioButton:pressed">
+    <Setter Property="IsChecked" Value="True" />
+  </Style>
+
+  <Style Selector="RadioButton:checked">
+    <Setter Property="IsChecked" Value="True" />
+  </Style>-->
+
+
+  <Style Selector="RadioButton:pointerover">
+    <Setter Property="Opacity" Value="0.9"/>
+  </Style>
+
+  <Style Selector="RadioButton:checked:pointerover">
+    <Setter Property="Opacity" Value="1.0"/>
+  </Style>
+
+</Styles>

@@ -1,0 +1,9 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="clr-namespace:System;assembly=netstandard">
+        
+  <StyleInclude Source="avares://Globe3DLight/Themes/Base.axaml" />
+  <StyleInclude Source="avares://Globe3DLight/Themes/BaseTheme.axaml" />
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/BlenderControls.axaml" />
+
+</Styles>

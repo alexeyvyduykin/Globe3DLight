@@ -1,0 +1,243 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="using:System">
+
+  <Design.PreviewWith>
+    <Grid ColumnDefinitions="100,20,*" RowDefinitions="200,20,*"
+          Height="300"
+          Width="200"
+          Margin="20"
+          Background="#424242">
+      <ScrollBar Grid.Row="0" Grid.Column="0" 
+                 HorizontalAlignment="Center" 
+                 Margin="10"></ScrollBar>
+
+      <ScrollBar Grid.Row="2" Grid.ColumnSpan="3" 
+                 Orientation="Horizontal" 
+                 VerticalAlignment="Center" 
+                 Margin="10"> </ScrollBar>
+
+    </Grid>
+  </Design.PreviewWith>
+
+
+  <Styles.Resources>
+   <!--<SolidColorBrush x:Key="themeControlMidBrush" Color="Red"/> 
+    <SolidColorBrush x:Key="themeForegroundLowBrush" Color="Green"/>   
+    <SolidColorBrush x:Key="themeAccentBrush" Color="Silver"/>
+    
+    <sys:Double x:Key="scrollBarThickness">12</sys:Double>
+    <sys:Double x:Key="scrollBarThumbThickness">6</sys:Double>-->
+
+    <sys:Double x:Key="thumbLength">50</sys:Double>
+      
+    <sys:Double x:Key="scrollBarSize">12</sys:Double>
+    <SolidColorBrush x:Key="scrollBarBackground" Color="Transparent"/>
+    <SolidColorBrush x:Key="scrollBarBackgroundPointerOver" Color="Transparent"/>
+    
+    <SolidColorBrush x:Key="scrollBarForeground" Color="Red"/>
+    <SolidColorBrush x:Key="scrollBarBorderBrush" Color="Red"/>
+
+    <SolidColorBrush x:Key="scrollBarThumbFillPointerOver" Color="#676767"></SolidColorBrush>
+    <SolidColorBrush x:Key="scrollBarThumbFillPressed" Color="#676767"></SolidColorBrush>
+    <SolidColorBrush x:Key="scrollBarThumbFillDisabled" Color="#676767"></SolidColorBrush>
+    <SolidColorBrush x:Key="scrollBarPanningThumbBackground" Color="#676767"></SolidColorBrush>
+    <SolidColorBrush x:Key="scrollBarThumbBackgroundColor" Color="#676767"></SolidColorBrush>
+
+    <CornerRadius x:Key="controlCornerRadius">10</CornerRadius>
+
+    <ScaleTransform x:Key="verticalSmallScrollThumbScaleTransform" ScaleX="1" ScaleY="1"  />
+    <ScaleTransform x:Key="horizontalSmallScrollThumbScaleTransform" ScaleX="1" ScaleY="1"   />
+
+    <SolidColorBrush x:Key="scrollBarTrackFill" Color="#2D2D2D"></SolidColorBrush>
+    <SolidColorBrush x:Key="scrollBarTrackFillPointerOver" Color="#2D2D2D"></SolidColorBrush>
+    <Thickness x:Key="scrollBarTrackBorderThemeThickness">1,1,1,1</Thickness>
+    <SolidColorBrush x:Key="scrollBarTrackStrokePointerOver" Color="#2D2D2D"></SolidColorBrush>
+    <SolidColorBrush x:Key="scrollBarTrackStroke" Color="#2D2D2D"></SolidColorBrush>
+    
+  </Styles.Resources>
+
+  <Style Selector="ScrollBar">
+    <Setter Property="AllowAutoHide" Value="False" />
+    <Setter Property="MinWidth" Value="{StaticResource scrollBarSize}" />
+    <Setter Property="MinHeight" Value="{StaticResource scrollBarSize}" />
+    <Setter Property="Background" Value="{StaticResource scrollBarBackground}" />
+    <Setter Property="Foreground" Value="{StaticResource scrollBarForeground}" />
+    <Setter Property="BorderBrush" Value="{StaticResource scrollBarBorderBrush}" />
+  </Style>
+
+  <Style Selector="ScrollBar:vertical">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid x:Name="Root">
+
+          <Border x:Name="VerticalRoot"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  CornerRadius="20">
+            <Grid RowDefinitions="*">
+
+              <Border x:Name="TrackRect" Margin="0" CornerRadius="10"/>
+
+              <Track Minimum="{TemplateBinding Minimum}"
+                     Maximum="{TemplateBinding Maximum}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}"
+                     ViewportSize="{TemplateBinding ViewportSize}"
+                     Orientation="{TemplateBinding Orientation}"
+                     IsDirectionReversed="True">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton"
+                                Classes="largeIncrease"
+                                Focusable="False" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton"
+                                Classes="largeIncrease"
+                                Focusable="False" />
+                </Track.IncreaseButton>
+                <Thumb Classes="thumb"
+                       Opacity="1"
+                       BorderThickness="1"
+                       BorderBrush="{DynamicResource scrollBarTrackStroke}"
+                       Width="{StaticResource scrollBarSize}"
+                       MinHeight="{StaticResource thumbLength}"
+                       RenderTransformOrigin="100%,50%" />
+              </Track>
+
+            </Grid>
+          </Border>
+
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="ScrollBar:horizontal">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Grid x:Name="Root">
+
+          <Border x:Name="HorizontalRoot"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}">
+            <Grid ColumnDefinitions="*">
+
+              <Border x:Name="TrackRect" Margin="0"  CornerRadius="10"/>
+
+              <Track Grid.Column="1"
+                     Minimum="{TemplateBinding Minimum}"
+                     Maximum="{TemplateBinding Maximum}"
+                     Value="{TemplateBinding Value, Mode=TwoWay}"
+                     ViewportSize="{TemplateBinding ViewportSize}"
+                     Orientation="{TemplateBinding Orientation}">
+                <Track.DecreaseButton>
+                  <RepeatButton Name="PART_PageUpButton"
+                                Classes="largeIncrease"
+                                Focusable="False" />
+                </Track.DecreaseButton>
+                <Track.IncreaseButton>
+                  <RepeatButton Name="PART_PageDownButton"
+                                Classes="largeIncrease"
+                                Focusable="False" />
+                </Track.IncreaseButton>
+                <Thumb Classes="thumb"
+                       Opacity="1"
+                       Height="{StaticResource scrollBarSize}"
+                       MinWidth="{StaticResource thumbLength}"
+                       RenderTransformOrigin="50%,100%" />
+              </Track>
+
+            </Grid>
+          </Border>
+
+        </Grid>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ Grid#Root">
+    <Setter Property="Background" Value="{StaticResource scrollBarBackgroundPointerOver}" />
+  </Style>
+
+  <Style Selector="ScrollBar /template/ Thumb.thumb">
+    <Setter Property="Background" Value="{StaticResource scrollBarPanningThumbBackground}" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border x:Name="ThumbVisual" Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    <!--<Setter Property="Transitions">
+      <Transitions>
+        <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.1" />
+      </Transitions>
+    </Setter>-->
+  </Style>
+
+  <!--<Style Selector="ScrollBar:vertical /template/ Thumb.thumb">
+    <Setter Property="RenderTransform" Value="{StaticResource verticalSmallScrollThumbScaleTransform}" />
+  </Style>
+
+  <Style Selector="ScrollBar:horizontal /template/ Thumb.thumb">
+    <Setter Property="RenderTransform" Value="{StaticResource horizontalSmallScrollThumbScaleTransform}" />
+  </Style>
+
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb.thumb">
+    <Setter Property="RenderTransform" Value="none" />
+    <Setter Property="Background" Value="{StaticResource scrollBarThumbBackgroundColor}" />
+  </Style>-->
+
+  <Style Selector="ScrollBar /template/ Thumb.thumb /template/ Border#ThumbVisual">
+    <Setter Property="CornerRadius" Value="{StaticResource controlCornerRadius}" />
+    <!--<Setter Property="Transitions">
+      <Transitions>
+        <CornerRadiusTransition Property="CornerRadius" Duration="0:0:0.1" />
+      </Transitions>
+    </Setter>-->
+  </Style>
+
+  <!--<Style Selector="ScrollBar[IsExpanded=true] /template/ Thumb.thumb /template/ Border#ThumbVisual">
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>-->
+
+  <Style Selector="ScrollBar /template/ Thumb.thumb:pointerover">
+    <Setter Property="Background" Value="{StaticResource scrollBarThumbFillPointerOver}" />
+  </Style>
+
+  <Style Selector="ScrollBar /template/ Thumb.thumb:pressed">
+    <Setter Property="Background" Value="{StaticResource scrollBarThumbFillPressed}" />
+  </Style>
+
+  <Style Selector="ScrollBar /template/ Thumb.thumb:disabled">
+    <Setter Property="Background" Value="{StaticResource scrollBarThumbFillDisabled}" />
+  </Style>
+
+  <Style Selector="ScrollBar /template/ Border#TrackRect">
+    <Setter Property="BorderThickness" Value="{StaticResource scrollBarTrackBorderThemeThickness}" />
+    <Setter Property="BorderBrush" Value="{StaticResource scrollBarTrackFill}" />     
+  </Style>
+
+  <!--<Style Selector="ScrollBar[IsExpanded=true] /template/ Rectangle#TrackRect">
+    <Setter Property="Fill" Value="{StaticResource scrollBarTrackFillPointerOver}" />
+    <Setter Property="Stroke" Value="{StaticResource scrollBarTrackStrokePointerOver}" />
+    <Setter Property="Opacity" Value="1" />
+  </Style>-->
+
+  <Style Selector="ScrollBar /template/ RepeatButton.largeIncrease">
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Background="{TemplateBinding Background}" />
+      </ControlTemplate>
+    </Setter>
+    <Setter Property="Background" Value="Transparent" />
+    <Setter Property="VerticalAlignment" Value="Stretch" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="Opacity" Value="0" />
+  </Style>
+
+  <Style Selector="ScrollBar[IsExpanded=true] /template/ RepeatButton.largeIncrease">
+    <Setter Property="Opacity" Value="1" />
+  </Style>
+
+</Styles>

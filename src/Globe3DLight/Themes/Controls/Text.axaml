@@ -1,0 +1,91 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Demo.Avalonia.StyleEditorBlender.Controls">
+    <Design.PreviewWith>
+
+      <Border Padding="20">
+
+        <StackPanel Spacing="1" Width="100" HorizontalAlignment="Center">
+          <TextBox Text="Text1"></TextBox>
+          <TextBox Text="Text2"></TextBox>
+          <TextBox Text="Text3"></TextBox>
+        </StackPanel>
+
+      </Border>
+      
+    </Design.PreviewWith>
+  
+    <Style Selector="TextBox">            
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border Name="border"
+                  Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <DockPanel Margin="{TemplateBinding Padding}"
+                       HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                       VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+              <DataValidationErrors>
+
+                <Grid ColumnDefinitions="Auto,*,Auto">
+                  <ContentPresenter Grid.Column="0" Grid.ColumnSpan="1" Content="{TemplateBinding InnerLeftContent}"/>
+                  <ScrollViewer Grid.Column="1" Grid.ColumnSpan="1"
+                                HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                    <Panel>
+                      <TextPresenter  Name="PART_TextPresenter"                   
+                                      Text="{TemplateBinding Text, Mode=TwoWay}"
+                                      CaretIndex="{TemplateBinding CaretIndex}"
+                                      SelectionStart="{TemplateBinding SelectionStart}"
+                                      SelectionEnd="{TemplateBinding SelectionEnd}"                                     
+                                      TextAlignment="{TemplateBinding TextAlignment}"
+                                      TextWrapping="{TemplateBinding TextWrapping}"                                                                           
+                                      SelectionBrush="{TemplateBinding SelectionBrush}"
+                                      SelectionForegroundBrush="{TemplateBinding SelectionForegroundBrush}"
+                                      CaretBrush="{TemplateBinding CaretBrush}" />
+                    </Panel>
+                  </ScrollViewer>
+                  <ContentPresenter Grid.Column="2" Grid.ColumnSpan="1" Content="{TemplateBinding InnerRightContent}"/>
+                </Grid>
+              </DataValidationErrors>
+            </DockPanel>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+  <Style Selector="TextBox">
+    <Setter Property="Padding" Value="8,2"/>
+    <Setter Property="MinHeight" Value="0"/>
+  
+    <Setter Property="BorderBrush" Value="{DynamicResource TextOutlineBrush}"/>
+    <Setter Property="BorderThickness" Value="1"/>
+
+    <Setter Property="SelectionBrush" Value="{DynamicResource TextItemBrush}"/>
+    <Setter Property="SelectionForegroundBrush" Value="{DynamicResource TextTextSelectedBrush}"/>
+
+    <Setter Property="CaretBrush" Value="{DynamicResource StyleTextCursorBrush}" />
+
+    <Setter Property="Background" Value="{DynamicResource TextInnerBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextTextBrush}"/>
+  </Style>
+
+  <Style Selector="TextBox /template/ Border#border">
+    <Setter Property="CornerRadius" Value="{DynamicResource TextRoundness}"/>
+  </Style>
+
+  <Style Selector="TextBox:focus">
+    <Setter Property="Background" Value="{DynamicResource TextInnerSelectedBrush}"/>
+    <Setter Property="Foreground" Value="{DynamicResource TextTextSelectedBrush}"/>
+  </Style>
+
+  <Style Selector="TextBox:pointerover">
+    <Setter Property="Opacity" Value="0.9"/>
+  </Style>
+
+  <Style Selector="TextBox:focus:pointerover">
+    <Setter Property="Opacity" Value="1.0"/>
+  </Style>
+
+
+</Styles>

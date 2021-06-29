@@ -1,0 +1,38 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"      
+        x:Class="Globe3DLight.Themes.Controls.BlenderControls">
+ 
+  
+  <!-- Define ToolTip first so its styles can be overriden by other controls (e.g. TextBox) -->
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Tooltip.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Tool.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Text.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Option.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/RadioButton.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/NumberField.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ListItem.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Box.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/MenuBack.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Menu.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/MenuItem.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Pulldown.axaml"/>
+  <!-- TabControl needs to come after TabStrip as it redefines the inner TabStrip.ItemsPanel-->
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Tab.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/TabItem.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/TabControl.axaml"/>
+  
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Window.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/UserControl.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ScrollBar.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ScrollViewer.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/DataValidationErrors.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/PopupRoot.axaml"/>  
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/FocusAdorner.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ContentControl.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Slider.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/TreeView.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ToggleButton.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/FlyoutPresenter.axaml"/>
+  <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Expander.axaml"/>
+
+</Styles>

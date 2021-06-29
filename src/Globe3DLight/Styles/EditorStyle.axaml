@@ -1,0 +1,102 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:Globe3DLight.Controls"       
+        xmlns:sys="using:System">
+  
+    <Design.PreviewWith>
+        <Border Padding="20">
+          <Border.Styles>
+            <Style Selector="Controls|Editor /template/ Border#PanelBorder">
+              <Setter Property="Background" Value="Red"></Setter>
+            </Style>
+          </Border.Styles>
+
+          <Controls:Editor>
+
+            <Controls:Editor.Icon>
+              <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorPropertiesIcon}"/>
+              </Viewbox>
+            </Controls:Editor.Icon>
+                        
+            <Controls:Editor.HeaderContent>                             
+              <TextBlock>TextBlock</TextBlock>          
+            </Controls:Editor.HeaderContent>
+
+            <Controls:Editor.PanelContent>
+              <StackPanel Spacing="5" Margin="8">
+                <TextBlock>TextBlock1</TextBlock>
+                <TextBlock>TextBlock2</TextBlock>
+                <TextBlock>TextBlock3</TextBlock>
+                <TextBlock>TextBlock4</TextBlock>
+              </StackPanel>             
+            </Controls:Editor.PanelContent>
+            
+          </Controls:Editor>
+        </Border>
+    </Design.PreviewWith>
+
+  <Style Selector="Controls|Editor">
+    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <Panel>          
+              <Grid RowDefinitions="Auto,*">
+    
+                <Border Name="HeaderBorder"                      
+                        VerticalAlignment="Stretch"
+                        Height="25"
+                        Classes="top">
+                  <Grid ColumnDefinitions="Auto, *">
+
+                    <Border Grid.Column="0" 
+                            CornerRadius="{DynamicResource ThemeControlCornerRadius}"        
+                            BorderThickness="1"        
+                            Width="20"        
+                            Height="20"        
+                            BorderBrush="{DynamicResource MenuOutlineBrush}"        
+                            Background="{DynamicResource MenuInnerBrush}"        
+                            Margin="8,2,0,2">
+                      <ContentPresenter Content="{TemplateBinding Icon}"/>
+                    </Border>
+                                  
+                    <ContentPresenter Name="HeaderContentPresenter"
+                                      Grid.Column="1" 
+                                      Margin="8,2,8,2"
+                                      VerticalAlignment="Center"
+                                      Content="{TemplateBinding HeaderContent}"/>
+
+                  </Grid>
+                </Border>
+          
+                <Border Name="PanelBorder"
+                        Grid.Row="1"                    
+                        VerticalAlignment="Stretch"
+                        Classes="bottom"
+                        Margin="0,-1">
+                  <Grid>
+                    <ContentPresenter Name="PanelContentPresenter"                                      
+                                      Margin="0"
+                                      Content="{TemplateBinding PanelContent}"/>
+                  </Grid>
+                </Border>
+
+              </Grid>       
+          </Panel>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+
+  <Style Selector="Controls|Editor /template/ Border#HeaderBorder">
+    <Setter Property="Background" Value="{DynamicResource EditorHeaderBrush}"></Setter>
+  </Style>
+
+  <Style Selector="Controls|Editor /template/ Border#PanelBorder">
+    <Setter Property="Background" Value="{DynamicResource EditorWindowBackgroundBrush}"></Setter>
+  </Style>
+
+</Styles>

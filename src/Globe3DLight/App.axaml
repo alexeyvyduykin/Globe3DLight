@@ -27,6 +27,9 @@
         </Style>
         
         <StyleInclude Source="avares://Globe3DLight/Icons.axaml"/>
-        
+
+
+
+
     </Application.Styles>
 </Application>

@@ -1,0 +1,61 @@
+﻿<Style xmlns="https://github.com/avaloniaui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+       xmlns:sys="using:System"
+       xmlns:converters="using:Avalonia.Controls.Converters">
+  
+  
+  <Design.PreviewWith>
+    
+    <Border Padding="20">
+      <StackPanel Spacing="2">
+      <TextBlock Text="Text."></TextBlock>
+      <TextBlock Text="This is a long text." 
+                 FontFamily="avares://Globe3DLight/Themes/Assets#Droid Sans"
+                 FontWeight="Bold"
+                 FontSize="12">        
+      </TextBlock>
+      <TextBlock Text="Short text."
+                 FontFamily="New Time Roman"
+                 FontWeight="Thin"></TextBlock>
+        <TextBlock Text="Short text."
+                 FontFamily="Droid Sans"
+                 FontWeight="Normal"></TextBlock>
+      </StackPanel>
+    </Border>
+    
+  </Design.PreviewWith>
+  
+  
+  <Style.Resources>
+
+    <!-- Text Style -->
+    <FontFamily x:Key="ThemeFontFamily">avares://Globe3DLight/Themes/Assets#Droid Sans</FontFamily>
+    <sys:Double x:Key="ThemeFontSize">14</sys:Double>
+    <FontWeight x:Key="ThemeFontWeight">Normal</FontWeight>
+    
+    <!----><!-- Panel Title -->
+    <sys:Double x:Key="PanelTitleFontSize">12</sys:Double>
+        
+    <!----><!-- Widget -->
+    <sys:Double x:Key="WidgetFontSize">12</sys:Double>
+
+    <!----><!-- Widget Label -->
+    <sys:Double x:Key="WidgetLabelFontSize">11</sys:Double>
+      
+    <SolidColorBrush x:Key="SystemControlTransparentBrush" Color="Transparent" /> 
+    
+    <Thickness x:Key="ThemeBorderThickness">1</Thickness>
+    <Thickness x:Key="ThemeControlPadding">10,6,6,5</Thickness>        
+    <sys:Double x:Key="ThemeIconHeight">20</sys:Double>
+    <sys:Double x:Key="ThemeIconWidth">20</sys:Double>
+    <CornerRadius x:Key="ThemeControlCornerRadius">4</CornerRadius>
+    <CornerRadius x:Key="ThemeOverlayCornerRadius">4</CornerRadius>
+    
+    <converters:CornerRadiusFilterConverter x:Key="TopCornerRadiusFilterConverter" Filter="TopLeft, TopRight"/>
+    <converters:CornerRadiusFilterConverter x:Key="RightCornerRadiusFilterConverter" Filter="TopRight, BottomRight"/>
+    <converters:CornerRadiusFilterConverter x:Key="BottomCornerRadiusFilterConverter" Filter="BottomLeft, BottomRight"/>
+    <converters:CornerRadiusFilterConverter x:Key="LeftCornerRadiusFilterConverter" Filter="TopLeft, BottomLeft"/>
+            
+  </Style.Resources>
+  
+</Style>

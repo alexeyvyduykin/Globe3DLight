@@ -1,0 +1,38 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+  <Styles.Resources>
+    <Thickness x:Key="SystemControlFocusVisualMargin">0</Thickness>
+    <Thickness x:Key="SystemControlFocusVisualPrimaryThickness">2</Thickness>
+    <Thickness x:Key="SystemControlFocusVisualSecondaryThickness">1</Thickness>
+
+    <SolidColorBrush x:Key="systemControlFocusVisualPrimaryBrush" Color="Orange"></SolidColorBrush>
+    <SolidColorBrush x:Key="systemControlFocusVisualSecondaryBrush" Color="Red"></SolidColorBrush>
+  </Styles.Resources>
+
+  <!--  HighVisibility FocusAdorner  -->
+  <Style Selector=":is(Control)">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Border BorderThickness="{DynamicResource SystemControlFocusVisualPrimaryThickness}"
+                BorderBrush="{StaticResource systemControlFocusVisualPrimaryBrush}"
+                Margin="{DynamicResource SystemControlFocusVisualMargin}">
+          <Border BorderThickness="{DynamicResource SystemControlFocusVisualSecondaryThickness}"
+                  BorderBrush="{StaticResource systemControlFocusVisualSecondaryBrush}" />
+        </Border>
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+
+  <!--  DottedLine FocusAdorner  -->
+  <Style Selector="Window.DottedLineFocusAdorner :is(Control)">
+    <Setter Property="FocusAdorner">
+      <FocusAdornerTemplate>
+        <Rectangle Stroke="{StaticResource systemControlFocusVisualPrimaryBrush}"
+                   StrokeThickness="1"
+                   StrokeDashArray="1,2"
+                   Margin="1" />
+      </FocusAdornerTemplate>
+    </Setter>
+  </Style>
+</Styles>

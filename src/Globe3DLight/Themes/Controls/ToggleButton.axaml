@@ -1,0 +1,99 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="using:System">
+  
+  <Design.PreviewWith>
+    <Border Padding="20" Background="{DynamicResource PropertiesPanelBackgroundBrush}">
+      <StackPanel Spacing="20" Width="200" >
+        <ToggleButton Content="ToggleButton1" />
+        <ToggleButton Content="ToggleButton2" IsChecked="True"/>
+        <ToggleButton Content="ToggleButton3"/>
+      </StackPanel>
+    </Border>
+  </Design.PreviewWith>
+
+  <Styles.Resources>
+    <Thickness x:Key="ButtonPadding">8,4,8,4</Thickness>
+    <Thickness x:Key="toggleButtonBorderThemeThickness">1</Thickness>
+    <SolidColorBrush x:Key="toggleButtonBackground">#595959</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBackgroundPointerOver" Opacity="0.7" Color="#595959"></SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBackgroundPressed">#5680C2</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBackgroundChecked">#5680C2</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBackgroundCheckedPointerOver">#5680C2</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBackgroundCheckedPressed" Opacity="0.7" Color="#595959"></SolidColorBrush>
+      
+    <SolidColorBrush x:Key="toggleButtonForeground">#E6E6E6</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonForegroundPointerOver">#E6E6E6</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonForegroundPressed">#FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonForegroundChecked">#FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonForegroundCheckedPointerOver">#FFFFFF</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonForegroundCheckedPressed">#E6E6E6</SolidColorBrush>
+
+    <SolidColorBrush x:Key="toggleButtonBorderBrush">#373737</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBorderBrushPointerOver">#373737</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBorderBrushPressed">#373737</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBorderBrushChecked">#373737</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBorderBrushCheckedPointerOver">#373737</SolidColorBrush>
+    <SolidColorBrush x:Key="toggleButtonBorderBrushCheckedPressed">#373737</SolidColorBrush>
+  </Styles.Resources>
+  
+  <Style Selector="ToggleButton">
+    <Setter Property="Background" Value="{StaticResource toggleButtonBackground}" />
+    <Setter Property="Foreground" Value="{StaticResource toggleButtonForeground}" />
+    <Setter Property="BorderBrush" Value="{StaticResource toggleButtonBorderBrush}" />
+    <Setter Property="BorderThickness" Value="{StaticResource toggleButtonBorderThemeThickness}" />
+    <Setter Property="Padding" Value="{DynamicResource ButtonPadding}" />
+    <Setter Property="HorizontalAlignment" Value="Stretch" />
+    <Setter Property="VerticalAlignment" Value="Center" />
+    <Setter Property="FontWeight" Value="Normal" />
+    <Setter Property="FontSize" Value="{DynamicResource ThemeFontSize}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <ContentPresenter x:Name="PART_ContentPresenter"
+                          Background="{TemplateBinding Background}"
+                          BorderBrush="{TemplateBinding BorderBrush}"
+                          BorderThickness="{TemplateBinding BorderThickness}"
+                          Content="{TemplateBinding Content}"
+                          ContentTemplate="{TemplateBinding ContentTemplate}"
+                          Padding="{TemplateBinding Padding}"
+                          HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                          VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}" />
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+  <Style Selector="ToggleButton /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="CornerRadius" Value="{DynamicResource ThemeControlCornerRadius}" />
+  </Style>
+
+  <Style Selector="ToggleButton:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource toggleButtonBackgroundPointerOver}" />
+    <Setter Property="BorderBrush" Value="{StaticResource toggleButtonBorderBrushPointerOver}" />
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource toggleButtonForegroundPointerOver}" />
+  </Style>
+
+  <Style Selector="ToggleButton:pressed  /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource toggleButtonBackgroundPressed}" />
+    <Setter Property="BorderBrush" Value="{StaticResource toggleButtonBorderBrushPressed}" />
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource toggleButtonForegroundPressed}" />
+  </Style>
+
+  <Style Selector="ToggleButton:checked /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource toggleButtonBackgroundChecked}" />
+    <Setter Property="BorderBrush" Value="{StaticResource toggleButtonBorderBrushChecked}" />
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource toggleButtonForegroundChecked}" />
+  </Style>
+
+  <Style Selector="ToggleButton:checked:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource toggleButtonBackgroundCheckedPointerOver}" />
+    <Setter Property="BorderBrush" Value="{StaticResource toggleButtonBorderBrushCheckedPointerOver}" />
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource toggleButtonForegroundCheckedPointerOver}" />
+  </Style>
+
+  <Style Selector="ToggleButton:checked:pressed /template/ ContentPresenter#PART_ContentPresenter">
+    <Setter Property="Background" Value="{StaticResource toggleButtonBackgroundCheckedPressed}" />
+    <Setter Property="BorderBrush" Value="{StaticResource toggleButtonBorderBrushCheckedPressed}" />
+    <Setter Property="TextBlock.Foreground" Value="{StaticResource toggleButtonForegroundCheckedPressed}" />
+  </Style>
+
+</Styles>

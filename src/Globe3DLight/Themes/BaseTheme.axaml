@@ -1,0 +1,452 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:sys="using:System">
+    
+<Styles.Resources>
+
+<!-- Base Colors -->
+
+<Color x:Key="idText1">#D9D9D9</Color> <!-- (0.851, 0.851, 0.851) -->
+<Color x:Key="idText2">#E6E6E6</Color> <!-- (0.902, 0.902, 0.902) -->
+<Color x:Key="idText3">#A5A5A5</Color> <!-- (0.647, 0.647, 0.647) -->
+<Color x:Key="idText4">#989898</Color> <!-- (0.596, 0.596, 0.596) -->
+
+<Color x:Key="idTextSelected1">#FFFFFF</Color> <!-- (1.000, 1.000, 1.000) -->
+
+<Color x:Key="idItem1">#3E3E3E</Color> <!-- (0.243, 0.243, 0.243) -->
+<Color x:Key="idItem2">#191919</Color> <!-- (0.098, 0.098, 0.098) -->
+<Color x:Key="idItem3">#727272</Color> <!-- (0.447, 0.447, 0.447) -->
+<Color x:Key="idItem4">#676767</Color> <!-- (0.404, 0.404, 0.404) -->
+<Color x:Key="idItem5">#B3B3B3</Color> <!-- (0.702, 0.702, 0.702) -->
+<Color x:Key="idItem6">#2D2D2D</Color> <!-- (0.176, 0.176, 0.176) -->
+<Color x:Key="idItem7">#19191A</Color> <!-- (0.098, 0.098, 0.102) -->
+<Color x:Key="idItem8">#FFFFFF</Color> <!-- (1.000, 1.000, 1.000) -->
+<Color x:Key="idItem9">#D9D9D9</Color> <!-- (0.851, 0.851, 0.851) -->
+    
+<Color x:Key="idInner1">#585858</Color> <!-- (0.345, 0.345, 0.345) -->
+<Color x:Key="idInner2">#595959</Color> <!-- (0.349, 0.349, 0.349) -->
+<Color x:Key="idInner3">#1F1F1F</Color> <!-- (0.122, 0.122, 0.122) -->
+<Color x:Key="idInner4">#666666</Color> <!-- (0.400, 0.400, 0.400) -->
+<Color x:Key="idInner5">#2B2B2B</Color> <!-- (0.169, 0.169, 0.169) -->
+<Color x:Key="idInner6">#000000</Color> <!-- (0.000, 0.000, 0.000) -->
+<Color x:Key="idInner7">#2E2E2E</Color> <!-- (0.180, 0.180, 0.180) -->
+<Color x:Key="idInner8">#19191A</Color> <!-- (0.098, 0.098, 0.102) -->
+<Color x:Key="idInner9">#676767</Color> <!-- (0.404, 0.404, 0.404) -->
+<Color x:Key="idInner10">#2D2D2D</Color> <!-- (0.176, 0.176, 0.176) -->
+<Color x:Key="idInner11">#2C2C2C</Color> <!-- (0.173, 0.173, 0.173) -->
+  
+<Color x:Key="idInnerSelected1">#5680C2</Color> <!-- (0.337, 0.502, 0.761) -->
+<Color x:Key="idInnerSelected2">#505050</Color> <!-- (0.314, 0.314, 0.314) -->
+<Color x:Key="idInnerSelected3">#696E76</Color> <!-- (0.412, 0.431, 0.463) -->
+<Color x:Key="idInnerSelected4">#424242</Color> <!-- (0.259, 0.259, 0.259) -->
+<Color x:Key="idInnerSelected5">#19191A</Color> <!-- (0.098, 0.098, 0.102) --> 
+    
+<Color x:Key="idOutline1">#373737</Color> <!-- (0.216, 0.216, 0.216) -->
+<Color x:Key="idOutline2">#444444</Color> <!-- (0.267, 0.267, 0.267) -->
+<Color x:Key="idOutline3">#4D4D4D</Color> <!-- (0.302, 0.302, 0.302) -->
+<Color x:Key="idOutline4">#19191A</Color> <!-- (0.098, 0.098, 0.102) -->
+<Color x:Key="idOutline5">#000000</Color> <!-- (0.000, 0.000, 0.000) -->
+<Color x:Key="idOutline6">#424242</Color> <!-- (0.259, 0.259, 0.259) -->
+<Color x:Key="idOutline7">#2D2D2D</Color> <!-- (0.176, 0.176, 0.176) -->
+<Color x:Key="idOutline8">#202020</Color> <!-- (0.125, 0.125, 0.125) -->
+
+    <Color x:Key="idStyle1">#1F1F1F</Color> <!-- (0.122, 0.122, 0.122) -->
+    <Color x:Key="idStyle2">#3399E6</Color> <!-- (0.200, 0.600, 0.902) -->
+    <Color x:Key="idStyle3">#000000</Color> <!-- (0.000, 0.000, 0.000) -->
+    
+    <Color x:Key="idIcon1">#E6E6E6</Color> <!-- (0.902, 0.902, 0.902) -->
+    <Color x:Key="idIcon2">#F4F4F4</Color> <!-- (0.957, 0.957, 0.957) -->
+    <Color x:Key="idIcon3">#EE9E5D</Color> <!-- (0.933, 0.620, 0.365) -->
+    <Color x:Key="idIcon4">#00D4A3</Color> <!-- (0.000, 0.831, 0.639) -->   
+    <Color x:Key="idIcon5">#84B8FF</Color> <!-- (0.518, 0.722, 1.000) -->    
+    <Color x:Key="idIcon6">#EA7581</Color> <!-- (0.918, 0.459, 0.506) -->    
+    <Color x:Key="idIcon7">#E3C16E</Color> <!-- (0.890, 0.757, 0.431) -->
+    
+    
+        
+    <!-- User Interface -->
+
+  <!-- Window -->
+  <SolidColorBrush x:Key="WindowBackgroundBrush" Color="Black"></SolidColorBrush>
+  
+  
+  
+  
+<!-- Regular -->
+<!-- базовые объекты без категорий -->
+
+ <SolidColorBrush x:Key="RegularTextBrush" Color="{StaticResource idText1}" ></SolidColorBrush>
+ <SolidColorBrush x:Key="RegularTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="RegularItemBrush" Color="{StaticResource idItem1}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="RegularInnerBrush" Color="{StaticResource idInner1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="RegularInnerSelectedBrush" Color="{StaticResource idInnerSelected1}" Opacity="0.902"></SolidColorBrush>
+ <SolidColorBrush x:Key="RegularOutlineBrush" Color="{StaticResource idOutline1}"></SolidColorBrush>
+
+ <CornerRadius x:Key="RegularRoundness">4</CornerRadius>
+
+
+<!-- Tool -->
+<!-- в принципе любые кнопки, например для таймера -->
+
+ <SolidColorBrush x:Key="ToolTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ToolTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ToolItemBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="ToolInnerBrush" Color="{StaticResource idInner1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ToolInnerSelectedBrush" Color="{StaticResource idInnerSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ToolOutlineBrush" Color="{StaticResource idOutline1}"></SolidColorBrush>
+
+  <CornerRadius x:Key="ToolRoundness">4</CornerRadius>
+
+<!-- Radio Buttons -->
+<!-- набор кнопок с единственным выбором -->
+
+ <SolidColorBrush x:Key="RadioButtonTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="RadioButtonTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="RadioButtonItemBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="RadioButtonInnerBrush" Color="{StaticResource idInner2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="RadioButtonInnerSelectedBrush" Color="{StaticResource idInnerSelected1}" Opacity="0.902"></SolidColorBrush>
+ <SolidColorBrush x:Key="RadioButtonOutlineBrush" Color="{StaticResource idOutline1}"></SolidColorBrush>
+
+  <CornerRadius x:Key="RadioButtonRoundness">4</CornerRadius>
+
+<!-- Text -->
+<!-- текст в editboxes, в принцепе аналог EditBox -->
+
+ <SolidColorBrush x:Key="TextTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TextTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TextItemBrush" Color="{StaticResource idItem2}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="TextInnerBrush" Color="{StaticResource idInner3}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TextInnerSelectedBrush" Color="{StaticResource idInnerSelected2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TextOutlineBrush" Color="{StaticResource idOutline2}"></SolidColorBrush>
+
+  <CornerRadius x:Key="TextRoundness">4</CornerRadius>
+
+<!-- Option -->
+<!-- аналог CheckBox  -->
+
+ <SolidColorBrush x:Key="OptionTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="OptionTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="OptionItemBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="OptionInnerBrush" Color="{StaticResource idInner4}"></SolidColorBrush>
+ <SolidColorBrush x:Key="OptionInnerSelectedBrush" Color="{StaticResource idInnerSelected1}" Opacity="0.902"></SolidColorBrush>
+ <SolidColorBrush x:Key="OptionOutlineBrush" Color="{StaticResource idOutline1}"></SolidColorBrush>
+
+  <CornerRadius x:Key="OptionRoundness">4</CornerRadius>
+
+<!-- Number Field -->
+<!-- поля для ввода значений, специальный элемент -->
+<!-- разделить на только чтение и запись-->
+
+  <SolidColorBrush x:Key="NumberFieldTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+  <SolidColorBrush x:Key="NumberFieldTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+  <SolidColorBrush x:Key="NumberFieldItemBrush" Color="{StaticResource idItem2}"></SolidColorBrush>
+
+  <SolidColorBrush x:Key="NumberFieldInnerBrush" Color="{StaticResource idInner2}"></SolidColorBrush>
+  <SolidColorBrush x:Key="NumberFieldInnerSelectedBrush" Color="{StaticResource idInnerSelected2}"></SolidColorBrush>
+  <SolidColorBrush x:Key="NumberFieldOutlineBrush" Color="{StaticResource idOutline2}"></SolidColorBrush>
+
+  <CornerRadius x:Key="NumberFieldRoundness">4</CornerRadius>
+  
+<!-- Value Slider -->
+<!-- ввод данных с мин/макс значением, специальный элемент -->
+<!-- это не slider из таймера-->
+
+<!-- Box -->
+<!-- это аналог ListBox, где Items это List Item -->
+
+ <SolidColorBrush x:Key="BoxTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="BoxTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="BoxItemBrush" Color="{StaticResource idItem2}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="BoxInnerBrush" Color="{StaticResource idInner6}" Opacity="0.200"></SolidColorBrush>
+ <SolidColorBrush x:Key="BoxInnerSelectedBrush" Color="{StaticResource idInnerSelected3}"></SolidColorBrush>
+ <SolidColorBrush x:Key="BoxOutlineBrush" Color="{StaticResource idOutline2}"></SolidColorBrush>
+
+  <CornerRadius x:Key="BoxRoundness">4</CornerRadius>
+
+<!-- Menu -->
+<!-- продвинутый элемент смесь MenuFlyout и ComboBox, выбор элемента из сложного контента  -->
+
+  <SolidColorBrush x:Key="MenuTextBrush" Color="{StaticResource idText1}"></SolidColorBrush>
+  <SolidColorBrush x:Key="MenuTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+  <SolidColorBrush x:Key="MenuItemBrush" Color="{StaticResource idItem9}"></SolidColorBrush>
+
+  <SolidColorBrush x:Key="MenuInnerBrush" Color="{StaticResource idInner11}"></SolidColorBrush>
+  <SolidColorBrush x:Key="MenuInnerSelectedBrush" Color="{StaticResource idInnerSelected3}"></SolidColorBrush>
+  <SolidColorBrush x:Key="MenuOutlineBrush" Color="{StaticResource idOutline2}"></SolidColorBrush>
+
+  <CornerRadius x:Key="MenuRoundness">4</CornerRadius>
+    
+<!-- Pulldown -->
+<!-- это аналог MainMenu -->
+
+ <SolidColorBrush x:Key="PulldownTextBrush" Color="{StaticResource idText1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="PulldownTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="PulldownItemBrush" Color="{StaticResource idItem3}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="PulldownInnerBrush" Color="{StaticResource idInner7}" Opacity="0.800"></SolidColorBrush>
+ <SolidColorBrush x:Key="PulldownInnerSelectedBrush" Color="{StaticResource idInnerSelected1}" Opacity="0.902"></SolidColorBrush>
+ <SolidColorBrush x:Key="PulldownOutlineBrush" Color="{StaticResource idOutline3}"></SolidColorBrush>
+
+  <CornerRadius x:Key="PulldownRoundness">4</CornerRadius>
+
+<!-- Menu Back -->
+<!-- всплывающая панель, для Pulldown, Menu, Color, etc. -->
+
+ <SolidColorBrush x:Key="MenuBackTextBrush" Color="{StaticResource idText3}"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuBackTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuBackItemBrush" Color="{StaticResource idItem3}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="MenuBackInnerBrush" Color="{StaticResource idInner3}" Opacity="0.937"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuBackInnerSelectedBrush" Color="{StaticResource idInner1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuBackOutlineBrush" Color="{StaticResource idOutline4}"></SolidColorBrush>
+
+  <CornerRadius x:Key="MenuBackRoundness">4</CornerRadius>
+
+<!-- Tooltip -->
+<!-- это аналог ToolTip -->
+
+ <SolidColorBrush x:Key="TooltipTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TooltipTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TooltipItemBrush" Color="{StaticResource idItem7}" Opacity="0.937"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="TooltipInnerBrush" Color="{StaticResource idInner8}" Opacity="0.937"></SolidColorBrush>
+ <SolidColorBrush x:Key="TooltipInnerSelectedBrush" Color="{StaticResource idInnerSelected5}" Opacity="0.937"></SolidColorBrush>
+ <SolidColorBrush x:Key="TooltipOutlineBrush" Color="{StaticResource idOutline4}"></SolidColorBrush>
+
+  <CornerRadius x:Key="TooltipRoundness">4</CornerRadius>
+
+<!-- Menu Item -->
+<!-- это аналог MainMenuItem для Pulldown -->
+
+ <SolidColorBrush x:Key="MenuItemTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuItemTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuItemItemBrush" Color="{StaticResource idItem8}" Opacity="0.561"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="MenuItemInnerBrush" Color="{StaticResource idInner6}" Opacity="0.000"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuItemInnerSelectedBrush" Color="{StaticResource idInnerSelected1}" Opacity="0.902"></SolidColorBrush>
+ <SolidColorBrush x:Key="MenuItemOutlineBrush" Color="{StaticResource idOutline5}"></SolidColorBrush>
+
+  <CornerRadius x:Key="MenuItemRoundness">4</CornerRadius>
+
+<!-- Scroll Bar -->
+<!-- это аналог ScroolViewer, используется для всех элементов -->
+
+ <SolidColorBrush x:Key="ScrollBarTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ScrollBarTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ScrollBarItemBrush" Color="{StaticResource idItem4}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="ScrollBarInnerBrush" Color="{StaticResource idInner9}" Opacity="0.000"></SolidColorBrush>
+ <SolidColorBrush x:Key="ScrollBarInnerSelectedBrush" Color="{StaticResource idItem5}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ScrollBarOutlineBrush" Color="{StaticResource idOutline6}"></SolidColorBrush>
+
+  <CornerRadius x:Key="ScrollBarRoundness">10</CornerRadius>
+
+<!-- List Item -->
+<!-- это аналог ListBoxItem, где ListBox это Box -->
+
+ <SolidColorBrush x:Key="ListItemTextBrush" Color="{StaticResource idText2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ListItemTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ListItemItemBrush" Color="{StaticResource idItem5}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="ListItemInnerBrush" Color="{StaticResource idInner10}" Opacity="0.000"></SolidColorBrush>
+ <SolidColorBrush x:Key="ListItemInnerSelectedBrush" Color="{StaticResource idInnerSelected3}"></SolidColorBrush>
+ <SolidColorBrush x:Key="ListItemOutlineBrush" Color="{StaticResource idOutline7}"></SolidColorBrush>
+
+  <CornerRadius x:Key="ListItemRoundness">4</CornerRadius>
+
+<!-- Tab -->
+<!-- это аналог TabControlHeader для Workspaces и Properties -->
+
+ <SolidColorBrush x:Key="TabTextBrush" Color="{StaticResource idText4}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TabTextSelectedBrush" Color="{StaticResource idTextSelected1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TabItemBrush" Color="{StaticResource idItem6}"></SolidColorBrush>
+
+ <SolidColorBrush x:Key="TabInnerBrush" Color="{StaticResource idInner1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TabInnerSelectedBrush" Color="{StaticResource idInnerSelected4}"></SolidColorBrush>
+ <SolidColorBrush x:Key="TabOutlineBrush" Color="{StaticResource idOutline8}"></SolidColorBrush>
+
+  <CornerRadius x:Key="TabRoundness">4</CornerRadius>
+
+<!-- Styles -->
+<!-- общие св-ва для разных элементов -->
+
+ <sys:Double x:Key="StyleMenuShadowStrength">0.3</sys:Double>
+ <sys:Double x:Key="StyleIconAlpha">1.0</sys:Double>
+ <sys:Double x:Key="StyleIconSaturation">0.5</sys:Double>
+
+ <SolidColorBrush x:Key="StyleEditorOutlineBrush" Color="{StaticResource idStyle1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="StyleTextCursorBrush" Color="{StaticResource idStyle2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="StyleWidgetEmbossBrush" Color="{StaticResource idStyle3}" Opacity="0.149"></SolidColorBrush>
+
+<!-- Icon Colors -->
+<!-- цвета для ттематических иконок -->
+
+ <SolidColorBrush x:Key="IconColorSceneBrush" Color="{StaticResource idIcon1}"></SolidColorBrush>
+ <SolidColorBrush x:Key="IconColorCollectionBrush" Color="{StaticResource idIcon2}"></SolidColorBrush>
+ <SolidColorBrush x:Key="IconColorObjectBrush" Color="{StaticResource idIcon3}"></SolidColorBrush>
+    <SolidColorBrush x:Key="IconColorObjectDataBrush" Color="{StaticResource idIcon4}"></SolidColorBrush>
+    <SolidColorBrush x:Key="IconColorModifierBrush" Color="{StaticResource idIcon5}"></SolidColorBrush>
+    <SolidColorBrush x:Key="IconColorShadingBrush" Color="{StaticResource idIcon6}"></SolidColorBrush>
+    <SolidColorBrush x:Key="IconColorFileFoldersBrush" Color="{StaticResource idIcon7}"></SolidColorBrush>
+
+    
+    <Color x:Key="idThemeSpaceHeader1">#424242</Color> <!-- (0.259, 0.259, 0.259) -->
+    <Color x:Key="idThemeSpaceHeader2">#454545</Color> <!-- (0.271, 0.271, 0.271) -->
+    <Color x:Key="idThemeSpaceHeader3">#232323</Color> <!-- (0.137, 0.137, 0.137) -->
+    <Color x:Key="idThemeSpaceHeader4">#303030</Color> <!-- (0.188, 0.188, 0.188) -->
+
+    <Color x:Key="idThemeSpaceWindowBackground1">#424242</Color> <!-- (0.259, 0.259, 0.259) -->
+    <Color x:Key="idThemeSpaceWindowBackground2">#282828</Color> <!-- (0.157, 0.157, 0.157) -->
+
+    <Color x:Key="idThemeSpaceTitle1">#D4D4D4</Color> <!-- (0.831, 0.831, 0.831) -->
+
+    <Color x:Key="idThemeSpaceText1">#E6E6E6</Color> <!-- (0.902, 0.902, 0.902) -->
+    <Color x:Key="idThemeSpaceText2">#C3C3C3</Color> <!-- (0.765, 0.765, 0.765) -->
+    <Color x:Key="idThemeSpaceText3">#838383</Color> <!-- (0.514, 0.514, 0.514) -->
+
+    <Color x:Key="idThemeSpaceNavigationBarBackground1">#232323</Color> <!-- (0.137, 0.137, 0.137) -->
+
+
+    <Color x:Key="idPanelColorsHeader1">#424242</Color> <!-- (0.259, 0.259, 0.259) -->
+
+    <Color x:Key="idPanelColorsBackground1">#383838</Color> <!-- (0.220, 0.220, 0.220) -->
+
+    <Color x:Key="idPanelColorsSubBackground1">#000000</Color> <!-- (0.000, 0.000, 0.000) -->
+
+    <Color x:Key="idTimelineGrid">#2A2A2A</Color> <!-- (0.165, 0.165, 0.165) -->
+    <Color x:Key="idTimelineCurrentFrame">#5680C2</Color> <!-- (0.337, 0.502, 0.761) -->
+    <Color x:Key="idTimelineMarkersRegion">#292929</Color> <!-- (0.161, 0.161, 0.161) -->
+
+    <Color x:Key="idOutlinerActiveHighlight">#3B5689</Color> <!-- (0.231, 0.337, 0.537) -->
+    <Color x:Key="idOutlinerActiveObject">#FFAF29</Color> <!-- (1.000, 0.686, 0.161) -->
+    <Color x:Key="idOutlinerAlternateRows">#FFFFFF</Color> <!-- (1.000, 1.000, 1.000) -->
+
+
+
+  <!-- Editor -->
+
+  <SolidColorBrush x:Key="EditorWindowBackgroundBrush" Color="#282828"/>
+  <SolidColorBrush x:Key="EditorHeaderBrush" Color="#424242"/>
+  <sys:Double x:Key="EditorHeaderHeight">24</sys:Double>
+
+
+
+  <!-- 3D Viewport -->
+<!-- уникальные для элемента свойства -->
+
+<!----><!-- Theme Space -->
+<SolidColorBrush x:Key="3DViewportHeaderBrush" Color="{StaticResource idThemeSpaceHeader1}" Opacity="0.000"></SolidColorBrush> <!-- background для header элемента -->
+
+
+
+<!-- Dope Sheet / Timeline -->
+<!-- элемент типа Chart -->
+<!-- также уникальные для элемента свойства -->
+
+ <SolidColorBrush x:Key="TimelineGridBrush" Color="{StaticResource idTimelineGrid}"></SolidColorBrush><!-- вертикальная сетка -->
+ <SolidColorBrush x:Key="TimelineCurrentFrameBrush" Color="{StaticResource idTimelineCurrentFrame}"></SolidColorBrush><!-- интерактивная вертикальная линия для перемещения по времени -->
+ <SolidColorBrush x:Key="TimelineMarkersRegionBrush" Color="{StaticResource idTimelineMarkersRegion}" Opacity="0.902"></SolidColorBrush><!-- область для оси X в которой содержатся осевые метки -->
+
+
+<!-- Properties -->
+
+
+<!----><!-- Theme Space -->
+
+<SolidColorBrush x:Key="PropertiesWindowBackgroundBrush" Color="{StaticResource idThemeSpaceWindowBackground1}"></SolidColorBrush>
+<SolidColorBrush x:Key="PropertiesTitleBrush" Color="{StaticResource idThemeSpaceTitle1}"></SolidColorBrush> <!-- header expander текст для всех уровней -->
+<SolidColorBrush x:Key="PropertiesTextBrush" Color="{StaticResource idThemeSpaceText1}"></SolidColorBrush> <!-- все TextBlock/Labels для всех уровней -->
+<SolidColorBrush x:Key="PropertiesHeaderBrush" Color="{StaticResource idThemeSpaceHeader1}"></SolidColorBrush> <!-- background для header элемента -->
+<SolidColorBrush x:Key="PropertiesNavigationBarBackgroundBrush" Color="{StaticResource idThemeSpaceNavigationBarBackground1}"></SolidColorBrush> <!-- область под иконками tabs -->
+
+<!----><!----><!-- Panel Colors -->
+
+<SolidColorBrush x:Key="PropertiesPanelHeaderBrush" Color="{StaticResource idPanelColorsHeader1}"></SolidColorBrush>
+<SolidColorBrush x:Key="PropertiesPanelBackgroundBrush" Color="{StaticResource idPanelColorsBackground1}"></SolidColorBrush>
+<SolidColorBrush x:Key="PropertiesSubPanelBackgroundBrush" Color="{StaticResource idPanelColorsSubBackground1}" Opacity="0.141"></SolidColorBrush>
+
+
+
+<!-- Outliner -->
+
+<SolidColorBrush x:Key="OutlinerActiveHighlightBrush" Color="{StaticResource idOutlinerActiveHighlight}"></SolidColorBrush><!--  -->
+<SolidColorBrush x:Key="OutlinerActiveObjectBrush" Color="{StaticResource idOutlinerActiveObject}"></SolidColorBrush><!-- текст выбранного объекта для Properties -->
+<SolidColorBrush x:Key="OutlinerAlternateRowsBrush" Color="{StaticResource idOutlinerAlternateRows}" Opacity="0.027"></SolidColorBrush><!-- background чередование цветов с Window Background -->
+
+<!----><!-- Theme Space -->
+
+<SolidColorBrush x:Key="OutlinerWindowBackgroundBrush" Color="{StaticResource idThemeSpaceWindowBackground2}"></SolidColorBrush>
+<SolidColorBrush x:Key="OutlinerTextBrush" Color="{StaticResource idThemeSpaceText2}"></SolidColorBrush> <!-- текст для Items -->
+<SolidColorBrush x:Key="OutlinerHeaderBrush" Color="{StaticResource idThemeSpaceHeader2}"></SolidColorBrush> <!-- background для header элемента -->
+
+
+<!-- Top Bar -->
+<!----><!-- Theme Space -->
+
+<SolidColorBrush x:Key="TopBarHeaderBrush" Color="{StaticResource idThemeSpaceHeader3}"></SolidColorBrush> <!-- background для header элемента -->
+
+
+<!-- Status Bar -->
+<!----><!-- Theme Space -->
+
+<SolidColorBrush x:Key="StatusBarHeaderBrush" Color="{StaticResource idThemeSpaceHeader4}"></SolidColorBrush> <!-- background для header элемента -->
+<SolidColorBrush x:Key="StatusBarHeaderTextBrush" Color="{StaticResource idThemeSpaceText3}"></SolidColorBrush> <!-- текст для header -->
+
+
+
+  <!-- Task List -->
+
+  <SolidColorBrush x:Key="TaskListBackgroundBrush" Color="#424242"/>
+  <SolidColorBrush x:Key="TaskListItemBackgroundBrush" Color="#292929"/>
+  <SolidColorBrush x:Key="TaskListOutlineBrush" Color="#2D2D2D"/>
+  <SolidColorBrush x:Key="TaskListSelectedOutlineBrush" Color="#5680C2"/>
+
+
+</Styles.Resources>
+
+  
+  
+  <Style Selector="Border.top">
+    <Setter Property="CornerRadius"
+            Value="{Binding Source={StaticResource ThemeControlCornerRadius}, 
+              Converter={StaticResource TopCornerRadiusFilterConverter}}"></Setter>
+  </Style>
+    
+  <Style Selector="Border.bottom">
+    <Setter Property="CornerRadius"
+            Value="{Binding Source={StaticResource ThemeControlCornerRadius}, 
+              Converter={StaticResource BottomCornerRadiusFilterConverter}}"></Setter>
+  </Style>
+
+
+  <Style Selector="Button.left /template/ ContentPresenter">
+    <Setter Property="CornerRadius"
+            Value="{Binding Source={StaticResource ThemeControlCornerRadius}, 
+              Converter={StaticResource LeftCornerRadiusFilterConverter}}"></Setter>
+  </Style>
+
+  <Style Selector="Button.right /template/ ContentPresenter">
+    <Setter Property="CornerRadius"
+            Value="{Binding Source={StaticResource ThemeControlCornerRadius}, 
+              Converter={StaticResource RightCornerRadiusFilterConverter}}"></Setter>
+  </Style>
+
+  <Style Selector="Button.top /template/ ContentPresenter">
+    <Setter Property="CornerRadius"
+            Value="{Binding Source={StaticResource ThemeControlCornerRadius}, 
+              Converter={StaticResource TopCornerRadiusFilterConverter}}"></Setter>
+  </Style>
+
+  <Style Selector="Button.bottom /template/ ContentPresenter">
+    <Setter Property="CornerRadius"
+            Value="{Binding Source={StaticResource ThemeControlCornerRadius}, 
+              Converter={StaticResource BottomCornerRadiusFilterConverter}}"></Setter>
+  </Style>
+  
+</Styles>

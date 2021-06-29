@@ -1,0 +1,238 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"
+             xmlns:converters="clr-namespace:Globe3DLight.Converters"
+             xmlns:markups="clr-namespace:Globe3DLight.Markups"
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
+             Margin="10"              
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
+             x:Class="Globe3DLight.Views.Editors.TaskListEditor">
+
+  <UserControl.DataContext>
+    <vm:TaskListEditorViewModel/>
+  </UserControl.DataContext>
+
+  <UserControl.Styles>
+
+    <Style Selector="TextBox.search">
+      <Setter Property="Padding" Value="4,0,2,0"></Setter>
+      <Setter Property="InnerLeftContent">
+        <Setter.Value>
+          <Template>
+            <Viewbox Stretch="Uniform" 
+                     Width="14" Height="14"                      
+                     Margin="0,0,4,0">
+              <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListSearchIcon}"/>
+            </Viewbox>
+          </Template>
+        </Setter.Value>
+      </Setter>
+    </Style>
+
+    <Style Selector="Button.target:pressed /template/ ContentPresenter">
+      <Setter Property="Background" Value="{TemplateBinding Background}"/>
+    </Style>
+
+    <Style Selector="ContentControl">
+      <Setter Property="Template">
+        <ControlTemplate>
+          <Border>
+            <Grid ColumnDefinitions="Auto,*" RowDefinitions="*,*">
+              <TextBlock Text="Begin:" Grid.Column="0"/>
+              <TextBlock Text="{Binding Begin}" Grid.Column="1"
+                         HorizontalAlignment="Center"/>
+              <TextBlock Text="Duration:" Grid.Column="0" Grid.Row="1" />
+              <TextBlock Text="{Binding Duration}" Grid.Column="1" Grid.Row="1"
+                         HorizontalAlignment="Center"/>
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter>
+    </Style>
+
+
+    <Style Selector="ListBox">
+      <Setter Property="Background" Value="{DynamicResource TaskListBackgroundBrush}" />
+      <Setter Property="Margin" Value="2,0,6,0" />
+      <Setter Property="Padding" Value="2" />
+    </Style>
+    
+    <Style Selector="ListBoxItem">
+      <Setter Property="Background" Value="{DynamicResource TaskListItemBackgroundBrush}" />
+      <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+      <Setter Property="Margin" Value="0,1,12,1" />
+      <Setter Property="Padding" Value="4" />
+      <Setter Property="TextBlock.Foreground" Value="{DynamicResource ListItemTextBrush}" />
+    </Style>
+
+    <Style Selector="ListBoxItem /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="BorderBrush" Value="{DynamicResource TaskListOutlineBrush}" />
+      <Setter Property="BorderThickness" Value="1" />
+      <Setter Property="CornerRadius" Value="{DynamicResource ThemeControlCornerRadius}" />   
+    </Style>
+    
+    <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter#PART_ContentPresenter">     
+      <Setter Property="Background" Value="{DynamicResource TaskListItemBackgroundBrush}" />
+    </Style>
+  
+    <Style Selector="ListBoxItem:selected /template/ ContentPresenter#PART_ContentPresenter">
+      <Setter Property="BorderBrush" Value="{DynamicResource TaskListSelectedOutlineBrush}" />    
+      <Setter Property="Background" Value="{DynamicResource TaskListItemBackgroundBrush}" />
+      <Setter Property="TextBlock.Foreground" Value="{DynamicResource ListItemTextBrush}" />
+    </Style>
+
+    <Style Selector="ListBox /template/ ScrollViewer#PART_ScrollViewer /template/ ScrollBar#PART_VerticalScrollBar">
+      <Setter Property="AllowAutoHide" Value="False"></Setter>
+    </Style>
+
+    <Style Selector="ListBox /template/ ScrollViewer#PART_ScrollViewer /template/ ScrollContentPresenter#PART_ContentPresenter">
+      <!-- not work -->
+      <!--<Setter Property="Grid.ColumnSpan" Value="1"></Setter>-->
+      <Setter Property="Margin" Value="0,0,14,0"></Setter>
+    </Style>
+
+
+    <Style Selector="controls|Editor /template/ Border#PanelBorder">
+      <Setter Property="Background" Value="{DynamicResource TaskListBackgroundBrush}"></Setter>
+    </Style>
+    
+  </UserControl.Styles>
+
+
+
+  <controls:Editor>
+
+    <controls:Editor.Icon>
+      <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+        <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorTaskListIcon}"/>
+      </Viewbox>
+    </controls:Editor.Icon>
+
+    <controls:Editor.HeaderContent>
+      <Grid ColumnDefinitions="*,Auto">
+        <TextBox Grid.Column="0"               
+                 Width="140"
+                 Height="20"
+                 HorizontalAlignment="Center"
+                 Classes="search"></TextBox>
+
+        <Button Grid.Column="1"
+                VerticalAlignment="Center"
+                HorizontalAlignment="Left"
+                Height="20"
+                Margin="0,2,8,2"
+                Padding="0"
+                Classes="target">
+
+          <Grid ColumnDefinitions="Auto,Auto">
+            <Viewbox Stretch="UniformToFill" Width="14" Height="14"
+                     Margin="4,0,0,0">
+              <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListFilterIcon}"/>
+            </Viewbox>
+            <Viewbox UseLayoutRounding="False"
+                                Grid.Column="1"
+                                IsHitTestVisible="False"
+                                Margin="6,0,4,0"
+                                Height="12"
+                                Width="12"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center">
+              <Panel>
+                <Path Stretch="Uniform"
+                      VerticalAlignment="Center"
+                      Fill="White"
+                      Data="M1939 486L2029 576L1024 1581L19 576L109 486L1024 1401L1939 486Z" />
+              </Panel>
+            </Viewbox>
+          </Grid>
+
+          <Button.Flyout>
+            <Flyout Placement="Bottom"
+                    ShowMode="TransientWithDismissOnPointerMoveAway">
+              <StackPanel Spacing="4"
+                          DataContext="{Binding Filter}">
+                <TextBlock Text="Filter:"></TextBlock>
+                <StackPanel Orientation="Horizontal">
+                  <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                    <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListRotateIcon}"/>
+                  </Viewbox>
+                  <CheckBox Content="Rotation" IsChecked="{Binding IsRotate}"></CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                  <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                    <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListTransmitIcon}"/>
+                  </Viewbox>
+                  <CheckBox Content="Transmit" IsChecked="{Binding IsTransmit}"></CheckBox>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                  <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                    <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListShootIcon}"/>
+                  </Viewbox>
+                  <CheckBox Content="Shooting" IsChecked="{Binding IsShoot}"></CheckBox>
+                </StackPanel>
+              </StackPanel>
+            </Flyout>
+          </Button.Flyout>
+
+        </Button>
+
+      </Grid>
+    </controls:Editor.HeaderContent>
+
+    <controls:Editor.PanelContent>
+      <ListBox Items="{Binding Tasks}" VirtualizationMode="Simple">
+
+        <ListBox.DataTemplates>
+
+          <DataTemplate DataType="vm:Task1">
+            <Grid RowDefinitions="Auto,*">
+
+              <StackPanel Orientation="Horizontal">
+                <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                  <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListRotateIcon}"/>
+                </Viewbox>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+              </StackPanel>
+
+              <ContentControl Content="{Binding}" Grid.Row="1"/>
+            </Grid>
+          </DataTemplate>
+
+          <DataTemplate DataType="vm:Task2">
+            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+              <StackPanel Orientation="Horizontal">
+                <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                  <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListTransmitIcon}"/>
+                </Viewbox>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+              </StackPanel>
+              <ContentControl Content="{Binding}" Grid.Row="1"/>
+            </Grid>
+          </DataTemplate>
+
+          <DataTemplate DataType="vm:Task3">
+            <Grid RowDefinitions="Auto,*">
+              <StackPanel Orientation="Horizontal">
+                <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                  <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListShootIcon}"/>
+                </Viewbox>
+                <TextBlock Text="{Binding Name}"></TextBlock>
+              </StackPanel>
+              <ContentControl Content="{Binding}" Grid.Row="1"/>
+            </Grid>
+          </DataTemplate>
+
+        </ListBox.DataTemplates>
+
+      </ListBox>
+
+    </controls:Editor.PanelContent>
+    
+  </controls:Editor>
+    
+</UserControl>

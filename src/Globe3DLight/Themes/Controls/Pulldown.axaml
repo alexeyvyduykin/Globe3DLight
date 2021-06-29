@@ -1,0 +1,142 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:sys="using:System">
+
+  <Design.PreviewWith>
+    <Border Padding="20" Width="400" Height="200" Background="Silver">
+      <Menu VerticalAlignment="Top">
+        <MenuItem Header="File">
+          <MenuItem Header="Disabled" />
+          <MenuItem Header="New">
+            <MenuItem Header="XML" />
+          </MenuItem>
+          <MenuItem Header="Open">
+            <MenuItem.Icon>
+              <CheckBox BorderThickness="0" IsHitTestVisible="False" IsChecked="True" />
+            </MenuItem.Icon>
+          </MenuItem>
+          <Separator />
+          <MenuItem Header="Exit" />
+        </MenuItem>
+        <MenuItem Header="Edit">
+          <MenuItem Header="Go To">
+            <MenuItem Header="Go To Line" />
+          </MenuItem>
+        </MenuItem>
+        <MenuItem Header="View">
+          <MenuItem Header="Designer" />
+        </MenuItem>
+        <MenuItem Header="Project">
+          <MenuItem Header="Add class" />
+        </MenuItem>
+      </Menu>
+    </Border>
+  </Design.PreviewWith>
+
+
+  <Style Selector="Menu">
+    <Setter Property="MinHeight" Value="12"></Setter>
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border x:Name="Border"
+                BorderBrush="Transparent"
+                BorderThickness="1"               
+                Background="Transparent"
+                Padding="1"                
+                HorizontalAlignment="Stretch">
+          <ItemsPresenter Name="PART_ItemsPresenter"
+                          Items="{TemplateBinding Items}"
+                          ItemsPanel="{TemplateBinding ItemsPanel}"
+                          ItemTemplate="{TemplateBinding ItemTemplate}"
+                          VerticalAlignment="Stretch"                             
+                          KeyboardNavigation.TabNavigation="Continue" />
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+        
+  <Style Selector="Menu > MenuItem">
+    <Setter Property="Foreground" Value="{DynamicResource PulldownTextBrush}"></Setter>
+    <Setter Property="Margin" Value="1"></Setter>
+    <Setter Property="Padding" Value="4,2,4,2" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <Border Name="PART_LayoutRoot">
+          <Panel>
+            <ContentPresenter Name="PART_HeaderPresenter"
+                              Content="{TemplateBinding Header}"                              
+                              VerticalAlignment="Center"
+                              HorizontalAlignment="Stretch"                              
+                              Margin="4,2,4,2">
+              <ContentPresenter.DataTemplates>
+                <DataTemplate DataType="sys:String">
+                  <TextBlock Text="{Binding}"
+                             Foreground="{TemplateBinding Foreground}"/>
+                </DataTemplate>
+              </ContentPresenter.DataTemplates>
+            </ContentPresenter>
+            <Popup Name="PART_Popup"
+                   WindowManagerAddShadowHint="False"
+                   MinWidth="{Binding Bounds.Width, RelativeSource={RelativeSource TemplatedParent}}"
+                   IsLightDismissEnabled="True"
+                   IsOpen="{TemplateBinding IsSubMenuOpen, Mode=TwoWay}"
+                   OverlayInputPassThroughElement="{Binding $parent[Menu]}">
+              <Border Background="{DynamicResource MenuBackInnerBrush}"
+                      BorderBrush="{DynamicResource MenuBackOutlineBrush}"
+                      BorderThickness="1"
+                      Padding="2"                   
+                      MinHeight="12"
+                      HorizontalAlignment="Stretch"
+                      CornerRadius="{DynamicResource MenuBackRoundness}">
+                <ScrollViewer Classes="menuscroller">
+                  <ItemsPresenter Name="PART_ItemsPresenter"
+                                  Items="{TemplateBinding Items}"
+                                  ItemsPanel="{TemplateBinding ItemsPanel}"
+                                  ItemTemplate="{TemplateBinding ItemTemplate}"
+                                  Margin="0"
+                                  Grid.IsSharedSizeScope="True" />
+                </ScrollViewer>
+              </Border>
+            </Popup>
+          </Panel>
+        </Border>
+      </ControlTemplate>
+    </Setter>
+  
+  </Style>
+
+  <Style Selector="Menu > MenuItem /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="{DynamicResource PulldownInnerBrush}"></Setter>
+    <Setter Property="BorderBrush" Value="Transparent"></Setter>
+    <Setter Property="BorderThickness" Value="1"></Setter>
+    <Setter Property="CornerRadius" Value="{DynamicResource PulldownRoundness}"></Setter>
+    <Setter Property="Padding" Value="4,0,4,0"></Setter>  
+  </Style>
+  
+  <Style Selector="Menu > MenuItem:pointerover">
+    <Setter Property="Foreground" Value="{DynamicResource PulldownTextSelectedBrush}" />
+  </Style>
+  
+  <Style Selector="Menu > MenuItem:selected">
+    <Setter Property="Foreground" Value="{DynamicResource PulldownTextSelectedBrush}" />
+  </Style>
+
+  <Style Selector="Menu > MenuItem:pointerover /template/ Border#PART_LayoutRoot"> 
+    <Setter Property="Background" Value="{DynamicResource PulldownInnerSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PulldownInnerSelectedBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource PulldownRoundness}" />    
+    <Setter Property="Padding" Value="4,0,4,0" />
+  </Style>
+
+
+  <Style Selector="Menu > MenuItem:selected /template/ Border#PART_LayoutRoot">
+    <Setter Property="Background" Value="{DynamicResource PulldownInnerSelectedBrush}" />
+    <Setter Property="BorderBrush" Value="{DynamicResource PulldownInnerSelectedBrush}" />
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="CornerRadius" Value="{DynamicResource PulldownRoundness}" />
+    <Setter Property="Padding" Value="4,0,4,0" />
+  </Style>
+  
+  
+</Styles>

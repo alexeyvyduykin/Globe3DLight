@@ -13,7 +13,12 @@
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+    <AvaloniaXaml Remove="Icons.axaml" />
+    <None Remove="Themes\Assets\DroidSans-Bold.ttf" />
+    <None Remove="Themes\Assets\DroidSans.ttf" />
     <AvaloniaResource Include="Icons.axaml" />
+    <AvaloniaResource Include="Themes\Assets\DroidSans-Bold.ttf" />
+    <AvaloniaResource Include="Themes\Assets\DroidSans.ttf" />
   </ItemGroup>
 
   <ItemGroup>

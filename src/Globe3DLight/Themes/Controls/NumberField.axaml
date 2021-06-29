@@ -1,0 +1,169 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Controls="clr-namespace:Globe3DLight.Controls"   
+        xmlns:sys="using:System">
+
+
+  <Design.PreviewWith>
+    
+    <Border Padding="20" Background="Silver">
+
+      <StackPanel Spacing="5" Width="150" HorizontalAlignment="Center">
+        <StackPanel.Styles>
+          <!--<Style Selector="Controls|NumberField.top /template/ Border#PART_BorderElement">
+            <Setter Property="CornerRadius" Value="6,6,0,0"></Setter>
+          </Style>
+          <Style Selector="Controls|NumberField.top /template/ Button#PART_DecreaseButton /template/ Border#PART_ButtonLayoutBorder">
+            <Setter Property="CornerRadius" Value="6,0,0,0"></Setter>
+          </Style>
+          <Style Selector="Controls|NumberField.top /template/ Button#PART_IncreaseButton /template/ Border#PART_ButtonLayoutBorder">
+            <Setter Property="CornerRadius" Value="0,6,0,0"></Setter>
+          </Style>-->                              
+        </StackPanel.Styles>
+        
+        
+        
+        <Controls:NumberField Value="1" Increment="0.01" FormatString="\{0:0.##\} m" 
+                              CultureInfo="en-US"></Controls:NumberField>
+
+        <Controls:NumberField Value="2" Increment="0.1" FormatString="\{0:0.#\} °"
+                              CultureInfo="en-US"></Controls:NumberField>
+
+        <Controls:NumberField Value="3" Increment="0.01" FormatString="\{0:0.000\}"
+                              CultureInfo="en-US"></Controls:NumberField>
+
+      </StackPanel>
+    </Border>
+
+  </Design.PreviewWith>
+
+  <Styles.Resources>
+    <StreamGeometry x:Key="LeftArrow">M 410.312 454.729 151.767 244.996 410.312 35.271 381.693 0 79.688 244.996 381.693 490 Z</StreamGeometry>
+    <StreamGeometry x:Key="RightArrow">M 106.601 490 412.15 245.004 106.601 0 77.85 35.856 338.702 245.004 77.85 454.159 Z</StreamGeometry>
+  </Styles.Resources>
+
+  <Style Selector="Controls|NumberField">
+    <Setter Property="FontSize" Value="{DynamicResource ControlContentThemeFontSize}" />
+    <Setter Property="FocusAdorner" Value="{x:Null}" />
+    <Setter Property="Template">
+      <ControlTemplate>
+        <DataValidationErrors>
+          <Panel>
+            <Border Name="PART_BorderElement">
+              <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto">
+                <Button x:Name="PART_DecreaseButton" Grid.Column="0" Grid.ColumnSpan="1"/>
+                <DockPanel x:Name="PART_InnerDockPanel" Grid.Column="1" Grid.ColumnSpan="1">
+
+                  <ScrollViewer HorizontalScrollBarVisibility="{TemplateBinding (ScrollViewer.HorizontalScrollBarVisibility)}"
+                                VerticalScrollBarVisibility="{TemplateBinding (ScrollViewer.VerticalScrollBarVisibility)}">
+                    <Panel>
+                      <TextBox Name="PART_TextBox"
+                               Text="{TemplateBinding Text, Mode=TwoWay}"                                    
+                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </Panel>
+                  </ScrollViewer>
+                </DockPanel>
+                <Button x:Name="PART_IncreaseButton" Grid.Column="2" Grid.ColumnSpan="1"/>
+              </Grid>
+            </Border>
+          </Panel>
+        </DataValidationErrors>
+      </ControlTemplate>
+    </Setter>
+  </Style>
+
+
+  <Style Selector="Controls|NumberField">
+    <Setter Property="Padding" Value="0" />
+    <Setter Property="Foreground" Value="{DynamicResource NumberFieldTextBrush}" />
+    <Setter Property="Background" Value="{DynamicResource NumberFieldInnerBrush}" />
+  </Style>
+
+  <Style Selector="Controls|NumberField /template/ Border#PART_BorderElement">
+    <Setter Property="BorderThickness" Value="1" />
+    <Setter Property="BorderBrush" Value="{DynamicResource NumberFieldOutlineBrush}" />
+    <Setter Property="CornerRadius" Value="{DynamicResource NumberFieldRoundness}" />
+  </Style>
+
+
+
+  <!-- pointerover -->
+  <Style Selector="Controls|NumberField /template/ TextBox:pointerover#PART_TextBox">
+    <Setter Property="Background" Value="{DynamicResource NumberFieldInnerBrush}"></Setter>
+  </Style>
+
+  
+  
+  
+  
+  
+  <!-- TextBox -->
+  <Style Selector="Controls|NumberField /template/ TextBox#PART_TextBox">    
+    <Setter Property="Background" Value="{DynamicResource NumberFieldInnerBrush}"></Setter>
+    <Setter Property="HorizontalContentAlignment" Value="Center"></Setter>
+    <Setter Property="BorderThickness" Value="0"></Setter>
+  </Style>
+
+  <Style Selector="Controls|NumberField /template/ TextBox#PART_TextBox /template/ Border#border">
+    <Setter Property="CornerRadius" Value="0" />
+  </Style>
+
+
+  <!-- Button -->
+  <Style Selector="Controls|NumberField /template/ Button#PART_DecreaseButton">
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="Width" Value="20"/>   
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="PART_ButtonLayoutBorder"
+                  Background="{DynamicResource NumberFieldInnerBrush}"
+                  BorderThickness="0">
+            <Panel>
+              <Path x:Name="PART_LeftGlyph"
+                    Fill="{DynamicResource NumberFieldTextBrush}"
+                    Data="{StaticResource LeftArrow}"
+                    Height="10"
+                    Width="10"
+                    Stretch="Uniform"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center" />
+            </Panel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="Controls|NumberField /template/ Button#PART_IncreaseButton">
+    <Setter Property="VerticalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+    <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+    <Setter Property="Width" Value="20"/>
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate TargetType="Button">
+          <Border x:Name="PART_ButtonLayoutBorder"
+                  Background="{DynamicResource NumberFieldInnerBrush}"
+                  BorderThickness="0">
+            <Panel>
+              <Path x:Name="PART_RightGlyph"
+                    Fill="{DynamicResource NumberFieldTextBrush}"
+                    Data="{StaticResource RightArrow}"
+                    Height="10"
+                    Width="10"
+                    Stretch="Uniform"
+                    VerticalAlignment="Center"
+                    HorizontalAlignment="Center" />
+            </Panel>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+</Styles>
