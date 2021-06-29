@@ -78,6 +78,6 @@ namespace Globe3DLight.Themes
         void IResourceProvider.AddOwner(IResourceHost owner) => (Loaded as IResourceProvider)?.AddOwner(owner);
         void IResourceProvider.RemoveOwner(IResourceHost owner) => (Loaded as IResourceProvider)?.RemoveOwner(owner);
 
-        private Uri GetUri() => new Uri("avares://Demo.Avalonia.StyleEditorBlender/Themes/BlenderDefaultTheme.axaml", UriKind.Absolute);
+        private Uri GetUri() => new Uri("avares://Globe3DLight/Themes/BlenderDefaultTheme.axaml", UriKind.Absolute);
     }
 }

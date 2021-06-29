@@ -3,33 +3,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:theme="using:Globe3DLight.Themes"
              xmlns:local="clr-namespace:Globe3DLight">
     <Application.DataTemplates>
         <local:ViewLocator/>
     </Application.DataTemplates>
 
-    <Application.Resources>
-        <FontFamily x:Key="UiFontFamily">Segoe UI, SF Pro Display, Noto Sans, Cantarel</FontFamily>
-        <FontFamily x:Key="CodeFontFamily">Consolas, Menlo, Monaco, Courier, Courier New, Andale Mono, DejaVu Sans Mono</FontFamily>
-        <StaticResource x:Key="ContentControlThemeFontFamily" ResourceKey="UiFontFamily" />                
-    </Application.Resources>
-
     <Application.Styles>
         
-        <FluentTheme Mode="Dark"/>
-        
-        <Style>
-            <Style.Resources>
-                <SolidColorBrush x:Key="IconTransparentBrush" Color="{DynamicResource SystemControlTransparentBrush}"/>
-                <SolidColorBrush x:Key="IconAccentBrush1" Color="{DynamicResource SystemAccentColor}"/>
-                <SolidColorBrush x:Key="IconAccentBrush2" Color="{DynamicResource SystemAccentColorLight1}"/>
-            </Style.Resources>
-        </Style>
-        
+        <theme:BlenderTheme></theme:BlenderTheme>
+
         <StyleInclude Source="avares://Globe3DLight/Icons.axaml"/>
 
-
-
+        <StyleInclude Source="avares://Globe3DLight/Styles/EditorStyle.axaml"/>
 
     </Application.Styles>
 </Application>
