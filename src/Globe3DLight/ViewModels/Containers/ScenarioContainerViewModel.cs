@@ -30,6 +30,7 @@ namespace Globe3DLight.ViewModels.Containers
        // private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
         private SceneTimerEditorViewModel _sceneTimerEditor;
+        private TaskListEditorViewModel _taskListEditor;
         private double _width;
         private double _height;
         private ImmutableArray<FrameViewModel> _frameRoot;
@@ -62,9 +63,9 @@ namespace Globe3DLight.ViewModels.Containers
             {
                 if(CurrentScenarioMode == ScenarioMode.Task)
                 {
-                    if (CurrentTask != null)
+                    if (TaskListEditor.CurrentTask != null)
                     {
-                        SetCameraTo(CurrentTask.Satellite);
+                        SetCameraTo(TaskListEditor.CurrentTask.Satellite);
                     }
                 }
             }
@@ -148,6 +149,12 @@ namespace Globe3DLight.ViewModels.Containers
         {
             get => _sceneTimerEditor;
             set => RaiseAndSetIfChanged(ref _sceneTimerEditor, value);
+        }
+
+        public TaskListEditorViewModel TaskListEditor
+        {
+            get => _taskListEditor;
+            set => RaiseAndSetIfChanged(ref _taskListEditor, value);
         }
 
         public void SetCameraTo(ITargetable target)

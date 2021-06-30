@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 using System.Collections.ObjectModel;
+using Globe3DLight.ViewModels.Editors;
 
 namespace Globe3DLight.ViewModels.Entities
 {
@@ -11,10 +12,6 @@ namespace Globe3DLight.ViewModels.Entities
     {
         private readonly IList<BaseSatelliteEvent> _sourceEvents;
         private bool _isVisible;
-        private bool _hasRotations;
-        private bool _hasObservations;
-        private bool _hasTransmission;
-        private string _searchString;
         private IList<BaseSatelliteEvent> _events;
         private BaseSatelliteEvent? _selectedEvent;
         private Satellite _satellite;
@@ -30,64 +27,22 @@ namespace Globe3DLight.ViewModels.Entities
             _sourceEvents = sortEvents;
             _events = sortEvents;
             _selectedEvent = sortEvents.FirstOrDefault();
-            _searchString = string.Empty;
-
+       
             _rotations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is RotationEvent));
             _observations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is ObservationEvent));
             _transmissions = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is TransmissionEvent));
-
-            PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(HasRotations) || e.PropertyName == nameof(HasObservations) || 
-                e.PropertyName == nameof(HasTransmissions) || e.PropertyName == nameof(SearchString))
-                {
-                    Events = CreateFrom(_sourceEvents);
-                    SelectedEvent = Events.FirstOrDefault();
-                }
-            };
         }
              
-        private IList<BaseSatelliteEvent> CreateFrom(IList<BaseSatelliteEvent> source)
+        public void Filtering(Filter filter)
         {
-            Func<BaseSatelliteEvent, bool> rotationPredicate = (s => (HasRotations == true) ? s is RotationEvent : false);
-            Func<BaseSatelliteEvent, bool> observationPredicate = (s => (HasObservations == true) ? s is ObservationEvent : false);
-            Func<BaseSatelliteEvent, bool> transmissionPredicate = (s => (HasTransmissions == true) ? s is TransmissionEvent : false);
-            Func<BaseSatelliteEvent, bool> namePredicate =
-                (s => (string.IsNullOrEmpty(SearchString) == false) ? s.Name.Contains(SearchString) : true);
-
-            Func<BaseSatelliteEvent, bool> combined = s => rotationPredicate(s) || observationPredicate(s) || transmissionPredicate(s);
-
-            return source.Where(combined).Where(namePredicate).ToList();
+            Events = filter.Filtering(_sourceEvents);
+            SelectedEvent = Events.FirstOrDefault();
         }
 
         public bool IsVisible 
         {
             get => _isVisible; 
             set => RaiseAndSetIfChanged(ref _isVisible, value); 
-        }
-
-        public bool HasRotations
-        {
-            get => _hasRotations;
-            set => RaiseAndSetIfChanged(ref _hasRotations, value);
-        }
-        
-        public bool HasObservations
-        {
-            get => _hasObservations;
-            set => RaiseAndSetIfChanged(ref _hasObservations, value);
-        }
-        
-        public bool HasTransmissions
-        {
-            get => _hasTransmission;
-            set => RaiseAndSetIfChanged(ref _hasTransmission, value);
-        }
-        
-        public string SearchString 
-        {
-            get => _searchString;
-            set => RaiseAndSetIfChanged(ref _searchString, value);
         }
 
         public Satellite Satellite 

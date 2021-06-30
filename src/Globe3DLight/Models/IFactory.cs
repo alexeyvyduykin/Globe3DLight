@@ -52,7 +52,7 @@ namespace Globe3DLight.Models
         //LogicalCollectionViewModel CreateLogicalCollection(string name);
 
         SceneTimerEditorViewModel CreateSceneTimerEditor(DateTime dateTime, TimeSpan timeSpan);
-
+        TaskListEditorViewModel CreateTaskListEditor(ScenarioContainerViewModel scenario);
         IDataUpdater CreateDataUpdater();
 
         void SaveProjectContainer(ProjectContainerViewModel project, string path, IFileSystem fileIO, IJsonSerializer serializer);

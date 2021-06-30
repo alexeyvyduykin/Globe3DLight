@@ -17,12 +17,12 @@
                   Grid.Row="0"                   
                   HorizontalAlignment="Center">
 
-                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                <!--<StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
                     <TextBlock Text="Zoom: "/>
                     <TextBlock Text="{Binding #scheduler.Zoom}"/>
-                </StackPanel>
+                </StackPanel>-->
 
-                <Border Grid.Column="1" Margin="1">
+                <!--<Border Grid.Column="1" Margin="1">
                     <Border.Background>
                         <SolidColorBrush Color="Silver" Opacity="0.3"/>
                     </Border.Background>
@@ -30,10 +30,10 @@
                             IsSnapToTickEnabled="True"                          
                             Padding="5,-15"
                             Value="{Binding #scheduler.Zoom}"/>
-                </Border>
+                </Border>-->
             </Grid>
 
-            <sch:SchedulerControl x:Name="scheduler"
+            <!--<sch:SchedulerControl x:Name="scheduler"
                                   Grid.Row="1"
                                   Epoch="{Binding SceneTimerEditor.Begin}"
                                   CurrentTime="{Binding SceneTimerEditor.CurrentTime}">
@@ -59,9 +59,9 @@
 
                 </sch:SchedulerControl.Series>
 
-            </sch:SchedulerControl>
+            </sch:SchedulerControl>-->
 
-            <sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="2"/>
+            <!--<sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="2"/>-->
 
         </Grid>
 

@@ -24,6 +24,8 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static SceneTimerEditorViewModel SceneTimerEditor { get; set; }
 
+        public static TaskListEditorViewModel TaskListEditor { get; set; }
+
         public static ICamera ArcballCamera { get; set; }
 
         public static Satellite Satellite { get; set; }
@@ -71,7 +73,7 @@ namespace Globe3DLight.ViewModels.Designer
 
             Editor = serviceProvider.GetService<ProjectEditorViewModel>();
 
-            SceneTimerEditor = factory.CreateSceneTimerEditor(begin, duration);// serviceProvider.GetService<ISceneTimer>();
+    
 
             // New Project
 
@@ -181,6 +183,10 @@ namespace Globe3DLight.ViewModels.Designer
             // Scene
 
             ArcballCamera = factory.CreateArcballCamera(GlmSharp.dvec3.UnitZ);
+
+            // Editors
+            SceneTimerEditor = factory.CreateSceneTimerEditor(begin, duration);
+            TaskListEditor = factory.CreateTaskListEditor(Scenario);
         }
     }
 

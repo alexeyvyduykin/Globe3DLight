@@ -4,7 +4,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Presenters;
 using Avalonia.VisualTree;
 
-namespace Globe3DLight.Views.CustomControls
+namespace Globe3DLight.Controls
 {
     public class AccordionStackPanel : StackPanel
     {

@@ -10,23 +10,43 @@ namespace Globe3DLight
 {
     public static class ScenarioExtensions
     {
+        //public static void AddSatelliteTask(this ScenarioContainerViewModel scenario, SatelliteTask task)
+        //{
+        //    if (scenario?.TaskListEditor.Tasks != null && task != null)
+        //    {
+        //        var builder = scenario.TaskListEditor.Tasks.ToBuilder();
+        //        builder.Add(task);
+        //        scenario.TaskListEditor.Tasks = builder.ToImmutable();
+        //    }
+        //}
+
+        //public static void AddSatelliteTasks(this ScenarioContainerViewModel scenario, IList<SatelliteTask> tasks)
+        //{
+        //    if (scenario?.TaskListEditor.Tasks != null && tasks != null)
+        //    {
+        //        var builder = scenario.TaskListEditor.Tasks.ToBuilder();
+        //        builder.AddRange(tasks);
+        //        scenario.TaskListEditor.Tasks = builder.ToImmutable();
+        //    }
+        //}
+
         public static void AddSatelliteTask(this ScenarioContainerViewModel scenario, SatelliteTask task)
         {
-            if (scenario?.Tasks != null && task != null)
+            if (scenario?.TaskListEditor.Tasks != null && task != null)
             {
-                var builder = scenario.Tasks.ToBuilder();
-                builder.Add(task);
-                scenario.Tasks = builder.ToImmutable();
+                var list = scenario.TaskListEditor.Tasks.ToList();
+                list.Add(task);
+                scenario.TaskListEditor.Tasks = new System.Collections.ObjectModel.ObservableCollection<SatelliteTask>(list);
             }
         }
 
         public static void AddSatelliteTasks(this ScenarioContainerViewModel scenario, IList<SatelliteTask> tasks)
         {
-            if (scenario?.Tasks != null && tasks != null)
+            if (scenario?.TaskListEditor.Tasks != null && tasks != null)
             {
-                var builder = scenario.Tasks.ToBuilder();
-                builder.AddRange(tasks);
-                scenario.Tasks = builder.ToImmutable();
+                var list = scenario.TaskListEditor.Tasks.ToList();
+                list.AddRange(tasks);
+                scenario.TaskListEditor.Tasks = new System.Collections.ObjectModel.ObservableCollection<SatelliteTask>(list);
             }
         }
 

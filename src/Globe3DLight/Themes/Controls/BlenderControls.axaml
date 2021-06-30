@@ -34,5 +34,6 @@
   <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ToggleButton.axaml"/>
   <StyleInclude Source="avares://Globe3DLight/Themes/Controls/FlyoutPresenter.axaml"/>
   <StyleInclude Source="avares://Globe3DLight/Themes/Controls/Expander.axaml"/>
-
+    <StyleInclude Source="avares://Globe3DLight/Themes/Controls/ItemsControl.axaml"/>
+    
 </Styles>

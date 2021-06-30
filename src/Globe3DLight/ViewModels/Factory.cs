@@ -74,14 +74,15 @@ namespace Globe3DLight.ViewModels
                 IsExpanded = true,
                 FrameRoot = ImmutableArray.Create<FrameViewModel>(frame),
                 CurrentFrame = frame,
-                Entities = ImmutableArray.Create<BaseEntity>(),
-                Tasks = ImmutableArray.Create<SatelliteTask>(),              
+                Entities = ImmutableArray.Create<BaseEntity>(),                         
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
                 SceneTimerEditor = CreateSceneTimerEditor(begin, duration),
                 CurrentScenarioMode = ScenarioMode.Visual,            
             };
-  
+
+            scenario.TaskListEditor = CreateTaskListEditor(scenario);
+
             frame.Owner = scenario;
 
             return scenario;
@@ -146,6 +147,11 @@ namespace Globe3DLight.ViewModels
             var timer = CreateAcceleratedTimer();
 
             return new SceneTimerEditorViewModel(timer, dateTime, timeSpan);
+        }
+
+        public TaskListEditorViewModel CreateTaskListEditor(ScenarioContainerViewModel scenario)
+        {
+            return new TaskListEditorViewModel(scenario);
         }
 
         public IDataUpdater CreateDataUpdater()
@@ -720,10 +726,10 @@ namespace Globe3DLight.ViewModels
                 var task = new SatelliteTask(satellites[i], sortEvents)
                 {
                     Name = name,
-                    HasRotations = true,
-                    HasObservations = true,
-                    HasTransmissions = true,
-                    SearchString = string.Empty,
+                    //HasRotations = true,
+                    //HasObservations = true,
+                    //HasTransmissions = true,
+                    //SearchString = string.Empty,
                 };
 
                 list.Add(task);

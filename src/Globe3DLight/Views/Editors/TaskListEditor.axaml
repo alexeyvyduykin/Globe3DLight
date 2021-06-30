@@ -1,21 +1,23 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Globe3DLight.Views.Editors.TaskListEditor"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"
              xmlns:converters="clr-namespace:Globe3DLight.Converters"
              xmlns:markups="clr-namespace:Globe3DLight.Markups"
-             xmlns:controls="clr-namespace:Globe3DLight.Controls"
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"  
+             xmlns:editors="clr-namespace:Globe3DLight.ViewModels.Editors"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer"
+             xmlns:Entities="clr-namespace:Globe3DLight.ViewModels.Entities"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
-             Margin="10"              
-             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450"
-             x:Class="Globe3DLight.Views.Editors.TaskListEditor">
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"                       
+             mc:Ignorable="d"                          
+             d:DataContext="{x:Static Designer:DesignerContext.TaskListEditor}"
+             d:DesignWidth="250" d:DesignHeight="500"
+             x:DataType="editors:TaskListEditorViewModel" x:CompileBindings="False">
 
-  <UserControl.DataContext>
-    <vm:TaskListEditorViewModel/>
-  </UserControl.DataContext>
 
   <UserControl.Styles>
 
@@ -58,7 +60,7 @@
 
     <Style Selector="ListBox">
       <Setter Property="Background" Value="{DynamicResource TaskListBackgroundBrush}" />
-      <Setter Property="Margin" Value="2,0,6,0" />
+      <Setter Property="Margin" Value="2,0,2,0" />
       <Setter Property="Padding" Value="2" />
     </Style>
     
@@ -100,10 +102,12 @@
     <Style Selector="controls|Editor /template/ Border#PanelBorder">
       <Setter Property="Background" Value="{DynamicResource TaskListBackgroundBrush}"></Setter>
     </Style>
-    
+      
+      <Style Selector="Expander /template/ ToggleButton#PART_toggle > Border">
+          <Setter Property="Width" Value="{Binding $parent[Grid].Bounds.Width}"/>
+      </Style>
+      
   </UserControl.Styles>
-
-
 
   <controls:Editor>
 
@@ -116,6 +120,7 @@
     <controls:Editor.HeaderContent>
       <Grid ColumnDefinitions="*,Auto">
         <TextBox Grid.Column="0"               
+                 Text="{Binding Filter.SearchString}"
                  Width="140"
                  Height="20"
                  HorizontalAlignment="Center"
@@ -161,19 +166,19 @@
                   <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
                     <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListRotateIcon}"/>
                   </Viewbox>
-                  <CheckBox Content="Rotation" IsChecked="{Binding IsRotate}"></CheckBox>
+                  <CheckBox Content="Rotations" IsChecked="{Binding IsRotation}"></CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                   <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
                     <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListTransmitIcon}"/>
                   </Viewbox>
-                  <CheckBox Content="Transmit" IsChecked="{Binding IsTransmit}"></CheckBox>
+                  <CheckBox Content="Transmissions" IsChecked="{Binding IsTransmission}"></CheckBox>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal">
                   <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
                     <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListShootIcon}"/>
                   </Viewbox>
-                  <CheckBox Content="Shooting" IsChecked="{Binding IsShoot}"></CheckBox>
+                  <CheckBox Content="Observations" IsChecked="{Binding IsObservation}"></CheckBox>
                 </StackPanel>
               </StackPanel>
             </Flyout>
@@ -185,54 +190,86 @@
     </controls:Editor.HeaderContent>
 
     <controls:Editor.PanelContent>
-      <ListBox Items="{Binding Tasks}" VirtualizationMode="Simple">
 
-        <ListBox.DataTemplates>
+       <Grid>
+            <ItemsControl Items="{Binding Tasks}">
 
-          <DataTemplate DataType="vm:Task1">
-            <Grid RowDefinitions="Auto,*">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>                 
+                        <controls:AccordionStackPanel />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
 
-              <StackPanel Orientation="Horizontal">
-                <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
-                  <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListRotateIcon}"/>
-                </Viewbox>
-                <TextBlock Text="{Binding Name}"></TextBlock>
-              </StackPanel>
+                <ItemsControl.Styles>
+                    <Style Selector="ItemsControl > ContentPresenter">
+                        <Setter Property="controls:AccordionStackPanel.IsExpanded" Value="{Binding IsVisible, Mode=TwoWay}" />
+                        <Setter Property="ContentTemplate">
+                            <Setter.Value>
+                                <DataTemplate DataType="Entities:SatelliteTask">                                      
+                                    <Expander Header="{Binding Name}"
+                                              HorizontalContentAlignment="Stretch"
+                                              IsExpanded="{Binding $parent[ContentPresenter].(controls:AccordionStackPanel.IsExpanded), Mode=TwoWay}">
+                       
+                                        <ListBox Items="{Binding Events}" 
+                                                 SelectedItem="{Binding SelectedEvent}" 
+                                                 VirtualizationMode="Simple">
 
-              <ContentControl Content="{Binding}" Grid.Row="1"/>
-            </Grid>
-          </DataTemplate>
+                                            <ListBox.DataTemplates>
 
-          <DataTemplate DataType="vm:Task2">
-            <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
-              <StackPanel Orientation="Horizontal">
-                <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
-                  <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListTransmitIcon}"/>
-                </Viewbox>
-                <TextBlock Text="{Binding Name}"></TextBlock>
-              </StackPanel>
-              <ContentControl Content="{Binding}" Grid.Row="1"/>
-            </Grid>
-          </DataTemplate>
+                                                <DataTemplate DataType="Entities:RotationEvent">
+                                                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
 
-          <DataTemplate DataType="vm:Task3">
-            <Grid RowDefinitions="Auto,*">
-              <StackPanel Orientation="Horizontal">
-                <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
-                  <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListShootIcon}"/>
-                </Viewbox>
-                <TextBlock Text="{Binding Name}"></TextBlock>
-              </StackPanel>
-              <ContentControl Content="{Binding}" Grid.Row="1"/>
-            </Grid>
-          </DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                                                                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListRotateIcon}"/>
+                                                            </Viewbox>
+                                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                                        </StackPanel>
 
-        </ListBox.DataTemplates>
+                                                        <ContentControl Content="{Binding}" Grid.Row="1"/>
+                                                    </Grid>
+                                                </DataTemplate>
 
-      </ListBox>
+                                                <DataTemplate DataType="Entities:TransmissionEvent">
+                                                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                                                                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListTransmitIcon}"/>
+                                                            </Viewbox>
+                                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                                        </StackPanel>
+                                                        <ContentControl Content="{Binding}" Grid.Row="1"/>
+                                                    </Grid>
+                                                </DataTemplate>
 
+                                                <DataTemplate DataType="Entities:ObservationEvent">
+                                                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="*" HorizontalAlignment="Stretch">
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">
+                                                                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderTaskListShootIcon}"/>
+                                                            </Viewbox>
+                                                            <TextBlock Text="{Binding Name}"></TextBlock>
+                                                        </StackPanel>
+                                                        <ContentControl Content="{Binding}" Grid.Row="1"/>
+                                                    </Grid>
+                                                </DataTemplate>
+
+                                            </ListBox.DataTemplates>
+
+                                        </ListBox>
+                                        
+                                    </Expander>
+                                </DataTemplate>
+                            </Setter.Value>
+                        </Setter>
+                    </Style>
+                </ItemsControl.Styles>
+
+            </ItemsControl>
+        </Grid>
+        
     </controls:Editor.PanelContent>
     
   </controls:Editor>
-    
+      
 </UserControl>
