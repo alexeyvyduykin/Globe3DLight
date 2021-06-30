@@ -13,9 +13,9 @@ namespace Globe3DLight.ViewModels.Editor
         {
             if (project?.Scenarios != null && entity != null)
             {
-                var builder = project.CurrentScenario.Entities.ToBuilder();
+                var builder = project.CurrentScenario.OutlinerEditor.Entities.ToBuilder();
                 builder.Add(entity);
-                project.CurrentScenario.Entities = builder.ToImmutable();
+                project.CurrentScenario.OutlinerEditor.Entities = builder.ToImmutable();
             }
 
             return entity;
@@ -25,9 +25,9 @@ namespace Globe3DLight.ViewModels.Editor
         {
             if (project?.Scenarios != null && entities != null)
             {
-                var builder = project.CurrentScenario.Entities.ToBuilder();
+                var builder = project.CurrentScenario.OutlinerEditor.Entities.ToBuilder();
                 builder.AddRange(entities);
-                project.CurrentScenario.Entities = builder.ToImmutable();
+                project.CurrentScenario.OutlinerEditor.Entities = builder.ToImmutable();
             }
 
             return entities;

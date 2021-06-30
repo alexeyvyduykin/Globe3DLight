@@ -1,123 +1,194 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Globe3DLight.Views.Editors.OutlinerEditor"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"    
              xmlns:converters="clr-namespace:Globe3DLight.Converters"
              xmlns:markups="clr-namespace:Globe3DLight.Markups"             
-             xmlns:controls="clr-namespace:Globe3DLight.Controls"          
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"      
+             xmlns:editors="clr-namespace:Globe3DLight.ViewModels.Editors"    
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer"       
+             xmlns:Entities="clr-namespace:Globe3DLight.ViewModels.Entities"
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"          
-             Margin="10"             
-             mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="450"
-             x:Class="Globe3DLight.Views.Editors.OutlinerEditor">
+             
+             mc:Ignorable="d"  
+             d:DataContext="{x:Static Designer:DesignerContext.OutlinerEditor}"  
+             d:DesignWidth="250" d:DesignHeight="500"  
+             x:DataType="editors:OutlinerEditorViewModel" x:CompileBindings="False">
 
-  <UserControl.DataContext>
-    <vm:OutlinerEditorViewModel/>
-  </UserControl.DataContext>
+    <UserControl.Resources>
+        <converters:IsTargetableConverter x:Key="IsTargetableConverter"/>   
+        <StreamGeometry x:Key="OutlinerHideIcon">F1 M96,96z M0,0z M3.4786428,48.007653A3.7031208,4.7978532,0,0,0,1.0197832,56.103141C10.823929,69.90217 23.84651,96 48.01286,96 72.179321,96 85.216342,69.90217 95.020461,56.103141A3.7055568,4.8010092,0,1,0,89.567587,49.600351C78.936525,64.563079 68.046673,86.405374 48.01286,86.405374 27.979128,86.405374 17.089277,64.563079 6.4582432,49.600351A3.7031208,4.7978532,0,0,0,3.4786148,48.008378z</StreamGeometry>    
+        <StreamGeometry x:Key="OutlinerVisibleIcon">F1 M96,96z M0,0z M48.000002,-0.000158C23.778056,-0.01018249 10.785945,29.018616 0.97786896,44.386056 -0.32595316,46.427854 -0.32595316,49.571812 0.97786896,51.613609 10.787497,66.983503 23.781676,95.978495 48.000002,95.999823 72.223205,96.021153 85.214576,66.980197 95.022136,51.613609 96.325958,49.571812 96.325958,46.427854 95.022136,44.386056 85.213098,29.017123 72.219732,0.00986649 48.000002,-0.000158z M48.000002,10.664196A25.863586,37.325168,0,0,1,73.863624,47.989435A25.863586,37.325168,0,0,1,48.000002,85.314674A25.863586,37.325168,0,0,1,22.136381,47.989435A25.863586,37.325168,0,0,1,48.000002,10.664196z M48.000002,31.992904A11.084374,15.996471,0,0,0,36.915593,47.989435A11.084374,15.996471,0,0,0,48.000002,63.985966A11.084374,15.996471,0,0,0,59.084412,47.989435A11.084374,15.996471,0,0,0,48.000002,31.992904z</StreamGeometry>
+    </UserControl.Resources>
 
-  <UserControl.Resources>
-    <StreamGeometry x:Key="OutlinerHideIcon">F1 M96,96z M0,0z M3.4786428,48.007653A3.7031208,4.7978532,0,0,0,1.0197832,56.103141C10.823929,69.90217 23.84651,96 48.01286,96 72.179321,96 85.216342,69.90217 95.020461,56.103141A3.7055568,4.8010092,0,1,0,89.567587,49.600351C78.936525,64.563079 68.046673,86.405374 48.01286,86.405374 27.979128,86.405374 17.089277,64.563079 6.4582432,49.600351A3.7031208,4.7978532,0,0,0,3.4786148,48.008378z</StreamGeometry>
-    <StreamGeometry x:Key="OutlinerVisibleIcon">F1 M96,96z M0,0z M48.000002,-0.000158C23.778056,-0.01018249 10.785945,29.018616 0.97786896,44.386056 -0.32595316,46.427854 -0.32595316,49.571812 0.97786896,51.613609 10.787497,66.983503 23.781676,95.978495 48.000002,95.999823 72.223205,96.021153 85.214576,66.980197 95.022136,51.613609 96.325958,49.571812 96.325958,46.427854 95.022136,44.386056 85.213098,29.017123 72.219732,0.00986649 48.000002,-0.000158z M48.000002,10.664196A25.863586,37.325168,0,0,1,73.863624,47.989435A25.863586,37.325168,0,0,1,48.000002,85.314674A25.863586,37.325168,0,0,1,22.136381,47.989435A25.863586,37.325168,0,0,1,48.000002,10.664196z M48.000002,31.992904A11.084374,15.996471,0,0,0,36.915593,47.989435A11.084374,15.996471,0,0,0,48.000002,63.985966A11.084374,15.996471,0,0,0,59.084412,47.989435A11.084374,15.996471,0,0,0,48.000002,31.992904z</StreamGeometry>
-  </UserControl.Resources>
-    
-  <UserControl.Styles>
-    
-    <Style Selector="TreeViewItem">                 
-      <Setter Property="IsExpanded" Value="True" />           
-    </Style>
+    <UserControl.Styles>
 
-    <Style Selector="TreeViewItem /template/ ContentPresenter#PART_HeaderPresenter">
-      <Setter Property="ContentTemplate">
-        <DataTemplate>
-          <TextBlock Text="{Binding}" Background="Red"></TextBlock>
-        </DataTemplate>
-      </Setter>
-    </Style>
+        <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+        </Style>
 
-   <Style Selector="ToggleButton.IsVisibleChevron">
-    <Setter Property="Margin" Value="0" />
-    <Setter Property="Template">
-      <ControlTemplate>
-        <Border Background="Transparent"
-                Width="{TemplateBinding Width}"
-                Height="{TemplateBinding Height}">
-          <Path x:Name="ChevronPath"
-                Width="12"
-                Height="8"
-                Stretch="Fill"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center" />
-        </Border>
-      </ControlTemplate>
-    </Setter>
-  </Style>
-  
-  <Style Selector="ToggleButton.IsVisibleChevron /template/ Path#ChevronPath">
-    <Setter Property="Data" Value="{StaticResource OutlinerHideIcon}" />
-    <Setter Property="Fill" Value="#E6E6E6" />  
-  </Style>
-    
-  <Style Selector="ToggleButton.IsVisibleChevron:checked /template/ Path#ChevronPath">
-    <Setter Property="Data" Value="{StaticResource OutlinerVisibleIcon}" />   
-    <Setter Property="Fill" Value="#E6E6E6" />
-    <Setter Property="Opacity" Value="0.9" />
-  </Style>
-  
-  </UserControl.Styles>
+        <Style Selector="TreeViewItem /template/ ContentPresenter#PART_HeaderPresenter">
+            <Setter Property="ContentTemplate">
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Background="Red"></TextBlock>
+                </DataTemplate>
+            </Setter>
+        </Style>
 
-
-  <controls:Editor>
-
-    <controls:Editor.Icon>
-      <Viewbox Stretch="UniformToFill" Width="12" Height="12">
-        <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorOutlinerIcon}"/>
-      </Viewbox>
-    </controls:Editor.Icon>
-
-    <controls:Editor.HeaderContent>
-      <DockPanel>
-        <ComboBox HorizontalAlignment="Left"
-                  SelectedItem="{Binding SelectedMode}"
-                  Height="20"
-                  FontSize="{DynamicResource WidgetFontSize}"
-                  Items="{Binding Source={markups:EnumBindingSource {x:Type vm:DisplayMode}}}" />
-      </DockPanel>
-    </controls:Editor.HeaderContent>
-
-    <controls:Editor.PanelContent>
-      <TreeView x:Name="tree" Items="{Binding Items}" Background="Transparent">
-        <TreeView.DataTemplates>
-          <TreeDataTemplate DataType="vm:ISceneModel" ItemsSource="{Binding Children}">
-
-            <DockPanel LastChildFill="True">
-
-              <TextBlock Text="{Binding Name}"/>
-
-              <StackPanel Orientation="Horizontal"
-                          DockPanel.Dock="Right"
-                          Margin="0,0,8,0"
-                          HorizontalAlignment="Right">
-                <ToggleButton IsChecked="{Binding IsVisible}"
-                              Classes="IsVisibleChevron"
-                              Height="12"
-                              Width="12" />
-              </StackPanel>
-
-            </DockPanel>
-
-          </TreeDataTemplate>
-
-          <TreeDataTemplate DataType="vm:ItemModel" ItemsSource="{Binding Children}">
-            <TextBlock Text="{Binding Name}"/>
-          </TreeDataTemplate>
-
-        </TreeView.DataTemplates>
-      </TreeView>
-
-    </controls:Editor.PanelContent>
-    
-  </controls:Editor>
+        <Style Selector="ToggleButton.IsVisibleChevron">
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="Transparent"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}">
+                        <Path x:Name="ChevronPath"
+                              Width="12"
+                              Height="8"
+                              Stretch="Fill"
+                              HorizontalAlignment="Center"
+                              VerticalAlignment="Center" />
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
         
+        <Style Selector="ToggleButton.IsVisibleChevron /template/ Path#ChevronPath">
+            <Setter Property="Data" Value="{StaticResource OutlinerHideIcon}" />
+            <Setter Property="Fill" Value="#E6E6E6" />
+        </Style>
+
+        <Style Selector="ToggleButton.IsVisibleChevron:checked /template/ Path#ChevronPath">
+            <Setter Property="Data" Value="{StaticResource OutlinerVisibleIcon}" />
+            <Setter Property="Fill" Value="#E6E6E6" />
+            <Setter Property="Opacity" Value="0.9" />
+        </Style>
+                    
+        <Style Selector="RadioButton.IsTargetChevron">
+            <Setter Property="Margin" Value="0" />            
+            <Setter Property="Width" Value="14" />
+            <Setter Property="Height" Value="14" />
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Background="Transparent"
+                            Width="{TemplateBinding Width}"
+                            Height="{TemplateBinding Height}">                        
+                        <Viewbox Stretch="UniformToFill" Width="12" Height="12">             
+                            <DrawingPresenter x:Name="ChevronPath" Stretch="None"/>           
+                        </Viewbox>                                    
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <Style Selector="RadioButton.IsTargetChevron /template/ DrawingPresenter#ChevronPath">
+            <Setter Property="Drawing" Value="{DynamicResource BlenderSceneCameraOffIcon}" />    
+        </Style>
+
+        <Style Selector="RadioButton.IsTargetChevron:checked /template/ DrawingPresenter#ChevronPath">
+            <Setter Property="Drawing" Value="{DynamicResource BlenderSceneCameraOnIcon}" />
+        </Style>
+
+    </UserControl.Styles>
+
+
+    <controls:Editor>
+
+        <controls:Editor.Icon>
+            <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorOutlinerIcon}"/>
+            </Viewbox>
+        </controls:Editor.Icon>
+
+        <controls:Editor.HeaderContent>
+            <DockPanel>
+                <ComboBox HorizontalAlignment="Left"
+                          SelectedItem="{Binding SelectedMode}"
+                          Height="20"
+                          FontSize="{DynamicResource WidgetFontSize}"
+                          Items="{Binding Source={markups:EnumBindingSource {x:Type vm:DisplayMode}}}" />
+            </DockPanel>
+        </controls:Editor.HeaderContent>
+
+        <controls:Editor.PanelContent>
+            <TreeView x:Name="tree"
+                      Items="{Binding Items}" 
+                      SelectedItem="{Binding SelectedItem}" 
+                      Background="Transparent">
+
+                <TreeView.Styles>
+                    <Style Selector="TreeViewItem" x:DataType="TreeViewItem">
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}"/>
+                    </Style>
+                </TreeView.Styles>
+                                
+                <TreeView.DataTemplates>
+
+                    <TreeDataTemplate DataType="Entities:FrameViewModel" ItemsSource="{Binding Children}" x:CompileBindings="False">
+                        <DockPanel LastChildFill="True">                            
+                            <TextBlock Text="{Binding Name}"/>
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Right"
+                                        Margin="0,0,8,0"
+                                        HorizontalAlignment="Right">
+                                <ToggleButton IsChecked="{Binding IsVisible}"                                              
+                                              IsVisible="{Binding RenderModel, Converter={x:Static ObjectConverters.IsNotNull}}"
+                                              Classes="IsVisibleChevron"/>
+                            </StackPanel>                                                                                    
+                        </DockPanel>
+                    </TreeDataTemplate>
+
+                    <!--<TreeDataTemplate DataType="Containers:ScenarioContainerViewModel" ItemsSource="{Binding Entities}" x:CompileBindings="False">
+                        <TextBlock Text="{Binding Name}" Grid.Column="0" Background="Transparent"/>
+                    </TreeDataTemplate>-->
+
+                    <TreeDataTemplate DataType="Entities:EntityList" ItemsSource="{Binding Values}" x:CompileBindings="False">
+                        <DockPanel LastChildFill="True">
+                            <TextBlock Text="{Binding Name}"/>
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Right"
+                                        Margin="0,0,8,0"
+                                        HorizontalAlignment="Right">
+                                <ToggleButton IsChecked="{Binding IsVisible}" Classes="IsVisibleChevron"/>
+                            </StackPanel>
+                        </DockPanel>
+                    </TreeDataTemplate>
+
+
+                    <TreeDataTemplate DataType="Entities:BaseEntity" ItemsSource="{Binding Children}" x:CompileBindings="False">
+                        <DockPanel LastChildFill="True">
+                            <TextBlock Text="{Binding Name}"/>
+                                
+                            <StackPanel Orientation="Horizontal"
+                                        DockPanel.Dock="Right" 
+                                        HorizontalAlignment="Right"
+                                        Margin="0,0,8,0"
+                                        VerticalAlignment="Center">
+                                
+                                <RadioButton IsVisible="{Binding, Converter={StaticResource IsTargetableConverter}}"
+                                             Command="{Binding $parent[UserControl].DataContext.OnSetCameraTo}"
+                                             CommandParameter="{Binding}" 
+                                             GroupName="CameraTarget"
+                                             Classes="IsTargetChevron"      
+                                             Margin="0,0,8,0" />
+                                
+                                <ToggleButton IsChecked="{Binding IsVisible}" Classes="IsVisibleChevron"/>                                                        
+                            </StackPanel>
+                        </DockPanel>
+
+                    </TreeDataTemplate>
+
+                </TreeView.DataTemplates>
+            </TreeView>
+
+        </controls:Editor.PanelContent>
+
+    </controls:Editor>
+
 </UserControl>

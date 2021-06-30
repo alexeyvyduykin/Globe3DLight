@@ -53,6 +53,8 @@ namespace Globe3DLight.Models
 
         SceneTimerEditorViewModel CreateSceneTimerEditor(DateTime dateTime, TimeSpan timeSpan);
         TaskListEditorViewModel CreateTaskListEditor(ScenarioContainerViewModel scenario);
+        OutlinerEditorViewModel CreateOutlinerEditor(ScenarioContainerViewModel scenario);
+
         IDataUpdater CreateDataUpdater();
 
         void SaveProjectContainer(ProjectContainerViewModel project, string path, IFileSystem fileIO, IJsonSerializer serializer);

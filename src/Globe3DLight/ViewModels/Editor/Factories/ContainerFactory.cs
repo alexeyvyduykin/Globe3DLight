@@ -59,7 +59,7 @@ namespace Globe3DLight.ViewModels.Editor
             project.AddScenario(scenario);
             project.SetCurrentScenario(scenario);
 
-            var root = scenario.FrameRoot.First();
+            var root = scenario.OutlinerEditor.FrameRoot.First();
 
             project.AddEntity(factory.CreateSpacebox(root));
             project.AddEntity(factory.CreateSun(data.Sun, root));

@@ -65,16 +65,11 @@ namespace Globe3DLight.ViewModels
         }
 
         public ScenarioContainerViewModel CreateScenarioContainer(string name, DateTime begin, TimeSpan duration)
-        {
-            var frame = CreateRootFrame();
-
+        {    
             var scenario = new ScenarioContainerViewModel()
             {
                 Name = name,       
-                IsExpanded = true,
-                FrameRoot = ImmutableArray.Create<FrameViewModel>(frame),
-                CurrentFrame = frame,
-                Entities = ImmutableArray.Create<BaseEntity>(),                         
+                IsExpanded = true,                                  
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
                 SceneTimerEditor = CreateSceneTimerEditor(begin, duration),
@@ -82,9 +77,8 @@ namespace Globe3DLight.ViewModels
             };
 
             scenario.TaskListEditor = CreateTaskListEditor(scenario);
-
-            frame.Owner = scenario;
-
+            scenario.OutlinerEditor = CreateOutlinerEditor(scenario);
+      
             return scenario;
         }
 
@@ -152,6 +146,23 @@ namespace Globe3DLight.ViewModels
         public TaskListEditorViewModel CreateTaskListEditor(ScenarioContainerViewModel scenario)
         {
             return new TaskListEditorViewModel(scenario);
+        }
+
+        public OutlinerEditorViewModel CreateOutlinerEditor(ScenarioContainerViewModel scenario)
+        {
+            var frame = CreateRootFrame();
+
+            frame.Owner = scenario;
+
+            var editor = new OutlinerEditorViewModel(scenario) 
+            {        
+                SelectedMode = DisplayMode.Visual,
+                FrameRoot = ImmutableArray.Create<FrameViewModel>(frame),            
+                CurrentFrame = frame,
+                Entities = ImmutableArray.Create<BaseEntity>(),
+            };
+
+            return editor;
         }
 
         public IDataUpdater CreateDataUpdater()

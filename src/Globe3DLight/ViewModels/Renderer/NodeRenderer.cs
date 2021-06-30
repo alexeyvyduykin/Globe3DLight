@@ -39,9 +39,9 @@ namespace Globe3DLight.ViewModels.Renderer
 
         public void DrawScenario(object dc, ScenarioContainerViewModel scenario)
         {
-            DrawFrames(dc, scenario.FrameRoot.Single(), scenario.SceneState);
+            DrawFrames(dc, scenario.OutlinerEditor.FrameRoot.Single(), scenario.SceneState);
 
-            foreach (var entity in scenario.Entities)
+            foreach (var entity in scenario.OutlinerEditor.Entities)
             {
                 DrawEntities(dc, entity, scenario.SceneState);
             }

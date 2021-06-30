@@ -25,6 +25,8 @@ namespace Globe3DLight.ViewModels.Designer
         public static SceneTimerEditorViewModel SceneTimerEditor { get; set; }
 
         public static TaskListEditorViewModel TaskListEditor { get; set; }
+        
+        public static OutlinerEditorViewModel OutlinerEditor { get; set; }
 
         public static ICamera ArcballCamera { get; set; }
 
@@ -120,7 +122,7 @@ namespace Globe3DLight.ViewModels.Designer
             //objBuilder.Add(objFactory.CreateSensor("Sensor3", null));
             //objBuilder.Add(objFactory.CreateSensor("Sensor4", null));
 
-            Project.CurrentScenario.Entities = objBuilder.ToImmutable();
+            //Project.CurrentScenario.Entities = objBuilder.ToImmutable();
 
             // Frames and Data
 
@@ -187,6 +189,7 @@ namespace Globe3DLight.ViewModels.Designer
             // Editors
             SceneTimerEditor = factory.CreateSceneTimerEditor(begin, duration);
             TaskListEditor = factory.CreateTaskListEditor(Scenario);
+            OutlinerEditor = factory.CreateOutlinerEditor(Scenario);
         }
     }
 

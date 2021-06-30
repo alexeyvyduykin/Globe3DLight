@@ -9,28 +9,20 @@ using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using System.Reflection;
+using System.Collections.Immutable;
+using System.ComponentModel;
+using System.Reactive.Disposables;
+using GlmSharp;
+using Globe3DLight.Models;
+using Globe3DLight.Models.Data;
+using Globe3DLight.Models.Scene;
+using Globe3DLight.ViewModels.Data;
+using Globe3DLight.ViewModels.Entities;
+using Globe3DLight.ViewModels.Editors;
+using Globe3DLight.ViewModels.Containers;
 
 namespace Globe3DLight.ViewModels.Editors
 {
-
-    public interface ISceneModel
-    {
-        public bool IsVisible { get; set; }
-    }
-
-    public class ItemModel
-    {
-        public string Name { get; set; }
-
-        public ObservableCollection<ItemModel> Children { get; set; } = new ObservableCollection<ItemModel>();
-    }
-
-
-    public class ItemSceneModel : ItemModel, ISceneModel
-    {
-        public bool IsVisible { get; set; }
-    }
-
     public enum DisplayMode
     {
         Visual, 
@@ -39,37 +31,55 @@ namespace Globe3DLight.ViewModels.Editors
 
     public class OutlinerEditorViewModel : ViewModelBase
     {
-        private ObservableCollection<ItemModel> _visualItems;
-        private ObservableCollection<ItemModel> _logicalItems;
+        private ScenarioContainerViewModel _scenario;
+
+        private ImmutableArray<FrameViewModel> _frameRoot;
+        private FrameViewModel _currentFrame;
+
+        private ImmutableArray<BaseEntity> _entities;
+        private BaseEntity _currentEntity;
+
         private DisplayMode _selectedMode;
-        private ObservableCollection<ItemModel> _items;
+        private ObservableCollection<ViewModelBase> _items;
+        private ViewModelBase _selectedItem;
 
-        public OutlinerEditorViewModel()
+        public OutlinerEditorViewModel(ScenarioContainerViewModel scenario)
         {
-            var visualRoot = CreateVisualItems();
-            var logicalRoot = CreateLogicalItems();
-      
-            _visualItems = new ObservableCollection<ItemModel>(visualRoot);
-
-            _logicalItems = new ObservableCollection<ItemModel>(logicalRoot);
-            
+            _scenario = scenario;
             PropertyChanged += OutlinerEditorViewModel_PropertyChanged;
-
-            _selectedMode = DisplayMode.Visual;
-            _items = _visualItems;
         }
 
         private void OutlinerEditorViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(SelectedMode))
+            if (e.PropertyName == nameof(OutlinerEditorViewModel.SelectedMode))
             {
                 switch (SelectedMode)
                 {
                     case DisplayMode.Visual:
-                        Items = _visualItems;
+                        InvalidateVisual();
                         break;
                     case DisplayMode.Logical:
-                        Items = _logicalItems;
+                        InvalidateLogical();
+                        break;
+                    default:
+                        break;
+                }
+            }
+            else if(e.PropertyName == nameof(OutlinerEditorViewModel.SelectedItem))
+            {
+                switch (SelectedMode)
+                {
+                    case DisplayMode.Visual:
+                        if (SelectedItem is BaseEntity entity)
+                        {
+                            CurrentEntity = entity;
+                        }
+                        break;
+                    case DisplayMode.Logical:
+                        if (SelectedItem is FrameViewModel frame)
+                        {
+                            CurrentFrame = frame;
+                        }
                         break;
                     default:
                         break;
@@ -77,58 +87,48 @@ namespace Globe3DLight.ViewModels.Editors
             }
         }
 
-        private List<ItemModel> CreateVisualItems()
-        {
-            List<ItemModel> list = new List<ItemModel>();
-
-            List<ItemModel> root = new List<ItemModel>();
-
-            List<ItemModel> sublist1 = new List<ItemModel>();
-            List<ItemModel> sublist2 = new List<ItemModel>();
-            List<ItemModel> sublist3 = new List<ItemModel>();
-
-            sublist1.Add(new ItemSceneModel() { Name = "SubItem1", IsVisible = false });
-            sublist1.Add(new ItemSceneModel() { Name = "SubItem2", IsVisible = true });
-
-            sublist2.Add(new ItemSceneModel() { Name = "SubItem1", IsVisible = false });
-            sublist2.Add(new ItemSceneModel() { Name = "SubItem2", IsVisible = true });
-            sublist2.Add(new ItemSceneModel() { Name = "SubItem3", IsVisible = true });
-
-            sublist3.Add(new ItemSceneModel() { Name = "SubItem1", IsVisible = false });
-
-            list.Add(new ItemModel() { Name = "Item1" });
-            list.Add(new ItemModel() { Name = "Item2", Children = new ObservableCollection<ItemModel>(sublist1) });
-            list.Add(new ItemModel() { Name = "Item3" });
-            list.Add(new ItemModel() { Name = "Item4", Children = new ObservableCollection<ItemModel>(sublist2) });
-            list.Add(new ItemModel() { Name = "Item5", Children = new ObservableCollection<ItemModel>(sublist3) });
-
-            root.Add(new ItemModel() { Name = "VisualRoot", Children = new ObservableCollection<ItemModel>(list) });
-
-            return root;
+        private void InvalidateVisual()
+        {                    
+            Items = new ObservableCollection<ViewModelBase>(_entities);                    
+            SelectedItem = _entities.FirstOrDefault();
         }
 
-        private List<ItemModel> CreateLogicalItems()
+        private void InvalidateLogical()
+        {                    
+            Items = new ObservableCollection<ViewModelBase>(_frameRoot);                    
+            SelectedItem = _frameRoot.FirstOrDefault();
+        }
+
+        public ImmutableArray<FrameViewModel> FrameRoot
         {
-            List<ItemModel> list = new List<ItemModel>();
+            get => _frameRoot;
+            set                                 
+            {                 
+                RaiseAndSetIfChanged(ref _frameRoot, value);
+                InvalidateLogical();
+            }
+        }
 
-            List<ItemModel> root = new List<ItemModel>();
+        public FrameViewModel CurrentFrame
+        {
+            get => _currentFrame;
+            set => RaiseAndSetIfChanged(ref _currentFrame, value);
+        }
 
-            List<ItemModel> sublist1 = new List<ItemModel>();
-            List<ItemModel> sublist2 = new List<ItemModel>();
+        public ImmutableArray<BaseEntity> Entities
+        {
+            get => _entities;
+            set 
+            { 
+                RaiseAndSetIfChanged(ref _entities, value);
+                InvalidateVisual();
+            }
+        }
 
-            sublist1.Add(new ItemSceneModel() { Name = "SubItem1", IsVisible = false });
-            sublist1.Add(new ItemSceneModel() { Name = "SubItem2", IsVisible = true });
-
-            sublist2.Add(new ItemSceneModel() { Name = "SubItem3", IsVisible = true });
-
-            list.Add(new ItemModel() { Name = "Item1" });
-            list.Add(new ItemModel() { Name = "Item2", Children = new ObservableCollection<ItemModel>(sublist1) });
-            list.Add(new ItemModel() { Name = "Item3" });
-            list.Add(new ItemModel() { Name = "Item4", Children = new ObservableCollection<ItemModel>(sublist2) });
-      
-            root.Add(new ItemModel() { Name = "LogicalRoot", Children = new ObservableCollection<ItemModel>(list) });
-
-            return root;
+        public BaseEntity CurrentEntity
+        {
+            get => _currentEntity;
+            set => RaiseAndSetIfChanged(ref _currentEntity, value);
         }
 
         public DisplayMode SelectedMode 
@@ -137,10 +137,48 @@ namespace Globe3DLight.ViewModels.Editors
             set => this.RaiseAndSetIfChanged(ref _selectedMode, value); 
         }
 
-        public ObservableCollection<ItemModel> Items 
+        public ObservableCollection<ViewModelBase> Items 
         {
             get => _items;
-            set => this.RaiseAndSetIfChanged(ref _items, value); 
+            set => this.RaiseAndSetIfChanged(ref _items, value);
+        }
+
+        public ViewModelBase SelectedItem
+        {
+            get => _selectedItem;
+            set => this.RaiseAndSetIfChanged(ref _selectedItem, value);
+        }
+
+        public override IDisposable Subscribe(IObserver<(object sender, PropertyChangedEventArgs e)> observer)
+        {
+            var mainDisposable = new CompositeDisposable();
+            var disposablePropertyChanged = default(IDisposable);          
+            var disposableShapes = default(CompositeDisposable);
+
+            ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);   
+            ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
+
+            void Handler(object sender, PropertyChangedEventArgs e)
+            {
+                if (e.PropertyName == nameof(OutlinerEditorViewModel.Entities))
+                {
+                    ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
+                }
+
+                observer.OnNext((sender, e));
+            }
+
+            return mainDisposable;
+        }
+
+        public void OnSetCameraTo(ViewModelBase item)
+        {
+            if (item is ITargetable target)
+            {
+                _scenario.SetCameraTo(target);
+
+                SelectedItem = item;
+            }
         }
     }
 }

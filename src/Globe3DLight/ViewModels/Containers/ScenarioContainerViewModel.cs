@@ -17,24 +17,23 @@ namespace Globe3DLight.ViewModels.Containers
 
     public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
 
-    public enum ScenarioMode { Visual, Logical, Task };
+    public enum ScenarioMode { Visual, Task };
 
     public partial class ScenarioContainerViewModel : BaseContainerViewModel
     {
         private readonly InvalidateScenarioEventArgs _invalidateScenarioEventArgs;
        // private ImmutableArray<LogicalViewModel> _logicalRoot;
         private IDataUpdater _updater;
-        private ImmutableArray<BaseEntity> _entities;
-        private BaseEntity _currentEntity;
+
         private GroundObjectList _groundObjectList;
        // private LogicalViewModel _currentLogical;
         private ISceneState _sceneState;
         private SceneTimerEditorViewModel _sceneTimerEditor;
-        private TaskListEditorViewModel _taskListEditor;
+        private TaskListEditorViewModel _taskListEditor; 
+        private OutlinerEditorViewModel _outlinerEditor;
         private double _width;
         private double _height;
-        private ImmutableArray<FrameViewModel> _frameRoot;
-        private FrameViewModel _currentFrame;
+
         private ScenarioMode _currentScenarioMode;
 
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
@@ -85,40 +84,16 @@ namespace Globe3DLight.ViewModels.Containers
         //    set => RaiseAndSetIfChanged(ref _currentLogical, value);
         //}
 
-        public ImmutableArray<FrameViewModel> FrameRoot
-        {
-            get => _frameRoot;
-            set => RaiseAndSetIfChanged(ref _frameRoot, value);
-        }
-
-        public FrameViewModel CurrentFrame
-        {
-            get => _currentFrame;
-            set => RaiseAndSetIfChanged(ref _currentFrame, value);
-        }
-
         public IDataUpdater Updater
         {
             get => _updater;
             set => RaiseAndSetIfChanged(ref _updater, value);
         }
 
-        public ImmutableArray<BaseEntity> Entities
-        {
-            get => _entities;
-            set => RaiseAndSetIfChanged(ref _entities, value);
-        }
-
         public GroundObjectList GroundObjectList
         {
             get => _groundObjectList;
             set => RaiseAndSetIfChanged(ref _groundObjectList, value);
-        }
-
-        public BaseEntity CurrentEntity
-        {
-            get => _currentEntity;
-            set => RaiseAndSetIfChanged(ref _currentEntity, value);
         }
 
         public ISceneState SceneState
@@ -157,6 +132,12 @@ namespace Globe3DLight.ViewModels.Containers
             set => RaiseAndSetIfChanged(ref _taskListEditor, value);
         }
 
+        public OutlinerEditorViewModel OutlinerEditor
+        {
+            get => _outlinerEditor;
+            set => RaiseAndSetIfChanged(ref _outlinerEditor, value);
+        }
+        
         public void SetCameraTo(ITargetable target)
         {
             var behaviours = SceneState.CameraBehaviours;
@@ -178,7 +159,8 @@ namespace Globe3DLight.ViewModels.Containers
         {
             //if (TimePresenter.Timer.IsRunning == true)
             {
-                Updater.Update(SceneTimerEditor.Timer.CurrentTime, FrameRoot.Single());
+                var root = OutlinerEditor.FrameRoot.Single();
+                Updater.Update(SceneTimerEditor.Timer.CurrentTime, root);
             }
         }
 
@@ -188,7 +170,7 @@ namespace Globe3DLight.ViewModels.Containers
         {
             var isDirty = base.IsDirty();
 
-            foreach (var scObj in Entities)
+            foreach (var scObj in OutlinerEditor.Entities)
             {
                 isDirty |= scObj.IsDirty();
             }
@@ -200,7 +182,7 @@ namespace Globe3DLight.ViewModels.Containers
         {
             base.Invalidate();
 
-            foreach (var scObj in Entities)
+            foreach (var scObj in OutlinerEditor.Entities)
             {
                 scObj.Invalidate();
             }
@@ -217,22 +199,16 @@ namespace Globe3DLight.ViewModels.Containers
             var mainDisposable = new CompositeDisposable();
             var disposablePropertyChanged = default(IDisposable);
             var disposableTimePresenter = default(IDisposable);
-            var disposableShapes = default(CompositeDisposable);
-
+           
             ObserveSelf(Handler, ref disposablePropertyChanged, mainDisposable);
             ObserveObject(_sceneTimerEditor, ref disposableTimePresenter, mainDisposable, observer);
-            ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
+            OutlinerEditor.Subscribe(observer);
 
             void Handler(object sender, PropertyChangedEventArgs e)
             {
-                if (e.PropertyName == nameof(SceneTimerEditorViewModel))
+                if (e.PropertyName == nameof(ScenarioContainerViewModel.SceneTimerEditor))
                 {
                     ObserveObject(_sceneTimerEditor, ref disposableTimePresenter, mainDisposable, observer);
-                }
-
-                if (e.PropertyName == nameof(Entities))
-                {
-                    ObserveList(_entities, ref disposableShapes, mainDisposable, observer);
                 }
 
                 observer.OnNext((sender, e));

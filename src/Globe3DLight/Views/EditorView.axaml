@@ -126,25 +126,18 @@
     <Grid RowDefinitions="Auto,*">
 
         <Grid Grid.Row="0" RowDefinitions="*" ColumnDefinitions="Auto,Auto">
-            <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto,Auto" RowDefinitions="*">               
+            <Grid Grid.Column="0" ColumnDefinitions="Auto,Auto" RowDefinitions="*">               
                 <RadioButton Name="rb1" Grid.Column="0" FontSize="20" Width="50" Classes="tglb"
                              GroupName="GroupName1" Content="Visual"
                              IsChecked="{Binding Project.CurrentScenario.CurrentScenarioMode, 
                              Converter={StaticResource EnumToBooleanConverter}, 
                              ConverterParameter={x:Static Containers:ScenarioMode.Visual}}"/>
                 <RadioButton Name="rb2" Grid.Column="1" FontSize="20" Width="50" Classes="tglb"
-                             GroupName="GroupName1" Content="Logical" 
-                             IsChecked="{Binding Project.CurrentScenario.CurrentScenarioMode,
-                             Converter={StaticResource EnumToBooleanConverter}, 
-                             ConverterParameter={x:Static Containers:ScenarioMode.Logical}}}"/>
-                <RadioButton Name="rb3" Grid.Column="2" FontSize="20" Width="50" Classes="tglb"
                              GroupName="GroupName1" Content="Tasks" 
                              IsChecked="{Binding Project.CurrentScenario.CurrentScenarioMode,
                              Converter={StaticResource EnumToBooleanConverter}, 
                              ConverterParameter={x:Static Containers:ScenarioMode.Task}}}"/>
             </Grid>
-
-
 
             <editors:SceneTimerEditor Grid.Column="1"
                                       Width="400"
@@ -153,9 +146,8 @@
         </Grid>
       
         <Grid Grid.Row="1">
-            <views:VisualEditorView IsVisible="{Binding #rb1.IsChecked}"/>
-            <views:LogicalEditorView IsVisible="{Binding #rb2.IsChecked}"/>
-            <views:TaskEditorView IsVisible="{Binding #rb3.IsChecked}"/>
+            <views:VisualEditorView IsVisible="{Binding #rb1.IsChecked}"/>        
+            <views:TaskEditorView IsVisible="{Binding #rb2.IsChecked}"/>
         </Grid>
    
     </Grid>

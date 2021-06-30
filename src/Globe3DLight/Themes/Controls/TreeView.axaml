@@ -101,7 +101,6 @@
   </Style>
 
   <Style Selector="TreeViewItem">
-    <Style.Resources />
     <Setter Property="Padding" Value="0,4" />
     <Setter Property="Background" Value="{StaticResource treeViewItemBackground}" />
     <Setter Property="BorderBrush" Value="{StaticResource treeViewItemBorderBrush}" />
@@ -214,7 +213,8 @@
     <Setter Property="IsVisible" Value="False" />
   </Style>
   <Style Selector="TreeViewItem:empty /template/ Panel#PART_ExpandCollapseChevronContainer">
-    <Setter Property="Width" Value="{StaticResource TreeViewItemExpandCollapseChevronSize}" />
+    <!--<Setter Property="Width" Value="{StaticResource TreeViewItemExpandCollapseChevronSize}" />-->
+    <Setter Property="Width" Value="14" />
   </Style>
   
 </Styles>
