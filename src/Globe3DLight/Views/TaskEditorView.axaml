@@ -8,6 +8,7 @@
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
              xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
              xmlns:editors="using:Globe3DLight.Views.Editors"
+             xmlns:Entities="clr-namespace:Globe3DLight.Views.Entities"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
              xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
              xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"     
@@ -22,14 +23,15 @@
         <editors:TaskListEditor Grid.Column="0" Grid.Row="0" Grid.RowSpan="2"
                                 DataContext="{Binding Project.CurrentScenario.TaskListEditor}"
                                 IsVisible="{Binding Project.CurrentScenario.IsTaskMode}" />
-        
-        
+                
         <views:ScenarioControl Grid.Column="1" Grid.Row="0"/>
         
         <views:TimeDataViewer Grid.Column="1" Grid.Row="1" DataContext="{Binding Project.CurrentScenario}"/>
-
-        <containers:GroundObjectContainerControl Grid.Column="2" Grid.Row="0" Grid.RowSpan="2" 
-                                                 DataContext="{Binding Project.CurrentScenario}" />
+  
+        <Entities:GroundObjectListControl Grid.Column="2" 
+                                          Grid.Row="0" 
+                                          Grid.RowSpan="2" 
+                                          DataContext="{Binding Project.CurrentScenario.GroundObjectList}"/>
         
     </Grid>
     

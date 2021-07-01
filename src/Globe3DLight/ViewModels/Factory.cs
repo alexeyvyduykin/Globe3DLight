@@ -78,6 +78,7 @@ namespace Globe3DLight.ViewModels
 
             scenario.TaskListEditor = CreateTaskListEditor(scenario);
             scenario.OutlinerEditor = CreateOutlinerEditor(scenario);
+            scenario.PropertiesEditor = CreatePropertiesEditor(scenario);
       
             return scenario;
         }
@@ -161,6 +162,13 @@ namespace Globe3DLight.ViewModels
                 CurrentFrame = frame,
                 Entities = ImmutableArray.Create<BaseEntity>(),
             };
+
+            return editor;
+        }
+
+        public PropertiesEditorViewModel CreatePropertiesEditor(ScenarioContainerViewModel scenario)
+        {
+            var editor = new PropertiesEditorViewModel(scenario);
 
             return editor;
         }

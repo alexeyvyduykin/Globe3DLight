@@ -1,32 +1,23 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+<UserControl x:Class="Globe3DLight.Views.Editors.PropertiesEditor"
+             xmlns="https://github.com/avaloniaui"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"
+             xmlns:vm="clr-namespace:Globe3DLight.ViewModels.Editors"      
              xmlns:converters="clr-namespace:Globe3DLight.Converters"
-             xmlns:markups="clr-namespace:Globe3DLight.Markups"
-             xmlns:controls="clr-namespace:Globe3DLight.Controls"             
+             xmlns:markups="clr-namespace:Globe3DLight.Markups"             
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"      
+             xmlns:editors="clr-namespace:Globe3DLight.ViewModels.Editors"    
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer"       
+             xmlns:Entities="clr-namespace:Globe3DLight.ViewModels.Entities"          
              xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
              xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
              xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"
-             Margin="10" 
-             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="450"
-             x:Class="Globe3DLight.Views.Editors.PropertiesEditor">
-
-  <UserControl.DataContext>
-    <vm:PropertiesEditorViewModel/>
-  </UserControl.DataContext>
-
-<!--
-<SolidColorBrush x:Key="PropertiesTitleBrush" Color="{StaticResource idThemeSpaceTitle1}"/> --><!-- header expander текст для всех уровней --><!--
-<SolidColorBrush x:Key="PropertiesTextBrush" Color="{StaticResource idThemeSpaceText1}"/> --><!-- все TextBlock/Labels для всех уровней --><!--
-
-  
- <SolidColorBrush x:Key="PropertiesPanelBackgroundBrush" Color="{StaticResource idPanelColorsBackground1}"></SolidColorBrush>
-<SolidColorBrush x:Key="PropertiesSubPanelBackgroundBrush" Color="{StaticResource idPanelColorsSubBackground1}" Opacity="0.141"></SolidColorBrush>
-
-  
-  -->
+             mc:Ignorable="d"  
+             d:DataContext="{x:Static Designer:DesignerContext.OutlinerEditor}"  
+             d:DesignWidth="250" d:DesignHeight="500"  
+             x:DataType="editors:PropertiesEditorViewModel" x:CompileBindings="False"
+             >
         
   <UserControl.Styles>  
     <!--<StyleInclude Source="avares://Globe3DLight/Styles/ExpanderItemProperty.axaml"/>-->
@@ -87,6 +78,7 @@
     <controls:Editor.PanelContent>
       
      <TabControl TabStripPlacement="Left">
+         
         <TabItem Classes="left">
           <TabItem.Header>
             <Viewbox Width="16" Height="16" Margin="4" Stretch="UniformToFill">
@@ -96,78 +88,26 @@
 
           <StackPanel>
             <Expander Header="SubProperty1">
-
               <Grid ColumnDefinitions="3*,5*" RowDefinitions="*,*" Margin="4">
-                <TextBlock Text="Value1" Classes="label"/>
-                <TextBlock Grid.Column="1"
-                           Text="{Binding Entity.Value1}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
 
-                <TextBlock Text="Value2"
-                           Grid.Row="1"
-                           Classes="label"/>
-                <TextBlock Grid.Column="1"
-                           Grid.Row="1"
-                           Text="{Binding Entity.Value2}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
               </Grid>
-
             </Expander>
 
             <Expander Header="SubProperty2">
-
               <Grid ColumnDefinitions="3*,5*" RowDefinitions="*,*" Margin="4">
-                <TextBlock Text="Name1" Classes="label"/>
-                <TextBox Grid.Column="1"
-                           Text="{Binding Entity.Name1}"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Center"/>
 
-                <TextBlock Text="Name2"
-                           Grid.Row="1"
-                           Classes="label"/>
-                <TextBox Grid.Column="1"
-                           Grid.Row="1"
-                           Text="{Binding Entity.Name1}"
-                           HorizontalAlignment="Stretch"
-                           VerticalAlignment="Center"/>
               </Grid>
-
             </Expander>
 
             <Expander Header="SubProperty3">
-
               <Grid ColumnDefinitions="3*,5*" RowDefinitions="*,*,*" Margin="4">
-                <CheckBox Grid.Column="1"
-                          Content="Is1"
-                          IsChecked="{Binding Entity.Is1}"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"/>
 
-                <CheckBox Grid.Column="1"
-                          Content="Is2"
-                          IsChecked="{Binding Entity.Is2}"
-                           Grid.Row="1"
-                           HorizontalAlignment="Left"
-                           VerticalAlignment="Center"/>
-
-                <TextBlock Text="Mode"
-                            Grid.Row="2"
-                            Classes="label"/>
-                <ComboBox Grid.Column="1"
-                          Grid.Row="2"
-                          SelectedItem="{Binding Entity.Mode}"
-                          Items="{Binding Source={markups:EnumBindingSource {x:Type vm:EntityMode}}}"
-                          HorizontalAlignment="Stretch"
-                          VerticalAlignment="Center"/>
-                <!--<prop:ColorProperty Grid.Row="3" Label="Color" Value="{Binding Entity.Color}"/>-->
               </Grid>
             </Expander>
           </StackPanel>
 
         </TabItem>
+       
         <TabItem Classes="left">
           <TabItem.Header>
             <Viewbox Width="16" Height="16" Margin="4" Stretch="UniformToFill">
@@ -175,9 +115,9 @@
             </Viewbox>
           </TabItem.Header>
 
-          <Border />
-
+         <Border />
         </TabItem>
+        
         <TabItem Classes="left">
           <TabItem.Header>
             <Viewbox Width="16" Height="16" Margin="4" Stretch="UniformToFill">
@@ -186,10 +126,9 @@
           </TabItem.Header>
 
           <Border />
-
         </TabItem>
+         
       </TabControl>
-
 
     </controls:Editor.PanelContent>
     

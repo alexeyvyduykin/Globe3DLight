@@ -29,28 +29,10 @@
 
         <GridSplitter Grid.Column="3" Grid.Row="0" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" Background="Transparent" Width="6"/>
 
-        <TabControl Padding="0,0,6,0" Grid.Column="4" Grid.Row="0">
-            <TabItem Header="Properties" FontSize="20">
-                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                    <ContentControl Content="{Binding Project.CurrentScenario.CurrentFrame, Mode=TwoWay}"/>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Scene" FontSize="20">
-                <TabControl>
-                    <TabItem Header="Scenario">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ContentControl Content="{Binding Project.CurrentScenario, Mode=TwoWay}"/>
-                        </ScrollViewer>
-                    </TabItem>
-                    <TabItem Header="Camera">
-                        <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
-                            <ContentControl Content="{Binding Project.CurrentScenario.SceneState.Camera, Mode=TwoWay}"/>
-                        </ScrollViewer>
-                    </TabItem>
-                </TabControl>
-            </TabItem>
-        </TabControl>
-
+        <editors:PropertiesEditor DataContext="{Binding Project.CurrentScenario.PropertiesEditor}"            
+                                  Grid.Column="4" 
+                                  Grid.Row="0"/>
+        
     </Grid>
 
 </UserControl>

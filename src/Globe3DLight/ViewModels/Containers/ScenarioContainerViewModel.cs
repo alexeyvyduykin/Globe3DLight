@@ -31,6 +31,7 @@ namespace Globe3DLight.ViewModels.Containers
         private SceneTimerEditorViewModel _sceneTimerEditor;
         private TaskListEditorViewModel _taskListEditor; 
         private OutlinerEditorViewModel _outlinerEditor;
+        private PropertiesEditorViewModel _propertiesEditor;
         private double _width;
         private double _height;
 
@@ -137,7 +138,13 @@ namespace Globe3DLight.ViewModels.Containers
             get => _outlinerEditor;
             set => RaiseAndSetIfChanged(ref _outlinerEditor, value);
         }
-        
+
+        public PropertiesEditorViewModel PropertiesEditor
+        {
+            get => _propertiesEditor;
+            set => RaiseAndSetIfChanged(ref _propertiesEditor, value);
+        }
+         
         public void SetCameraTo(ITargetable target)
         {
             var behaviours = SceneState.CameraBehaviours;
