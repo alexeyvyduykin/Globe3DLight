@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Globe3DLight.Views
+namespace Globe3DLight.Views.Workspaces
 {
-    public class MainView : UserControl
+    public partial class LayoutView : UserControl
     {
-        public MainView()
+        public LayoutView()
         {
             InitializeComponent();
         }

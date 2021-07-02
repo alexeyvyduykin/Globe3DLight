@@ -30,6 +30,8 @@ namespace Globe3DLight.ViewModels.Designer
 
         public static PropertiesEditorViewModel PropertiesEditor { get; set; }
 
+        public static TopBarViewModel TopBar { get; set; }
+
         public static ICamera ArcballCamera { get; set; }
 
         public static Satellite Satellite { get; set; }
@@ -193,6 +195,7 @@ namespace Globe3DLight.ViewModels.Designer
             TaskListEditor = factory.CreateTaskListEditor(Scenario);
             OutlinerEditor = factory.CreateOutlinerEditor(Scenario);
             PropertiesEditor = factory.CreatePropertiesEditor(Scenario);
+            TopBar = factory.CreateTopBar();
         }
     }
 

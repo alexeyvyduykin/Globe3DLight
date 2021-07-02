@@ -55,6 +55,7 @@ namespace Globe3DLight.Models
         TaskListEditorViewModel CreateTaskListEditor(ScenarioContainerViewModel scenario);
         OutlinerEditorViewModel CreateOutlinerEditor(ScenarioContainerViewModel scenario);
         PropertiesEditorViewModel CreatePropertiesEditor(ScenarioContainerViewModel scenario);
+        TopBarViewModel CreateTopBar();
         IDataUpdater CreateDataUpdater();
 
         void SaveProjectContainer(ProjectContainerViewModel project, string path, IFileSystem fileIO, IJsonSerializer serializer);

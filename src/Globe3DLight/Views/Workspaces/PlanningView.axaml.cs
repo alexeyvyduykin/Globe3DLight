@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Globe3DLight.Views
+namespace Globe3DLight.Views.Workspaces
 {
-    public class DashboardMenuControl : UserControl
+    public partial class PlanningView : UserControl
     {
-        public DashboardMenuControl()
+        public PlanningView()
         {
             InitializeComponent();
         }

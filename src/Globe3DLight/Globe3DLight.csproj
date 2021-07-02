@@ -36,4 +36,13 @@
     <PackageReference Include="System.Drawing.Common" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\Workspaces\PlanningView.axaml.cs">
+      <DependentUpon>PlanningView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\Workspaces\LayoutView.axaml.cs">
+      <DependentUpon>LayoutView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
 </Project>

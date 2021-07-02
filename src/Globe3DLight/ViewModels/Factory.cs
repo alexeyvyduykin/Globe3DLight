@@ -60,7 +60,8 @@ namespace Globe3DLight.ViewModels
             return new ProjectContainerViewModel()
             {
                 Name = name,
-                Scenarios = ImmutableArray.Create<ScenarioContainerViewModel>()
+                Scenarios = ImmutableArray.Create<ScenarioContainerViewModel>(),
+                TopBar = CreateTopBar()
             };
         }
 
@@ -72,8 +73,7 @@ namespace Globe3DLight.ViewModels
                 IsExpanded = true,                                  
                 SceneState = CreateSceneState(),
                 Updater = CreateDataUpdater(),
-                SceneTimerEditor = CreateSceneTimerEditor(begin, duration),
-                CurrentScenarioMode = ScenarioMode.Visual,            
+                SceneTimerEditor = CreateSceneTimerEditor(begin, duration),                          
             };
 
             scenario.TaskListEditor = CreateTaskListEditor(scenario);
@@ -172,7 +172,13 @@ namespace Globe3DLight.ViewModels
 
             return editor;
         }
-
+        public TopBarViewModel CreateTopBar() 
+        {
+            return new TopBarViewModel()
+            {
+                ActiveWorkspace = Workspace.Layout
+            };
+        }
         public IDataUpdater CreateDataUpdater()
         {
             return new DataUpdater();

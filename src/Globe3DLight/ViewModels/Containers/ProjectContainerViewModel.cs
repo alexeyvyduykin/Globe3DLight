@@ -3,6 +3,7 @@ using System;
 using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Reactive.Disposables;
+using Globe3DLight.ViewModels.Editors;
 
 namespace Globe3DLight.ViewModels.Containers
 {
@@ -11,6 +12,7 @@ namespace Globe3DLight.ViewModels.Containers
         private ImmutableArray<ScenarioContainerViewModel> _scenarios;
         private ScenarioContainerViewModel _currentScenario;
         private ViewModelBase _selected;
+        private TopBarViewModel _topBar;
 
         public ProjectContainerViewModel()
         {
@@ -39,6 +41,12 @@ namespace Globe3DLight.ViewModels.Containers
         {
             get => _selected;
             set => RaiseAndSetIfChanged(ref _selected, value);
+        }
+
+        public TopBarViewModel TopBar
+        {
+            get => _topBar;
+            set => RaiseAndSetIfChanged(ref _topBar, value);
         }
 
         public void SetCurrentScenario(ScenarioContainerViewModel scenario)

@@ -1,0 +1,36 @@
+<UserControl x:Class="Globe3DLight.Views.Workspaces.LayoutView"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:containers="clr-namespace:Globe3DLight.Views.Containers;assembly=Globe3DLight"
+             xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"
+             xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
+             xmlns:editors="clr-namespace:Globe3DLight.Views.Editors"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
+             xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers;assembly=Globe3DLight"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             d:DataContext="{x:Static Designer:DesignerContext.Editor}"
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="False"
+             >
+
+    <Grid ColumnDefinitions="*,250" RowDefinitions="2*,3*">
+
+        <Grid RowDefinitions="Auto,*" Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+            <editors:SceneTimerEditor Grid.Row="0" Width="460" Margin="1"                                                                                                                                        
+                                      DataContext="{Binding Project.CurrentScenario.SceneTimerEditor}"/>
+
+            <views:ScenarioControl Grid.Row="1" Margin="1"/>
+        </Grid>
+
+        <editors:OutlinerEditor Grid.Column="1" Grid.Row="0" Margin="1"                         
+                                DataContext="{Binding Project.CurrentScenario.OutlinerEditor}"/>
+
+        <editors:PropertiesEditor Grid.Column="1" Grid.Row="1" Margin="1"
+                                  DataContext="{Binding Project.CurrentScenario.PropertiesEditor}"/>
+
+    </Grid>
+
+</UserControl>

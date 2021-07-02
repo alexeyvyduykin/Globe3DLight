@@ -17,8 +17,6 @@ namespace Globe3DLight.ViewModels.Containers
 
     public delegate void InvalidateScenarioEventHandler(object sender, InvalidateScenarioEventArgs e);
 
-    public enum ScenarioMode { Visual, Task };
-
     public partial class ScenarioContainerViewModel : BaseContainerViewModel
     {
         private readonly InvalidateScenarioEventArgs _invalidateScenarioEventArgs;
@@ -34,8 +32,6 @@ namespace Globe3DLight.ViewModels.Containers
         private PropertiesEditorViewModel _propertiesEditor;
         private double _width;
         private double _height;
-
-        private ScenarioMode _currentScenarioMode;
 
         public event InvalidateScenarioEventHandler InvalidateScenarioHandler;
 
@@ -59,16 +55,16 @@ namespace Globe3DLight.ViewModels.Containers
 
         private void ScenarioModeChangedEvent(object sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(ScenarioContainerViewModel.CurrentScenarioMode))
-            {
-                if(CurrentScenarioMode == ScenarioMode.Task)
-                {
-                    if (TaskListEditor.CurrentTask != null)
-                    {
-                        SetCameraTo(TaskListEditor.CurrentTask.Satellite);
-                    }
-                }
-            }
+            //if (e.PropertyName == nameof(ScenarioContainerViewModel.CurrentScenarioMode))
+            //{
+            //    if(CurrentScenarioMode == ScenarioMode.Task)
+            //    {
+            //        if (TaskListEditor.CurrentTask != null)
+            //        {
+            //            SetCameraTo(TaskListEditor.CurrentTask.Satellite);
+            //        }
+            //    }
+            //}
         }
 
         public void InvalidateScenario() => InvalidateScenarioHandler?.Invoke(this, _invalidateScenarioEventArgs);
@@ -101,12 +97,6 @@ namespace Globe3DLight.ViewModels.Containers
         {
             get => _sceneState;
             set => RaiseAndSetIfChanged(ref _sceneState, value);
-        }
-
-        public ScenarioMode CurrentScenarioMode
-        {
-            get => _currentScenarioMode;
-            set => RaiseAndSetIfChanged(ref _currentScenarioMode, value);
         }
 
         public double Width
@@ -170,8 +160,6 @@ namespace Globe3DLight.ViewModels.Containers
                 Updater.Update(SceneTimerEditor.Timer.CurrentTime, root);
             }
         }
-
-
 
         public override bool IsDirty()
         {
