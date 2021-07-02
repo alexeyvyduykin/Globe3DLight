@@ -37,6 +37,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\Editors\Viewport3DEditor.axaml.cs">
+      <DependentUpon>Viewport3DEditor.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\Workspaces\PlanningView.axaml.cs">
       <DependentUpon>PlanningView.axaml</DependentUpon>
     </Compile>

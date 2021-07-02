@@ -1,14 +1,14 @@
-﻿using Avalonia;
+using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Globe3DLight.Views
+namespace Globe3DLight.Views.Editors
 {
-    public class ScenarioControl : UserControl
+    public partial class Viewport3DEditor : UserControl
     {
-        public ScenarioControl()
+        public Viewport3DEditor()
         {
-            this.InitializeComponent();
+            InitializeComponent();
         }
 
         private void InitializeComponent()

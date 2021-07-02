@@ -28,8 +28,8 @@
 
         <editors:SceneTimerEditor Grid.Column="1" Grid.Row="0" Width="460" Margin="1"                                                                                          
                                   DataContext="{Binding Project.CurrentScenario.SceneTimerEditor}"/>
-        
-        <views:ScenarioControl Grid.Column="1" Grid.Row="1" Margin="1" />
+                        
+        <editors:Viewport3DEditor Grid.Column="1" Grid.Row="1" Margin="1" />
             
         <views:TimeDataViewer Grid.Column="1" Grid.Row="2" Margin="1"
                               DataContext="{Binding Project.CurrentScenario}"/>

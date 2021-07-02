@@ -1,0 +1,70 @@
+<UserControl x:Class="Globe3DLight.Views.Editors.Viewport3DEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                              
+             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
+             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
+             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"             
+             xmlns:converters="clr-namespace:Globe3DLight.Converters"            
+             xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors"             
+             xmlns:views="clr-namespace:Globe3DLight.Views"
+             xmlns:Designer="clr-namespace:Globe3DLight.Designer"
+             xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor"    
+             xmlns:controls="clr-namespace:Globe3DLight.Controls"
+             xmlns:editors="clr-namespace:Globe3DLight.ViewModels.Editors"                                  
+             mc:Ignorable="d"
+             d:DataContext="{x:Static Designer:DesignerContext.Editor}"
+             d:DesignWidth="600" d:DesignHeight="600"
+             x:DataType="Editor:ProjectEditorViewModel" x:CompileBindings="True">
+   
+    <i:Interaction.Behaviors>
+        <behaviors:AttachEditorBehavior/>
+    </i:Interaction.Behaviors>
+    
+    <controls:Editor>
+
+        <controls:Editor.Icon>
+            <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditor3DViewportIcon}"/>
+            </Viewbox>
+        </controls:Editor.Icon>
+
+        <controls:Editor.PanelContent>
+
+            <Border ClipToBounds="True">
+
+
+
+                <ScrollViewer x:Name="scrollViewer"
+                              HorizontalScrollBarVisibility="Disabled"
+                              VerticalScrollBarVisibility="Disabled">
+
+                    <Panel>
+                        <!--HorizontalAlignment="Center"                      
+               VerticalAlignment="Center"   
+               -->
+                        <!--
+               Width="{Binding #presenterControlEditor.Container.Width}"                                
+               Height="{Binding #presenterControlEditor.Container.Height}"
+               -->
+
+                        <views:PresenterControl x:Name="presenterControlEditor"
+                                                Renderer="{Binding Renderer}"
+                                                Container="{Binding Project.CurrentScenario}"
+                                                PresenterContract="{Binding Presenter}"
+                                                ClipToBounds="False"/>
+
+
+                    </Panel>
+
+                </ScrollViewer>
+            </Border>
+
+
+        </controls:Editor.PanelContent>
+
+    </controls:Editor>
+
+
+</UserControl>

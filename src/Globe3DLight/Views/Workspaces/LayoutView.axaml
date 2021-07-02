@@ -22,7 +22,7 @@
             <editors:SceneTimerEditor Grid.Row="0" Width="460" Margin="1"                                                                                                                                        
                                       DataContext="{Binding Project.CurrentScenario.SceneTimerEditor}"/>
 
-            <views:ScenarioControl Grid.Row="1" Margin="1"/>
+            <editors:Viewport3DEditor Grid.Row="1" Margin="1" />
         </Grid>
 
         <editors:OutlinerEditor Grid.Column="1" Grid.Row="0" Margin="1"                         
