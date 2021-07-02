@@ -198,7 +198,10 @@
                         </RepeatButton.Template>
                       </RepeatButton>
                     </Track.IncreaseButton>
-                    <Thumb Classes="SliderThumbStyle" Name="SliderThumb" Margin="0" Padding="0" DataContext="{TemplateBinding Value}" Height="{StaticResource sliderVerticalThumbHeight}" Width="{StaticResource sliderVerticalThumbWidth}" />
+                    <Thumb Classes="SliderThumbStyle" Name="SliderThumb" Margin="0" Padding="0" 
+                           DataContext="{TemplateBinding Value}" 
+                           Height="{StaticResource sliderVerticalThumbHeight}" 
+                           Width="{StaticResource sliderVerticalThumbWidth}" />
                   </Track>
                 </Grid>
               </Grid>

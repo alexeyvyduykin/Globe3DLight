@@ -2,11 +2,11 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Markup.Xaml;
 
-namespace Globe3DLight.Views
+namespace Globe3DLight.Views.Editors
 {
-    public partial class TimeDataViewer : UserControl
+    public partial class TimelineEditor : UserControl
     {
-        public TimeDataViewer()
+        public TimelineEditor()
         {
             InitializeComponent();
         }

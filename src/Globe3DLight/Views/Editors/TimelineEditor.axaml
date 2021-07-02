@@ -1,0 +1,113 @@
+<UserControl x:Class="Globe3DLight.Views.Editors.TimelineEditor"
+             xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                     
+             xmlns:sch="clr-namespace:TimeDataViewer"
+             xmlns:shapes="clr-namespace:TimeDataViewer.Shapes"
+             xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers" 
+             xmlns:Controls="clr-namespace:Globe3DLight.Controls"                   
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="Containers:ScenarioContainerViewModel" x:CompileBindings="True"
+             >
+
+    <UserControl.Styles>
+        
+        <Style Selector="Slider:horizontal /template/ Thumb">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Grid>                        
+                        <Ellipse Width="12" Height="12" Fill="{DynamicResource sliderThumbBackground}"/>
+                    </Grid>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+            
+    </UserControl.Styles>
+    
+    
+    <Controls:Editor>
+
+        <Controls:Editor.Icon>
+            <Viewbox Stretch="UniformToFill" Width="12" Height="12">
+                <DrawingPresenter Stretch="None" Drawing="{DynamicResource BlenderEditorTimelineIcon}"/>
+            </Viewbox>
+        </Controls:Editor.Icon>
+
+        <Controls:Editor.HeaderContent>
+
+            <Grid ColumnDefinitions="Auto,400" HorizontalAlignment="Center">
+                                                        
+                <Border Background="{DynamicResource NumberFieldInnerBrush}"       
+                        CornerRadius="{DynamicResource ThemeControlCornerRadius}"
+                        Margin="0,2,0,2">
+                    <TextBlock Foreground="{DynamicResource RegularTextBrush}"
+                               FontSize="{DynamicResource WidgetFontSize}"
+                               Padding="4,0,4,0"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
+                               Text="{Binding #scheduler.Zoom, StringFormat=Zoom \{0:000\}}"/>
+                </Border>
+
+
+                <Slider Grid.Column="1"
+                        TickFrequency="1"
+                        Margin="8,2,0,2"          
+                        IsSnapToTickEnabled="True"
+                        VerticalAlignment="Center"                        
+                        Value="{Binding #scheduler.Zoom}"/>
+            </Grid>
+
+        </Controls:Editor.HeaderContent>
+
+        <Controls:Editor.PanelContent>
+
+            <Grid RowDefinitions="*,60">
+
+                <sch:SchedulerControl x:Name="scheduler"                                      
+                                      Epoch="{Binding SceneTimerEditor.Begin}"
+                                      CurrentTime="{Binding SceneTimerEditor.CurrentTime}">
+
+                    <sch:SchedulerControl.Series>
+                        <sch:Series Category="Rotation"
+                                    Items="{Binding TaskListEditor.CurrentTask.Rotations}"
+                                    LeftBindingPath="BeginTime"
+                                    RightBindingPath="EndTime">
+                            <sch:Series.IntervalTemplate>
+                                <shapes:IntervalVisual Background="Yellow"/>
+                            </sch:Series.IntervalTemplate>
+                        </sch:Series>
+
+                        <sch:Series Category="Observation"
+                                    Items="{Binding TaskListEditor.CurrentTask.Observations}"
+                                    LeftBindingPath="BeginTime"
+                                    RightBindingPath="EndTime">
+                            <sch:Series.IntervalTemplate>
+                                <shapes:IntervalVisual Background="Blue"/>
+                            </sch:Series.IntervalTemplate>
+                        </sch:Series>
+
+                        <sch:Series Category="Transmission"
+                                    Items="{Binding TaskListEditor.CurrentTask.Transmissions}"
+                                    LeftBindingPath="BeginTime"
+                                    RightBindingPath="EndTime">
+                            <sch:Series.IntervalTemplate>
+                                <shapes:IntervalVisual Background="Green"/>
+                            </sch:Series.IntervalTemplate>
+                        </sch:Series>
+
+                    </sch:SchedulerControl.Series>
+
+                </sch:SchedulerControl>
+
+                <sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="1"/>
+
+            </Grid>
+
+        </Controls:Editor.PanelContent>
+
+    </Controls:Editor>
+
+
+
+</UserControl>

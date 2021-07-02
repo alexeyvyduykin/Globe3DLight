@@ -7,7 +7,7 @@
              xmlns:views="clr-namespace:Globe3DLight.Views;assembly=Globe3DLight"         
              xmlns:converters="clr-namespace:Globe3DLight.Converters;assembly=Globe3DLight"
              xmlns:Editor="clr-namespace:Globe3DLight.ViewModels.Editor;assembly=Globe3DLight"
-             xmlns:editors="using:Globe3DLight.Views.Editors"
+             xmlns:Editors="using:Globe3DLight.Views.Editors"
              xmlns:Entities="clr-namespace:Globe3DLight.Views.Entities"
              xmlns:Designer="clr-namespace:Globe3DLight.Designer;assembly=Globe3DLight"
              xmlns:behaviors="clr-namespace:Globe3DLight.Behaviors;assembly=Globe3DLight"
@@ -20,19 +20,19 @@
 
     <Grid ColumnDefinitions="250,*,250" RowDefinitions="Auto,*,300">
               
-        <editors:TaskListEditor Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="1"                                
+        <Editors:TaskListEditor Grid.Column="0" Grid.Row="0" Grid.RowSpan="3" Margin="1"                                
                                 DataContext="{Binding Project.CurrentScenario.TaskListEditor}" />
         
         <Entities:GroundObjectListControl Grid.Column="2" Grid.Row="0" Grid.RowSpan="3" Margin="1"
                                           DataContext="{Binding Project.CurrentScenario.GroundObjectList}"/>
 
-        <editors:SceneTimerEditor Grid.Column="1" Grid.Row="0" Width="460" Margin="1"                                                                                          
+        <Editors:SceneTimerEditor Grid.Column="1" Grid.Row="0" Width="460" Margin="1"                                                                                          
                                   DataContext="{Binding Project.CurrentScenario.SceneTimerEditor}"/>
                         
-        <editors:Viewport3DEditor Grid.Column="1" Grid.Row="1" Margin="1" />
-            
-        <views:TimeDataViewer Grid.Column="1" Grid.Row="2" Margin="1"
-                              DataContext="{Binding Project.CurrentScenario}"/>
+        <Editors:Viewport3DEditor Grid.Column="1" Grid.Row="1" Margin="1" />
+
+        <Editors:TimelineEditor Grid.Column="1" Grid.Row="2" Margin="1"
+                                DataContext="{Binding Project.CurrentScenario}"/>
         
     </Grid>
 
