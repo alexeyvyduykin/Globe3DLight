@@ -4,6 +4,9 @@ using System.Text;
 using GlmSharp;
 using Globe3DLight.Spatial;
 using Globe3DLight.Models.Scene;
+using System.ComponentModel;
+using System.Collections;
+using System.Xml.Serialization;
 
 namespace Globe3DLight.ViewModels.Scene
 {
@@ -21,6 +24,11 @@ namespace Globe3DLight.ViewModels.Scene
         private dquat _orientation;
         private dquat _orientationSaved;
         private double _radius = 1.0;
+
+        public ArcballCamera(dvec3 eye, dvec3 target, dvec3 up)
+        {
+            LookAt(eye, target, up);
+        }
 
         public double AdjustWidth
         {
@@ -46,12 +54,7 @@ namespace Globe3DLight.ViewModels.Scene
             set => RaiseAndSetIfChanged(ref _height, value);
         }
 
-        public override dmat4 ViewMatrix => _view;//* _target.InverseAbsoluteModel;
-
-        public ArcballCamera(dvec3 eye, dvec3 target, dvec3 up)
-        {
-            LookAt( eye,  target, up);
-        }
+        public override dmat4 ViewMatrix => _view;
 
         public override void LookAt(dvec3 eye, dvec3 target, dvec3 up)
         {
@@ -78,9 +81,11 @@ namespace Globe3DLight.ViewModels.Scene
                 width = height;
             }
 
-            AdjustWidth = 1.0 / ((width - 1) * 0.5);
-            AdjustHeight = 1.0 / ((height - 1) * 0.5);
-            //   this.AspectRatio = (double)width / (double)height;
+          //  AdjustWidth = 1.0 / ((width - 1) * 0.5);
+          //  AdjustHeight = 1.0 / ((height - 1) * 0.5);
+
+            AdjustWidth = 2.0f / width;
+            AdjustHeight = 2.0f / height;
         }
 
         public void Zoom(double deltaZ)
@@ -88,22 +93,27 @@ namespace Globe3DLight.ViewModels.Scene
             _translation *= dmat4.Translate(new dvec3(0.0, 0.0, -deltaZ));
             _view = _translation * _rotation;
 
-            dvec3 zAxis = new dvec3(_view.m02, _view.m12, _view.m22);
+            var zAxis = new dvec3(_view.m02, _view.m12, _view.m22);
             Eye = -zAxis * _translation.m32;
 
-            double range = (Eye - Target).Length;// 36.0;// glm::length(position);
-            _radius = 1.0 / (0.38 * (range - 1.0)) + 1.4;
-            //radius = 1.0 / (0.38*(range-10.0)) + 1.4;
-            //radius = 6371.0;
+            var range = (Eye - Target).Length;
+            _radius = 1.0 / (0.38 * (range - 1.0)) + 1.4;      
         }
+       
+        public ivec2 Point0 { get; set; }
+
+        public ivec2 Point1 { get; set; }
 
         public void RotateBegin(int x, int y)
         {
             _orientationSaved = _orientation;
             _rotateBegin = MapToSphere(x, y);
+
+            Point0 = new ivec2(x, y);
+            Point1 = new ivec2(x, y);
         }
 
-        public void RotateEnd(int x, int y)
+        public void Rotate(int x, int y)
         {
             var ThisQuat = Drag(x, y);
             _orientation = ThisQuat * _orientationSaved;
@@ -114,6 +124,14 @@ namespace Globe3DLight.ViewModels.Scene
             dvec3 zAxis = new dvec3(_view.m02, _view.m12, _view.m22);
 
             Eye = -zAxis * _translation.m32;
+
+            Point1 = new ivec2(x, y);
+        }
+
+        public void RotateEnd(int x, int y)
+        {
+            Point0 = new ivec2(x, y);
+            Point1 = new ivec2(x, y);
         }
 
         private static dmat4 ToMatrixRotate(dquat q)
@@ -155,8 +173,32 @@ namespace Globe3DLight.ViewModels.Scene
             m.m30 = 0.0; m.m31 = 0.0; m.m32 = 0.0; m.m33 = 1.0;
             return m;
         }
+        
+        public dvec3 MapToSphere(int x, int y)
+        {
+            //hyperboloid mapping taken from https://www.opengl.org/wiki/Object_Mouse_Trackball
 
-        private dvec3 MapToSphere(int x, int y)
+            double pX = x * _adjustWidth - 1.0;
+            double pY = y * _adjustHeight - 1.0;
+
+            dvec3 P = new dvec3(pX, -pY, 0);
+
+            //sphere radius
+            // const double radius = 0.5;
+            // const double radius_squared = radius * radius;
+            var radius_squared = _radius * _radius;
+        
+            double XY_squared = P.x * P.x + P.y * P.y;
+
+            if (XY_squared <= 0.5 * radius_squared)
+                P.z = Math.Sqrt(radius_squared - XY_squared);  // Pythagore
+            else
+                P.z = (0.5 * (radius_squared)) / Math.Sqrt(XY_squared);  // hyperboloid
+
+            return P;
+        }
+
+        private dvec3 MapToSphere_old(int x, int y)
         {        
             //Adjust point coords and scale down to range of [-1 ... 1]
             double newX = (x * AdjustWidth) - 1.0;

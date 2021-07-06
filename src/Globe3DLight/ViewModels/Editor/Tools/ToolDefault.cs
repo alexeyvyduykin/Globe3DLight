@@ -34,6 +34,11 @@ namespace Globe3DLight.ViewModels.Editor.Tools
         public void LeftUp(InputArgs args)
         {
             _currentState = State.None;
+            
+            var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
+            var camera = (IArcballCamera)editor.Project.CurrentScenario.SceneState.Camera;
+
+            camera.RotateEnd((int)args.X, (int)args.Y);
         }
 
         public void RightDown(InputArgs args)
@@ -52,12 +57,11 @@ namespace Globe3DLight.ViewModels.Editor.Tools
         {
             var editor = _serviceProvider.GetService<ProjectEditorViewModel>();
 
-
             if (_currentState == State.Rotate)
             {
                 var camera = (IArcballCamera)editor.Project.CurrentScenario.SceneState.Camera;
 
-                camera.RotateEnd((int)args.X, (int)args.Y);
+                camera.Rotate((int)args.X, (int)args.Y);
             }
             else if (_currentState == State.Zoom)
             {

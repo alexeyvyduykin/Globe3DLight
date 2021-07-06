@@ -12,6 +12,7 @@ using Globe3DLight.ViewModels.Containers;
 using Globe3DLight.ViewModels.Renderer.Presenters;
 using System.Diagnostics;
 using Avalonia.Input;
+using Globe3DLight.ViewModels.Scene;
 
 namespace Globe3DLight.Views
 {
@@ -174,7 +175,10 @@ namespace Globe3DLight.Views
 
                         //             Debug.WriteLine($"Width: {PresenterContract.Width}, Height: {PresenterContract.Height}");
                         //             Debug.WriteLine($"_Width: {_width}, _Height: {_height}");
-                        
+
+
+                        //DrawCameraInput(customState, drawingContext);
+
                         customState.Container?.Invalidate();
                     }
                     catch
@@ -206,6 +210,24 @@ namespace Globe3DLight.Views
                 PresenterContract.Resize(_width, _height);
 
                 _transform.Y = _height;
+            }
+        }
+
+        private void DrawCameraInput(CustomState customState, DrawingContext context)
+        {
+            if (customState.Container.SceneState.Camera is ArcballCamera camera)
+            {
+                var w = camera.Width;
+                var h = camera.Height;
+                var x0 = camera.Point0.x;
+                var y0 = camera.Point0.y;
+                var x1 = camera.Point1.x;
+                var y1 = camera.Point1.y;
+
+                context.DrawRectangle(new Pen() { Thickness = 4, Brush = new SolidColorBrush() { Color = Colors.Red } }, new Rect(0, 0, w, h));
+
+                context.DrawLine(new Pen() { Thickness = 2, Brush = new SolidColorBrush() { Color = Colors.Orange } },
+                    new Point(x0, y0), new Point(x1, y1));
             }
         }
 
