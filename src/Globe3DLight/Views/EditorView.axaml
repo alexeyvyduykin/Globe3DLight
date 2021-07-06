@@ -3,9 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"           
-             xmlns:i="clr-namespace:Avalonia.Xaml.Interactivity;assembly=Avalonia.Xaml.Interactivity"
-             xmlns:ia="clr-namespace:Avalonia.Xaml.Interactions.Core;assembly=Avalonia.Xaml.Interactions"
-             xmlns:iac="clr-namespace:Avalonia.Xaml.Interactions.Custom;assembly=Avalonia.Xaml.Interactions.Custom"            
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             xmlns:iac="using:Avalonia.Xaml.Interactions.Custom"            
              xmlns:views="clr-namespace:Globe3DLight.Views"
              xmlns:converters="clr-namespace:Globe3DLight.Converters" 
              xmlns:selectors="clr-namespace:Globe3DLight.Converters"
@@ -23,8 +23,8 @@
              x:DataType="Containers:ProjectContainerViewModel" x:CompileBindings="False"             
              >
 
-    <UserControl.Resources>
-        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>
+    <UserControl.Resources>        
+        <converters:EnumToBooleanConverter x:Key="EnumToBooleanConverter"/>        
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -37,10 +37,17 @@
         
         <Grid Grid.Row="1">
 
-            <!--<ContentPresenter Content="{Binding Project.TopBar.ActiveWorkspace}"/>-->
-
-            <!--<ContentPresenter Name="cont" Content="{Binding Project.TopBar.ActiveWorkspace}">
-                   <ContentPresenter.DataTemplates>
+            <i:Interaction.Behaviors>
+                <ia:DataTriggerBehavior Binding="{Binding Project.TopBar.ActiveWorkspace}" ComparisonCondition="Equal" Value="{x:Static vm:Workspace.Layout}">
+                    <ia:ChangePropertyAction TargetObject="{Binding #contentPresenter}" PropertyName="Content" Value="{x:Static vm:Workspace.Layout}"/>               
+                </ia:DataTriggerBehavior>
+                <ia:DataTriggerBehavior Binding="{Binding Project.TopBar.ActiveWorkspace}" ComparisonCondition="Equal" Value="{x:Static vm:Workspace.Planning}">
+                    <ia:ChangePropertyAction TargetObject="{Binding #contentPresenter}" PropertyName="Content" Value="{x:Static vm:Workspace.Planning}"/>               
+                </ia:DataTriggerBehavior>
+            </i:Interaction.Behaviors>
+                        
+            <ContentPresenter Name="contentPresenter">                  
+                <ContentPresenter.DataTemplates>
                         <selectors:WorkspaceTemplateSelector>
 
                             <DataTemplate x:Key="Layout" DataType="{x:Type vm:Workspace}">
@@ -52,13 +59,13 @@
                             </DataTemplate>
 
                         </selectors:WorkspaceTemplateSelector>
-                    </ContentPresenter.DataTemplates>
-                </ContentPresenter>-->
+                    </ContentPresenter.DataTemplates>               
+            </ContentPresenter>
 
-            <i:Interaction.Behaviors>
+            <!--<i:Interaction.Behaviors>
                 <ia:DataTriggerBehavior Binding="{Binding Project.TopBar.ActiveWorkspace}" ComparisonCondition="Equal" Value="{x:Static vm:Workspace.Layout}">
-                    <ia:ChangePropertyAction TargetObject="{Binding #contentPresenter1}" PropertyName="IsVisible" Value="True"/>
                     <ia:ChangePropertyAction TargetObject="{Binding #contentPresenter2}" PropertyName="IsVisible" Value="False"/>
+                    <ia:ChangePropertyAction TargetObject="{Binding #contentPresenter1}" PropertyName="IsVisible" Value="True"/>                
                 </ia:DataTriggerBehavior>
                 <ia:DataTriggerBehavior Binding="{Binding Project.TopBar.ActiveWorkspace}" ComparisonCondition="Equal" Value="{x:Static vm:Workspace.Planning}">
                     <ia:ChangePropertyAction TargetObject="{Binding #contentPresenter1}" PropertyName="IsVisible" Value="False"/>
@@ -76,7 +83,7 @@
                 <ContentPresenter.Content>
                     <workspaces:PlanningView DataContext="{Binding $parent[UserControl].DataContext}"/>
                 </ContentPresenter.Content>
-            </ContentPresenter>
+            </ContentPresenter>-->
                        
         </Grid>
    
