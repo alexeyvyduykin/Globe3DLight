@@ -101,6 +101,11 @@ namespace TimeDataViewer
 
         public void SliderTo(double value)
         {
+            if(Slider == null)
+            {
+                return;
+            }
+
             foreach (var a in Axises)
             {
                 if (a.InternalAxis.IsHorizontal() == true)
@@ -144,6 +149,11 @@ namespace TimeDataViewer
 
         protected override void RenderSlider(CanvasRenderContext contextAxis, CanvasRenderContext contextPlot)
         {
+            if(Slider == null)
+            {
+                return;
+            }
+
             // TODO: Remove update method from render and replace to UpdateModel (present correct not work) 
             UpdateSlider();
             Slider.Render(contextAxis, contextPlot);
@@ -281,6 +291,11 @@ namespace TimeDataViewer
 
         private void UpdateSlider()
         {
+            if(Slider == null)
+            {
+                return;
+            }
+
             Slider.UpdateMinMax(ActualModel);
         }
     }

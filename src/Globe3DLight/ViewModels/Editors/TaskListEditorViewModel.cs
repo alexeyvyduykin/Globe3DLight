@@ -90,7 +90,7 @@ namespace Globe3DLight.ViewModels.Editors
         {
             Filter = new Filter(this) { IsObservation = true, IsRotation = true, IsTransmission = true };
             _tasks = new ObservableCollection<SatelliteTask>();// ImmutableArray.Create<SatelliteTask>();    
-            _scenario = scenario;
+            _scenario = scenario;          
         }
 
         public Filter Filter { get; set; }

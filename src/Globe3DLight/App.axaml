@@ -16,6 +16,8 @@
         <StyleInclude Source="avares://Globe3DLight/Icons.axaml"/>
 
         <StyleInclude Source="avares://Globe3DLight/Styles/EditorStyle.axaml"/>
+        
+        <StyleInclude Source="resm:TimeDataViewer.Themes.Default.xaml?assembly=TimeDataViewer"/>
 
     </Application.Styles>
 </Application>

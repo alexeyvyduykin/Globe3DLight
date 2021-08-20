@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"                     
-             xmlns:sch="clr-namespace:TimeDataViewer"
+             xmlns:sch="using:TimeDataViewer"
              xmlns:shapes="clr-namespace:TimeDataViewer.Shapes"
              xmlns:Containers="clr-namespace:Globe3DLight.ViewModels.Containers" 
              xmlns:Controls="clr-namespace:Globe3DLight.Controls"                   
@@ -38,7 +38,7 @@
 
             <Grid ColumnDefinitions="Auto,400" HorizontalAlignment="Center">
                                                         
-                <Border Background="{DynamicResource NumberFieldInnerBrush}"       
+                <!--<Border Background="{DynamicResource NumberFieldInnerBrush}"       
                         CornerRadius="{DynamicResource ThemeControlCornerRadius}"
                         Margin="0,2,0,2">
                     <TextBlock Foreground="{DynamicResource RegularTextBrush}"
@@ -47,62 +47,71 @@
                                HorizontalAlignment="Left"
                                VerticalAlignment="Center"
                                Text="{Binding #scheduler.Zoom, StringFormat=Zoom \{0:000\}}"/>
-                </Border>
+                </Border>-->
 
 
-                <Slider Grid.Column="1"
+                <!--<Slider Grid.Column="1"
                         TickFrequency="1"
                         Margin="8,2,0,2"          
                         IsSnapToTickEnabled="True"
                         VerticalAlignment="Center"                        
-                        Value="{Binding #scheduler.Zoom}"/>
+                        Value="{Binding #scheduler.Zoom}"/>-->
             </Grid>
 
         </Controls:Editor.HeaderContent>
 
         <Controls:Editor.PanelContent>
 
-            <Grid RowDefinitions="*,60">
+            <sch:Timeline>
 
-                <sch:SchedulerControl x:Name="scheduler"                                      
-                                      Epoch="{Binding SceneTimerEditor.Begin}"
-                                      CurrentTime="{Binding SceneTimerEditor.CurrentTime}">
+                <sch:Timeline.Axises>
 
-                    <sch:SchedulerControl.Series>
-                        <sch:Series Category="Rotation"
-                                    Items="{Binding TaskListEditor.CurrentTask.Rotations}"
-                                    LeftBindingPath="BeginTime"
-                                    RightBindingPath="EndTime">
-                            <sch:Series.IntervalTemplate>
-                                <shapes:IntervalVisual Background="Yellow"/>
-                            </sch:Series.IntervalTemplate>
-                        </sch:Series>
+                    <sch:CategoryAxis Position="Left"
+                                      AbsoluteMinimum="-0.5"
+                                      AbsoluteMaximum="2.5"
+                                      IsZoomEnabled="False"
+                                      Items="{Binding TaskListEditor.CurrentTask.Labels}"
+                                      LabelField="Label"/>
+                    <sch:DateTimeAxis Position="Top"
+                                      IntervalType="Auto"
+                                      AbsoluteMinimum="{Binding TaskListEditor.CurrentTask.BeginScenario}"
+                                      AbsoluteMaximum="{Binding TaskListEditor.CurrentTask.EndScenario}"
+                                      FirstDateTime="{Binding TaskListEditor.CurrentTask.Epoch}"/>
 
-                        <sch:Series Category="Observation"
-                                    Items="{Binding TaskListEditor.CurrentTask.Observations}"
-                                    LeftBindingPath="BeginTime"
-                                    RightBindingPath="EndTime">
-                            <sch:Series.IntervalTemplate>
-                                <shapes:IntervalVisual Background="Blue"/>
-                            </sch:Series.IntervalTemplate>
-                        </sch:Series>
+                </sch:Timeline.Axises>
 
-                        <sch:Series Category="Transmission"
-                                    Items="{Binding TaskListEditor.CurrentTask.Transmissions}"
-                                    LeftBindingPath="BeginTime"
-                                    RightBindingPath="EndTime">
-                            <sch:Series.IntervalTemplate>
-                                <shapes:IntervalVisual Background="Green"/>
-                            </sch:Series.IntervalTemplate>
-                        </sch:Series>
+                <sch:Timeline.Series>
 
-                    </sch:SchedulerControl.Series>
+                    <sch:TimelineSeries BarWidth="0.5"
+                                         FillBrush="Yellow"
+                                         Items="{Binding TaskListEditor.CurrentTask.TimelineRotations}"
+                                         CategoryField="Category"
+                                         BeginField="BeginTime"
+                                         EndField="EndTime"/>
+            
+                    <sch:TimelineSeries BarWidth="0.5"
+                                        FillBrush="Blue"
+                                        Items="{Binding TaskListEditor.CurrentTask.TimelineObservations}"
+                                        CategoryField="Category"
+                                        BeginField="BeginTime"
+                                        EndField="EndTime"/>
 
-                </sch:SchedulerControl>
+                    <sch:TimelineSeries BarWidth="0.5"
+                                        FillBrush="Green"
+                                        Items="{Binding TaskListEditor.CurrentTask.TimelineTransmissions}"
+                                        CategoryField="Category"
+                                        BeginField="BeginTime"
+                                        EndField="EndTime"/>
 
-                <sch:SchedulerAxisXControl DataContext="{Binding #scheduler}" Grid.Row="1"/>
+                </sch:Timeline.Series>
+              
+                <!--<sch:Timeline.Slider>
+                    <sch:Slider Begin="{Binding TaskListEditor.CurrentTask.Begin}"
+                                Duration="{Binding TaskListEditor.CurrentTask.Duration}"
+                                CurrentValue="{Binding SceneTimerEditor.TimelineCurrentTime}"/>
+                </sch:Timeline.Slider>-->
 
-            </Grid>
+            </sch:Timeline>
 
         </Controls:Editor.PanelContent>
 

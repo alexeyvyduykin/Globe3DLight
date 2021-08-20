@@ -34,7 +34,8 @@ namespace Globe3DLight.ViewModels.Editors
         private double _sliderMin = 0.0;
         private double _sliderMax = 1000.0;
         private double _sliderValue = 0.0;
-       
+        private DateTime _timelineCurrentTime;
+
         public event TimeEventHandler UpdateTimeEvent;
 
         public SceneTimerEditorViewModel(ITimer timer, DateTime begin, TimeSpan duration)
@@ -44,6 +45,7 @@ namespace Globe3DLight.ViewModels.Editors
             _duration = duration;
             _currentTime = 0.0;
             _currentDateTime = begin;
+            _timelineCurrentTime = begin;
 
             _timerMode = TimerMode.Stop;
 
@@ -66,6 +68,9 @@ namespace Globe3DLight.ViewModels.Editors
         private void TimerThreadElapsed(object sender, System.Timers.ElapsedEventArgs e)
         {
             CurrentTime = _timer.CurrentTime;
+       
+            TimelineCurrentTime = Begin.AddSeconds(CurrentTime);
+
             CurrentDateTime = _begin.AddSeconds(CurrentTime);
 
             var sliderValue = (int)(CurrentTime * (_sliderMax - _sliderMin) / Duration.TotalSeconds);
@@ -127,6 +132,12 @@ namespace Globe3DLight.ViewModels.Editors
         {
             get => _currentTime;
             protected set => RaiseAndSetIfChanged(ref _currentTime, value);
+        }
+
+        public DateTime TimelineCurrentTime
+        {
+            get => _timelineCurrentTime;
+            protected set => RaiseAndSetIfChanged(ref _timelineCurrentTime, value);
         }
 
         public ITimer Timer

@@ -37,6 +37,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\TimeDataViewer\TimeDataViewer.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Update="Views\Editors\Viewport3DEditor.axaml.cs">
       <DependentUpon>Viewport3DEditor.axaml</DependentUpon>
     </Compile>
