@@ -1,0 +1,212 @@
+﻿<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="using:TimeDataViewer">
+  <Design.PreviewWith>
+    <Border Padding="20">
+      <!-- Add Controls for Previewer Here -->      
+    </Border>
+  </Design.PreviewWith>
+
+  <Styles.Resources>    
+    <Color x:Key="timelineBackground">#424242</Color> <!-- (0.259, 0.259, 0.259) -->
+    <Color x:Key="axisLabelForeground">#C3C3C3</Color> <!-- (0.765, 0.765, 0.765) -->    
+    <Color x:Key="axisBackgound">#292929</Color> <!-- (0.161, 0.161, 0.161) -->
+    <Color x:Key="axisGrid">#2A2A2A</Color> <!-- (0.165, 0.165, 0.165) -->
+    <Color x:Key="sliderBackground">#5680C2</Color> <!-- (0.337, 0.502, 0.761) -->
+    <Color x:Key="sliderForeground">#FFFFFF</Color> <!-- (1.000, 1.000, 1.000) -->
+  </Styles.Resources>
+
+  <Style Selector="local|TrackerControl">
+    <Setter Property="Distance" Value="8" />
+    <Setter Property="CanCenterHorizontally" Value="true" />
+    <Setter Property="CanCenterVertically" Value="true" />
+    <Setter Property="IsHitTestVisible" Value="false" />
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Panel HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 ClipToBounds="False">
+            <Panel Name="PART_ContentContainer"
+                   ClipToBounds="False">
+              <Border Name="PART_Border"
+                      Margin="{TemplateBinding MarginPointer}"/>
+              <ContentPresenter Name="PART_Content"
+                                Content="{TemplateBinding Content}"
+                                HorizontalAlignment="Center">
+              </ContentPresenter>
+            </Panel>
+          </Panel>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="local|TrackerControl /template/ Border#PART_Border">
+    <Setter Property="BorderBrush" Value="Black"></Setter>
+    <Setter Property="BorderThickness" Value="1"></Setter>
+    <Setter Property="CornerRadius" Value="4"></Setter>
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="White" Opacity="0.6"></SolidColorBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+      
+  <Style Selector="local|Timeline">         
+
+    <Setter Property="DefaultTrackerTemplate">
+      <Setter.Value>
+        <ControlTemplate>
+          <local:TrackerControl Position="{Binding Position}"
+                                LineExtents="{Binding PlotModel.PlotArea}">
+            <local:TrackerControl.Content>
+              <TextBlock Text="{Binding Text}" Margin="7" />
+            </local:TrackerControl.Content>
+          </local:TrackerControl>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="ZoomRectangleTemplate">
+      <Setter.Value>
+        <ControlTemplate>
+          <Rectangle Stroke="White" StrokeDashArray="5,5" StrokeThickness="1">
+            <Rectangle.Fill>
+              <SolidColorBrush Color="White" Opacity="0.2"></SolidColorBrush>
+            </Rectangle.Fill>
+          </Rectangle>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="Template">
+      <Setter.Value>
+        <ControlTemplate>
+          <Border Background="{TemplateBinding Background}"
+                  BorderBrush="{TemplateBinding BorderBrush}"
+                  BorderThickness="{TemplateBinding BorderThickness}">
+            <Grid>
+              <Grid.RowDefinitions>
+                <RowDefinition Height="30"/>
+                <RowDefinition Height="*"/>
+              </Grid.RowDefinitions>
+              <Panel Name="PART_PanelX"/>
+              <Panel Grid.Row="1" Name="PART_Panel" />
+            </Grid>
+          </Border>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+    
+  </Style>
+
+  <Style Selector="local|Timeline /template/ Panel#PART_PanelX">
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="{StaticResource axisBackgound}"/>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="local|Timeline /template/ Panel#PART_Panel">
+    <Setter Property="Background">
+      <Setter.Value>
+        <SolidColorBrush Color="{StaticResource timelineBackground}"/>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <Style Selector="local|Timeline">
+    <Setter Property="PlotMargins" Value="0,30,0,0"></Setter>
+  </Style>
+    
+  <Style Selector="local|DateTimeAxis">
+
+    <Setter Property="MajorTickSize" Value="0"></Setter>
+      
+    <Setter Property="MinorPen">
+      <Setter.Value>
+        <Pen>
+          <Pen.Brush>
+            <SolidColorBrush Color="{StaticResource axisGrid}"/>
+          </Pen.Brush>
+        </Pen>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="MajorPen">
+      <Setter.Value>
+        <Pen>
+          <Pen.Brush>
+            <SolidColorBrush Color="{StaticResource axisGrid}"/>
+          </Pen.Brush>
+        </Pen>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="MinorTickPen">
+      <Setter.Value>
+        <Pen>
+          <Pen.Brush>
+            <SolidColorBrush Color="{StaticResource axisGrid}"/>
+          </Pen.Brush>
+        </Pen>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="MajorTickPen">
+      <Setter.Value>
+        <Pen>
+          <Pen.Brush>
+            <SolidColorBrush Color="{StaticResource axisGrid}"/>
+          </Pen.Brush>
+        </Pen>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="DefaultLabelTemplate">
+      <Setter.Value>
+        <ControlTemplate>
+          <TextBlock Foreground="{StaticResource axisLabelForeground}"
+                     FontFamily="Segoe UI"
+                     FontSize="12"        
+                     FontWeight="Normal"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+  
+  </Style>
+  
+  <Style Selector="local|Slider">
+    
+    <Setter Property="InactiveRangeBrush">
+      <Setter.Value>
+        <SolidColorBrush Color="Black" Opacity="0.2"/>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="SliderBrush">
+      <Setter.Value>
+        <SolidColorBrush Color="{StaticResource sliderBackground}"/>
+      </Setter.Value>
+    </Setter>
+
+    <Setter Property="DefaultLabelTemplate">
+      <Setter.Value>
+        <ControlTemplate>
+          <TextBlock Background="{StaticResource sliderBackground}"
+                     Foreground="{StaticResource sliderForeground}"
+                     FontFamily="Segoe UI"
+                     FontSize="12"
+                     FontWeight="Normal"
+                     HorizontalAlignment="Center"
+                     VerticalAlignment="Center"
+                     Padding="4,2,4,2"/>
+        </ControlTemplate>
+      </Setter.Value>
+    </Setter>
+
+  </Style>
+
+</Styles>

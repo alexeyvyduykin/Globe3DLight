@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe3DLight", "src\Globe3D
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Globe3DLight.Desktop", "src\Globe3DLight.Desktop\Globe3DLight.Desktop.csproj", "{13CF8AA9-2E63-4D40-93A2-F8E9F7F025DD}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimeDataViewer", "src\TimeDataViewer\TimeDataViewer.csproj", "{9C6E4DF3-4A2C-43EE-85DF-BC1963020EA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{13CF8AA9-2E63-4D40-93A2-F8E9F7F025DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13CF8AA9-2E63-4D40-93A2-F8E9F7F025DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{13CF8AA9-2E63-4D40-93A2-F8E9F7F025DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9C6E4DF3-4A2C-43EE-85DF-BC1963020EA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C6E4DF3-4A2C-43EE-85DF-BC1963020EA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C6E4DF3-4A2C-43EE-85DF-BC1963020EA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C6E4DF3-4A2C-43EE-85DF-BC1963020EA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{4111EF25-B68A-41AF-994F-88AC84F185F2} = {6E1263C9-A25E-4486-BB86-B8E29BC4835D}
 		{FE4FE4E5-B22E-40F5-A254-F2E918F462B4} = {337DA0CB-2E8B-4E18-ABBD-70F5741773E6}
 		{13CF8AA9-2E63-4D40-93A2-F8E9F7F025DD} = {337DA0CB-2E8B-4E18-ABBD-70F5741773E6}
+		{9C6E4DF3-4A2C-43EE-85DF-BC1963020EA7} = {337DA0CB-2E8B-4E18-ABBD-70F5741773E6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {033177EA-7256-4FD1-ADC8-437AFCC1382F}
