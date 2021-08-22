@@ -66,7 +66,7 @@
 
                 <sch:Timeline.Axises>
 
-                    <sch:CategoryAxis Position="Left"
+                    <!--<sch:CategoryAxis Position="Left"
                                       AbsoluteMinimum="-0.5"
                                       AbsoluteMaximum="2.5"
                                       IsZoomEnabled="False"
@@ -76,13 +76,13 @@
                                       IntervalType="Auto"
                                       AbsoluteMinimum="{Binding TaskListEditor.CurrentTask.BeginScenario}"
                                       AbsoluteMaximum="{Binding TaskListEditor.CurrentTask.EndScenario}"
-                                      FirstDateTime="{Binding TaskListEditor.CurrentTask.Epoch}"/>
+                                      FirstDateTime="{Binding TaskListEditor.CurrentTask.Epoch}"/>-->
 
                 </sch:Timeline.Axises>
 
                 <sch:Timeline.Series>
 
-                    <sch:TimelineSeries BarWidth="0.5"
+                    <!--<sch:TimelineSeries BarWidth="0.5"
                                          FillBrush="Yellow"
                                          Items="{Binding TaskListEditor.CurrentTask.TimelineRotations}"
                                          CategoryField="Category"
@@ -101,7 +101,7 @@
                                         Items="{Binding TaskListEditor.CurrentTask.TimelineTransmissions}"
                                         CategoryField="Category"
                                         BeginField="BeginTime"
-                                        EndField="EndTime"/>
+                                        EndField="EndTime"/>-->
 
                 </sch:Timeline.Series>
               

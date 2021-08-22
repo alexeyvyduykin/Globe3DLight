@@ -14,57 +14,31 @@ using Globe3DLight.Models.Scene;
 using Globe3DLight.ViewModels.Data;
 using Globe3DLight.ViewModels.Entities;
 using Globe3DLight.ViewModels.Containers;
+using ReactiveUI;
+using DynamicData.Binding;
+using DynamicData;
+using Avalonia.OpenGL;
+using System.Reactive.Linq;
 
 namespace Globe3DLight.ViewModels.Editors
 {
-    public class Filter : ViewModelBase
+    public class SatelliteTaskFilter 
     {
-        private bool _isRotation;
-        private bool _isObservation;
-        private bool _isTransmission;
-        private string _searchString;
-        private readonly TaskListEditorViewModel _taskListEditor;
-
-        public Filter(TaskListEditorViewModel taskListEditor)
+        public SatelliteTaskFilter()
         {
-            _taskListEditor = taskListEditor;
-
-            PropertyChanged += (s, e) =>
-            {
-                if (e.PropertyName == nameof(IsRotation) || e.PropertyName == nameof(IsObservation) ||
-                e.PropertyName == nameof(IsTransmission) || e.PropertyName == nameof(SearchString))
-                {
-                    if (_taskListEditor.CurrentTask != null)
-                    {
-                        _taskListEditor.CurrentTask.Filtering(this);
-                    }
-                }
-            };
+            IsRotation = true;
+            IsObservation = true;
+            IsTransmission = true;
+            SearchString = string.Empty;    
         }
         
-        public bool IsRotation
-        {
-            get => _isRotation;
-            set => RaiseAndSetIfChanged(ref _isRotation, value);
-        }
+        public bool IsRotation { get; set; }
 
-        public bool IsObservation
-        {
-            get => _isObservation;
-            set => RaiseAndSetIfChanged(ref _isObservation, value);
-        }
+        public bool IsObservation { get; set; }
 
-        public bool IsTransmission
-        {
-            get => _isTransmission;
-            set => RaiseAndSetIfChanged(ref _isTransmission, value);
-        }
+        public bool IsTransmission { get; set; }
 
-        public string SearchString
-        {
-            get => _searchString;
-            set => RaiseAndSetIfChanged(ref _searchString, value);
-        }
+        public string SearchString { get; set; }
 
         public IList<BaseSatelliteEvent> Filtering(IList<BaseSatelliteEvent> source)
         {
@@ -80,86 +54,136 @@ namespace Globe3DLight.ViewModels.Editors
         }
     }
 
-    public class TaskListEditorViewModel : ViewModelBase
-    {
-        private ObservableCollection<SatelliteTask> _tasks;
-        private SatelliteTask _currentTask;
+    public class TaskListEditorViewModel : ReactiveObject
+    {      
+        private SatelliteTask? _currentTask;
         private ScenarioContainerViewModel _scenario;
+        private bool _isRotation;
+        private bool _isObservation;
+        private bool _isTransmission;
+        private string _searchString;
+       
+        public ObservableCollection<SatelliteTask> Tasks { get; set; }
 
         public TaskListEditorViewModel(ScenarioContainerViewModel scenario)
-        {
-            Filter = new Filter(this) { IsObservation = true, IsRotation = true, IsTransmission = true };
-            _tasks = new ObservableCollection<SatelliteTask>();// ImmutableArray.Create<SatelliteTask>();    
-            _scenario = scenario;          
-        }
+        {            
+            Tasks = new ObservableCollection<SatelliteTask>();  
+            _scenario = scenario;
 
-        public Filter Filter { get; set; }
+            _currentTask = null;
 
-        public ObservableCollection<SatelliteTask> Tasks
-        {
-            get => _tasks;
-            set
+            _isRotation = true;
+            _isObservation = true;
+            _isTransmission = true;
+            _searchString = string.Empty;
+
+            this.WhenAnyValue(x => x.IsRotation, x => x.IsObservation, x => x.IsTransmission, x => x.SearchString).Subscribe(_ =>
             {
-                if (_tasks != value)
+                if (CurrentTask != null)
                 {
-                    RaiseAndSetIfChanged(ref _tasks, value);
-
-                    foreach (var task in _tasks)
-                    {
-                        task.PropertyChanged += TaskVisibilityChangedEvent;
-                        task.PropertyChanged += TaskSelectedEventChangedEvent;
-                    }                  
+                    ActivateFilterFor(CurrentTask);
                 }
-            }
-        }
+            });
 
-        public SatelliteTask CurrentTask
-        {
-            get => _currentTask;
-            set
+
+            this.WhenAnyValue(x => x.CurrentTask).Subscribe(task =>
             {
-                if (_currentTask != value)
+                if(task == null)
                 {
-                    RaiseAndSetIfChanged(ref _currentTask, value);
-
-                    _currentTask.Filtering(Filter);
-
-                    _scenario.SetCameraTo(_currentTask.Satellite);
+                    return;
                 }
-            }
-        }
 
-        private void TaskSelectedEventChangedEvent(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SatelliteTask.SelectedEvent))
+                ActivateFilterFor(task);
+
+                _scenario.SetCameraTo(task.Satellite);
+            });
+
+
+            Tasks.ToObservableChangeSet().AutoRefresh(task => task.IsVisible).Subscribe(changeSet =>
             {
-                var task = sender as SatelliteTask;
-
-                if (task.SelectedEvent is not null)
+                var task = changeSet.SingleOrDefault().Item.Current;
+             
+                if(task == null)
                 {
-                    if (_scenario.SceneTimerEditor.Timer.IsRunning == true)
-                    {
-                        _scenario.SceneTimerEditor.OnPause();
-                    }
-
-                    var time = task.SelectedEvent.Epoch.AddSeconds(task.SelectedEvent.BeginTime);//task.SelectedEvent.Begin;
-                    var begin = _scenario.SceneTimerEditor.Begin;
-
-                    _scenario.SceneTimerEditor.Update((time - begin).TotalSeconds);
+                    return;
                 }
-            }
-        }
 
-        private void TaskVisibilityChangedEvent(object? sender, PropertyChangedEventArgs e)
-        {
-            if (e.PropertyName == nameof(SatelliteTask.IsVisible))
-            {
-                var task = sender as SatelliteTask;
                 if (task.IsVisible == true)
                 {
                     CurrentTask = task;
                 }
-            }
+            });
+
+            Tasks.ToObservableChangeSet().AutoRefresh(task => task.SelectedEvent).Subscribe(changeSet =>
+            {
+                var task = changeSet.SingleOrDefault().Item.Current;
+             
+                var selectedEvent = task.SelectedEvent;
+
+                if (task == null || selectedEvent == null)
+                {
+                    return;
+                }
+
+                if (_scenario.SceneTimerEditor.Timer.IsRunning == true)
+                {
+                    _scenario.SceneTimerEditor.OnPause();
+                }
+
+                var time = selectedEvent.Epoch.AddSeconds(selectedEvent.BeginTime);
+                var begin = _scenario.SceneTimerEditor.Begin;
+
+                _scenario.SceneTimerEditor.Update((time - begin).TotalSeconds);
+            });
+        }
+
+        private void ActivateFilterFor(SatelliteTask task)
+        {
+            var filter = new SatelliteTaskFilter()
+            {
+                IsObservation = IsObservation,
+                IsRotation = IsRotation,
+                IsTransmission = IsTransmission,
+                SearchString = SearchString
+            };
+
+            task.Filtering(filter);
+        }
+
+        public bool IsRotation
+        {
+            get => _isRotation;
+            set => this.RaiseAndSetIfChanged(ref _isRotation, value);
+        }
+
+        public bool IsObservation
+        {
+            get => _isObservation;
+            set => this.RaiseAndSetIfChanged(ref _isObservation, value);
+        }
+
+        public bool IsTransmission
+        {
+            get => _isTransmission;
+            set => this.RaiseAndSetIfChanged(ref _isTransmission, value);
+        }
+
+        public string SearchString
+        {
+            get => _searchString;
+            set => this.RaiseAndSetIfChanged(ref _searchString, value);
+        }
+
+        //public ObservableCollection<SatelliteTask> Tasks
+        //{
+        //    get => _tasks;
+        //    set => this.RaiseAndSetIfChanged(ref _tasks, value);               
+        //}
+
+        public SatelliteTask? CurrentTask
+        {
+            get => _currentTask;
+            set => this.RaiseAndSetIfChanged(ref _currentTask, value);                            
         }
     }
 }

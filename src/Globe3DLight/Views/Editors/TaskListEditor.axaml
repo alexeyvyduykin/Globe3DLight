@@ -120,7 +120,7 @@
     <controls:Editor.HeaderContent>
       <Grid ColumnDefinitions="*,Auto">
         <TextBox Grid.Column="0"               
-                 Text="{Binding Filter.SearchString}"
+                 Text="{Binding SearchString}"
                  Width="140"
                  Height="20"
                  HorizontalAlignment="Center"
@@ -159,8 +159,7 @@
           <Button.Flyout>
             <Flyout Placement="Bottom"
                     ShowMode="TransientWithDismissOnPointerMoveAway">
-              <StackPanel Spacing="4"
-                          DataContext="{Binding Filter}">
+              <StackPanel Spacing="4">
                 <TextBlock Text="Filter:"></TextBlock>
                 <StackPanel Orientation="Horizontal">
                   <Viewbox Stretch="UniformToFill" Width="14" Height="14" Margin="4,0,4,0">

@@ -5,7 +5,6 @@ using System.Text;
 using System.Linq;
 using System.Collections.ObjectModel;
 using Globe3DLight.ViewModels.Editors;
-using TimeDataViewer.Core;
 
 namespace Globe3DLight.ViewModels.Entities
 {
@@ -16,7 +15,7 @@ namespace Globe3DLight.ViewModels.Entities
 
     public class SatelliteTask : ViewModelBase
     {
-        private readonly IList<BaseSatelliteEvent> _sourceEvents;
+        private readonly IList<BaseSatelliteEvent> _eventsSource;
         private bool _isVisible;
         private IList<BaseSatelliteEvent> _events;
         private BaseSatelliteEvent? _selectedEvent;
@@ -35,13 +34,12 @@ namespace Globe3DLight.ViewModels.Entities
         private double _begin;
         private double _duration;
         public SatelliteTask(Satellite satellite, IList<BaseSatelliteEvent> events)
-        {
-            var sortEvents = events.OrderBy(s => s.BeginTime/*Begin*/).ToList();
-
+        {         
             _satellite = satellite;
-            _sourceEvents = sortEvents;
-            _events = sortEvents;
-            _selectedEvent = sortEvents.FirstOrDefault();
+            _eventsSource = events;
+
+            _events = events;
+            _selectedEvent = events.FirstOrDefault();
 
             _rotations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is RotationEvent));
             _observations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is ObservationEvent));
@@ -92,9 +90,9 @@ namespace Globe3DLight.ViewModels.Entities
         }
 
         // HACK: For test, full rework
-        public void Filtering(Filter filter)
+        public void Filtering(SatelliteTaskFilter filter)
         {
-            Events = filter.Filtering(_sourceEvents);
+            Events = filter.Filtering(_eventsSource);
             SelectedEvent = Events.FirstOrDefault();
 
             List<Rotation> rotations = new List<Rotation>();
@@ -215,7 +213,7 @@ namespace Globe3DLight.ViewModels.Entities
         }
     }
 
-    public class Rotation : TimelineItem
+    public class Rotation
     {
         public string Category => "Rotation";
 
@@ -224,7 +222,7 @@ namespace Globe3DLight.ViewModels.Entities
         public DateTime EndTime { get; set; }
     }
 
-    public class Observation : TimelineItem
+    public class Observation
     {
         public string Category => "Observation";
 
@@ -233,7 +231,7 @@ namespace Globe3DLight.ViewModels.Entities
         public DateTime EndTime { get; set; }
     }
 
-    public class Transmission : TimelineItem
+    public class Transmission
     {
         public string Category => "Transmission";
 
