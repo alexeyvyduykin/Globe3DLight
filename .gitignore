@@ -352,7 +352,10 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
-# Specific for this project
+# Fody - auto-generated XML schema
+FodyWeavers.xsd
+
+# Globe3DLight specific
 demo/
 tests/
 resources/
