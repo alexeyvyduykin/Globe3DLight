@@ -5,6 +5,8 @@ using System.Text;
 using System.Linq;
 using System.Collections.ObjectModel;
 using Globe3DLight.ViewModels.Editors;
+using ReactiveUI;
+using ReactiveUI.Fody.Helpers;
 
 namespace Globe3DLight.ViewModels.Entities
 {
@@ -13,39 +15,24 @@ namespace Globe3DLight.ViewModels.Entities
         public string Label { get; set; }
     }
 
-    public class SatelliteTask : ViewModelBase
+    public class SatelliteTask : ReactiveObject
     {
         private readonly IList<BaseSatelliteEvent> _eventsSource;
-        private bool _isVisible;
-        private IList<BaseSatelliteEvent> _events;
-        private BaseSatelliteEvent? _selectedEvent;
-        private Satellite _satellite;
-        private ObservableCollection<BaseSatelliteEvent> _rotations;
-        private ObservableCollection<BaseSatelliteEvent> _observations;
-        private ObservableCollection<BaseSatelliteEvent> _transmissions;
-        private ObservableCollection<LabelItem> _labels;
-        private DateTime _epoch;
         private DateTime TimeOrigin { get; } = new DateTime(1899, 12, 31, 0, 0, 0, DateTimeKind.Utc);
-        private List<Rotation> _timelineRotations;
-        private List<Observation> _timelineObservations;
-        private List<Transmission> _timelineTransmissions;
-        private double _beginScenario;
-        private double _endScenario;
-        private double _begin;
-        private double _duration;
+
         public SatelliteTask(Satellite satellite, IList<BaseSatelliteEvent> events)
         {         
-            _satellite = satellite;
+            Satellite = satellite;
             _eventsSource = events;
 
-            _events = events;
-            _selectedEvent = events.FirstOrDefault();
+            Events = events;
+            SelectedEvent = events.FirstOrDefault();
 
-            _rotations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is RotationEvent));
-            _observations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is ObservationEvent));
-            _transmissions = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is TransmissionEvent));
+            Rotations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is RotationEvent));
+            Observations = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is ObservationEvent));
+            Transmissions = new ObservableCollection<BaseSatelliteEvent>(events.Where(s => s is TransmissionEvent));
 
-            _labels = new ObservableCollection<LabelItem>()
+            Labels = new ObservableCollection<LabelItem>()
             {
                 new() { Label = "Rotation" },
                 new() { Label = "Observation" },
@@ -53,41 +40,55 @@ namespace Globe3DLight.ViewModels.Entities
             };
         }
 
-        public ObservableCollection<LabelItem> Labels
-        {
-            get => _labels;
-            set => this.RaiseAndSetIfChanged(ref _labels, value);
-        }
+        [Reactive]
+        public ObservableCollection<LabelItem> Labels { get; set; }
 
-        public double BeginScenario
-        {
-            get => _beginScenario;
-            set => this.RaiseAndSetIfChanged(ref _beginScenario, value);
-        }
+        [Reactive]
+        public string Name { get; set; }
 
-        public double EndScenario
-        {
-            get => _endScenario;
-            set => this.RaiseAndSetIfChanged(ref _endScenario, value);
-        }
+        [Reactive]
+        public double BeginScenario { get; set; }
 
-        public double Begin
-        {
-            get => _begin;
-            set => this.RaiseAndSetIfChanged(ref _begin, value);
-        }
+        [Reactive]
+        public double EndScenario { get; set; }
 
-        public double Duration
-        {
-            get => _duration;
-            set => this.RaiseAndSetIfChanged(ref _duration, value);
-        }
+        [Reactive]
+        public double Begin { get; set; }
 
-        public DateTime Epoch
-        {
-            get => _epoch;
-            set => this.RaiseAndSetIfChanged(ref _epoch, value);
-        }
+        [Reactive]
+        public double Duration { get; set; }
+
+        [Reactive]
+        public DateTime Epoch { get; set; }
+
+        [Reactive]
+        public List<Rotation> TimelineRotations { get; set; }
+
+        [Reactive]
+        public List<Observation> TimelineObservations { get; set; }
+
+        [Reactive]
+        public List<Transmission> TimelineTransmissions { get; set; }
+
+        [Reactive]
+        public bool IsVisible { get; set; }
+
+        [Reactive]
+        public Satellite Satellite { get; set; }
+
+        [Reactive]
+        public ObservableCollection<BaseSatelliteEvent> Rotations { get; set; }
+
+        public ObservableCollection<BaseSatelliteEvent> Observations { get; set; }
+
+        [Reactive]
+        public ObservableCollection<BaseSatelliteEvent> Transmissions { get; set; }
+
+        [Reactive]
+        public IList<BaseSatelliteEvent> Events { get; set; }
+
+        [Reactive]
+        public BaseSatelliteEvent? SelectedEvent { get; set; }
 
         // HACK: For test, full rework
         public void Filtering(SatelliteTaskFilter filter)
@@ -99,7 +100,7 @@ namespace Globe3DLight.ViewModels.Entities
             List<Observation> observations = new List<Observation>();
             List<Transmission> transmissions = new List<Transmission>();
 
-            foreach (var item in _rotations)
+            foreach (var item in Rotations)
             {
                 rotations.Add(new Rotation()
                 {
@@ -108,7 +109,7 @@ namespace Globe3DLight.ViewModels.Entities
                 });
             }
 
-            foreach (var item in _observations)
+            foreach (var item in Observations)
             {
                 observations.Add(new Observation()
                 {
@@ -117,7 +118,7 @@ namespace Globe3DLight.ViewModels.Entities
                 });
             }
 
-            foreach (var item in _transmissions)
+            foreach (var item in Transmissions)
             {
                 transmissions.Add(new Transmission()
                 {
@@ -126,7 +127,7 @@ namespace Globe3DLight.ViewModels.Entities
                 });
             }
 
-            Epoch = _rotations.FirstOrDefault().Epoch;
+            Epoch = Rotations.FirstOrDefault().Epoch;
 
             var min = rotations.Min(s => ToTotalDays(s.BeginTime, Epoch));
             min = Math.Min(observations.Min(s => ToTotalDays(s.BeginTime, Epoch)), min);
@@ -145,66 +146,6 @@ namespace Globe3DLight.ViewModels.Entities
 
             Begin = ToTotalDays(Epoch, TimeOrigin);
             Duration = 1.0;
-        }
-        
-        public List<Rotation> TimelineRotations
-        {
-            get => _timelineRotations;
-            set => RaiseAndSetIfChanged(ref _timelineRotations, value);
-        }
-
-        public List<Observation> TimelineObservations
-        {
-            get => _timelineObservations;
-            set => RaiseAndSetIfChanged(ref _timelineObservations, value);
-        }
-
-        public List<Transmission> TimelineTransmissions
-        {
-            get => _timelineTransmissions;
-            set => RaiseAndSetIfChanged(ref _timelineTransmissions, value);
-        }
-
-        public bool IsVisible 
-        {
-            get => _isVisible; 
-            set => RaiseAndSetIfChanged(ref _isVisible, value); 
-        }
-
-        public Satellite Satellite 
-        {
-            get => _satellite; 
-            set => RaiseAndSetIfChanged(ref _satellite, value); 
-        }
-
-        public ObservableCollection<BaseSatelliteEvent> Rotations
-        {
-            get => _rotations;
-            set => RaiseAndSetIfChanged(ref _rotations, value);
-        }
-
-        public ObservableCollection<BaseSatelliteEvent> Observations
-        {
-            get => _observations;
-            set => RaiseAndSetIfChanged(ref _observations, value);
-        }
-
-        public ObservableCollection<BaseSatelliteEvent> Transmissions
-        {
-            get => _transmissions;
-            set => RaiseAndSetIfChanged(ref _transmissions, value);
-        }
-
-        public IList<BaseSatelliteEvent> Events 
-        {
-            get => _events; 
-            set => RaiseAndSetIfChanged(ref _events, value); 
-        }
-       
-        public BaseSatelliteEvent? SelectedEvent 
-        {
-            get => _selectedEvent;
-            set => RaiseAndSetIfChanged(ref _selectedEvent, value);
         }
 
         public static double ToTotalDays(DateTime value, DateTime timeOrigin)

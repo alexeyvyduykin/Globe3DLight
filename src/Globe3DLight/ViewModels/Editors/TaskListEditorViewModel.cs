@@ -19,6 +19,7 @@ using DynamicData.Binding;
 using DynamicData;
 using Avalonia.OpenGL;
 using System.Reactive.Linq;
+using ReactiveUI.Fody.Helpers;
 
 namespace Globe3DLight.ViewModels.Editors
 {
@@ -56,26 +57,19 @@ namespace Globe3DLight.ViewModels.Editors
 
     public class TaskListEditorViewModel : ReactiveObject
     {      
-        private SatelliteTask? _currentTask;
         private ScenarioContainerViewModel _scenario;
-        private bool _isRotation;
-        private bool _isObservation;
-        private bool _isTransmission;
-        private string _searchString;
        
-        public ObservableCollection<SatelliteTask> Tasks { get; set; }
-
         public TaskListEditorViewModel(ScenarioContainerViewModel scenario)
         {            
             Tasks = new ObservableCollection<SatelliteTask>();  
             _scenario = scenario;
 
-            _currentTask = null;
+            CurrentTask = null;
 
-            _isRotation = true;
-            _isObservation = true;
-            _isTransmission = true;
-            _searchString = string.Empty;
+            IsRotation = true;
+            IsObservation = true;
+            IsTransmission = true;
+            SearchString = string.Empty;
 
             this.WhenAnyValue(x => x.IsRotation, x => x.IsObservation, x => x.IsTransmission, x => x.SearchString).Subscribe(_ =>
             {
@@ -150,40 +144,21 @@ namespace Globe3DLight.ViewModels.Editors
             task.Filtering(filter);
         }
 
-        public bool IsRotation
-        {
-            get => _isRotation;
-            set => this.RaiseAndSetIfChanged(ref _isRotation, value);
-        }
+        public ObservableCollection<SatelliteTask> Tasks { get; set; }
 
-        public bool IsObservation
-        {
-            get => _isObservation;
-            set => this.RaiseAndSetIfChanged(ref _isObservation, value);
-        }
+        [Reactive]
+        public bool IsRotation { get; set; }
 
-        public bool IsTransmission
-        {
-            get => _isTransmission;
-            set => this.RaiseAndSetIfChanged(ref _isTransmission, value);
-        }
+        [Reactive]
+        public bool IsObservation { get; set; }
 
-        public string SearchString
-        {
-            get => _searchString;
-            set => this.RaiseAndSetIfChanged(ref _searchString, value);
-        }
+        [Reactive]
+        public bool IsTransmission { get; set; }
 
-        //public ObservableCollection<SatelliteTask> Tasks
-        //{
-        //    get => _tasks;
-        //    set => this.RaiseAndSetIfChanged(ref _tasks, value);               
-        //}
+        [Reactive]
+        public string SearchString { get; set; }
 
-        public SatelliteTask? CurrentTask
-        {
-            get => _currentTask;
-            set => this.RaiseAndSetIfChanged(ref _currentTask, value);                            
-        }
+        [Reactive]
+        public SatelliteTask? CurrentTask { get; set; }
     }
 }
